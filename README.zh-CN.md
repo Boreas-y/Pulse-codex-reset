@@ -144,7 +144,7 @@ Pulse 只呈现各服务上报的数字，每个百分比都来自那份回复�
 | **sub2api** | 粘贴的分组密钥；网关地址自行填写 | 读取自建 [sub2api](https://github.com/Wei-Shaw/sub2api) 网关按分组核算的用量——余额、配额、订阅或限速窗口，取决于分组的设置方式（[Docs/providers/sub2api.md](Docs/providers/sub2api.md)） |
 | **New API** | 粘贴的 `sk-` 密钥；网关地址自行填写 | 读取自建 [New API](https://github.com/QuantumNous/new-api) 网关的余额，按部署方设定的币种显示；不显示百分比，因为回复里的比例可能有两种含义（[Docs/providers/newapi.md](Docs/providers/newapi.md)） |
 | **V2EX** | 粘贴的个人访问令牌 | AI Chat 滚动 5 小时的 token 配额，买过加油包再多画一个环；窗口还没开始时不显示倒计时（[Docs/providers/v2ex.md](Docs/providers/v2ex.md)） |
-| **Qoder** | 什么都不用填——读取浏览器里 qoder.com 或 qoder.com.cn 的登录会话，也可以手动粘贴 `Cookie:` 头 | 积分额度（套餐加加油包），按 Qoder 上报的重置时间显示；团队套餐的共享积分单独画一个环，从不相加；额度为零时会直说，而不是画一个空环（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
+| **Qoder** | 什么都不用填——读取浏览器里 qoder.com 或 qoder.com.cn 的登录会话，也可以手动粘贴 `Cookie:` 头 | 积分额度（套餐加加油包），按 Qoder 上报的重置时间显示；团队套餐的共享积分单独画一个环，从不相加；可选择把套餐积分、加油包和专属积分分项显示；额度为零时会直说，而不是画一个空环（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
 | **阶跃星辰（StepFun）** | 什么都不用填——读取浏览器里 platform.stepfun.com 或 platform.stepfun.ai 的登录会话，也可以手动粘贴 `Cookie:` 头 | Step Plan：Token Plan 的月度 Credit 和加油包合成一个环，并显示最早一批的到期日；旧版 Coding Plan 显示 5 小时和每周两个窗口；没有订阅时会直说，而不是画一个环（[Docs/providers/stepfun.md](Docs/providers/stepfun.md)） |
 
 ### 更多服务商

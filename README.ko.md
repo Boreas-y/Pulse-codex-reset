@@ -144,7 +144,7 @@ Pulse는 각 서비스가 보고하는 숫자를 그대로 보여 줍니다. 화
 | **sub2api** | 붙여 넣은 그룹 키. 게이트웨이 주소는 직접 입력 | 직접 운영하는 [sub2api](https://github.com/Wei-Shaw/sub2api) 게이트웨이의 그룹별 집계를 읽음——잔액, 할당량, 구독, 속도 제한 중 하나이며 그룹 설정에 따라 달라짐([Docs/providers/sub2api.md](Docs/providers/sub2api.md)) |
 | **New API** | 붙여 넣은 `sk-` 키. 게이트웨이 주소는 직접 입력 | 직접 운영하는 [New API](https://github.com/QuantumNous/new-api) 게이트웨이의 잔액을 운영자가 설정한 통화로 표시. 응답의 비율은 두 가지 의미일 수 있어 백분율은 표시하지 않음([Docs/providers/newapi.md](Docs/providers/newapi.md)) |
 | **V2EX** | 붙여 넣은 개인 액세스 토큰 | AI Chat의 롤링 5시간 토큰 한도. 구매한 추가 팩이 있으면 링을 하나 더 표시. 아직 시작하지 않은 창은 카운트다운을 표시하지 않음([Docs/providers/v2ex.md](Docs/providers/v2ex.md)) |
-| **Qoder** | 입력할 것이 없음——qoder.com 또는 qoder.com.cn에 로그인된 브라우저 세션을 읽음. `Cookie:` 헤더를 붙여 넣을 수도 있음 | 크레딧 한도(플랜과 팩 합산)를 Qoder가 보고하는 초기화 시각과 함께 표시. 팀 플랜의 공유 크레딧은 별도 링으로 표시하며 절대 합산하지 않음. 크레딧이 0이면 링을 그리지 않고 그렇다고 알림([Docs/providers/qoder.md](Docs/providers/qoder.md)) |
+| **Qoder** | 입력할 것이 없음——qoder.com 또는 qoder.com.cn에 로그인된 브라우저 세션을 읽음. `Cookie:` 헤더를 붙여 넣을 수도 있음 | 크레딧 한도(플랜과 팩 합산)를 Qoder가 보고하는 초기화 시각과 함께 표시. 팀 플랜의 공유 크레딧은 별도 링으로 표시하며 절대 합산하지 않음. 요금제 크레딧, 충전 팩, 전용 크레딧을 항목별로 표시할 수도 있음. 크레딧이 0이면 링을 그리지 않고 그렇다고 알림([Docs/providers/qoder.md](Docs/providers/qoder.md)) |
 | **StepFun** | 입력할 것이 없음——platform.stepfun.com 또는 platform.stepfun.ai에 로그인된 브라우저 세션을 읽음. `Cookie:` 헤더를 붙여 넣을 수도 있음 | Step Plan: Token Plan의 월간 Credit과 추가 팩을 하나의 링으로 합치고 가장 먼저 만료되는 분의 날짜를 표시. 구 Coding Plan은 5시간·주간 두 창. 플랜이 없으면 링을 그리지 않고 그렇게 표시함([Docs/providers/stepfun.md](Docs/providers/stepfun.md)) |
 
 ### 그 밖의 제공업체

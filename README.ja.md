@@ -144,7 +144,7 @@ Pulse は各サービスが報告する数字をそのまま表示します。�
 | **sub2api** | 貼り付けたグループキー。ゲートウェイのアドレスは自分で入力 | 自前で運用する [sub2api](https://github.com/Wei-Shaw/sub2api) ゲートウェイのグループ単位の集計を読み取る——残高、クォータ、サブスクリプション、レート制限のいずれかで、グループの設定によって変わる（[Docs/providers/sub2api.md](Docs/providers/sub2api.md)） |
 | **New API** | 貼り付けた `sk-` キー。ゲートウェイのアドレスは自分で入力 | 自前で運用する [New API](https://github.com/QuantumNous/new-api) ゲートウェイの残高を、運用者が設定した通貨で表示。回答の比率は意味が二通りありうるため、割合は表示しない（[Docs/providers/newapi.md](Docs/providers/newapi.md)） |
 | **V2EX** | 貼り付けた個人アクセストークン | AI Chat のローリング 5 時間トークン枠。購入した追加パックがあれば、もう 1 つ輪を表示。ウィンドウがまだ始まっていないときはカウントダウンを表示しない（[Docs/providers/v2ex.md](Docs/providers/v2ex.md)） |
-| **Qoder** | 入力は不要——qoder.com または qoder.com.cn のサインイン済みブラウザセッションを読み取る。`Cookie:` ヘッダーを貼り付けることもできる | クレジット枠（プランとパックの合計）を Qoder が報告するリセット時刻とともに表示。チームプランの共有クレジットは別の輪として表示し、決して合算しない。クレジットが 0 のときはそう表示し、輪は描かない（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
+| **Qoder** | 入力は不要——qoder.com または qoder.com.cn のサインイン済みブラウザセッションを読み取る。`Cookie:` ヘッダーを貼り付けることもできる | クレジット枠（プランとパックの合計）を Qoder が報告するリセット時刻とともに表示。チームプランの共有クレジットは別の輪として表示し、決して合算しない。プランのクレジット、追加パック、専用クレジットを内訳ごとに表示することもできる。クレジットが 0 のときはそう表示し、輪は描かない（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
 | **StepFun** | 入力は不要——platform.stepfun.com または platform.stepfun.ai のサインイン済みブラウザセッションを読み取る。`Cookie:` ヘッダーを貼り付けることもできる | Step Plan：Token Plan の月次 Credit と追加パックを 1 つの輪にまとめ、最も早く失効する分の日付を表示。旧 Coding Plan は 5 時間枠と週間枠。プランがなければ輪を描かずにそう表示する（[Docs/providers/stepfun.md](Docs/providers/stepfun.md)） |
 
 ### その他のプロバイダ

@@ -144,7 +144,7 @@ Pulse 只呈現各服務回報的數字，每個百分比都來自那份回覆�
 | **sub2api** | 貼上的群組金鑰；閘道位址自行輸入 | 讀取自架 [sub2api](https://github.com/Wei-Shaw/sub2api) 閘道依群組核算的用量——餘額、配額、訂閱或速率限制視窗，視群組設定而定（[Docs/providers/sub2api.md](Docs/providers/sub2api.md)） |
 | **New API** | 貼上的 `sk-` 金鑰；閘道位址自行輸入 | 讀取自架 [New API](https://github.com/QuantumNous/new-api) 閘道的餘額，依部署端設定的幣別顯示；不顯示百分比，因為回覆中的比例可能有兩種含義（[Docs/providers/newapi.md](Docs/providers/newapi.md)） |
 | **V2EX** | 貼上的個人存取權杖 | AI Chat 滾動 5 小時的 token 配額，買過加油包再多畫一個環；視窗尚未開始時不顯示倒數（[Docs/providers/v2ex.md](Docs/providers/v2ex.md)） |
-| **Qoder** | 無需輸入——讀取瀏覽器中 qoder.com 或 qoder.com.cn 的登入工作階段，也可以手動貼上 `Cookie:` 標頭 | 點數額度（方案加加購包），依 Qoder 回報的重設時間顯示；團隊方案的共用點數另外畫一個環，絕不相加；點數為零時會直接說明，而不是畫一個空環（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
+| **Qoder** | 無需輸入——讀取瀏覽器中 qoder.com 或 qoder.com.cn 的登入工作階段，也可以手動貼上 `Cookie:` 標頭 | 點數額度（方案加加購包），依 Qoder 回報的重設時間顯示；團隊方案的共用點數另外畫一個環，絕不相加；可選擇將方案點數、加購包與專屬點數分項顯示；點數為零時會直接說明，而不是畫一個空環（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
 | **階躍星辰（StepFun）** | 無需輸入——讀取瀏覽器中 platform.stepfun.com 或 platform.stepfun.ai 的登入工作階段，也可以手動貼上 `Cookie:` 標頭 | Step Plan：Token Plan 的每月 Credit 與加購包合成一個環，並顯示最早一批的到期日；舊版 Coding Plan 顯示 5 小時與每週兩個視窗；沒有訂閱時會直接說明，而不是畫一個環（[Docs/providers/stepfun.md](Docs/providers/stepfun.md)） |
 
 ### 更多服務商
