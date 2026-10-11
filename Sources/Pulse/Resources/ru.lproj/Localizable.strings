@@ -670,7 +670,7 @@
 "Dedicated credits" = "Целевые кредиты";
 "Show each part of the credits" = "Показывать кредиты по частям";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Кредиты тарифа, пакет пополнения и целевые кредиты расходуются отдельно. Общий остаток может выглядеть большим, хотя одна из частей почти исчерпана.";
-"%@: %@ credits expire" = "Из них %2$@ сгорят к %1$@";
+"%@: %@ credits expire" = "Из них к %1$@ сгорит %2$@";
 "Sign in to Qoder in a browser to see usage." = "Войдите в Qoder в браузере, чтобы видеть расход.";
 "Qoder's saved session expired. Sign in again in your browser." = "Сохранённый сеанс Qoder истёк. Войдите снова в браузере.";
 "This Qoder account has no credits." = "У этого аккаунта Qoder нет кредитов.";
