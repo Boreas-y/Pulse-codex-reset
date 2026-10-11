@@ -61,7 +61,7 @@ Each field is accepted in either spelling. Other readers recorded all-camelCase;
 - `qoder.pack`, `kind: .topUp` ("Top-up pack", the term Pulse already uses for Warp's and V2EX's): `resource_package_quota`. No reset.
 - `qoder.dedicated`, `kind: .dedicatedCredits` ("Dedicated credits"): `dedicated_resource_package_quota` — on the mainland site the credits tied to Qwen, but the reply does not name the model family, so neither does Pulse. No reset.
 
-Each part's `nextExpiry` comes from its **own** `quota_detail`. Drawn only when **two or more** parts have an allowance: one alone is the total under another name (the trial reply). The parts count the same credits as the total, so the ring's automatic choice (`headlineWindow`, the fullest) lands on whichever part is closest to spent, and the total never wins it. Changing the setting refetches (`onChange`).
+Each part's `nextExpiry` comes from its **own** `quota_detail`. Drawn only when **two or more** parts have an allowance: one alone is the total under another name (the trial reply). The parts count the same credits as the total, so the ring's automatic choice (`headlineWindow`, the fullest) lands on whichever part is closest to spent, and the total never wins it. Changing the setting refetches (`onChange`). **A spent part turns the ring red while other parts still have credits** — the plan spent beside a pack with some left reads "spent" on the ring, though Qoder may go on drawing from the pack. That is what the reader asked for by switching it on; the total, still on the card, says what is left overall.
 
 ### Both rings
 

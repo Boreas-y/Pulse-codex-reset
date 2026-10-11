@@ -34,27 +34,39 @@ extension PanelGlobalsSuite {
         /// And once per way a lying rail lays out its figures: none (the top
         /// rail's default), under the rings, and — free across only — beside
         /// them. Each moves where every ring sits.
+        ///
+        /// And with the time arc off and on, figures under and above the
+        /// rings: the arc moves every figure further off (issue #73) and takes
+        /// room on the ring's side (issue #78), and which side that is depends
+        /// on where the figure is.
         private func underEachEndStyle(_ body: (String) -> Void) {
             let original = PanelMetrics.usesRoundEnds
             let labels = PanelMetrics.topRailShowsPercentages
             let beside = PanelMetrics.freeAcrossFiguresBeside
+            let clock = PanelMetrics.showsWindowClock
+            let above = PanelMetrics.labelAboveRing
             defer {
                 PanelMetrics.useRoundEnds(original)
                 PanelMetrics.showTopPercentages(labels)
                 PanelMetrics.putFreeAcrossFiguresBeside(beside)
+                PanelMetrics.showWindowClock(clock)
+                PanelMetrics.putLabelAboveRing(above)
             }
 
-            let clock = PanelMetrics.showsWindowClock
-            defer { PanelMetrics.showWindowClock(clock) }
             for round in [false, true] {
                 for (shows, besideRings) in [(false, false), (true, false), (true, true)] {
-                    // The time arc moves every figure further off (issue #73).
-                    PanelMetrics.showWindowClock(round)
-                    PanelMetrics.useRoundEnds(round)
-                    PanelMetrics.showTopPercentages(shows)
-                    PanelMetrics.putFreeAcrossFiguresBeside(besideRings)
-                    let figures = !shows ? "no figures across" : besideRings ? "figures beside" : "figures under"
-                    body("\(round ? "round ends" : "softened ends"), \(figures)")
+                    for arc in [false, true] {
+                        for labelAbove in [false, true] {
+                            PanelMetrics.useRoundEnds(round)
+                            PanelMetrics.showTopPercentages(shows)
+                            PanelMetrics.putFreeAcrossFiguresBeside(besideRings)
+                            PanelMetrics.showWindowClock(arc)
+                            PanelMetrics.putLabelAboveRing(labelAbove)
+                            let figures = !shows ? "no figures across" : besideRings ? "figures beside" : "figures under"
+                            body("\(round ? "round ends" : "softened ends"), \(figures), "
+                                + "time arc \(arc ? "on" : "off"), figure \(labelAbove ? "above" : "below")")
+                        }
+                    }
                 }
             }
         }
