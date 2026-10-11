@@ -6,6 +6,24 @@
         <description>Updates for Pulse.</description>
         <language>en</language>
         <item>
+            <title>1.10.0</title>
+            <pubDate>Sun, 11 Oct 2026 15:33:53 -0000</pubDate>
+            <sparkle:version>1.10.0</sparkle:version>
+            <sparkle:shortVersionString>1.10.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.10.0</link>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.10.0</h2><p><strong>新功能</strong></p><ul><li><strong>Qoder 的积分可以分项显示。</strong> Qoder 的积分额度由套餐积分、加油包和专属积分三部分相加而成，三者各自扣减，合计看起来还很充裕时，其中一项可能已所剩无几。在 Qoder 设置的「面板」中打开「分项显示积分」，合计之后会分别显示这三项，圆环默认跟随最接近用完的一项。只有一项有额度时不会重复显示。默认关闭。感谢 <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>开启剩余时间弧后，圆环不再贴着面板下边。</strong> 停靠在屏幕顶部、百分比显示在圆环上方并开启剩余时间弧时，弧几乎贴着面板下边缘，在刘海下尤其明显。现在开启剩余时间弧时，圆环一侧多留 10pt。感谢 <a href="https://github.com/qunqin24/Pulse/issues/78">@cybershape</a> 反馈。</li><li><strong>积分到期的说明不再被读成剩余总量。</strong> 卡片上原来显示「11月7日 1,989 积分到期」，紧挨着圆环的百分比，容易被理解为总共只剩 1,989。现在改为「其中 1,989 积分 11月7日 到期」，日文和韩文同样调整。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.10.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.10.0/Pulse-1.10.0.zip"
+                       length="15268854"
+                       type="application/octet-stream"
+                       sparkle:edSignature="c3wm3aw8+Tj8tFFG6NHOrDYsvbXinRLNoxzmmAA53ZoQhOjqbeUY4fwX0KcXbWveBgxBu4cs/+5ESYDOeHA5CQ==" />
+        </item>
+        <item>
             <title>1.9.0</title>
             <pubDate>Fri, 09 Oct 2026 05:31:02 -0000</pubDate>
             <sparkle:version>1.9.0</sparkle:version>

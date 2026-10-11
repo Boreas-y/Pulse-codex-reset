@@ -6,6 +6,24 @@
         <description>Updates for Pulse.</description>
         <language>en</language>
         <item>
+            <title>1.10.0</title>
+            <pubDate>Sun, 11 Oct 2026 15:33:53 -0000</pubDate>
+            <sparkle:version>1.10.0</sparkle:version>
+            <sparkle:shortVersionString>1.10.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.10.0</link>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.10.0</h2><p><strong>New</strong></p><ul><li><strong>Qoder&#x27;s credits can be shown part by part.</strong> Qoder&#x27;s credit allowance adds up plan credits, a top-up pack and dedicated credits, and each is spent separately, so the total can look ample while one of them is nearly gone. Turn on Show each part of the credits in the Panel group of Qoder&#x27;s settings, and the three parts follow the total on the card; the ring follows whichever is closest to spent unless you choose otherwise. A single part with an allowance is not shown twice. Off by default. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> for the suggestion.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>The rings no longer sit against the panel&#x27;s bottom edge with the time-until-reset arc on.</strong> Docked at the top of the screen, with figures above the rings and the arc on, the arc almost touched the panel&#x27;s bottom edge, most noticeably under the camera notch. The ring&#x27;s side now has 10pt more room while the arc is on. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/78">@cybershape</a> for the report.</li><li><strong>Expiring credits are no longer read as everything that is left.</strong> In Chinese, Japanese and Korean, the card&#x27;s line naming credits about to expire now says they are part of the total, so the amount beside the ring&#x27;s percentage is not taken for the whole remainder.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.10.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.10.0/Pulse-1.10.0.zip"
+                       length="15268854"
+                       type="application/octet-stream"
+                       sparkle:edSignature="c3wm3aw8+Tj8tFFG6NHOrDYsvbXinRLNoxzmmAA53ZoQhOjqbeUY4fwX0KcXbWveBgxBu4cs/+5ESYDOeHA5CQ==" />
+        </item>
+        <item>
             <title>1.9.0</title>
             <pubDate>Fri, 09 Oct 2026 05:31:02 -0000</pubDate>
             <sparkle:version>1.9.0</sparkle:version>
