@@ -400,11 +400,11 @@ extension PanelGlobalsSuite {
 
             PanelMetrics.putFreeAcrossFiguresBeside(false)
             // Where the hit test puts a ring is where the drawing does: the
-            // stacked item centred in the free rail's own thickness, behind its
-            // own padding — not the top dock's.
+            // stacked item behind the free rail's own padding — not the top
+            // dock's — and the time arc's reach on the ring's side.
             if !DockLayout.labelLeads {
                 #expect(DockLayout.ringCentreAcross(on: .horizontal, docked: false)
-                    == DockLayout.crossPadding(on: .horizontal, docked: false) + DockLayout.ringDiameter / 2)
+                    == DockLayout.crossInsets(on: .horizontal, docked: false).leading + DockLayout.ringDiameter / 2)
             }
             let docked = DockLayout.thickness(on: .horizontal, docked: true)
             let dockedStep = DockLayout.ringStep(on: .horizontal, docked: true)
@@ -432,6 +432,47 @@ extension PanelGlobalsSuite {
             // The window is budgeted for the longer and the thicker of the rails.
             #expect(DockLayout.maximumLength(on: .horizontal, capacity: 7)
                 == DockLayout.length(for: 7, on: .horizontal, docked: false))
+        }
+
+        /// Issue #78: a top dock with figures above the rings and the time arc
+        /// on drew the arc 3pt off the rail's bottom edge. The ring's side now
+        /// takes the arc's reach, so the clear room past the arc is what it is
+        /// past a ring without one — figures above or under, docked or free.
+        @MainActor
+        @Test("The time arc keeps the room a ring has from the rail's edge")
+        func timeArcKeepsItsRoom() {
+            let labels = PanelMetrics.topRailShowsPercentages
+            let beside = PanelMetrics.freeAcrossFiguresBeside
+            let above = PanelMetrics.labelAboveRing
+            let clock = PanelMetrics.showsWindowClock
+            defer {
+                PanelMetrics.showTopPercentages(labels)
+                PanelMetrics.putFreeAcrossFiguresBeside(beside)
+                PanelMetrics.putLabelAboveRing(above)
+                PanelMetrics.showWindowClock(clock)
+            }
+            PanelMetrics.showTopPercentages(true)
+            PanelMetrics.putFreeAcrossFiguresBeside(false)
+
+            /// Clear room between the rail's edge and the outermost thing
+            /// drawn round the ring, on the ring's side.
+            func room(docked: Bool) -> CGFloat {
+                let centre = DockLayout.ringCentreAcross(on: .horizontal, docked: docked)
+                let outer = DockLayout.ringDiameter / 2 + DockLayout.clockReach
+                return DockLayout.labelLeads
+                    ? DockLayout.thickness(on: .horizontal, docked: docked) - centre - outer
+                    : centre - outer
+            }
+            for labelAbove in [true, false] {
+                PanelMetrics.putLabelAboveRing(labelAbove)
+                for docked in [true, false] {
+                    PanelMetrics.showWindowClock(false)
+                    let plain = room(docked: docked)
+                    PanelMetrics.showWindowClock(true)
+                    #expect(room(docked: docked) == plain, "above \(labelAbove), docked \(docked)")
+                    #expect(DockLayout.clockReach == 5 * PanelMetrics.scale)
+                }
+            }
         }
     }
 }
