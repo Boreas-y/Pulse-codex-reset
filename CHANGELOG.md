@@ -7,6 +7,30 @@ shows in the update window — see [Scripts/changelog.py](Scripts/changelog.py).
 Add the entry **before** tagging, in the small grammar the converter knows:
 bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
+## 1.10.0
+
+**中文**
+
+**新功能**
+
+- **Qoder 的积分可以分项显示。** Qoder 的积分额度由套餐积分、加油包和专属积分三部分相加而成，三者各自扣减，合计看起来还很充裕时，其中一项可能已所剩无几。在 Qoder 设置的「面板」中打开「分项显示积分」，合计之后会分别显示这三项，圆环默认跟随最接近用完的一项。只有一项有额度时不会重复显示。默认关闭。感谢 [@momusticks](https://github.com/qunqin24/Pulse/issues/76) 提议。
+
+**改进与修复**
+
+- **开启剩余时间弧后，圆环不再贴着面板下边。** 停靠在屏幕顶部、百分比显示在圆环上方并开启剩余时间弧时，弧几乎贴着面板下边缘，在刘海下尤其明显。现在开启剩余时间弧时，圆环一侧多留 10pt。感谢 [@cybershape](https://github.com/qunqin24/Pulse/issues/78) 反馈。
+- **积分到期的说明不再被读成剩余总量。** 卡片上原来显示「11月7日 1,989 积分到期」，紧挨着圆环的百分比，容易被理解为总共只剩 1,989。现在改为「其中 1,989 积分 11月7日 到期」，日文和韩文同样调整。
+
+**English**
+
+**New**
+
+- **Qoder's credits can be shown part by part.** Qoder's credit allowance adds up plan credits, a top-up pack and dedicated credits, and each is spent separately, so the total can look ample while one of them is nearly gone. Turn on Show each part of the credits in the Panel group of Qoder's settings, and the three parts follow the total on the card; the ring follows whichever is closest to spent unless you choose otherwise. A single part with an allowance is not shown twice. Off by default. Thanks to [@momusticks](https://github.com/qunqin24/Pulse/issues/76) for the suggestion.
+
+**Changed and fixed**
+
+- **The rings no longer sit against the panel's bottom edge with the time-until-reset arc on.** Docked at the top of the screen, with figures above the rings and the arc on, the arc almost touched the panel's bottom edge, most noticeably under the camera notch. The ring's side now has 10pt more room while the arc is on. Thanks to [@cybershape](https://github.com/qunqin24/Pulse/issues/78) for the report.
+- **Expiring credits are no longer read as everything that is left.** In Chinese, Japanese and Korean, the card's line naming credits about to expire now says they are part of the total, so the amount beside the ring's percentage is not taken for the whole remainder.
+
 ## 1.9.0
 
 **中文**
