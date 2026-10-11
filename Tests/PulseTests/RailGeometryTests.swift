@@ -436,10 +436,10 @@ extension PanelGlobalsSuite {
 
         /// Issue #78: a top dock with figures above the rings and the time arc
         /// on drew the arc 3pt off the rail's bottom edge. The ring's side now
-        /// takes the arc's reach, so the clear room past the arc is what it is
+        /// takes 10pt more, so the clear room past the arc is 5pt more than
         /// past a ring without one — figures above or under, docked or free.
         @MainActor
-        @Test("The time arc keeps the room a ring has from the rail's edge")
+        @Test("The time arc gets more room from the rail's edge than a bare ring has")
         func timeArcKeepsItsRoom() {
             let labels = PanelMetrics.topRailShowsPercentages
             let beside = PanelMetrics.freeAcrossFiguresBeside
@@ -469,7 +469,7 @@ extension PanelGlobalsSuite {
                     PanelMetrics.showWindowClock(false)
                     let plain = room(docked: docked)
                     PanelMetrics.showWindowClock(true)
-                    #expect(room(docked: docked) == plain, "above \(labelAbove), docked \(docked)")
+                    #expect(room(docked: docked) == plain + 5 * PanelMetrics.scale, "above \(labelAbove), docked \(docked)")
                     #expect(DockLayout.clockReach == 5 * PanelMetrics.scale)
                 }
             }

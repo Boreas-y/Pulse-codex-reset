@@ -264,20 +264,24 @@ enum DockLayout {
     /// The padding either side of the items across the rail — top and bottom
     /// lying across, left and right down a side.
     ///
-    /// **The ring's side takes the time-until-reset arc's reach on top**, when
-    /// the rail lies across with its figures stacked over or under the rings.
-    /// The arc stands 5pt further out than the ring, and with figures above
-    /// the rings at the top dock it sat 3pt off the rail's bottom edge, under
-    /// a notch's whole housing of black (issue #78). The figures' side is left
-    /// as it was: the gap between a ring and its figure already allows for the
-    /// arc (`ringToTextSpacing`). Down a side, and with figures beside or off,
-    /// the rail is far wider than a ring and its arc, so nothing is added.
+    /// **The ring's side gets 10pt more while the time-until-reset arc is
+    /// on**, when the rail lies across with its figures stacked over or under
+    /// the rings. The arc stands 5pt further out than the ring, and with
+    /// figures above the rings at the top dock it sat 3pt off the rail's
+    /// bottom edge, under a notch's whole housing of black (issue #78). Its
+    /// own reach alone (5pt) was tried first and still read cramped; 10 was
+    /// picked by eye on the bundled app, which leaves 5pt more past the arc
+    /// than a ring without one has. The figures' side is left as it was: the
+    /// gap between a ring and its figure already allows for the arc
+    /// (`ringToTextSpacing`). Down a side, and with figures beside or off, the
+    /// rail is far wider than a ring and its arc, so nothing is added.
     static func crossInsets(on axis: PanelEdge.Axis,
                             docked: Bool = true) -> (leading: CGFloat, trailing: CGFloat) {
         let padding = crossPadding(on: axis, docked: docked)
         guard axis == .horizontal, showsPercentages(on: .horizontal),
               !labelsBeside(on: axis, docked: docked) else { return (padding, padding) }
-        return labelLeads ? (padding, padding + clockReach) : (padding + clockReach, padding)
+        let extra = PanelMetrics.showsWindowClock ? 10 * PanelMetrics.scale : 0
+        return labelLeads ? (padding, padding + extra) : (padding + extra, padding)
     }
 
     /// Rail length for a given number of providers: the padding at each end +
