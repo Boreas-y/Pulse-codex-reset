@@ -152,6 +152,19 @@ final class AppSettings {
         didSet { hidesInFullScreenChanged(from: oldValue) }
     }
 
+    /// Whether the floating panel is left out of screenshots and screen
+    /// recordings (`NSWindow.sharingType = .none`).
+    ///
+    /// **Off by default, because it hides Pulse from its own pictures too.**
+    /// The panel's window is sized for the tallest card it may show and is
+    /// mostly transparent, so a screenshot tool's automatic window selection
+    /// picks a frame far larger than the rail. Switching this on takes the
+    /// window out of capture altogether — which is also what keeps a README
+    /// image or a bug report's screenshot from showing it.
+    var hidesFromScreenCapture: Bool {
+        didSet { hidesFromScreenCaptureChanged(from: oldValue) }
+    }
+
     /// Whether the panel moves itself onto whichever display the pointer is on.
     ///
     /// Off by default: with one display it can do nothing, and with two it
@@ -894,6 +907,7 @@ final class AppSettings {
         hidesMenuBarIcon: Bool = Default.hidesMenuBarIcon,
         showsDockIconInSettings: Bool = Default.showsDockIconInSettings,
         hidesInFullScreen: Bool = Default.hidesInFullScreen,
+        hidesFromScreenCapture: Bool = Default.hidesFromScreenCapture,
         followsActiveDisplay: Bool = Default.followsActiveDisplay,
         openSettingsShortcut: GlobalShortcut? = nil,
         togglePanelShortcut: GlobalShortcut? = nil,
@@ -951,6 +965,7 @@ final class AppSettings {
         self.hidesMenuBarIcon = hidesMenuBarIcon
         self.showsDockIconInSettings = showsDockIconInSettings
         self.hidesInFullScreen = hidesInFullScreen
+        self.hidesFromScreenCapture = hidesFromScreenCapture
         self.followsActiveDisplay = followsActiveDisplay
         self.openSettingsShortcut = openSettingsShortcut
         self.togglePanelShortcut = togglePanelShortcut
@@ -1048,6 +1063,9 @@ final class AppSettings {
                 Key.showsDockIconInSettings, default: Default.showsDockIconInSettings
             ),
             hidesInFullScreen: defaults.settingsFlag(Key.hidesInFullScreen, default: Default.hidesInFullScreen),
+            hidesFromScreenCapture: defaults.settingsFlag(
+                Key.hidesFromScreenCapture, default: Default.hidesFromScreenCapture
+            ),
             followsActiveDisplay: defaults.settingsFlag(
                 Key.followsActiveDisplay, default: Default.followsActiveDisplay
             ),
