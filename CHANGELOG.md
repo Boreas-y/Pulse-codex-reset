@@ -7,6 +7,38 @@ shows in the update window — see [Scripts/changelog.py](Scripts/changelog.py).
 Add the entry **before** tagging, in the small grammar the converter knows:
 bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
+## 1.11.0
+
+**中文**
+
+**新功能**
+
+- **俄语界面。** 在「设置 → 通用 → 语言」中选择。感谢 [@winstik13](https://github.com/qunqin24/Pulse/pull/77) 贡献翻译。
+- **扩展可以上报自定义指标。** 例如首字时间和输出速率，显示在卡片上并画出趋势线，[写法](https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md#metrics)见文档。感谢 [@xkaaaaaa](https://github.com/qunqin24/Pulse/issues/80) 提议。
+- **新增「不使用代理」和「使用代理」。** 在「设置 → 网络与刷新 → 代理」中选择，「使用代理」在系统代理未开启时不联网，默认仍为「跟随系统」。
+- **截图时隐藏悬浮面板。** 在「设置 → 位置与行为」中打开「截图时隐藏」，支持此设置的截图工具不会再截到悬浮面板。
+
+**改进与修复**
+
+- **服务商确认没有套餐后，不再显示旧额度。** 适用于 z.ai、Xiaomi Coding Plan、Grok Bot 等。
+- **清除 Xiaomi Coding Plan 的登录后，卡片提示重新登录。** 不再显示过期的旧额度。
+- **重新登录的账号不会被旧登录的续期覆盖。** 适用于在 Pulse 中添加的 Claude Code 和 Grok 账号。
+
+**English**
+
+**New**
+
+- **Russian interface.** Choose it under Settings → General → Language. Thanks to [@winstik13](https://github.com/qunqin24/Pulse/pull/77) for the translation.
+- **Extensions can report metrics of their own.** Figures such as time to first token and output rate appear on the card with a trend line; see [how to report them](https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md#metrics). Thanks to [@xkaaaaaa](https://github.com/qunqin24/Pulse/issues/80) for the suggestion.
+- **No Proxy and System Proxy Only.** Choose them under Settings → Network and refresh → Proxy; System Proxy Only connects nowhere while macOS has no proxy switched on, and Follow System stays the default.
+- **Hide the floating panel from screenshots.** Turn on Hide from screenshots under Settings → Position and behavior, and screenshot tools that support it leave the panel out.
+
+**Changed and fixed**
+
+- **Old figures are no longer shown once a provider confirms there is no plan.** This covers z.ai, Xiaomi Coding Plan, Grok Bot and others.
+- **Clearing Xiaomi Coding Plan's sign-in asks you to sign in again.** The card no longer shows the old figures instead.
+- **An account signed in to again is no longer replaced by the old login's renewal.** This covers Claude Code and Grok accounts added in Pulse.
+
 ## 1.10.0
 
 **中文**
