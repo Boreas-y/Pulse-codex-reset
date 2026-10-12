@@ -23,6 +23,9 @@ bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 - **服务商确认没有套餐后，不再显示旧额度。** 适用于 z.ai、Xiaomi Coding Plan、Grok Bot 等。
 - **清除 Xiaomi Coding Plan 的登录后，卡片提示重新登录。** 不再显示过期的旧额度。
 - **重新登录的账号不会被旧登录的续期覆盖。** 适用于在 Pulse 中添加的 Claude Code 和 Grok 账号。
+- **Qoder 分项显示时，到期说明不再重复。** 合计行不再显示到期，整行一起到期时写作「11月7日全部到期」。感谢 [@momusticks](https://github.com/qunqin24/Pulse/issues/76) 反馈。
+- **Qoder 积分分多天到期时，卡片说明全部批次。** 例如「11月8日起分 4 批全部到期」。[#76](https://github.com/qunqin24/Pulse/issues/76)
+- **打开「分项显示积分」后，圆环跟随最接近用完的一项。** 原来固定在合计上的圆环会改回自动。[#76](https://github.com/qunqin24/Pulse/issues/76)
 
 **English**
 
@@ -38,6 +41,9 @@ bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 - **Old figures are no longer shown once a provider confirms there is no plan.** This covers z.ai, Xiaomi Coding Plan, Grok Bot and others.
 - **Clearing Xiaomi Coding Plan's sign-in asks you to sign in again.** The card no longer shows the old figures instead.
 - **An account signed in to again is no longer replaced by the old login's renewal.** This covers Claude Code and Grok accounts added in Pulse.
+- **Qoder's expiry lines no longer repeat when its credits are shown part by part.** The total no longer shows one, and a row whose credits all lapse together reads "All expire Nov 7". Thanks to [@momusticks](https://github.com/qunqin24/Pulse/issues/76) for the report.
+- **Qoder credits lapsing over several days are described in full.** For example, "All expire from Nov 8, in 4 lots". [#76](https://github.com/qunqin24/Pulse/issues/76)
+- **Turning on Show each part of the credits lets the ring follow the part closest to spent.** A ring pinned to the total returns to automatic. [#76](https://github.com/qunqin24/Pulse/issues/76)
 
 ## 1.10.0
 
