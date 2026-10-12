@@ -76,11 +76,13 @@ actor UsageCache {
     /// something, whichever was actually taken later.
     func reconciled(_ result: ProviderUsage) -> ProviderUsage {
         let fetched = result.recordingSoleRoute()
-        // Qoder confirmed there is no allowance, or StepFun that there is no
-        // Step Plan. It supersedes the old figures, including on the next
-        // launch and in the cached JSON export. A failed or unreadable request
-        // still uses the ordinary fallback.
-        if fetched.state == .unavailable(.qoderNoCredits) || fetched.state == .unavailable(.stepFunNoPlan) {
+        // The service confirmed there is no plan or no allowance: Qoder's
+        // credits, StepFun's Step Plan, Z.ai's and Xiaomi's Coding Plan, a
+        // Cursor plan without Grok Bot, a profiled provider's plan. It
+        // supersedes the old figures, including on the next launch and in the
+        // cached JSON export. A failed or unreadable request still uses the
+        // ordinary fallback.
+        if case .unavailable(let reason) = fetched.state, Self.confirmsNoPlan(reason) {
             discard(for: fetched.account)
             return fetched
         }
@@ -164,7 +166,8 @@ actor UsageCache {
         // Gemini's vanished login file showed the last percentage, stale,
         // instead of asking to sign in.
         if case .unavailable(let reason) = fetched.state,
-           [.apiKeyMissing, .ollamaSessionMissing, .qoderSessionMissing, .stepFunSessionMissing, .signedOut,
+           [.apiKeyMissing, .ollamaSessionMissing, .qoderSessionMissing, .stepFunSessionMissing,
+            .xiaomiSessionMissing, .signedOut,
             .claudeDesktopNotSignedIn, .claudeDesktopKeyRefused,
             .serverAddressMissing, .serverAddressRefused,
             .sessionMissing, .localLoginMissing, .localAppMissing].contains(reason) {
@@ -194,6 +197,13 @@ actor UsageCache {
         }
 
         return cached
+    }
+
+    /// A complete answer that there is nothing to show — not a failure, so the
+    /// banked figures are not a newer version of it.
+    static func confirmsNoPlan(_ reason: ProviderUsage.Unavailability) -> Bool {
+        [.qoderNoCredits, .stepFunNoPlan, .zaiNoCodingPlan, .xiaomiNoCodingPlan,
+         .grokBotNotIncluded, .noPlan].contains(reason)
     }
 
     /// Whether `b`'s figures may stand in for `a`'s — a fallback, a newer
