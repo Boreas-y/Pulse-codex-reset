@@ -40,7 +40,7 @@
 "Copy diagnostics" = "Copy diagnostics";
 "Not recorded" = "Not recorded";
 "Read cached usage" = "Read cached usage";
-"Reads saved figures without fetching or opening credentials." = "Reads saved figures without fetching or opening credentials.";
+"Prints Pulse's saved readings, not the provider's original reply, without fetching or opening credentials." = "Prints Pulse's saved readings, not the provider's original reply, without fetching or opening credentials.";
 "Copy command" = "Copy command";
 "Developer kit" = "Developer kit";
 "Raycast extension, tmux and shell status, and a sketchybar plugin." = "Raycast extension, tmux and shell status, and a sketchybar plugin.";
@@ -680,6 +680,9 @@
 "Show each part of the credits" = "Show each part of the credits";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone.";
 "%@: %@ credits expire" = "%@: %@ credits expire";
+"All expire %@" = "All expire %@";
+"All expire from %@, in %@ lots" = "All expire from %1$@, in %2$@ lots";
+"From %@: %@ credits expire in turn" = "From %1$@: %2$@ credits expire in turn";
 "Sign in to Qoder in a browser to see usage." = "Sign in to Qoder in a browser to see usage.";
 "Qoder's saved session expired. Sign in again in your browser." = "Qoder's saved session expired. Sign in again in your browser.";
 "This Qoder account has no credits." = "This Qoder account has no credits.";

@@ -40,7 +40,7 @@
 "Copy diagnostics" = "Скопировать диагностику";
 "Not recorded" = "Не записано";
 "Read cached usage" = "Расход из кэша";
-"Reads saved figures without fetching or opening credentials." = "Выводит сохранённые значения, не обращаясь к сервисам и учётным данным.";
+"Prints Pulse's saved readings, not the provider's original reply, without fetching or opening credentials." = "Выводит сохранённые показания Pulse, а не исходный ответ сервиса, не обращаясь к сервисам и учётным данным.";
 "Copy command" = "Скопировать команду";
 "Developer kit" = "Набор для разработчиков";
 "Raycast extension, tmux and shell status, and a sketchybar plugin." = "Расширение для Raycast, строка состояния для tmux и оболочки, плагин для sketchybar.";
@@ -680,6 +680,9 @@
 "Show each part of the credits" = "Показывать кредиты по частям";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Кредиты тарифа, пакет пополнения и целевые кредиты расходуются отдельно. Общий остаток может выглядеть большим, хотя одна из частей почти исчерпана.";
 "%@: %@ credits expire" = "Из них к %1$@ сгорит %2$@";
+"All expire %@" = "Всё сгорит к %@";
+"All expire from %@, in %@ lots" = "Сгорит частями с %1$@";
+"From %@: %@ credits expire in turn" = "Из них с %1$@ сгорит частями %2$@";
 "Sign in to Qoder in a browser to see usage." = "Войдите в Qoder в браузере, чтобы видеть расход.";
 "Qoder's saved session expired. Sign in again in your browser." = "Сохранённый сеанс Qoder истёк. Войдите снова в браузере.";
 "This Qoder account has no credits." = "У этого аккаунта Qoder нет кредитов.";

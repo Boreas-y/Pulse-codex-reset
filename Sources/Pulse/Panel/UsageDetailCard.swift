@@ -499,12 +499,33 @@ struct UsageDetailCard: View {
         formatter.setLocalizedDateFormatFromTemplate(
             Calendar.current.isDateInToday(expiry.at) ? "jmm" : "MMMd"
         )
-        // StepFun counts in Credits of which a plan holds billions: "1,599,913,834"
-        // does not fit the slot, and the scale is the point, as with tokens.
-        let amount = expiry.amount >= 10_000
-            ? TokenCount.short(Int(expiry.amount))
-            : expiry.amount.formatted(.number.precision(.fractionLength(0...1)).locale(LocalizationSource.locale))
-        return String.localized("\(formatter.string(from: expiry.at)): \(amount) credits expire")
+        let date = formatter.string(from: expiry.at)
+        // **Several days of lots are said as several.** Naming the soonest
+        // alone said 100 of 400 had a deadline when all four had (issue #76):
+        // the line gives everything that lapses, from the first day, and in
+        // how many lots.
+        // **Everything the row has left needs no amount**: the bar beside it
+        // already says how much that is, and the line has to fit beside the
+        // percentage. "Of which" only where it is part of the row: a part
+        // whose credits all lapse together read as a fraction of itself.
+        if expiry.coversRemainder == true {
+            if let lots = expiry.lots {
+                return String.localized("All expire from \(date), in \(String(lots)) lots")
+            }
+            return String.localized("All expire \(date)")
+        }
+        if let total = expiry.totalAmount {
+            return String.localized("From \(date): \(expiryAmount(total)) credits expire in turn")
+        }
+        return String.localized("\(date): \(expiryAmount(expiry.amount)) credits expire")
+    }
+
+    /// StepFun counts in Credits of which a plan holds billions: "1,599,913,834"
+    /// does not fit the slot, and the scale is the point, as with tokens.
+    private static func expiryAmount(_ amount: Double) -> String {
+        amount >= 10_000
+            ? TokenCount.short(Int(amount))
+            : amount.formatted(.number.precision(.fractionLength(0...1)).locale(LocalizationSource.locale))
     }
 
     private static func relative(_ date: Date) -> String {
@@ -1065,6 +1086,12 @@ private struct ProgressMetricRow: View {
                 Text(figureLabel)
                     .font(.system(size: DetailCardLayout.rowFontSize, weight: .medium, design: .rounded))
                     .foregroundStyle(isSpent ? Color.pulseExhausted : .primary.opacity(0.9))
+                    // **The figure keeps its line.** The reset line beside it
+                    // took the room first, and a long one — Russian's
+                    // "Сброс 9 нояб., 00:00", an expiry in lots — folded
+                    // "Осталось 58%" onto two lines, a row taller than the card
+                    // is budgeted for. The reset line gives way instead.
+                    .fixedSize()
                     // Swapped outright. A cross-fade drew two figures over each
                     // other; a numeric roll left the digits mid-turn — blank —
                     // for most of a sweep down the rail, since every switch
@@ -1078,6 +1105,8 @@ private struct ProgressMetricRow: View {
                     .font(.system(size: DetailCardLayout.rowFontSize, weight: .regular, design: .rounded))
                     .foregroundStyle(.primary.opacity(0.45))
                     .lineLimit(1)
+                    // Smaller before it is cut short.
+                    .minimumScaleFactor(0.8)
                     .layoutPriority(1)
             }
 

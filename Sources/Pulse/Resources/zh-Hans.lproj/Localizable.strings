@@ -40,7 +40,7 @@
 "Copy diagnostics" = "复制诊断信息";
 "Not recorded" = "尚无记录";
 "Read cached usage" = "读取用量缓存";
-"Reads saved figures without fetching or opening credentials." = "仅读取已保存的数字，不向服务商请求，也不访问凭据。";
+"Prints Pulse's saved readings, not the provider's original reply, without fetching or opening credentials." = "输出 Pulse 已保存的读数，不是服务商的原始回复；不会联网，也不访问凭据。";
 "Copy command" = "复制命令";
 "Developer kit" = "开发者集成包";
 "Raycast extension, tmux and shell status, and a sketchybar plugin." = "包含 Raycast 扩展、tmux 和终端里的状态显示，以及 sketchybar 插件。";
@@ -680,6 +680,9 @@
 "Show each part of the credits" = "分项显示积分";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "套餐积分、加油包和专属积分各自扣减。合计看起来尚有余量时，其中一项可能已所剩无几。";
 "%@: %@ credits expire" = "其中 %2$@ 积分 %1$@ 到期";
+"All expire %@" = "%@全部到期";
+"All expire from %@, in %@ lots" = "%1$@起分 %2$@ 批全部到期";
+"From %@: %@ credits expire in turn" = "其中 %2$@ 积分 %1$@起陆续到期";
 "Sign in to Qoder in a browser to see usage." = "在浏览器里登录 Qoder 后才能看到用量。";
 "Qoder's saved session expired. Sign in again in your browser." = "Qoder 的登录信息已过期，请在浏览器里重新登录。";
 "This Qoder account has no credits." = "这个 Qoder 账号上没有积分。";

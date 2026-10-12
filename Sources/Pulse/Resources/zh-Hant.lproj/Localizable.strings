@@ -40,7 +40,7 @@
 "Copy diagnostics" = "複製診斷資訊";
 "Not recorded" = "尚無記錄";
 "Read cached usage" = "讀取用量快取";
-"Reads saved figures without fetching or opening credentials." = "只讀取已儲存的數字，不向服務商請求，也不存取憑證。";
+"Prints Pulse's saved readings, not the provider's original reply, without fetching or opening credentials." = "輸出 Pulse 已儲存的讀數，不是服務商的原始回覆；不會連網，也不存取憑證。";
 "Copy command" = "複製指令";
 "Developer kit" = "開發者整合包";
 "Raycast extension, tmux and shell status, and a sketchybar plugin." = "包含 Raycast 擴充功能、tmux 和終端機裡的狀態顯示，以及 sketchybar 外掛。";
@@ -680,6 +680,9 @@
 "Show each part of the credits" = "分項顯示點數";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "方案點數、加購包與專屬點數各自扣減。合計看起來尚有餘裕時，其中一項可能已所剩無幾。";
 "%@: %@ credits expire" = "其中 %2$@ 點數 %1$@ 到期";
+"All expire %@" = "%@全部到期";
+"All expire from %@, in %@ lots" = "%1$@起分 %2$@ 批全部到期";
+"From %@: %@ credits expire in turn" = "其中 %2$@ 點數 %1$@起陸續到期";
 "Sign in to Qoder in a browser to see usage." = "在瀏覽器登入 Qoder 後才能看到用量。";
 "Qoder's saved session expired. Sign in again in your browser." = "Qoder 的登入資訊已過期，請在瀏覽器重新登入。";
 "This Qoder account has no credits." = "這個 Qoder 帳號上沒有點數。";
