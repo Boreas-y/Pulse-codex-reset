@@ -202,12 +202,19 @@ enum NetworkSession {
     /// addresses are never refused — nothing leaves the machine.
     static func refuses(_ url: URL?, settings: NetworkProxySettings, systemProxyOn: () -> Bool) -> Bool {
         guard settings.mode == .systemRequired else { return false }
-        if let host = url?.host()?.lowercased(),
-           host == "localhost" || host.hasSuffix(".localhost") || host == "::1" || host == "[::1]"
-            || host.hasPrefix("127.") {
-            return false
-        }
+        if let host = url?.host(), isLoopback(host) { return false }
         return !systemProxyOn()
+    }
+
+    /// `localhost`, a name under it, `::1`, or an IPv4 address in
+    /// 127.0.0.0/8 — parsed as an address, so `127.example.com` is a public
+    /// name like any other and is held back with the rest.
+    static func isLoopback(_ host: String) -> Bool {
+        let host = host.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+        if host == "localhost" || host.hasSuffix(".localhost") { return true }
+        if let v6 = IPv6Address(host) { return v6 == .loopback }
+        if let v4 = IPv4Address(host) { return v4.rawValue.first == 127 }
+        return false
     }
 
     /// "System Proxy Only" is refusing everything right now.

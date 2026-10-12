@@ -189,4 +189,14 @@ struct NetworkProxyTests {
         // Quitting the proxy app is not an outage to announce.
         #expect(AlertMemory.standing(of: .systemProxyOff) == .neutral)
     }
+
+    @Test("Loopback is an address, not a name that starts like one", arguments: [
+        ("localhost", true), ("api.localhost", true), ("127.0.0.1", true), ("127.8.9.10", true),
+        ("::1", true), ("[::1]", true),
+        ("127.audit.example.com", false), ("127.0.0.1.example.com", false), ("128.0.0.1", false),
+        ("api.anthropic.com", false), ("::2", false),
+    ])
+    func loopback(host: String, isLoopback: Bool) {
+        #expect(NetworkSession.isLoopback(host) == isLoopback)
+    }
 }
