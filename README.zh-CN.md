@@ -120,91 +120,154 @@
 
 Pulse 只呈现各服务上报的数字，每个百分比都来自那份回复本身。各产品的读取通道不同（已文档化的客户端接口、编辑器登录态、本地 language server、粘贴的密钥），并不是每一行都有公开的官方配额 API。贡献者细节见 [Docs/providers/README.md](Docs/providers/README.md)。
 
-| 服务商 | 读取通道与鉴权方式 | 说明与特性 |
-|---|---|---|
-| **Claude Code** | 账号 OAuth 用量接口；自动回退至 Claude 桌面端 Web 会话及状态栏 | 优先复用本机已存凭据，支持终端及桌面端混合无缝切换 |
-| **Codex** | 客户端用量接口；回退至 `codex app-server` | 自动复用本地 Codex 登录凭证 |
-| **Kiro** | Kiro CLI 原生 ACP 用量方法 | 借用 Kiro CLI 已登录的会话；Pulse 从不读取或保存 Kiro 凭据（[详情](Docs/providers/kiro.md)） |
-| **Antigravity** | 编辑器本地运行的 Language Server (LSP) | 在 Antigravity 编辑器运行期间实时报告 |
-| **Cursor** | Cursor 账号用量摘要接口 | 读取编辑器已保存凭据，分别展示 Fast / Slow 两个额度池 |
-| **Grok** | Grok Build CLI 代理接口 | 一个统一的周额度池，与网页/CLI/API 全线 Grok 共享 |
-| **Grok Bot** | Cursor 仪表盘接口 | Cursor 套餐内包含的 xAI 专属额度 |
-| **GitHub Copilot** | GitHub 设备码（Device Code）登录 | 只申请 `read:user` 这一项权限 |
-| **OpenCode Go** | 设置中填入 API Key，或读取 OpenCode CLI 登录信息；也可读取浏览器里 OpenCode 控制台的登录 | 读取控制台登录后，详细额度卡还会显示账号的请求记录：所有设备、所有应用，以及每次请求的实际花费 |
-| **Kimi Code** | 设置中填入 API Key | — |
-| **z.ai** | 设置中填入 API Key | 智谱国际站（`api.z.ai`），与国内账号独立 |
-| **Zhipu** | 设置中填入 API Key，或读取本地 GLM 工具已保存密钥 | 智谱国内站（`open.bigmodel.cn`） |
-| **MiniMax / MiniMax CN** | 设置中填入 API Key | 同时支持国际站（`minimax.io`）与国内站（`minimaxi.com`） |
-| **Ollama Cloud** | 本地读取浏览器登录会话 Cookies | 官方无配额 API。详见 [Docs/ollama-cloud.md](Docs/ollama-cloud.md) |
-| **Volcengine（火山引擎）** | `arkcli` 登录，或粘贴 Volcengine Access Key 对（签名走 Top OpenAPI） | Ark Coding / Agent 套餐；自动模式优先使用粘贴的密钥 |
-| **Command Code** | 设置中填入 API Key，或读取 `cmd login` 已保存的登录 | 以美元计费的余额；含滚动 5 小时 / 周限额与月度套餐行（标记为**估算**） |
-| **DeepSeek** | 设置中填入 API Key；官方文档化的 `GET /user/balance` | 仅报告预付余额、无额度；圆环的度量基准由你选择 |
-| **Devin** | 什么都不用填——读取浏览器里的登录会话，无需钥匙串授权 | 每日与每周额度均由 Devin 报告。没有浏览器会话或手填凭据时，读取应用存下的带日期套餐；接口失败只使用账户与组织匹配的接口缓存（[Docs/providers/devin.md](Docs/providers/devin.md)）|
-| **小米 Coding Plan** | 什么都不用填——读取浏览器里已登录的会话，也可以手动粘贴 `Cookie:` 头 | 小米 MiMo 控制台上的月度 token 额度，有结束时间就一并显示。预付余额作为一行附在卡片上。账号上没有 Coding Plan 时会直说，而不是画一个 0%（[Docs/providers/xiaomi-coding-plan.md](Docs/providers/xiaomi-coding-plan.md)） |
-| **sub2api** | 粘贴的分组密钥；网关地址自行填写 | 读取自建 [sub2api](https://github.com/Wei-Shaw/sub2api) 网关按分组核算的用量——余额、配额、订阅或限速窗口，取决于分组的设置方式（[Docs/providers/sub2api.md](Docs/providers/sub2api.md)） |
-| **New API** | 粘贴的 `sk-` 密钥；网关地址自行填写 | 读取自建 [New API](https://github.com/QuantumNous/new-api) 网关的余额，按部署方设定的币种显示；不显示百分比，因为回复里的比例可能有两种含义（[Docs/providers/newapi.md](Docs/providers/newapi.md)） |
-| **V2EX** | 粘贴的个人访问令牌 | AI Chat 滚动 5 小时的 token 配额，买过加油包再多画一个环；窗口还没开始时不显示倒计时（[Docs/providers/v2ex.md](Docs/providers/v2ex.md)） |
-| **Qoder** | 什么都不用填——读取浏览器里 qoder.com 或 qoder.com.cn 的登录会话，也可以手动粘贴 `Cookie:` 头 | 积分额度（套餐加加油包），按 Qoder 上报的重置时间显示；团队套餐的共享积分单独画一个环，从不相加；可选择把套餐积分、加油包和专属积分分项显示；额度为零时会直说，而不是画一个空环（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
-| **阶跃星辰（StepFun）** | 什么都不用填——读取浏览器里 platform.stepfun.com 或 platform.stepfun.ai 的登录会话，也可以手动粘贴 `Cookie:` 头 | Step Plan：Token Plan 的月度 Credit 和加油包合成一个环，并显示最早一批的到期日；旧版 Coding Plan 显示 5 小时和每周两个窗口；没有订阅时会直说，而不是画一个环（[Docs/providers/stepfun.md](Docs/providers/stepfun.md)） |
+| 图标 | 服务商 | 读取通道与鉴权方式 | 说明与特性 |
+|---|---|---|---|
+| <img src="Docs/icons/claude.svg" width="24" height="24" alt=""> | **Claude Code** | 账号 OAuth 用量接口；自动回退至 Claude 桌面端 Web 会话及状态栏 | 优先复用本机已存凭据，支持终端及桌面端混合无缝切换 |
+| <img src="Docs/icons/openai.svg" width="24" height="24" alt=""> | **Codex** | 客户端用量接口；回退至 `codex app-server` | 自动复用本地 Codex 登录凭证 |
+| <img src="Docs/icons/kiro.svg" width="24" height="24" alt=""> | **Kiro** | Kiro CLI 原生 ACP 用量方法 | 借用 Kiro CLI 已登录的会话；Pulse 从不读取或保存 Kiro 凭据（[详情](Docs/providers/kiro.md)） |
+| <img src="Docs/icons/antigravity.svg" width="24" height="24" alt=""> | **Antigravity** | 编辑器本地运行的 Language Server (LSP) | 在 Antigravity 编辑器运行期间实时报告 |
+| <img src="Docs/icons/cursor.svg" width="24" height="24" alt=""> | **Cursor** | Cursor 账号用量摘要接口 | 读取编辑器已保存凭据，分别展示 Fast / Slow 两个额度池 |
+| <img src="Docs/icons/grok.svg" width="24" height="24" alt=""> | **Grok** | Grok Build CLI 代理接口 | 一个统一的周额度池，与网页/CLI/API 全线 Grok 共享 |
+| <img src="Docs/icons/xai.svg" width="24" height="24" alt=""> | **Grok Bot** | Cursor 仪表盘接口 | Cursor 套餐内包含的 xAI 专属额度 |
+| <img src="Docs/icons/github.svg" width="24" height="24" alt=""> | **GitHub Copilot** | GitHub 设备码（Device Code）登录 | 只申请 `read:user` 这一项权限 |
+| <img src="Docs/icons/opencode.svg" width="24" height="24" alt=""> | **OpenCode Go** | 设置中填入 API Key，或读取 OpenCode CLI 登录信息；也可读取浏览器里 OpenCode 控制台的登录 | 读取控制台登录后，详细额度卡还会显示账号的请求记录：所有设备、所有应用，以及每次请求的实际花费 |
+| <img src="Docs/icons/kimi.svg" width="24" height="24" alt=""> | **Kimi Code** | 设置中填入 API Key | — |
+| <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **z.ai** | 设置中填入 API Key | 智谱国际站（`api.z.ai`），与国内账号独立 |
+| <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **Zhipu** | 设置中填入 API Key，或读取本地 GLM 工具已保存密钥 | 智谱国内站（`open.bigmodel.cn`） |
+| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax / MiniMax CN** | 设置中填入 API Key | 同时支持国际站（`minimax.io`）与国内站（`minimaxi.com`） |
+| <img src="Docs/icons/ollama.svg" width="24" height="24" alt=""> | **Ollama Cloud** | 本地读取浏览器登录会话 Cookies | 官方无配额 API。详见 [Docs/ollama-cloud.md](Docs/ollama-cloud.md) |
+| <img src="Docs/icons/volcengine.svg" width="24" height="24" alt=""> | **Volcengine（火山引擎）** | `arkcli` 登录，或粘贴 Volcengine Access Key 对（签名走 Top OpenAPI） | Ark Coding / Agent 套餐；自动模式优先使用粘贴的密钥 |
+| <img src="Docs/icons/commandcode.svg" width="24" height="24" alt=""> | **Command Code** | 设置中填入 API Key，或读取 `cmd login` 已保存的登录 | 以美元计费的余额；含滚动 5 小时 / 周限额与月度套餐行（标记为**估算**） |
+| <img src="Docs/icons/deepseek.svg" width="24" height="24" alt=""> | **DeepSeek** | 设置中填入 API Key；官方文档化的 `GET /user/balance` | 仅报告预付余额、无额度；圆环的度量基准由你选择 |
+| <img src="Docs/icons/devin.svg" width="24" height="24" alt=""> | **Devin** | 什么都不用填——读取浏览器里的登录会话，无需钥匙串授权 | 每日与每周额度均由 Devin 报告。没有浏览器会话或手填凭据时，读取应用存下的带日期套餐；接口失败只使用账户与组织匹配的接口缓存（[Docs/providers/devin.md](Docs/providers/devin.md)）|
+| <img src="Docs/icons/xiaomimimo.svg" width="24" height="24" alt=""> | **小米 Coding Plan** | 什么都不用填——读取浏览器里已登录的会话，也可以手动粘贴 `Cookie:` 头 | 小米 MiMo 控制台上的月度 token 额度，有结束时间就一并显示。预付余额作为一行附在卡片上。账号上没有 Coding Plan 时会直说，而不是画一个 0%（[Docs/providers/xiaomi-coding-plan.md](Docs/providers/xiaomi-coding-plan.md)） |
+| <img src="Docs/icons/sub2api.svg" width="24" height="24" alt=""> | **sub2api** | 粘贴的分组密钥；网关地址自行填写 | 读取自建 [sub2api](https://github.com/Wei-Shaw/sub2api) 网关按分组核算的用量——余额、配额、订阅或限速窗口，取决于分组的设置方式（[Docs/providers/sub2api.md](Docs/providers/sub2api.md)） |
+| <img src="Docs/icons/newapi.svg" width="24" height="24" alt=""> | **New API** | 粘贴的 `sk-` 密钥；网关地址自行填写 | 读取自建 [New API](https://github.com/QuantumNous/new-api) 网关的余额，按部署方设定的币种显示；不显示百分比，因为回复里的比例可能有两种含义（[Docs/providers/newapi.md](Docs/providers/newapi.md)） |
+| <img src="Docs/icons/v2ex.svg" width="24" height="24" alt=""> | **V2EX** | 粘贴的个人访问令牌 | AI Chat 滚动 5 小时的 token 配额，买过加油包再多画一个环；窗口还没开始时不显示倒计时（[Docs/providers/v2ex.md](Docs/providers/v2ex.md)） |
+| <img src="Docs/icons/qoder.svg" width="24" height="24" alt=""> | **Qoder** | 什么都不用填——读取浏览器里 qoder.com 或 qoder.com.cn 的登录会话，也可以手动粘贴 `Cookie:` 头 | 积分额度（套餐加加油包），按 Qoder 上报的重置时间显示；团队套餐的共享积分单独画一个环，从不相加；可选择把套餐积分、加油包和专属积分分项显示；额度为零时会直说，而不是画一个空环（[Docs/providers/qoder.md](Docs/providers/qoder.md)） |
+| <img src="Docs/icons/stepfun.svg" width="24" height="24" alt=""> | **阶跃星辰（StepFun）** | 什么都不用填——读取浏览器里 platform.stepfun.com 或 platform.stepfun.ai 的登录会话，也可以手动粘贴 `Cookie:` 头 | Step Plan：Token Plan 的月度 Credit 和加油包合成一个环，并显示最早一批的到期日；旧版 Coding Plan 显示 5 小时和每周两个窗口；没有订阅时会直说，而不是画一个环（[Docs/providers/stepfun.md](Docs/providers/stepfun.md)） |
 
 ### 更多服务商
 
 参照 [CodexBar](https://github.com/steipete/CodexBar) 的实现编写。**尚未用真实账号验证**——如果某家用不了，欢迎[提 issue](https://github.com/qunqin24/Pulse/issues)。各家的设置步骤见 [Docs/setup/](Docs/setup/)（英文），维护说明见 [Docs/providers/README.md](Docs/providers/README.md#profiled-providers)。
 
-| 服务商 | 读取通道与鉴权方式 | 显示内容 |
-|---|---|---|
-| **Abacus AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 算力点数与账单日期 |
-| **Aixy** | 设置中填入 API Key | 按周期的网关预算 |
-| **Alibaba Coding Plan** | 设置中填入 API Key | 5 小时、每周、每月额度；先问国际站，再问国内站 |
-| **Alibaba Token Plan** | 运行阿里 `bl` CLI，使用其已保存的登录 | 5 小时、每周、每月用量占比 |
-| **Amp** | 设置中填入 API Key | 免费每日额度、套餐额度与余额 |
-| **Atlas Cloud** | 设置中填入 API Key | 余额 |
-| **Augment Code** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 本周期已用积分 |
-| **Bifrost** | 填入 Key；自建网关地址由你填写 | 虚拟 Key 的美元预算 |
-| **Chutes** | 设置中填入 API Key | 滚动窗口与每月额度 |
-| **ClawRouter** | 设置中填入 API Key | 每月预算 |
-| **ClinePass** | 设置中填入 API Key | 5 小时、每周、每月限额 |
-| **Codebuff** | 填入 Key，或读取其 CLI 已保存的登录 | 积分；用 CLI 登录时另有每周限额 |
-| **DeepInfra** | 设置中填入 API Key | 余额；在其后台设过限额时显示花费占比 |
-| **DevPass** | 设置中填入 API Key | 每周高级额度与套餐积分 |
-| **ElevenLabs** | 设置中填入 API Key | 本计费周期的字符额度 |
-| **Factory** | 设置中填入 API Key | 5 小时、每周、每月限额（旧计费为 Standard 与 Premium）；额外用量余额 |
-| **Gemini** | 读取 Gemini CLI 保存的登录，只读、从不代为刷新 | 每个模型的配额。该登录约一小时过期，只在近期用过 Gemini CLI 时有读数 |
-| **GitKraken AI** | 粘贴 token | 个人积分与共享池 |
-| **Hugging Face** | 粘贴 token，或读取 `hf auth login` 保存的 | ZeroGPU 配额 |
-| **Hyper** | 设置中填入 API Key | Hypercredit 余额 |
-| **IBM Bob** | 设置中填入 API Key | Bobcoins 相对团队预算的用量 |
-| **JetBrains AI** | 读取 JetBrains IDE 保存的配额文件，不向任何地方发送数据 | AI Assistant 配额；IDE 运行时才更新 |
-| **Kilo Code** | 填入 Key，或读取其 CLI 已保存的登录 | 积分余额与 Kilo Pass |
-| **LiteLLM** | 填入 Key；自建网关地址由你填写 | 团队与用户预算 |
-| **LLM API Key Proxy** | 填入 Key；自建网关地址由你填写 | 按上游划分的配额组 |
-| **LongCat** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | Token 包额度与加油包 |
-| **Manus** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 每日与每月积分 |
-| **Mistral** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | API 与 Vibe 的每月额度，以及可用余额 |
-| **Moonshot** | 设置中填入 API Key | Kimi 开放平台余额，美元或人民币 |
-| **Neuralwatt** | 设置中填入 API Key | kWh 订阅、消费额度与余额 |
-| **Notion AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 滚动窗口与计费周期额度（Business 与 Enterprise） |
-| **Nous Portal** | 读取 Hermes Agent 保存的登录，只读 | 每月积分额度与余额 |
-| **OpenAI API** | 设置中填入 API Key | 预付余额（旧计费接口仍可用时） |
-| **Perplexity** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | API 余额 |
-| **Poe** | 设置中填入 API Key | 积分余额 |
-| **Qwen Cloud** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 5 小时、每周、每月占比，以及档位 |
-| **Raycast AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | AI 积分与续期日期 |
-| **Replicate** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 预付余额 |
-| **Sakana AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 5 小时与每周限额 |
-| **Synthetic** | 设置中填入 API Key | 5 小时、每周与搜索额度 |
-| **T3 Chat** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 4 小时窗口与每月用量 |
-| **TypeSafe** | 粘贴 `Cookie:` 请求头 | 余额与套餐 |
-| **v0** | 设置中填入 API Key | 计费额度 |
-| **Venice** | 设置中填入 API Key | 余额，美元或 DIEM |
-| **Vercel AI Gateway** | 设置中填入 API Key | 余额 |
-| **Warp** | 设置中填入 API Key | 套餐积分与附加积分 |
-| **Windsurf** | 从 Chromium 内核浏览器读取 windsurf.com 的登录 | 每日与每周配额 |
-| **xAI API** | 以 `TeamID:ManagementKey` 格式填入 | 团队预付余额（xAI 已入账的数额） |
-| **xKiro** | 设置中填入 API Key | 5 小时与每周窗口、每日免费 Token 与钱包 |
-| **Zed** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 编辑预测额度与消费上限 |
-| **ZenMux** | 填入管理密钥 | 5 小时与 7 天配额，以及余额 |
-| **ZoomMate** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 积分相对预算上限的用量 |
+| 图标 | 服务商 | 读取通道与鉴权方式 | 显示内容 |
+|---|---|---|---|
+| | **Abacus AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 算力点数与账单日期 |
+| | **Aixy** | 设置中填入 API Key | 按周期的网关预算 |
+| <img src="Docs/icons/alibabacloud.svg" width="24" height="24" alt=""> | **Alibaba Coding Plan** | 设置中填入 API Key | 5 小时、每周、每月额度；先问国际站，再问国内站 |
+| <img src="Docs/icons/alibabacloud.svg" width="24" height="24" alt=""> | **Alibaba Token Plan** | 运行阿里 `bl` CLI，使用其已保存的登录 | 5 小时、每周、每月用量占比 |
+| <img src="Docs/icons/amp.svg" width="24" height="24" alt=""> | **Amp** | 设置中填入 API Key | 免费每日额度、套餐额度与余额 |
+| <img src="Docs/icons/atlascloud.svg" width="24" height="24" alt=""> | **Atlas Cloud** | 设置中填入 API Key | 余额 |
+| | **Augment Code** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 本周期已用积分 |
+| | **Bifrost** | 填入 Key；自建网关地址由你填写 | 虚拟 Key 的美元预算 |
+| <img src="Docs/icons/chutes.svg" width="24" height="24" alt=""> | **Chutes** | 设置中填入 API Key | 滚动窗口与每月额度 |
+| <img src="Docs/icons/openclaw.svg" width="24" height="24" alt=""> | **ClawRouter** | 设置中填入 API Key | 每月预算 |
+| <img src="Docs/icons/cline.svg" width="24" height="24" alt=""> | **ClinePass** | 设置中填入 API Key | 5 小时、每周、每月限额 |
+| | **Codebuff** | 填入 Key，或读取其 CLI 已保存的登录 | 积分；用 CLI 登录时另有每周限额 |
+| <img src="Docs/icons/deepinfra.svg" width="24" height="24" alt=""> | **DeepInfra** | 设置中填入 API Key | 余额；在其后台设过限额时显示花费占比 |
+| | **DevPass** | 设置中填入 API Key | 每周高级额度与套餐积分 |
+| <img src="Docs/icons/elevenlabs.svg" width="24" height="24" alt=""> | **ElevenLabs** | 设置中填入 API Key | 本计费周期的字符额度 |
+| | **Factory** | 设置中填入 API Key | 5 小时、每周、每月限额（旧计费为 Standard 与 Premium）；额外用量余额 |
+| <img src="Docs/icons/geminicli.svg" width="24" height="24" alt=""> | **Gemini** | 读取 Gemini CLI 保存的登录，只读、从不代为刷新 | 每个模型的配额。该登录约一小时过期，只在近期用过 Gemini CLI 时有读数 |
+| | **GitKraken AI** | 粘贴 token | 个人积分与共享池 |
+| <img src="Docs/icons/huggingface.svg" width="24" height="24" alt=""> | **Hugging Face** | 粘贴 token，或读取 `hf auth login` 保存的 | ZeroGPU 配额 |
+| | **Hyper** | 设置中填入 API Key | Hypercredit 余额 |
+| <img src="Docs/icons/ibm.svg" width="24" height="24" alt=""> | **IBM Bob** | 设置中填入 API Key | Bobcoins 相对团队预算的用量 |
+| | **JetBrains AI** | 读取 JetBrains IDE 保存的配额文件，不向任何地方发送数据 | AI Assistant 配额；IDE 运行时才更新 |
+| <img src="Docs/icons/kilocode.svg" width="24" height="24" alt=""> | **Kilo Code** | 填入 Key，或读取其 CLI 已保存的登录 | 积分余额与 Kilo Pass |
+| | **LiteLLM** | 填入 Key；自建网关地址由你填写 | 团队与用户预算 |
+| | **LLM API Key Proxy** | 填入 Key；自建网关地址由你填写 | 按上游划分的配额组 |
+| <img src="Docs/icons/longcat.svg" width="24" height="24" alt=""> | **LongCat** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | Token 包额度与加油包 |
+| <img src="Docs/icons/manus.svg" width="24" height="24" alt=""> | **Manus** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 每日与每月积分 |
+| <img src="Docs/icons/mistral.svg" width="24" height="24" alt=""> | **Mistral** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | API 与 Vibe 的每月额度，以及可用余额 |
+| <img src="Docs/icons/moonshot.svg" width="24" height="24" alt=""> | **Moonshot** | 设置中填入 API Key | Kimi 开放平台余额，美元或人民币 |
+| | **Neuralwatt** | 设置中填入 API Key | kWh 订阅、消费额度与余额 |
+| <img src="Docs/icons/notion.svg" width="24" height="24" alt=""> | **Notion AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 滚动窗口与计费周期额度（Business 与 Enterprise） |
+| <img src="Docs/icons/hermesagent.svg" width="24" height="24" alt=""> | **Nous Portal** | 读取 Hermes Agent 保存的登录，只读 | 每月积分额度与余额 |
+| <img src="Docs/icons/openai.svg" width="24" height="24" alt=""> | **OpenAI API** | 设置中填入 API Key | 预付余额（旧计费接口仍可用时） |
+| <img src="Docs/icons/perplexity.svg" width="24" height="24" alt=""> | **Perplexity** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | API 余额 |
+| <img src="Docs/icons/poe.svg" width="24" height="24" alt=""> | **Poe** | 设置中填入 API Key | 积分余额 |
+| <img src="Docs/icons/qwen.svg" width="24" height="24" alt=""> | **Qwen Cloud** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 5 小时、每周、每月占比，以及档位 |
+| | **Raycast AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | AI 积分与续期日期 |
+| <img src="Docs/icons/replicate.svg" width="24" height="24" alt=""> | **Replicate** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 预付余额 |
+| <img src="Docs/icons/sakana.svg" width="24" height="24" alt=""> | **Sakana AI** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 5 小时与每周限额 |
+| | **Synthetic** | 设置中填入 API Key | 5 小时、每周与搜索额度 |
+| | **T3 Chat** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 4 小时窗口与每月用量 |
+| | **TypeSafe** | 粘贴 `Cookie:` 请求头 | 余额与套餐 |
+| <img src="Docs/icons/v0.svg" width="24" height="24" alt=""> | **v0** | 设置中填入 API Key | 计费额度 |
+| <img src="Docs/icons/venice.svg" width="24" height="24" alt=""> | **Venice** | 设置中填入 API Key | 余额，美元或 DIEM |
+| <img src="Docs/icons/vercel.svg" width="24" height="24" alt=""> | **Vercel AI Gateway** | 设置中填入 API Key | 余额 |
+| | **Warp** | 设置中填入 API Key | 套餐积分与附加积分 |
+| <img src="Docs/icons/windsurf.svg" width="24" height="24" alt=""> | **Windsurf** | 从 Chromium 内核浏览器读取 windsurf.com 的登录 | 每日与每周配额 |
+| <img src="Docs/icons/xai.svg" width="24" height="24" alt=""> | **xAI API** | 以 `TeamID:ManagementKey` 格式填入 | 团队预付余额（xAI 已入账的数额） |
+| | **xKiro** | 设置中填入 API Key | 5 小时与每周窗口、每日免费 Token 与钱包 |
+| | **Zed** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 编辑预测额度与消费上限 |
+| <img src="Docs/icons/zenmux.svg" width="24" height="24" alt=""> | **ZenMux** | 填入管理密钥 | 5 小时与 7 天配额，以及余额 |
+| | **ZoomMate** | 读取浏览器登录会话，或粘贴 `Cookie:` 请求头 | 积分相对预算上限的用量 |
+
+### Token 消耗的来源
+
+在设置中开启 Token 消耗后，Pulse 读取各客户端留在本机的日志、数据库和导出文件，不会发送到任何地方。下表列出的是 macOS 上的默认位置，Linux 风格的路径和编辑器的其他版本也会读取。如果 Pulse 同时以圆环显示该产品的额度，最后一列给出对应的服务商。各来源的依据与限制见 [Docs/token-spend-sources.md](Docs/token-spend-sources.md)。
+
+| 图标 | 客户端 | 读取位置 | Pulse 中的圆环 |
+|---|---|---|---|
+| <img src="Docs/icons/claude.svg" width="24" height="24" alt=""> | **Claude Code** | `~/.claude/projects/` | Claude Code |
+| <img src="Docs/icons/openai.svg" width="24" height="24" alt=""> | **Codex** | `~/.codex/sessions/`, `~/.codex/archived_sessions/` | Codex |
+| <img src="Docs/icons/opencode.svg" width="24" height="24" alt=""> | **OpenCode** | `~/.local/share/opencode/opencode.db` | OpenCode Go |
+| <img src="Docs/icons/kilocode.svg" width="24" height="24" alt=""> | **Kilo CLI** | `~/.local/share/kilo/kilo.db` | Kilo Code |
+| <img src="Docs/icons/grok.svg" width="24" height="24" alt=""> | **Grok Build** | `~/.grok/sessions/` | Grok |
+| <img src="Docs/icons/kimi.svg" width="24" height="24" alt=""> | **Kimi CLI** | `~/.kimi/sessions/` | Kimi Code |
+| <img src="Docs/icons/devin.svg" width="24" height="24" alt=""> | **Devin** | `~/.local/share/devin/cli/sessions.db` | Devin |
+| <img src="Docs/icons/devin.svg" width="24" height="24" alt=""> | **Devin Desktop** | `~/Library/Application Support/Devin/User/acp-events/` | Devin |
+| <img src="Docs/icons/cursor.svg" width="24" height="24" alt=""> | **Cursor** | `~/.config/tokscale/cursor-cache/` † | Cursor |
+| <img src="Docs/icons/github.svg" width="24" height="24" alt=""> | **GitHub Copilot** | `~/.copilot/otel/`, `~/.copilot/data.db`, VS Code `workspaceStorage/*/chatSessions/` | GitHub Copilot |
+| <img src="Docs/icons/kiro.svg" width="24" height="24" alt=""> | **Kiro** | `~/.kiro/sessions/cli/` | Kiro |
+| <img src="Docs/icons/antigravity.svg" width="24" height="24" alt=""> | **Antigravity CLI** | `~/.gemini/antigravity-cli/conversations/` | Antigravity |
+| <img src="Docs/icons/antigravity.svg" width="24" height="24" alt=""> | **Antigravity IDE** | `~/.gemini/antigravity/conversations/`, `~/.gemini/antigravity-ide/conversations/` | Antigravity |
+| <img src="Docs/icons/antigravity.svg" width="24" height="24" alt=""> | **Antigravity (export)** | `~/.config/tokscale/antigravity-cache/sessions/` † | Antigravity |
+| <img src="Docs/icons/gemini.svg" width="24" height="24" alt=""> | **Gemini CLI** | `~/.gemini/tmp/` | Gemini |
+| <img src="Docs/icons/qwen.svg" width="24" height="24" alt=""> | **Qwen Code** | `~/.qwen/projects/` | — |
+| <img src="Docs/icons/amp.svg" width="24" height="24" alt=""> | **Amp** | `~/.local/share/amp/threads/` | Amp |
+| | **Droid** | `~/.factory/sessions/` | Factory |
+| <img src="Docs/icons/cline.svg" width="24" height="24" alt=""> | **Cline** | VS Code `globalStorage/saoudrizwan.claude-dev/tasks/`, `~/.cline/data/sessions/` | ClinePass |
+| <img src="Docs/icons/roocode.svg" width="24" height="24" alt=""> | **Roo Code** | VS Code `globalStorage/rooveterinaryinc.roo-cline/tasks/` | — |
+| <img src="Docs/icons/kilocode.svg" width="24" height="24" alt=""> | **Kilo Code** | VS Code `globalStorage/kilocode.kilo-code/tasks/` | Kilo Code |
+| <img src="Docs/icons/commandcode.svg" width="24" height="24" alt=""> | **Command Code** | `~/.commandcode/projects/` | Command Code |
+| | **Codebuff** | `~/.config/manicode/` | Codebuff |
+| | **Freebuff** | `~/.config/manicode/` | Codebuff |
+| | **Augment** | `~/.augment/sessions/` | Augment Code |
+| <img src="Docs/icons/junie.svg" width="24" height="24" alt=""> | **Junie** | `~/.junie/sessions/` | JetBrains AI |
+| | **Zed** | `~/Library/Application Support/Zed/threads/threads.db` | Zed |
+| | **Warp** | `~/.config/tokscale/warp-cache/` † | Warp |
+| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax Code** | `~/.config/tokscale/headless/mcode/` † | MiniMax |
+| <img src="Docs/icons/openclaw.svg" width="24" height="24" alt=""> | **OpenClaw** | `~/.openclaw/agents/` | — |
+| <img src="Docs/icons/hermesagent.svg" width="24" height="24" alt=""> | **Hermes** | `~/.hermes/state.db` | — |
+| <img src="Docs/icons/goose.svg" width="24" height="24" alt=""> | **Goose** | `~/Library/Application Support/goose/sessions/sessions.db` | — |
+| <img src="Docs/icons/tencent.svg" width="24" height="24" alt=""> | **CodeBuddy** | `~/.codebuddy/` | — |
+| <img src="Docs/icons/tencent.svg" width="24" height="24" alt=""> | **WorkBuddy** | `~/.workbuddy/`, `~/.workbuddy-ai/` | — |
+| <img src="Docs/icons/cherrystudio.svg" width="24" height="24" alt=""> | **Cherry Studio** | `~/Library/Application Support/CherryStudio/` | — |
+| <img src="Docs/icons/trae.svg" width="24" height="24" alt=""> | **Trae** | `~/.config/tokscale/trae-cache/sessions/` † | — |
+| <img src="Docs/icons/xiaomimimo.svg" width="24" height="24" alt=""> | **MiMo Code** | `~/.local/share/mimocode/` | — |
+| <img src="Docs/icons/deepseek.svg" width="24" height="24" alt=""> | **DeepSeek Harness** | `~/.dsh/sessions/` | — |
+| <img src="Docs/icons/lmstudio.svg" width="24" height="24" alt=""> | **LM Studio** | `~/.lmstudio/server-logs/` | — |
+| <img src="Docs/icons/unsloth.svg" width="24" height="24" alt=""> | **Unsloth** | `~/.unsloth/studio/studio.db` | — |
+| <img src="Docs/icons/pi.svg" width="24" height="24" alt=""> | **Pi** | `~/.pi/agent/sessions/` | — |
+| | **Oh My Pi** | `~/.omp/agent/sessions/` | — |
+| | **OmO Native** | `~/.senpi/agent/sessions/` | — |
+| | **Gajae Code** | `~/.gjc/agent/sessions/` | — |
+| | **Kimchi** | `~/.config/kimchi/harness/sessions/` | — |
+| | **Prime Agent** | `~/.prime/agent/sessions/` | — |
+| <img src="Docs/icons/opencode.svg" width="24" height="24" alt=""> | **OpenCodeReview** | `~/.opencodereview/sessions/` | — |
+| | **ZCode** | `~/.zcode/projects/`, `~/.zcode/cli/db/db.sqlite` | — |
+| | **Crush** | `~/.local/share/crush/projects.json` | — |
+| | **Mux** | `~/.mux/sessions/` | — |
+| | **JCode** | `~/.jcode/sessions/` | — |
+| | **FX** | `~/.fx/sessions/` | — |
+| | **Reasonix** | `~/.reasonix/stats/` | — |
+| | **Hindsight** | `~/.hindsight/usage/` † | — |
+
+† 需要先导出或捕获记录，或者把文件放进 `~/Library/Application Support/Pulse/UsageImports/<client>/`。
 
 ---
 
