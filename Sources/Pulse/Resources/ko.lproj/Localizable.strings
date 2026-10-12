@@ -611,9 +611,10 @@
 /* 네트워크 프록시 */
 "Network" = "네트워크";
 "Proxy" = "프록시";
-"Use macOS settings or a proxy only for Pulse." = "macOS 시스템 설정을 사용하거나 Pulse에만 적용할 프록시를 지정합니다.";
-"Follow System" = "시스템 설정 따르기";
-"Manual" = "수동";
+"Connect directly, use the proxy in macOS settings, or set one only for Pulse." = "직접 연결하거나, macOS 설정의 프록시를 사용하거나, Pulse에만 적용할 프록시를 지정합니다.";
+"No Proxy" = "프록시 사용 안 함";
+"System Proxy" = "시스템 프록시";
+"Custom Proxy" = "사용자 지정 프록시";
 "Type" = "유형";
 "HTTP" = "HTTP";
 "SOCKS5" = "SOCKS5";

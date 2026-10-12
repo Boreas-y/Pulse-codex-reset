@@ -38,7 +38,7 @@ struct NetworkPane: View {
             SettingsGroup(String.localized("Network")) {
                 SettingsRow(
                     String.localized("Proxy"),
-                    subtitle: String.localized("Use macOS settings or a proxy only for Pulse.")
+                    subtitle: String.localized("Connect directly, use the proxy in macOS settings, or set one only for Pulse.")
                 ) {
                     Picker("", selection: Binding(
                         get: { settings.networkProxy.mode },
@@ -46,7 +46,7 @@ struct NetworkPane: View {
                             var proxy = settings.networkProxy
                             proxy.mode = mode
                             settings.networkProxy = proxy
-                            if mode == .system {
+                            if mode != .manual {
                                 proxyHostInvalid = false
                                 proxyPortInvalid = false
                             }

@@ -92,5 +92,35 @@ struct NetworkProxyTests {
     @Test("Following the system does not replace a helper's environment")
     func systemProcessEnvironmentIsInherited() {
         #expect(NetworkProxySettings.default.processEnvironment(over: ["HTTPS_PROXY": "http://shell:9"]) == nil)
+        #expect(NetworkSession.configured(.ephemeral, for: .default).connectionProxyDictionary == nil)
+    }
+
+    @Test("No proxy turns the system's off for requests and survives a round trip")
+    func directSession() {
+        withIsolatedDefaults { defaults in
+            // A saved endpoint stays saved, ready for the custom proxy again.
+            let settings = NetworkProxySettings(mode: .direct, kind: .http, host: "127.0.0.1", port: 7_897)
+            AppSettings.storeNetworkProxy(settings, in: defaults)
+            #expect(AppSettings.storedNetworkProxy(in: defaults) == settings)
+            #expect(settings.endpoint == nil)
+
+            let configuration = NetworkSession.configured(.ephemeral, for: settings)
+            #expect(configuration.proxyConfigurations.isEmpty)
+            // Empty, not nil: nil is the system's proxy.
+            let dictionary = configuration.connectionProxyDictionary
+            #expect(dictionary != nil)
+            #expect(dictionary?.isEmpty == true)
+        }
+    }
+
+    @Test("No proxy clears every proxy a helper would inherit, and nothing else")
+    func directProcessEnvironment() throws {
+        let settings = NetworkProxySettings(mode: .direct, kind: .socks5, host: "proxy.local", port: 1_080)
+        let environment = try #require(settings.processEnvironment(over: [
+            "PATH": "/usr/bin",
+            "HTTP_PROXY": "http://shell:1", "https_proxy": "http://shell:2",
+            "ALL_PROXY": "socks5://shell:3", "no_proxy": "example.com"
+        ]))
+        #expect(environment == ["PATH": "/usr/bin"])
     }
 }

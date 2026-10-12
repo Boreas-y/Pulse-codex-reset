@@ -611,9 +611,10 @@
 /* ネットワークプロキシ */
 "Network" = "ネットワーク";
 "Proxy" = "プロキシ";
-"Use macOS settings or a proxy only for Pulse." = "macOS のシステム設定を使うか、Pulse 専用のプロキシを指定します。";
-"Follow System" = "システム設定に従う";
-"Manual" = "手動";
+"Connect directly, use the proxy in macOS settings, or set one only for Pulse." = "直接接続するか、macOS の設定にあるプロキシを使うか、Pulse 専用のプロキシを指定します。";
+"No Proxy" = "プロキシを使わない";
+"System Proxy" = "システムのプロキシ";
+"Custom Proxy" = "カスタムプロキシ";
 "Type" = "種類";
 "HTTP" = "HTTP";
 "SOCKS5" = "SOCKS5";

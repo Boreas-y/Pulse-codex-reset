@@ -611,9 +611,10 @@
 /* Network proxy */
 "Network" = "Сеть";
 "Proxy" = "Прокси";
-"Use macOS settings or a proxy only for Pulse." = "Использовать настройки macOS или отдельный прокси для Pulse.";
-"Follow System" = "Как в системе";
-"Manual" = "Вручную";
+"Connect directly, use the proxy in macOS settings, or set one only for Pulse." = "Подключаться напрямую, через прокси из настроек macOS или через отдельный прокси для Pulse.";
+"No Proxy" = "Без прокси";
+"System Proxy" = "Системный прокси";
+"Custom Proxy" = "Свой прокси";
 "Type" = "Тип";
 "HTTP" = "HTTP";
 "SOCKS5" = "SOCKS5";

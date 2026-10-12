@@ -90,7 +90,7 @@
 - **擴充功能**：自己寫個小程式，就能讓 Pulse 顯示某個帳號的用量，例如公司內部的額度 API，不必再維護一份分支。開啟之前不會執行，Pulse 也不會交給它任何憑證。[撰寫說明](Docs/extensions.md)（英文）。
 - **服務狀態**：Codex、Claude Code 和 DeepSeek 的設定頁照各自官方狀態頁的樣式顯示服務狀態——每一項現在是否正常、過去 90 天每天一根直條，以及狀態頁公布的可用率。開啟設定頁時讀取，開著時每 5 分鐘更新一次。
 - **連線診斷**：查看實際的讀取來源、快取使用情形、最近一次檢查與備援結果。情境化操作可協助重新連線、重新登入或修正憑證；可複製不含帳號資訊與金鑰的診斷報告。
-- **隱私優先**：Pulse 跑在你自己的 Mac 上，用你自己的登入狀態。它只發起四類連線，這裡列的就是全部——你原本就在使用的服務商、為「服務狀態」及其通知讀取的公開狀態頁（status.openai.com、status.claude.com、status.deepseek.com）、為 Token 消耗頁取得公開模型價格的 [models.dev](https://models.dev)，以及檢查更新的 GitHub/Sparkle。服務商請求、狀態頁、登入時的權杖交換與 models.dev 會使用「設定 › 網路與重新整理」中選擇的代理，Pulse 也會把手動代理傳給支援的輔助程序。Sparkle 的更新檢查一律跟隨 macOS 系統代理設定。
+- **隱私優先**：Pulse 跑在你自己的 Mac 上，用你自己的登入狀態。它只發起四類連線，這裡列的就是全部——你原本就在使用的服務商、為「服務狀態」及其通知讀取的公開狀態頁（status.openai.com、status.claude.com、status.deepseek.com）、為 Token 消耗頁取得公開模型價格的 [models.dev](https://models.dev)，以及檢查更新的 GitHub/Sparkle。服務商請求、狀態頁、登入時的權杖交換與 models.dev 會使用「設定 › 網路與重新整理」中選擇的代理，Pulse 也會把自訂代理傳給支援的輔助程序；選擇「不使用代理」時，輔助程序也不經過代理。Sparkle 的更新檢查一律跟隨 macOS 系統代理設定。
 
 <p align="center">
   <img src="Docs/settings.webp" height="300" alt="Pulse 設定">
@@ -230,7 +230,7 @@ Pulse 只呈現各服務回報的數字，每個百分比都來自那份回覆�
 ## 隱私與安全
 
 Pulse 以嚴格的「本機優先」安全原則設計：
-- **沒有 Pulse 後端**：你的 Mac 用你自己的登入狀態連線至你原本就在使用的服務商。同時會為「服務狀態」讀取 Codex、Claude Code 和 DeepSeek 的公開狀態頁（無需登入），為 Token 消耗頁從 [models.dev](https://models.dev) 取得公開模型價格，並向 GitHub/Sparkle 檢查應用程式更新。服務商請求、狀態頁、登入時的權杖交換與 models.dev 會使用「設定 › 網路與重新整理」中選擇的代理，Pulse 也會把手動代理傳給支援的輔助程序。Sparkle 的更新檢查一律跟隨 macOS 系統代理設定。
+- **沒有 Pulse 後端**：你的 Mac 用你自己的登入狀態連線至你原本就在使用的服務商。同時會為「服務狀態」讀取 Codex、Claude Code 和 DeepSeek 的公開狀態頁（無需登入），為 Token 消耗頁從 [models.dev](https://models.dev) 取得公開模型價格，並向 GitHub/Sparkle 檢查應用程式更新。服務商請求、狀態頁、登入時的權杖交換與 models.dev 會使用「設定 › 網路與重新整理」中選擇的代理，Pulse 也會把自訂代理傳給支援的輔助程序；選擇「不使用代理」時，輔助程序也不經過代理。Sparkle 的更新檢查一律跟隨 macOS 系統代理設定。
 - **本機憑證**：在產品本身如此運作的前提下，讀取開發工具已存放在本機的憑證（`~/.claude`、`~/.codex`、Cursor 儲存空間等）；部分服務商需要你在設定中輸入金鑰或登入。
 - **加密的本機儲存**：手動輸入的 API 金鑰與工作階段權杖會加密，並嚴格存放於 Pulse 的本機應用程式目錄，權限僅限擁有者。
 - **本機用量記錄**：Pulse 會讀取對話記錄、資料庫與匯出檔，以取得 token 數量，以及標題、工作目錄等這類工作階段中介資料。這些記錄可能包含對話文字；處理完全在你的 Mac 上完成，記錄也留在本機。Pulse 只讀取這些記錄，僅此而已。

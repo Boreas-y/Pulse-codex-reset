@@ -611,9 +611,10 @@
 /* 网络代理 */
 "Network" = "网络";
 "Proxy" = "代理";
-"Use macOS settings or a proxy only for Pulse." = "使用 macOS 系统设置，或只为 Pulse 指定代理。";
-"Follow System" = "跟随系统";
-"Manual" = "手动";
+"Connect directly, use the proxy in macOS settings, or set one only for Pulse." = "直接连接、使用 macOS 设置中的代理，或只为 Pulse 指定代理。";
+"No Proxy" = "不使用代理";
+"System Proxy" = "使用代理";
+"Custom Proxy" = "自定义代理";
 "Type" = "类型";
 "HTTP" = "HTTP";
 "SOCKS5" = "SOCKS5";
