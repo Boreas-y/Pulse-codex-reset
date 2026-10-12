@@ -69,7 +69,7 @@ struct PlacementPane: View {
 
                 SettingsRow(
                     String.localized("Hide from screenshots"),
-                    subtitle: String.localized("Leave the floating panel out of screenshots, recordings and screen sharing.")
+                    subtitle: String.localized("Screenshot tools that support it leave the floating panel out. Recordings and screen sharing may still show it.")
                 ) {
                     Toggle("", isOn: Binding(
                         get: { settings.hidesFromScreenCapture },

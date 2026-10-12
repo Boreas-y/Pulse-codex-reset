@@ -315,9 +315,15 @@ final class FloatingPanelController {
         applyScreenCapture()
     }
 
-    /// Out of screenshots and recordings when the setting asks. The window is
-    /// sized for the tallest card and mostly transparent, so a screenshot
-    /// tool's window selection finds a frame far larger than the rail.
+    /// Marked not to be captured when the setting asks. The window is sized
+    /// for the tallest card and mostly transparent, so a screenshot tool's
+    /// window selection finds a frame far larger than the rail.
+    ///
+    /// **A request, not a guarantee.** Apple says not to rely on `.none` to
+    /// keep a window out of capture: since macOS 15.4, ScreenCaptureKit can
+    /// still include it. Tools that read the sharing state skip it, which is
+    /// what the setting is for; it does not promise a recording or a shared
+    /// screen leaves the panel out, and its wording says so.
     /// `.readOnly` is AppKit's default, which lets anything capture it.
     private func applyScreenCapture() {
         panel.sharingType = settings.hidesFromScreenCapture ? .none : .readOnly
