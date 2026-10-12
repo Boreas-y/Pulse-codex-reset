@@ -225,6 +225,27 @@ def single_language(feed: str, langs: list[str]) -> str:
     return ITEM.sub(cut, feed)
 
 
+def replace_enclosure(feed: str, version: str, url: str, length: str, signature: str) -> str:
+    """The feed with `version`'s download pointed at this archive."""
+    item = re.search(
+        rf"<item>(?:(?!</item>).)*?<sparkle:version>{re.escape(version)}</sparkle:version>.*?</item>",
+        feed,
+        re.S,
+    )
+    if not item:
+        sys.exit(f"appcast.xml names {version} outside an <item> — check it by hand.")
+    enclosure = (
+        f'<enclosure url="{url}"\n'
+        f'                       length="{length}"\n'
+        f'                       type="application/octet-stream"\n'
+        f'                       sparkle:edSignature="{signature}" />'
+    )
+    replaced, count = re.subn(r"<enclosure\b.*?/>", lambda _: enclosure, item.group(0), count=1, flags=re.S)
+    if count != 1:
+        sys.exit(f"{version}'s item in appcast.xml has no <enclosure> — check it by hand.")
+    return feed[: item.start()] + replaced + feed[item.end():]
+
+
 def write_feeds(feed: str) -> None:
     """appcast.xml and its one-language copies."""
     FEED.write_text(feed)
@@ -291,8 +312,15 @@ def main() -> None:
 """
 
     if f"<sparkle:version>{version}</sparkle:version>" in feed:
-        print(f"appcast.xml already carries {version} — leaving it alone.")
+        # **A re-run replaces the archive, so it replaces the signature too.**
+        # The release step re-uploads the zip with --clobber, and a rebuilt
+        # zip is not byte for byte the old one. Left alone, the feed went on
+        # offering the old length and EdDSA signature for the new file, and
+        # Sparkle refused the update as tampered with. Everything else about
+        # the item — its date, its notes — stays as first published.
+        feed = replace_enclosure(feed, version, url, length, signature)
         write_feeds(feed)
+        print(f"appcast.xml already carries {version} — its download now matches the archive ({length} bytes).")
         return
 
     # Newest first, which is the order Sparkle and every feed reader expect.

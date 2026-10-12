@@ -16,7 +16,7 @@ echo 1.0.1 > VERSION && git commit -am "Pulse 1.0.1"
 git tag v1.0.1 && git push && git push origin v1.0.1
 ```
 
-A tag/VERSION mismatch fails the run. A suffix (`v1.1.0-beta.1`) is a GitHub pre-release, excluded from “latest,” so the in-app check ignores it too.
+A tag/VERSION mismatch fails the run. A suffix (`v1.1.0-beta.1`) is a GitHub pre-release, excluded from “latest,” so the in-app check ignores it too — **and the workflow does not write it into the Sparkle feed**, which has no beta channel: an item there reached every installed copy as an ordinary update. **Re-running a release replaces its download in the feed.** The Publish step re-uploads the zip with `--clobber`, and a rebuilt zip is not the old bytes, so `Scripts/appcast.py` rewrites that version's `<enclosure>` (URL, length, EdDSA signature) to the new archive; it used to keep the old signature, and Sparkle refused the update. The item's date and notes stay as first published.
 
 ## CI
 
