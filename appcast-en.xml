@@ -6,6 +6,24 @@
         <description>Updates for Pulse.</description>
         <language>en</language>
         <item>
+            <title>1.11.0</title>
+            <pubDate>Mon, 12 Oct 2026 08:29:34 -0000</pubDate>
+            <sparkle:version>1.11.0</sparkle:version>
+            <sparkle:shortVersionString>1.11.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.11.0</link>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.11.0</h2><p><strong>New</strong></p><ul><li><strong>Russian interface.</strong> Choose it under Settings → General → Language. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/77">@winstik13</a> for the translation.</li><li><strong>Extensions can report metrics of their own.</strong> Figures such as time to first token and output rate appear on the card with a trend line; see <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md#metrics">how to report them</a>. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/80">@xkaaaaaa</a> for the suggestion.</li><li><strong>No Proxy and System Proxy Only.</strong> Choose them under Settings → Network and refresh → Proxy; System Proxy Only connects nowhere while macOS has no proxy switched on, and Follow System stays the default.</li><li><strong>Hide the floating panel from screenshots.</strong> Turn on Hide from screenshots under Settings → Position and behavior, and screenshot tools that support it leave the panel out.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Old figures are no longer shown once a provider confirms there is no plan.</strong> This covers z.ai, Xiaomi Coding Plan, Grok Bot and others.</li><li><strong>Clearing Xiaomi Coding Plan&#x27;s sign-in asks you to sign in again.</strong> The card no longer shows the old figures instead.</li><li><strong>An account signed in to again is no longer replaced by the old login&#x27;s renewal.</strong> This covers Claude Code and Grok accounts added in Pulse.</li><li><strong>Qoder&#x27;s expiry lines no longer repeat when its credits are shown part by part.</strong> The total no longer shows one, and a row whose credits all lapse together reads &quot;All expire Nov 7&quot;. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> for the report.</li><li><strong>Qoder credits lapsing over several days are described in full.</strong> For example, &quot;All expire from Nov 8, in 4 lots&quot;. <a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li><li><strong>Turning on Show each part of the credits lets the ring follow the part closest to spent.</strong> A ring pinned to the total returns to automatic. <a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.11.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.11.0/Pulse-1.11.0.zip"
+                       length="15433552"
+                       type="application/octet-stream"
+                       sparkle:edSignature="ZPbq5hSqlDMI6n6DrmOTeNQ6TRAoc8SOzg+nCbN6ep2/4DwvyUBCkut6T4iiR9mx567iz4RMDOw8miQYcm1rCA==" />
+        </item>
+        <item>
             <title>1.10.0</title>
             <pubDate>Sun, 11 Oct 2026 15:33:53 -0000</pubDate>
             <sparkle:version>1.10.0</sparkle:version>
