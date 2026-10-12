@@ -611,10 +611,16 @@
 /* Network proxy */
 "Network" = "Network";
 "Proxy" = "Proxy";
-"Connect directly, use the proxy in macOS settings, or set one only for Pulse." = "Connect directly, use the proxy in macOS settings, or set one only for Pulse.";
 "No Proxy" = "No Proxy";
-"System Proxy" = "System Proxy";
+"Follow System" = "Follow System";
+"System Proxy Only" = "System Proxy Only";
 "Custom Proxy" = "Custom Proxy";
+"Pulse connects directly and ignores the proxy in macOS settings." = "Pulse connects directly and ignores the proxy in macOS settings.";
+"Uses the proxy in macOS settings, or connects directly when there is none." = "Uses the proxy in macOS settings, or connects directly when there is none.";
+"Uses the proxy in macOS settings, and doesn't connect when there is none." = "Uses the proxy in macOS settings, and doesn't connect when there is none.";
+"A proxy for Pulse only." = "A proxy for Pulse only.";
+"macOS has no proxy switched on, so Pulse isn't connecting." = "macOS has no proxy switched on, so Pulse isn't connecting.";
+"No proxy is switched on in macOS, so Pulse didn't connect." = "No proxy is switched on in macOS, so Pulse didn't connect.";
 "Type" = "Type";
 "HTTP" = "HTTP";
 "SOCKS5" = "SOCKS5";

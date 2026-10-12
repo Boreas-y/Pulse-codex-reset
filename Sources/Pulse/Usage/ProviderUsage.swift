@@ -631,6 +631,9 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
         /// There is a key, and the service refused it.
         case apiKeyRefused
         case unreachable
+        /// "System Proxy Only" is on and macOS has no proxy switched on, so
+        /// the request was never sent (`NetworkSession.refuses`).
+        case systemProxyOff
         case unreadableReply
         case rateLimited
         case serverError
@@ -708,6 +711,7 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
             case .apiKeyMissing: .localized("Add an API key in Settings.")
             case .apiKeyRefused: .localized("That key was refused. Check it in Settings.")
             case .unreachable: .localized("The service didn't respond.")
+            case .systemProxyOff: .localized("No proxy is switched on in macOS, so Pulse didn't connect.")
             case .unreadableReply: .localized("Couldn't read the reply.")
             case .rateLimited: .localized("Checking too often — easing off.")
             case .serverError: .localized("The service returned an error.")

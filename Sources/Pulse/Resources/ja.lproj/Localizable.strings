@@ -611,10 +611,16 @@
 /* ネットワークプロキシ */
 "Network" = "ネットワーク";
 "Proxy" = "プロキシ";
-"Connect directly, use the proxy in macOS settings, or set one only for Pulse." = "直接接続するか、macOS の設定にあるプロキシを使うか、Pulse 専用のプロキシを指定します。";
 "No Proxy" = "プロキシを使わない";
-"System Proxy" = "システムのプロキシ";
+"Follow System" = "システム設定に従う";
+"System Proxy Only" = "システムのプロキシのみ";
 "Custom Proxy" = "カスタムプロキシ";
+"Pulse connects directly and ignores the proxy in macOS settings." = "Pulse は直接接続し、macOS の設定にあるプロキシを使いません。";
+"Uses the proxy in macOS settings, or connects directly when there is none." = "macOS の設定にあるプロキシを使います。設定がなければ直接接続します。";
+"Uses the proxy in macOS settings, and doesn't connect when there is none." = "macOS の設定にあるプロキシを使います。プロキシがオフのときは接続しません。";
+"A proxy for Pulse only." = "Pulse 専用のプロキシを指定します。";
+"macOS has no proxy switched on, so Pulse isn't connecting." = "macOS でプロキシがオンになっていないため、Pulse は接続していません。";
+"No proxy is switched on in macOS, so Pulse didn't connect." = "macOS でプロキシがオンになっていないため、Pulse は接続しませんでした。";
 "Type" = "種類";
 "HTTP" = "HTTP";
 "SOCKS5" = "SOCKS5";

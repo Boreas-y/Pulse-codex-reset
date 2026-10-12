@@ -123,4 +123,70 @@ struct NetworkProxyTests {
         ]))
         #expect(environment == ["PATH": "/usr/bin"])
     }
+
+    @Test("Follow System stays the default, and System Proxy Only survives a round trip")
+    func systemRequiredRoundTrip() {
+        withIsolatedDefaults { defaults in
+            #expect(NetworkProxySettings.default.mode == .system)
+            let settings = NetworkProxySettings(mode: .systemRequired, kind: .http, host: "", port: nil)
+            AppSettings.storeNetworkProxy(settings, in: defaults)
+            #expect(AppSettings.storedNetworkProxy(in: defaults) == settings)
+            // The system's proxy, as Follow System has it: nothing set here.
+            let configuration = NetworkSession.configured(.ephemeral, for: settings)
+            #expect(configuration.connectionProxyDictionary == nil)
+            #expect(configuration.proxyConfigurations.isEmpty)
+        }
+    }
+
+    @Test("Every session Pulse makes carries the guard, whatever the setting")
+    func guardInstalled() {
+        for mode in NetworkProxyMode.allCases {
+            let settings = NetworkProxySettings(mode: mode, kind: .http, host: "127.0.0.1", port: 7_897)
+            let classes = NetworkSession.configured(.ephemeral, for: settings).protocolClasses ?? []
+            #expect(classes.first == ProxyGuard.self)
+        }
+    }
+
+    @Test("Only System Proxy Only with nothing switched on refuses, and never loopback", arguments: [
+        (NetworkProxyMode.systemRequired, false, "https://api.anthropic.com/x", true),
+        (.systemRequired, true, "https://api.anthropic.com/x", false),
+        (.systemRequired, false, "http://127.0.0.1:4000/v1", false),
+        (.systemRequired, false, "http://localhost:4000/v1", false),
+        (.systemRequired, false, "http://[::1]:4000/v1", false),
+        (.system, false, "https://api.anthropic.com/x", false),
+        (.direct, false, "https://api.anthropic.com/x", false),
+        (.manual, false, "https://api.anthropic.com/x", false),
+    ])
+    func refusal(mode: NetworkProxyMode, systemOn: Bool, url: String, refused: Bool) {
+        let settings = NetworkProxySettings(mode: mode, kind: .http, host: "127.0.0.1", port: 7_897)
+        #expect(NetworkSession.refuses(URL(string: url), settings: settings, systemProxyOn: { systemOn }) == refused)
+    }
+
+    @Test("A proxy counts as on when any of macOS's switches is")
+    func systemProxySwitches() {
+        #expect(!SystemProxy.isOn(in: [:]))
+        #expect(!SystemProxy.isOn(in: ["HTTPEnable": 0, "HTTPSEnable": 0, "ExceptionsList": ["*.local"]]))
+        for key in ["HTTPEnable", "HTTPSEnable", "SOCKSEnable", "ProxyAutoConfigEnable", "ProxyAutoDiscoveryEnable"] {
+            #expect(SystemProxy.isOn(in: [key: 1]), "\(key)")
+        }
+    }
+
+    @Test("System Proxy Only leaves a helper's environment alone, like Follow System")
+    func systemRequiredProcessEnvironment() {
+        let settings = NetworkProxySettings(mode: .systemRequired, kind: .http, host: "", port: nil)
+        #expect(settings.processEnvironment(over: ["HTTPS_PROXY": "http://shell:9"]) == nil)
+    }
+
+    @MainActor
+    @Test("A refused request reads as the proxy being off, and nothing else is renamed")
+    func heldBackReason() {
+        let account = AccountKey(.claudeCode)
+        let unreachable = ProviderUsage.unavailable(account, reason: .unreachable)
+        #expect(UsageStore.namingHeldBack(unreachable, isHoldingBack: true).state == .unavailable(.systemProxyOff))
+        #expect(UsageStore.namingHeldBack(unreachable, isHoldingBack: false).state == .unavailable(.unreachable))
+        let signIn = ProviderUsage.unavailable(account, reason: .claudeSignInRequired)
+        #expect(UsageStore.namingHeldBack(signIn, isHoldingBack: true).state == .unavailable(.claudeSignInRequired))
+        // Quitting the proxy app is not an outage to announce.
+        #expect(AlertMemory.standing(of: .systemProxyOff) == .neutral)
+    }
 }

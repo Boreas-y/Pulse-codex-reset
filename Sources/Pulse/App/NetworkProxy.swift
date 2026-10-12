@@ -1,13 +1,19 @@
 // Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
+import CFNetwork
 import Network
 import os
 
 enum NetworkProxyMode: String, CaseIterable, Codable, Identifiable, Sendable {
     /// No proxy at all, whatever macOS or the shell says.
     case direct
-    /// macOS's proxy settings. The default.
+    /// macOS's proxy settings, or directly when macOS has none. The default,
+    /// and what every installation did before this setting existed.
     case system
+    /// macOS's proxy settings, and **no connection at all** when macOS has
+    /// none switched on — for someone whose accounts must never be reached
+    /// from this Mac's own address, and whose proxy app can be quit.
+    case systemRequired
     /// A proxy for Pulse only.
     case manual
 
@@ -16,9 +22,45 @@ enum NetworkProxyMode: String, CaseIterable, Codable, Identifiable, Sendable {
     var title: String {
         switch self {
         case .direct: .localized("No Proxy")
-        case .system: .localized("System Proxy")
+        case .system: .localized("Follow System")
+        case .systemRequired: .localized("System Proxy Only")
         case .manual: .localized("Custom Proxy")
         }
+    }
+
+    /// What the choice does, under the picker.
+    var explanation: String {
+        switch self {
+        case .direct: .localized("Pulse connects directly and ignores the proxy in macOS settings.")
+        case .system: .localized("Uses the proxy in macOS settings, or connects directly when there is none.")
+        case .systemRequired: .localized("Uses the proxy in macOS settings, and doesn't connect when there is none.")
+        case .manual: .localized("A proxy for Pulse only.")
+        }
+    }
+}
+
+/// Whether macOS has a proxy switched on, read from its current settings.
+enum SystemProxy {
+    /// Any of the HTTP, HTTPS or SOCKS proxies, or automatic configuration —
+    /// a PAC file or discovery. A PAC file may still send a host directly;
+    /// that is its own rule, the proxy app's, and not a direct connection
+    /// Pulse chose.
+    static func isOn(in settings: [String: Any]) -> Bool {
+        let switches = [
+            kCFNetworkProxiesHTTPEnable as String,
+            kCFNetworkProxiesHTTPSEnable as String,
+            kCFNetworkProxiesSOCKSEnable as String,
+            kCFNetworkProxiesProxyAutoConfigEnable as String,
+            "ProxyAutoDiscoveryEnable",
+        ]
+        return switches.contains { (settings[$0] as? NSNumber)?.boolValue == true }
+    }
+
+    static var isOn: Bool {
+        guard let settings = CFNetworkCopySystemProxySettings()?.takeRetainedValue() as? [String: Any] else {
+            return false
+        }
+        return isOn(in: settings)
     }
 }
 
@@ -76,7 +118,9 @@ struct NetworkProxySettings: Codable, Equatable, Sendable {
     func processEnvironment(over base: [String: String]) -> [String: String]? {
         var environment = base
         switch mode {
-        case .system:
+        // Helpers are not held to "System Proxy Only": what they inherit is
+        // what they inherited before there was a choice.
+        case .system, .systemRequired:
             return nil
         case .direct:
             Self.removeProxies(from: &environment)
@@ -117,13 +161,17 @@ struct NetworkProxySettings: Codable, Equatable, Sendable {
 enum NetworkSession {
     private struct State {
         var settings = NetworkProxySettings.default
-        var session = URLSession(configuration: .default)
+        var session = URLSession(configuration: NetworkSession.configured(.default, for: .default))
     }
 
     private static let state = OSAllocatedUnfairLock(initialState: State())
 
     static var shared: URLSession {
         state.withLock { $0.session }
+    }
+
+    static var currentSettings: NetworkProxySettings {
+        state.withLock { $0.settings }
     }
 
     static func apply(_ settings: NetworkProxySettings) {
@@ -149,6 +197,24 @@ enum NetworkSession {
         configured(configuration, for: state.withLock { $0.settings })
     }
 
+    /// Whether a request to `url` is refused rather than sent: "System Proxy
+    /// Only" with no proxy switched on in macOS. This Mac's own loopback
+    /// addresses are never refused — nothing leaves the machine.
+    static func refuses(_ url: URL?, settings: NetworkProxySettings, systemProxyOn: () -> Bool) -> Bool {
+        guard settings.mode == .systemRequired else { return false }
+        if let host = url?.host()?.lowercased(),
+           host == "localhost" || host.hasSuffix(".localhost") || host == "::1" || host == "[::1]"
+            || host.hasPrefix("127.") {
+            return false
+        }
+        return !systemProxyOn()
+    }
+
+    /// "System Proxy Only" is refusing everything right now.
+    static var isHoldingBack: Bool {
+        refuses(nil, settings: currentSettings, systemProxyOn: { SystemProxy.isOn })
+    }
+
     static func subprocessEnvironment() -> [String: String]? {
         state.withLock { $0.settings }.processEnvironment(over: ProcessInfo.processInfo.environment)
     }
@@ -159,6 +225,10 @@ enum NetworkSession {
         _ configuration: URLSessionConfiguration,
         for settings: NetworkProxySettings
     ) -> URLSessionConfiguration {
+        // Every session, whatever the setting it was made under: the guard
+        // reads the setting at each request, so a session a caller kept from
+        // before a change is held to the new one too.
+        configuration.protocolClasses = [ProxyGuard.self] + (configuration.protocolClasses ?? [])
         // An empty dictionary is "no proxy"; nil, the default, is the system's.
         if settings.mode == .direct {
             configuration.proxyConfigurations = []
@@ -178,4 +248,21 @@ enum NetworkSession {
         }
         return configuration
     }
+}
+
+/// Fails a request instead of sending it while "System Proxy Only" has no
+/// proxy to use, so nothing goes out from this Mac's own address. Answers
+/// only the requests it refuses; every other one is left to URLSession.
+final class ProxyGuard: URLProtocol, @unchecked Sendable {
+    override class func canInit(with request: URLRequest) -> Bool {
+        NetworkSession.refuses(request.url, settings: NetworkSession.currentSettings, systemProxyOn: { SystemProxy.isOn })
+    }
+
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        client?.urlProtocol(self, didFailWithError: URLError(.notConnectedToInternet))
+    }
+
+    override func stopLoading() {}
 }
