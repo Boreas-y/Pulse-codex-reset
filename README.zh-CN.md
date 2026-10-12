@@ -72,6 +72,7 @@
 - **可选的系统通知**：默认全部关闭。开启后可在限额越过 75/80/90/95%、服务商判定用尽、之前提醒过的窗口重置、连续几次读不到用量（面板正悄悄显示旧数字）、预付费额度跌破你设定的金额，以及 Codex、Claude Code 或 DeepSeek 的官方状态页公布工具所依赖的服务出故障时（只限你已开启的服务）收到通知。每件事只说一次：打开开关时已经越线的限额会立刻告诉你一次，之后不再重复，直到它重置或者更糟。
 - **额度重置后自动开启窗口（可选）**：Claude Code 和 Codex 的用量窗口，要等重置后你发出第一条消息才开始计时。打开这个开关后，Pulse 会在每次重置后不久、你设定的时间段内，通过服务商自己的命令行工具发一句「hi」，让窗口从那一刻起算，而不是等你回来才开始。默认关闭；这不是 Anthropic 或 OpenAI 提供的功能，打开前会请你确认：这样做可能被视为绕过用量限制。
 - **全屏空间避让**：默认只留在你当前工作的 Space，全屏应用那边交给它自己。
+- **截图时隐藏（可选）**：支持此设置的截图工具不会截到悬浮面板，自动选取窗口时也不会选中它。
 - **原生质感**：提供沉稳耐看的纯黑底板和适合明亮屏幕的浅色底板，macOS 26+ 更可选原生 **液态玻璃（Liquid Glass）** 材质。
 - **动画标记（可选）**：把供应商图标换成一个会随该账号状态反应的小机器人——正在干活、正在取数、额度用满还是闲着。默认关闭，按账号开启；八种人格、十八种形状，颜色也可以自己指定。
 - **浮动栏菜单与快捷键**：右键浮动栏——或收起后的细线，按住 Control 点击同样有效——可打开含「设置」与「退出」的菜单。在 **设置 › 通用 › 快捷键** 中，可自行将全局快捷键分配给**打开设置**与**显示或隐藏面板**；两者默认都不绑定。
@@ -87,7 +88,7 @@
 - **七十七个服务商**：Claude Code、Codex、Kiro、Antigravity、Cursor、GitHub Copilot、Grok、Grok Bot、OpenCode Go、Kimi Code、Ollama Cloud、z.ai、Zhipu、MiniMax（国际与国内）、火山引擎、Command Code、DeepSeek、Devin、小米 Coding Plan、sub2api、New API、V2EX、Qoder，以及阶跃星辰（StepFun）；另有 Abacus AI、Aixy、Alibaba Coding Plan、Alibaba Token Plan、Amp、Atlas Cloud、Augment Code、Bifrost、Chutes、ClawRouter、ClinePass、Codebuff、DeepInfra、DevPass、ElevenLabs、Factory、Gemini、GitKraken AI、Hugging Face、Hyper、IBM Bob、JetBrains AI、Kilo Code、LiteLLM、LLM API Key Proxy、LongCat、Manus、Mistral、Moonshot、Neuralwatt、Notion AI、Nous Portal、OpenAI API、Perplexity、Poe、Qwen Cloud、Raycast AI、Replicate、Sakana AI、Synthetic、T3 Chat、TypeSafe、v0、Venice、Vercel AI Gateway、Warp、Windsurf、xAI API、xKiro、Zed、ZenMux、ZoomMate。
 - **可脚本化**：`Pulse --json` 输出最近一次读数——套餐、每条限额、重置时间，以及数字有多旧——可接 tmux、sketchybar、Raycast 或 shell 提示符。它只读缓存，所以高频轮询几乎不花代价。
 - **开发者集成**：在设置中导出 Raycast 扩展及可直接配置的 tmux、sketchybar、终端脚本；通过账户链接直达对应设置页。[安装指南](Docs/integrations.md)。
-- **扩展**：你自己写个小程序，就能让 Pulse 显示某个账号的用量，比如公司内部的额度接口，不用再维护一份分支。开启之前不会运行，Pulse 也不会交给它任何凭据。[编写说明](Docs/extensions.md)（英文）。
+- **扩展**：你自己写个小程序，就能让 Pulse 显示某个账号的用量，比如公司内部的额度接口，不用再维护一份分支。开启之前不会运行，Pulse 也不会交给它任何凭据。扩展还可以上报自定义指标，比如中转站的首字时间，显示在卡片上并画出趋势线。[编写说明](Docs/extensions.md)（英文）。
 - **服务状态**：Codex、Claude Code 和 DeepSeek 的设置页照各自官方状态页的样式显示服务状态——每一项现在是否正常、过去 90 天每天一根竖条，以及状态页公布的可用率。打开设置页时读取，开着时每 5 分钟更新一次。
 - **连接诊断**：查看实际读数来源、缓存使用情况、最近检查及回退结果；根据原因直接重连、重新登录或编辑凭据，并可复制不含账户信息和密钥的诊断报告。
 - **本地优先**：Pulse 跑在你自己的 Mac 上，用你自己的登录态。它只发起四类连接，这里列的就是全部——你已在使用的服务商、为「服务状态」及其通知读取的公开状态页（status.openai.com、status.claude.com、status.deepseek.com）、为 Token 消耗页取公开模型价格的 [models.dev](https://models.dev)，以及检查更新的 GitHub/Sparkle。服务商请求、状态页、登录时的令牌交换和 models.dev 会使用「设置 › 网络与刷新」里选择的代理，Pulse 也会把自定义代理传给支持的辅助进程；选择「不使用代理」时，辅助进程也不经过代理。Sparkle 的更新检查始终跟随 macOS 系统代理设置。

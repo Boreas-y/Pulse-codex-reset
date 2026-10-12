@@ -72,6 +72,7 @@
 - **オプトインの通知**：知らせてほしいものだけを選んでオンにします。上限が 75/80/90/95% を越えたとき、プロバイダが使い切ったと報告したとき、警告したウィンドウが戻ったとき、何度も続けてチェックに失敗して（パネルが古い数字を静かに表示しているとき）、前払い残高があなたの決めた金額を下回ったとき、そして Codex・Claude Code・DeepSeek の公式ステータスページが、ツールの依存するサービスの障害を伝えたとき（オンにしているサービスだけ）に知らせます。それぞれ一度だけ：オンにした時点ですでに線を越えていた上限はすぐに一度だけ伝え、その後はリセットされたとき、または悪化したときに伝えます。
 - **リセット後にウィンドウを開始（オプション）**：Claude Code と Codex の利用枠は、リセット後に最初のメッセージを送った時点から数え始めます。オンにすると、Pulse はリセットの直後、指定した時間帯のうちに、プロバイダ自身のコマンドラインツールから「hi」を一度だけ送り、戻ってきた時点ではなくその時点から時計が進むようにします。既定はオフです。Anthropic や OpenAI の機能ではなく、利用制限の回避とみなされる可能性があることを確認してからオンになります。
 - **Spaces にやさしい**：既定ではいま作業している Space に留まり、全画面アプリはそのままにします。
+- **スクリーンショットに写さない（オプション）**：対応するスクリーンショットツールではフローティングパネルが写らず、ウィンドウの自動選択でも選ばれません。
 - **macOS らしい質感**：落ち着いた無地の黒いサーフェス、明るい画面に合うライトのサーフェス、または macOS 26+ のネイティブ **Liquid Glass**。
 - **アニメーションマーク（任意）**：プロバイダのロゴを、そのアカウントの状態に反応する小さなボットに置き換えます。作業中、取得中、上限到達、待機中を表します。既定はオフでアカウントごとに有効化でき、8 種類の性格と 18 種類の形、そして好みの色を選べます。
 - **レールメニューとショートカット**：フローティングレール——または折りたたまれた細い帯——を右クリックすると（Control クリックでも可）、「設定」と「終了」を含むメニューが開きます。**設定 › 一般 › ショートカット** では、**設定を開く** と **パネルの表示を切り替え** にグローバルショートカットを任意で割り当てられます。どちらも割り当てるまでは未設定です。
@@ -87,7 +88,7 @@
 - **77 のプロバイダ**：Claude Code、Codex、Kiro、Antigravity、Cursor、GitHub Copilot、Grok、Grok Bot、OpenCode Go、Kimi Code、Ollama Cloud、z.ai、Zhipu、MiniMax（国際・中国本土）、Volcengine、Command Code、DeepSeek、Devin、Xiaomi Coding Plan、sub2api、New API、V2EX、Qoder、StepFun。ほかに Abacus AI、Aixy、Alibaba Coding Plan、Alibaba Token Plan、Amp、Atlas Cloud、Augment Code、Bifrost、Chutes、ClawRouter、ClinePass、Codebuff、DeepInfra、DevPass、ElevenLabs、Factory、Gemini、GitKraken AI、Hugging Face、Hyper、IBM Bob、JetBrains AI、Kilo Code、LiteLLM、LLM API Key Proxy、LongCat、Manus、Mistral、Moonshot、Neuralwatt、Notion AI、Nous Portal、OpenAI API、Perplexity、Poe、Qwen Cloud、Raycast AI、Replicate、Sakana AI、Synthetic、T3 Chat、TypeSafe、v0、Venice、Vercel AI Gateway、Warp、Windsurf、xAI API、xKiro、Zed、ZenMux、ZoomMate。
 - **スクリプト可**：`Pulse --json` が最後の読み取り値——プラン、すべての上限、リセット時刻、数字がどれだけ古いか——を出力します。tmux、sketchybar、Raycast、シェルプロンプトにどうぞ。キャッシュを読むだけなので、ポーリングのコストはかかりません。
 - **開発者向け連携**：設定から Raycast 拡張と、そのまま設定できる tmux・sketchybar・シェルのスクリプトを書き出せます。アカウントのリンクは該当ペインを直接開きます。[セットアップガイド](Docs/integrations.md)。
-- **拡張機能**：自作の小さなプログラムで、1 つのアカウントの使用量（社内のクォータ API など）を Pulse のリングに表示できます。フォークを保守する必要はありません。オンにするまでは実行されず、Pulse が認証情報を渡すこともありません。[作り方](Docs/extensions.md)（英語）。
+- **拡張機能**：自作の小さなプログラムで、1 つのアカウントの使用量（社内のクォータ API など）を Pulse のリングに表示できます。フォークを保守する必要はありません。オンにするまでは実行されず、Pulse が認証情報を渡すこともありません。中継サービスの応答時間など独自の指標も報告でき、カードに数値と推移のグラフが表示されます。[作り方](Docs/extensions.md)（英語）。
 - **サービスの状態**：Codex・Claude Code・DeepSeek の設定に、それぞれの公式ステータスページと同じ見た目でサービスの状態を表示します——各項目がいま正常かどうか、過去 90 日を 1 日 1 本のバーで、そしてステータスページが公表する稼働率。設定を開いたときに読み込み、開いている間は 5 分ごとに更新します。
 - **接続診断**：実際の読み取り元、キャッシュの利用、最新のチェックとフォールバックの結果を確認できます。状況に応じた操作で再接続・再ログイン・認証情報の修正ができ、アカウント情報やシークレットを含まない診断レポートをコピーできます。
 - **プライバシー第一**：Pulse はあなたの Mac 上で、あなた自身のログインのもとで動きます。接続先は四つだけで、ここに挙げたものがすべてです——すでに使っているプロバイダ、「サービスの状態」とその通知のための公開ステータスページ（status.openai.com、status.claude.com、status.deepseek.com）、トークン使用量ペインの公開モデル価格を取得する [models.dev](https://models.dev)、そしてアプリの更新を確認する GitHub/Sparkle。プロバイダへのリクエスト、ステータスページ、サインイン時のトークン交換、models.dev は「設定」›「ネットワークと更新」で選んだプロキシを使い、カスタムプロキシは対応するヘルパープロセスにも渡されます。「プロキシを使わない」を選ぶと、ヘルパープロセスもプロキシを経由しません。Sparkle のアップデート確認は常に macOS のシステムプロキシ設定に従います。
