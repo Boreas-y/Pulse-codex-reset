@@ -704,6 +704,7 @@
 "Its program isn't there, or isn't executable." = "Its program isn't there, or isn't executable.";
 "Look again" = "Look again";
 "Manage extensions" = "Manage extensions";
+"Metrics" = "Metrics";
 "No pulse-extension.json in this folder." = "No pulse-extension.json in this folder.";
 "None yet" = "None yet";
 "Program" = "Program";
@@ -719,6 +720,7 @@
 "Time limit" = "Time limit";
 "Written for extension schema %@, which this version of Pulse doesn't read." = "Written for extension schema %@, which this version of Pulse doesn't read.";
 "pulse-extension.json isn't valid JSON, or is missing a field." = "pulse-extension.json isn't valid JSON, or is missing a field.";
+"%@. Lowest %@, highest %@." = "%@. Lowest %@, highest %@.";
 
 /* Profiled providers: shared wording */
 "No session found. Sign in at %@ first." = "No session found. Sign in at %@ first.";

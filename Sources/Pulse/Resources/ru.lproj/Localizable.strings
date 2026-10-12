@@ -704,6 +704,7 @@
 "Its program isn't there, or isn't executable." = "Программа не найдена или не является исполняемой.";
 "Look again" = "Проверить снова";
 "Manage extensions" = "Управление расширениями";
+"Metrics" = "Показатели";
 "No pulse-extension.json in this folder." = "В этой папке нет pulse-extension.json.";
 "None yet" = "Пока нет";
 "Program" = "Программа";
@@ -719,6 +720,7 @@
 "Time limit" = "Время ожидания";
 "Written for extension schema %@, which this version of Pulse doesn't read." = "Расширение написано для схемы %@, которую эта версия Pulse не поддерживает.";
 "pulse-extension.json isn't valid JSON, or is missing a field." = "Файл pulse-extension.json содержит некорректный JSON или в нём не хватает поля.";
+"%@. Lowest %@, highest %@." = "%@. Минимум %@, максимум %@.";
 
 /* Profiled providers: shared wording */
 "No session found. Sign in at %@ first." = "Сеанс не найден. Сначала войдите на %@.";

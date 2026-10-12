@@ -756,6 +756,10 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
     /// money, and it must not compare ¥ against $, so the currency travels
     /// with the amount.
     var creditRemaining: CreditAmount?
+    /// Figures that are not limits, as an extension stated them
+    /// (`UsageMetric`). Empty for every built-in provider. Drawn on the card
+    /// under the limits; never the ring, and never a reading on their own.
+    var metrics: [UsageMetric] = []
 
     var origin: UsageRoute?
     /// The account *and organization* the figures belong to, where the route

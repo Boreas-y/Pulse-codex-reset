@@ -704,6 +704,7 @@
 "Its program isn't there, or isn't executable." = "找不到它的程序，或者程序不可执行。";
 "Look again" = "重新查找";
 "Manage extensions" = "管理扩展";
+"Metrics" = "指标";
 "No pulse-extension.json in this folder." = "这个文件夹里没有 pulse-extension.json。";
 "None yet" = "还没有";
 "Program" = "程序";
@@ -719,6 +720,7 @@
 "Time limit" = "时间限制";
 "Written for extension schema %@, which this version of Pulse doesn't read." = "按扩展格式第 %@ 版编写，当前版本的 Pulse 无法读取。";
 "pulse-extension.json isn't valid JSON, or is missing a field." = "pulse-extension.json 不是有效的 JSON，或者缺少必填字段。";
+"%@. Lowest %@, highest %@." = "%@。最低 %@，最高 %@。";
 
 /* Profiled providers: shared wording */
 "No session found. Sign in at %@ first." = "没有找到登录信息。请先在 %@ 登录。";

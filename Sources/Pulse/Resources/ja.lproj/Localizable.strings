@@ -704,6 +704,7 @@
 "Its program isn't there, or isn't executable." = "プログラムが見つからないか、実行できません。";
 "Look again" = "再読み込み";
 "Manage extensions" = "拡張機能の管理";
+"Metrics" = "指標";
 "No pulse-extension.json in this folder." = "このフォルダに pulse-extension.json がありません。";
 "None yet" = "まだありません";
 "Program" = "プログラム";
@@ -719,6 +720,7 @@
 "Time limit" = "制限時間";
 "Written for extension schema %@, which this version of Pulse doesn't read." = "拡張機能スキーマ %@ 向けに書かれていますが、このバージョンの Pulse は読み込めません。";
 "pulse-extension.json isn't valid JSON, or is missing a field." = "pulse-extension.json が正しい JSON ではないか、必要な項目が欠けています。";
+"%@. Lowest %@, highest %@." = "%@。最低 %@、最高 %@。";
 
 /* Profiled providers: shared wording */
 "No session found. Sign in at %@ first." = "セッションが見つかりません。先に %@ でサインインしてください。";

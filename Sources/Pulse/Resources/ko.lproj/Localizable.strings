@@ -704,6 +704,7 @@
 "Its program isn't there, or isn't executable." = "프로그램이 없거나 실행할 수 없습니다.";
 "Look again" = "다시 찾기";
 "Manage extensions" = "확장 관리";
+"Metrics" = "지표";
 "No pulse-extension.json in this folder." = "이 폴더에 pulse-extension.json이 없습니다.";
 "None yet" = "아직 없음";
 "Program" = "프로그램";
@@ -719,6 +720,7 @@
 "Time limit" = "제한 시간";
 "Written for extension schema %@, which this version of Pulse doesn't read." = "확장 스키마 %@용으로 작성되었지만, 이 버전의 Pulse는 읽을 수 없습니다.";
 "pulse-extension.json isn't valid JSON, or is missing a field." = "pulse-extension.json이 올바른 JSON이 아니거나 필요한 항목이 빠져 있습니다.";
+"%@. Lowest %@, highest %@." = "%@. 최저 %@, 최고 %@.";
 
 /* Profiled providers: shared wording */
 "No session found. Sign in at %@ first." = "세션을 찾지 못했습니다. 먼저 %@에서 로그인하십시오.";

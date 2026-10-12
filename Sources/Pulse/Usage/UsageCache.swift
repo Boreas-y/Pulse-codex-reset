@@ -52,6 +52,9 @@ actor UsageCache {
         /// `CreditAmount.railText` exists to avoid. Optional: entries written
         /// before this field existed simply have none.
         var creditRemaining: CreditAmountStored?
+        /// An extension's figures beside its limits. Optional: entries written
+        /// before this field existed have none.
+        var metrics: [UsageMetric]?
         var origin: UsageRoute?
         /// The account and organization the provider said these figures belong
         /// to, where it said. Persisted so a failure after a relaunch still
@@ -225,6 +228,7 @@ actor UsageCache {
             creditRemaining: usage.creditRemaining.map {
                 CreditAmountStored(amount: $0.amount, currency: $0.currency)
             },
+            metrics: usage.metrics.isEmpty ? nil : usage.metrics,
             origin: usage.origin,
             scope: usage.sourceScope
         )
@@ -256,6 +260,7 @@ actor UsageCache {
         restored.creditRemaining = stored.creditRemaining.map {
             .init(amount: $0.amount, currency: $0.currency)
         }
+        restored.metrics = stored.metrics ?? []
         restored.origin = stored.origin
         restored.sourceScope = stored.scope
         restored.isCached = true
