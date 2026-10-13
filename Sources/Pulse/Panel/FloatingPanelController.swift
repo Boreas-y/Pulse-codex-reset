@@ -549,6 +549,8 @@ private final class FloatingPanel: NSPanel {
     /// is in progress.
     private var grab: CGSize?
     private var pressedAt: CGPoint?
+    /// When that press began, for `PanelIntent.ringClickGuard`.
+    private var pressBegan: Date?
     private var didDrag = false
 
     override func sendEvent(_ event: NSEvent) {
@@ -609,6 +611,7 @@ private final class FloatingPanel: NSPanel {
         let pointer = NSEvent.mouseLocation
         grab = CGSize(width: pointer.x - origin.x, height: pointer.y - origin.y)
         pressedAt = location
+        pressBegan = Date()
         didDrag = false
         // From here the grab offset is fixed, so nothing may move the panel
         // until the button comes up — a re-place now is a jump on the first
@@ -790,9 +793,17 @@ private final class FloatingPanel: NSPanel {
 
     private func finish() -> Bool {
         guard grab != nil else { return false }
-        let click = didDrag ? nil : pressedAt
+        // A press that began before the rings had been out for
+        // `ringClickGuard` was aimed at whatever was under the pointer
+        // before they appeared: it can still carry the panel, but it is not
+        // a click on a ring.
+        let aimed = pressBegan.map {
+            PanelIntent.acceptsRingClick(pressedAt: $0, railOpenedAt: placement?.railOpenedAt)
+        } ?? false
+        let click = didDrag || !aimed ? nil : pressedAt
         grab = nil
         pressedAt = nil
+        pressBegan = nil
         didDrag = false
         placement?.isDragging = false
         placement?.isPressed = false

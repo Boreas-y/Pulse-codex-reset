@@ -210,6 +210,11 @@ final class PanelPlacement {
     /// taken hold of, and cannot see that state from the outside.
     var isRailExpanded = true
 
+    /// When the rail last came out, for `PanelIntent.ringClickGuard`. Nil
+    /// while it is wound down. Set by the content alongside `isRailExpanded`;
+    /// nothing draws from it, so it is not observed.
+    @ObservationIgnored var railOpenedAt: Date?
+
     init(
         dock: PanelDock = .edge(.right),
         horizontalRatio: Double = 1,

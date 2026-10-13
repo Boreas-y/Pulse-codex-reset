@@ -26,6 +26,11 @@ struct FloatingUsagePanelContent: View {
     /// A moment's grace before hiding, so clipping a corner of the panel on
     /// the way somewhere else doesn't make it flinch.
     @State private var hideAfterDelay: Task<Void, Never>?
+    /// The pointer has arrived on a collapsed notch's housing and the rail
+    /// opens if it is still there when this finishes (`PanelIntent.notchDwell`).
+    @State private var notchDwell: Task<Void, Never>?
+    /// Where the pointer is right now, for the end of that wait.
+    @State private var pointerProbe = PointerProbe()
 
     /// This Mac's records for the detailed card, read as its cards open.
     @State private var cardLedgers = CardLedgers()
@@ -43,13 +48,13 @@ struct FloatingUsagePanelContent: View {
                 // the content. Tracking a position rather than enter/exit
                 // events means crossing from a ring to the card, or between
                 // two rings, never interrupts anything.
-                PanelPointerWatcher(onChange: pointerMoved)
+                PanelPointerWatcher(onChange: pointerMoved, probe: pointerProbe)
             )
             .overlay(alignment: .topLeading) {
                 if let target = notchTarget {
                     Color.clear
                         .frame(width: target.width, height: target.height)
-                        .background(PointerEntryReporter(onEnter: show))
+                        .background(PointerEntryReporter(onEnter: armNotch))
                         .allowsHitTesting(false)
                         .offset(x: target.minX, y: target.minY)
                 }
@@ -184,6 +189,8 @@ struct FloatingUsagePanelContent: View {
             // whether the rail is drawn out, which only this side knows.
             .onChange(of: isExpanded, initial: true) { _, expanded in
                 placement.isRailExpanded = expanded
+                placement.railOpenedAt = expanded ? Date() : nil
+                if expanded { cancelNotchDwell() }
             }
             // A card left open under a panel being carried across the screen
             // is noise; the pointer is sweeping the rings, not reading them.
@@ -204,6 +211,7 @@ struct FloatingUsagePanelContent: View {
             .onDisappear {
                 hideAfterDelay?.cancel()
                 hideAfterDelay = nil
+                cancelNotchDwell()
             }
             // Pinned dark on both surfaces, and pinned through the
             // *environment* rather than `preferredColorScheme` — the latter is
@@ -266,9 +274,10 @@ struct FloatingUsagePanelContent: View {
     /// The hardware target in the watcher's flipped, panel-local coordinates.
     private var notchTarget: CGRect? {
         placement.notch.map {
-            CGRect(x: railLeading + railSize.width / 2 - $0.width / 2,
-                   y: railTop - $0.height,
-                   width: $0.width, height: $0.height)
+            PanelIntent.notchHousing(
+                rail: CGRect(x: railLeading, y: railTop, width: railSize.width, height: railSize.height),
+                notchSize: $0.size
+            )
         }
     }
 
@@ -476,6 +485,32 @@ struct FloatingUsagePanelContent: View {
         isHovered = true
     }
 
+    /// The pointer arrived on a collapsed notch's housing: open if it is
+    /// still there once `PanelIntent.notchDwell` has passed.
+    ///
+    /// Armed by the housing's tracking area and by the sampler alike, so a
+    /// pointer that was already there when the area was installed still
+    /// counts. Checked against the pointer **now** (`pointerProbe`), not the
+    /// last sample, or a pointer that crossed and left would still read as
+    /// inside. A pointer that is gone simply leaves the rail as it was:
+    /// nothing here ever closes anything, so it cannot start the open/close
+    /// loop the enter-only rule exists to prevent.
+    private func armNotch() {
+        guard placement.notch != nil, !isExpanded, notchDwell == nil else { return }
+        notchDwell = Task { @MainActor in
+            try? await Task.sleep(for: PanelIntent.notchDwell)
+            guard !Task.isCancelled else { return }
+            notchDwell = nil
+            guard let point = pointerProbe.current(), notchTarget?.contains(point) == true else { return }
+            show()
+        }
+    }
+
+    private func cancelNotchDwell() {
+        notchDwell?.cancel()
+        notchDwell = nil
+    }
+
     /// Closes the details, and eventually the rail itself, once the pointer is
     /// no longer on either.
     private func pointerMoved(_ point: CGPoint?) {
@@ -483,6 +518,13 @@ struct FloatingUsagePanelContent: View {
         // should follow it across the gaps between rings too. `nil` is the
         // pointer leaving the panel altogether.
         if pointerPoint != point { pointerPoint = point }
+
+        // Collapsed at a notch, the housing is not content yet: the pointer
+        // being there only starts the wait (`armNotch`), and leaving it
+        // calls the wait off.
+        if placement.notch != nil, !isExpanded {
+            if let point, notchTarget?.contains(point) == true { armNotch() } else { cancelNotchDwell() }
+        }
 
         if let point, isOverContent(point) {
             hideAfterDelay?.cancel()
@@ -530,7 +572,6 @@ struct FloatingUsagePanelContent: View {
     /// simply asking whether the pointer is inside the window would hold the
     /// card open across a large blank area well away from it.
     private func isOverContent(_ point: CGPoint) -> Bool {
-        if notchTarget?.contains(point) == true { return true }
         let edge = placement.edge
 
         // Collapsed, only the sliver's own target counts. Testing the rail's
@@ -543,6 +584,8 @@ struct FloatingUsagePanelContent: View {
                 .contains(point)
         }
 
+        // Open, the housing holds the rail as the rest of its surface does.
+        if notchTarget?.contains(point) == true { return true }
         let rail = PanelHitArea.rail(edge: edge, railSize: railSize, railTop: railTop, railLeading: railLeading)
         if let notch = placement.notch {
             let surface = PanelHitArea.notchSurface(rail: rail, notchSize: notch.size)
