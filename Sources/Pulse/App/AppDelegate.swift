@@ -6,7 +6,7 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     /// Not private: the status-item menu reads the language from it so the
     /// menu rebuilds when the language changes.
-    let settings = AppSettings.restored()
+    let settings: AppSettings
     /// Not private for the same reason: the status-item menu shows a newer
     /// version when there is one.
     let update = AppUpdate()
@@ -28,6 +28,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     /// only while it still holds the latest, so the chain started by each
     /// settings change replaces the one before instead of running beside it.
     private var menuBarGeneration = 0
+
+    /// The app's own settings, restored — which moves the process-wide panel
+    /// metrics and the language to match them (`AppSettings.restored()`).
+    override convenience init() {
+        self.init(settings: .restored())
+    }
+
+    /// **A test passes settings on its own defaults.** Restored ones rewrite
+    /// `PanelMetrics` and the language for the whole test process, mid-run and
+    /// without putting them back, from whatever the test runner's own domain
+    /// holds: building a delegate in a menu test changed the window budget
+    /// under the layout suites (`FreeAcrossTests` failed now and then).
+    init(settings: AppSettings) {
+        self.settings = settings
+        super.init()
+    }
 
     private var panelController: FloatingPanelController?
     private var statusItem: NSStatusItem?
