@@ -195,7 +195,12 @@ struct FloatingUsagePanelContent: View {
             // A card left open under a panel being carried across the screen
             // is noise; the pointer is sweeping the rings, not reading them.
             .onChange(of: placement.isDragging) { _, dragging in
-                if dragging { deselect() }
+                if dragging { deselect() } else { pointerProbe.reportAgain() }
+            }
+            // While the menu is up nothing hides (`scheduleHide`); a pointer
+            // that stays where it closed the menu must still be asked about.
+            .onChange(of: placement.isMenuOpen) { _, open in
+                if !open { pointerProbe.reportAgain() }
             }
             // The detailed card's history, read when a card that shows it opens.
             .onChange(of: selectedSlot) {
@@ -465,9 +470,18 @@ struct FloatingUsagePanelContent: View {
     }
 
     /// Opens a provider's details when the pointer arrives on its ring.
+    ///
+    /// An enter that arrives after the pointer has gone again — queued
+    /// behind a busy main thread — opens nothing: the pointer is read
+    /// **now**. Refusing to open closes nothing, so this cannot start the
+    /// open/close loop the enter-only rule prevents. A card that does open
+    /// asks the sampler for a fresh report (`PointerProbe.reportAgain`), so a
+    /// pointer that leaves before the next sample still closes it.
     private func select(_ entry: RailEntry) {
         guard !placement.isDragging, selectedSlot != entry.id else { return }
+        guard let point = pointerProbe.current(), isOverContent(point) else { return }
         selectedSlot = entry.id
+        pointerProbe.reportAgain()
 
         // Opening a card is the clearest sign these numbers are being read,
         // which is what the automatic refresh interval paces itself against.
@@ -483,6 +497,8 @@ struct FloatingUsagePanelContent: View {
         hideAfterDelay = nil
         guard !isHovered else { return }
         isHovered = true
+        // The same late enter can draw the rail out after the pointer left.
+        pointerProbe.reportAgain()
     }
 
     /// The pointer arrived on a collapsed notch's housing: open if it is
@@ -559,7 +575,9 @@ struct FloatingUsagePanelContent: View {
             // while it is being carried across the screen. Nor while the
             // panel's own menu is up, for the same reason — the pointer is on
             // the menu, which is not the panel. Both re-arm: `hideAfterDelay`
-            // is already nil here, so the watcher's next tick asks again.
+            // is already nil here, and the end of either asks the sampler to
+            // report again, since a pointer that has not moved is otherwise
+            // never reported twice.
             guard !placement.isDragging, !placement.isMenuOpen, !isNotchHeld else { return }
             isHovered = false
         }

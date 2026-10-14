@@ -21,6 +21,8 @@ For a top-docked notch rail, an unpainted `PointerEntryReporter` covers exactly 
 
 **Do not close on exit events.** Views appearing, moving, or animating under a stationary pointer fire spurious exits; closing reopens; it loops. Enter from tracking areas, leave from sampling the real pointer. That loop is then structurally impossible.
 
+**Samples are deduplicated, so whatever opens the panel by another path asks for a fresh one** (`PointerProbe.reportAgain`). A ring's enter can arrive late — queued behind a busy main thread, or for a ring crossed between two samples — after the sampler has already reported the pointer gone; every later sample was that same "gone", so the card stayed open until the pointer came back and left again. Now `select` opens nothing unless the pointer is on the content **now** (`pointerProbe`; refusing closes nothing, so no loop), and `select`, `show`, the end of a drag and the menu closing each have the next sample report the pointer even if it has not moved.
+
 The sliver’s tracking area cannot be the only way `isHovered` gets set: a floating panel dragged onto an edge docks with `isHovered` still false and snaps shut in the hand. `pointerMoved` sets it from the same test that decides when to hide.
 
 `PanelHitArea.stripIsContainedInRail()` asserts the sliver never pokes outside the rail’s hit area (or leave-rail lands on the sliver, which shows the rail, which hides it). Bound is rail capacity / slots, not `Provider.allCases.count`. Run from `FloatingPanelController.init` once metrics are settled.

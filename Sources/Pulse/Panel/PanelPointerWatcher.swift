@@ -76,6 +76,12 @@ struct PanelPointerWatcher: NSViewRepresentable {
             self.timer = timer
         }
 
+        /// Makes the next sample report wherever the pointer is, even where
+        /// it was last reported. See `PointerProbe.reportAgain`.
+        func reportAgain() {
+            lastReported = nil
+        }
+
         /// The pointer now, or nil off the panel. Not throttled or deduplicated.
         func currentPoint() -> CGPoint? {
             guard let window else { return nil }
@@ -114,4 +120,15 @@ final class PointerProbe {
     fileprivate weak var view: PanelPointerWatcher.WatcherView?
 
     func current() -> CGPoint? { view?.currentPoint() }
+
+    /// Has the next sample report the pointer even if it has not moved.
+    ///
+    /// **Samples are deduplicated, so something that opens the panel by
+    /// another path has to ask for one.** A card or the rail opened by a
+    /// tracking area's enter that arrives late — behind a busy main thread,
+    /// or from a ring crossed between two samples — lands after the sampler
+    /// has already reported the pointer gone. Every later sample is that
+    /// same "gone", so nothing reported it again and the card stayed open
+    /// until the pointer came back and left once more.
+    func reportAgain() { view?.reportAgain() }
 }
