@@ -813,6 +813,12 @@ actor UsageLedgerReader {
         return formatter
     }()
 
+    /// A slot key back to the moment it starts: what `formatter.date(from:)`
+    /// answers, about ten times faster (`SlotDates`).
+    nonisolated static func slotDate(_ key: String, formatter: DateFormatter = sharedSlotFormatter) -> Date? {
+        SlotDates.date(key, formatter: formatter)
+    }
+
     /// Turns a reader's running `slotKey` totals into the sorted, priced
     /// buckets a session carries.
     ///
@@ -824,7 +830,7 @@ actor UsageLedgerReader {
     ) -> [UsageLedger.Slot] {
         totals
             .compactMap { key, value in
-                sharedSlotFormatter.date(from: key).map {
+                slotDate(key).map {
                     UsageLedger.Slot(start: $0, tokens: value.tokens, cost: value.cost, unpricedTokens: value.unpriced)
                 }
             }
@@ -872,7 +878,7 @@ actor UsageLedgerReader {
 
         for (key, models) in buckets {
             guard !Task.isCancelled else { return .empty }
-            guard let start = sharedSlotFormatter.date(from: key) else { continue }
+            guard let start = slotDate(key) else { continue }
             let day = calendar.startOfDay(for: start)
 
             var tokens = 0
@@ -1178,7 +1184,7 @@ actor UsageLedgerReader {
             var rollup = rollups[group] ?? Rollup()
 
             for (key, models) in entry.days {
-                guard let at = slotFormatter.date(from: key) else { continue }
+                guard let at = Self.slotDate(key, formatter: slotFormatter) else { continue }
 
                 var slot = rollup.slots[key] ?? (0, 0, 0)
                 let before = slot.tokens
@@ -2100,5 +2106,76 @@ private struct FileCache: Codable {
         // `PulseStorage.isSuperseded` reads it: every `ledger-<n>-*` below it
         // is cleaned away without a name being added to a list.
         (directory ?? PulseStorage.directory).appending(path: "ledger-\(UsageLedgerReader.cacheVersion)-\(provider.rawValue).json")
+    }
+}
+
+/// Slot keys (`yyyy-MM-dd HH:mm`, local time) back to dates, without a
+/// `DateFormatter` each time.
+///
+/// **Why.** Every quarter-hour on record is a key, and pricing a ledger and
+/// listing its sessions turn each one back into a date. Through
+/// `DateFormatter.date(from:)` that was about 14µs a key — measured in
+/// Instruments as the larger part of `priced` and `sessions` on a card's
+/// history read. Taking the digits out and asking a `Calendar` is about 1.3µs.
+///
+/// **Same answers, not close ones.** The calendar is in the formatter's own
+/// time zone, and a date is only used if it reads back as the very fields it
+/// was made from and no clock change is within a day of it; anything else — a
+/// key in some other shape, a local time a clock change skipped or repeated —
+/// goes to the formatter as before. `SlotDatesTests`
+/// holds every quarter-hour of two years in zones with clock changes,
+/// including half-hour and midnight ones, against the formatter.
+enum SlotDates {
+    private static let lock = NSLock()
+    nonisolated(unsafe) private static var calendars: [String: Calendar] = [:]
+
+    static func date(_ key: String, formatter: DateFormatter) -> Date? {
+        guard let fields = fields(of: key) else { return formatter.date(from: key) }
+        let zone = formatter.timeZone ?? .current
+        let calendar = calendar(in: zone)
+        guard let date = calendar.date(from: fields) else { return formatter.date(from: key) }
+        // **Within a day of a clock change, the formatter's.** When clocks go
+        // back an hour of local times happens twice, and the calendar and the
+        // formatter pick different ones (measured: Berlin, Santiago, Lord
+        // Howe's half hour, Havana's midnight). A day either side covers
+        // every change, and is a day or two a year.
+        let offset = zone.secondsFromGMT(for: date)
+        guard zone.secondsFromGMT(for: date - 86_400) == offset, zone.secondsFromGMT(for: date + 86_400) == offset
+        else { return formatter.date(from: key) }
+        let back = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        guard back.year == fields.year, back.month == fields.month, back.day == fields.day,
+              back.hour == fields.hour, back.minute == fields.minute
+        else { return formatter.date(from: key) }
+        return date
+    }
+
+    /// The five numbers in `yyyy-MM-dd HH:mm`, or nil for anything else.
+    static func fields(of key: String) -> DateComponents? {
+        let bytes = Array(key.utf8)
+        guard bytes.count == 16, bytes[4] == 0x2D, bytes[7] == 0x2D, bytes[10] == 0x20, bytes[13] == 0x3A
+        else { return nil }
+        func number(_ range: Range<Int>) -> Int? {
+            var value = 0
+            for index in range {
+                let byte = bytes[index]
+                guard byte >= 0x30, byte <= 0x39 else { return nil }
+                value = value * 10 + Int(byte - 0x30)
+            }
+            return value
+        }
+        guard let year = number(0..<4), let month = number(5..<7), let day = number(8..<10),
+              let hour = number(11..<13), let minute = number(14..<16)
+        else { return nil }
+        return DateComponents(year: year, month: month, day: day, hour: hour, minute: minute)
+    }
+
+    private static func calendar(in zone: TimeZone) -> Calendar {
+        lock.withLock {
+            if let calendar = calendars[zone.identifier] { return calendar }
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = zone
+            calendars[zone.identifier] = calendar
+            return calendar
+        }
     }
 }
