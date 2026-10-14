@@ -53,6 +53,7 @@ struct AppSettingsLayoutTests {
         ("hidesInFullScreen", { $0.hidesInFullScreen = false }),
         ("hidesFromScreenCapture", { $0.hidesFromScreenCapture = true }),
         ("followsActiveDisplay", { $0.followsActiveDisplay = true }),
+        ("snapsToEdges", { $0.snapsToEdges = false }),
         ("showsSecondRing", { $0.showsSecondRing = true })
     ]
 

@@ -150,6 +150,25 @@ final class PanelPlacement {
     /// Present only while attached to a physical notch; never persisted.
     var notch: CGRect?
 
+    /// `AppSettings.snapsToEdges`, copied here by the panel controller
+    /// whenever settings change; never persisted by this class. It decides
+    /// what a drag lands on (`dragDock`) and how close to a side a free
+    /// upright rail may stand (`sideMargin`).
+    var snapsToEdges = true
+
+    /// How far a free rail is kept from the left and right of the screen.
+    ///
+    /// An upright rail flush against a side looks docked there without
+    /// being docked, so while snapping is on it keeps the docking distance —
+    /// it would have docked on the way in anyway. A rail lying across has no
+    /// side dock to be mistaken for, and with snapping on it docks to a side
+    /// only once the pointer gets there: held back 32pt, it stopped short
+    /// while the hand kept moving. With snapping off nothing is held back,
+    /// so the rail goes flush into any corner (issue #85).
+    func sideMargin(for axis: PanelEdge.Axis) -> CGFloat {
+        snapsToEdges && axis == .vertical ? Self.dockDistance : 0
+    }
+
     /// How tall a card may be on the side it opens to, for a rail lying
     /// across: from the rail to the screen's usable edge, less the gap. Nil
     /// down a side, where the card slides along the rail instead. Set where
@@ -459,16 +478,19 @@ final class PanelPlacement {
         // Handled above; never reached.
         case .edge(.top), .edge(.bottom), .floating(.horizontal): visible.minX
         case .floating(.vertical):
-            // Floating means *not touching*. Without this, switching to free
-            // placement while the stored position is still the docked one
-            // leaves the rail flush against the side of the screen wearing the
-            // silhouette of something that isn't.
+            // Floating means *not touching* while snapping is on. Without
+            // this, switching to free placement while the stored position is
+            // still the docked one leaves the rail flush against the side of
+            // the screen wearing the silhouette of something that isn't.
             min(
                 max(
                     visible.minX + CGFloat(horizontalRatio) * max(visible.width - rail.width, 0),
-                    visible.minX + Self.dockDistance
+                    visible.minX + sideMargin(for: .vertical)
                 ),
-                max(visible.maxX - rail.width - Self.dockDistance, visible.minX + Self.dockDistance)
+                max(
+                    visible.maxX - rail.width - sideMargin(for: .vertical),
+                    visible.minX + sideMargin(for: .vertical)
+                )
             )
         }
 
@@ -493,19 +515,19 @@ final class PanelPlacement {
     /// A rail lying across the screen and standing free: the top dock's
     /// shape, placed by both ratios the way the upright floating rail is.
     ///
-    /// Kept clear of the sides by the docking distance for the same reason
-    /// that rail is. The window hangs *down* from the rail in the top half of
+    /// Not kept clear of the sides: see `sideMargin`. The window hangs *down* from the rail in the top half of
     /// the screen and stands *up* from it in the bottom half (`edge`), so the
     /// card always has the roomier half to open into — hanging down
     /// everywhere would slice it off against the Dock the moment the rail was
     /// parked low.
     private func layoutLyingFree(in visible: CGRect, panel: CGSize, rail: CGSize) -> Layout {
+        let margin = sideMargin(for: .horizontal)
         let railX = min(
             max(
                 visible.minX + CGFloat(horizontalRatio) * max(visible.width - rail.width, 0),
-                visible.minX + Self.dockDistance
+                visible.minX + margin
             ),
-            max(visible.maxX - rail.width - Self.dockDistance, visible.minX + Self.dockDistance)
+            max(visible.maxX - rail.width - margin, visible.minX + margin)
         )
         // Screen coordinates run bottom-up: this is the rail's bottom edge.
         let railY = visible.minY
@@ -579,8 +601,8 @@ final class PanelPlacement {
     /// the bottom has nothing, so a docked rail stays while its own bottom
     /// is within reach of the edge.
     ///
-    /// With `snaps` off (Settings → *Snap to screen edges*) none of that
-    /// applies: the rail stands free and keeps running the way it did when
+    /// With `snaps` off (Settings → *Snap to screen edges*, `snapsToEdges`)
+    /// none of that applies: the rail stands free and keeps running the way it did when
     /// it was picked up, wherever it is carried.
     static func dragDock(
         pointer: CGPoint,

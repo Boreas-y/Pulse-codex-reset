@@ -108,6 +108,7 @@ final class FloatingPanelController {
         self.store = store
         self.settings = settings
         self.placement = placement
+        placement.snapsToEdges = settings.snapsToEdges
 
         // The sliver has to be reachable without leaving the rail, or hiding
         // and showing chase each other forever. It is geometry, so it can be
@@ -203,7 +204,6 @@ final class FloatingPanelController {
         panel.railSize = { [settings, store] axis, docked in
             DockLayout.size(for: Self.shownSlotCount(settings, usage: { store.usage(for: $0) }), on: axis, docked: docked)
         }
-        panel.snapsToEdges = { [settings] in settings.snapsToEdges }
         panel.grabArea = { [settings, store, placement] in
             if placement.notch != nil && !placement.isRailExpanded { return .zero }
             let size = DockLayout.size(for: Self.shownSlotCount(settings, usage: { store.usage(for: $0) }), on: placement.edge.axis, docked: placement.isDocked)
@@ -289,6 +289,7 @@ final class FloatingPanelController {
 
     /// Brings the panel in line with settings that were just changed.
     func settingsChanged() {
+        placement.snapsToEdges = settings.snapsToEdges
         applyCollectionBehavior()
         applyScreenCapture()
         applyDisplayFollowing()
@@ -503,9 +504,6 @@ private final class FloatingPanel: NSPanel {
     /// The rail's size on a given axis, docked or not, which the drag needs
     /// for a dock the panel has not reached yet.
     var railSize: ((PanelEdge.Axis, Bool) -> CGSize)?
-    /// Whether a drag may dock the rail and turn it (Settings → *Snap to
-    /// screen edges*), asked on every frame so a change takes effect at once.
-    var snapsToEdges: (() -> Bool)?
 
     /// Where a top-docked rail's top edge belongs: the display's physical top,
     /// less whatever a notch takes out of it.
@@ -665,7 +663,7 @@ private final class FloatingPanel: NSPanel {
             visible: visible,
             current: placement.dock,
             axis: placement.edge.axis,
-            snaps: snapsToEdges?() ?? true
+            snaps: placement.snapsToEdges
         )
 
         // The rail turns as it crosses onto the other axis, so everything from

@@ -84,11 +84,12 @@ extension AppSettings {
         onLayoutChange?()
     }
 
-    /// Only stored: it changes what the next drag does, not where the panel
-    /// is now, so there is nothing to re-place.
+    /// Re-places the panel: a free upright rail is kept off the sides only
+    /// while snapping is on (`PanelPlacement.sideMargin`).
     func snapsToEdgesChanged(from old: Bool) {
         guard snapsToEdges != old else { return }
         defaults.set(snapsToEdges, forKey: Key.snapsToEdges)
+        onLayoutChange?()
     }
 
     func panelSizeChanged(from old: PanelSize) {
