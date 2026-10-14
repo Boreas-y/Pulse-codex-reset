@@ -431,7 +431,7 @@ struct AlertMemory: Codable, Sendable, Equatable {
              .kiroSignInRequired, .antigravityNotRunning, .antigravityNotAnswering,
              .cursorSignInRequired, .grokSignInRequired, .notSignedIn,
              .ollamaSessionMissing, .xiaomiSessionMissing, .qoderSessionMissing, .stepFunSessionMissing,
-             .apiKeyMissing, .volcengineCLIMissing,
+             .apiKeyMissing, .volcengineCLIMissing, .antigravityCLIMissing, .antigravityCLIOutdated,
              .volcengineSignInRequired,
              // A program taken out of its folder is a setup change somebody
              // made, not an outage.

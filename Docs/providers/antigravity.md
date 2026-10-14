@@ -2,7 +2,7 @@
 
 Service: [`AntigravityUsageService.swift`](../../Sources/Pulse/Providers/AntigravityUsageService.swift), with the CLI route in [`AntigravityCLIUsage.swift`](../../Sources/Pulse/Providers/AntigravityCLIUsage.swift).
 
-Two routes, tried in order and not offered as a choice: the editor's **language server** while Antigravity is open, then the **`agy` CLI** when the server produced no figures. The route that answered is recorded as `languageServer` or `antigravityCLI`.
+Two routes, chosen in Settings → *Read usage from*: **Automatic** (the default) tries the editor's **language server** while Antigravity is open, then the **`agy` CLI** when the server produced no figures; **CLI** asks only `agy`; **Desktop app** asks only the language server. The route that answered is recorded as `languageServer` or `antigravityCLI`.
 
 The odd one out. Extra accounts are not supported. `keepsLocalTranscripts` is false: it is an editor, not a CLI, and leaves no session files Pulse can read. History, the money estimate, and the activity mark are left out rather than shown as zeroes.
 
@@ -66,7 +66,7 @@ Only `agy` is looked for (`CommandLocator`). `antigravity` is also the name of t
 
 ### When the CLI does not answer
 
-**The language server's reason stands.** A CLI that exits with an error, times out or prints something unreadable leaves `.antigravityNotRunning` or `.antigravityNotAnswering` in place, and the CLI's attempt is recorded for the diagnostics. Reporting the CLI's failure instead would raise a notification for someone who installed `agy`, never signed in to it and closed the editor. A CLI that answers with no limits reports `.noLimitsReported`, which is an answer, not a fault.
+**Automatically, the language server's reason stands.** A CLI that exits with an error, times out or prints something unreadable leaves `.antigravityNotRunning` or `.antigravityNotAnswering` in place, and the CLI's attempt is recorded for the diagnostics. Reporting the CLI's failure instead would raise a notification for someone who installed `agy`, never signed in to it and closed the editor. A CLI that answers with no limits reports `.noLimitsReported`, which is an answer, not a fault. **Pinned to *CLI*, every failure is its own** (`cliOnly`): `.antigravityCLIMissing` when `agy` is not installed, `.antigravityCLIOutdated` below 1.1.11 or with an unreadable version, and the run's own reason otherwise. Both new reasons are setup, not outages, so they raise no failure notification.
 
 **`/credits` is not read.** It reports a separate balance of AI credits (`remaining_credits`) that can be bought, not the plan's quota, and a balance of 0 is what an account that never bought any reports.
 
@@ -104,4 +104,4 @@ The plan carries a Gemini allowance and a separate one for Claude and GPT, repor
 
 ## Settings copy
 
-`Provider.soleRoute` names “Antigravity’s language server or the agy CLI” / “Reads Antigravity while it is open, and the agy CLI when it is not.” The order is fixed, so it is stated rather than offered as a choice (`hasSourceChoice` stays false), and `UsageRoute.soleRoute(for:)` is nil because the service records which route answered. The wording must not leak to other single-route providers. See [README.md](README.md).
+A picker, not a stated route: every provider with more than one route offers the choice (`hasSourceChoice`), so `Provider.soleRoute` is nil. Options are *Automatic* / *CLI* / *Desktop app* (`UsageSource.options(for:)`; *CLI* is `.tooling` titled by `title(for:)`). The subtitles: automatic “Reads Antigravity while it is open, and the agy CLI when it is not.”, CLI “Asks the agy CLI, using the login it already saved.”, desktop app “Asks the language server Antigravity runs while it is open.” Claude's desktop-route availability filter does not apply to it. `UsageRoute.soleRoute(for:)` is nil because the service records which route answered. The wording must not leak to other single-route providers. See [README.md](README.md).

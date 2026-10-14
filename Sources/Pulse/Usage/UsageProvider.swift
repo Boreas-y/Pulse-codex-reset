@@ -394,10 +394,10 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
 
     /// Whether the route to this provider's figures is a choice.
     ///
-    /// The two CLIs can each be read two ways, which is a setting. Cursor has
-    /// exactly one route, a login it stored, and Antigravity has two in a
-    /// fixed order — its language server, then its `agy` CLI — so both are
-    /// stated rather than offered.
+    /// **Every provider with more than one route offers the choice**, with
+    /// *Automatic* the default. Antigravity's are its desktop app's language
+    /// server and its `agy` CLI; Cursor has exactly one route, a login it
+    /// stored, so it is stated rather than offered.
     /// **Not `keepsLocalTranscripts`**, which it used to be. The two happened
     /// to agree while only the CLIs had a choice, and reading one for the other
     /// is the kind of coincidence that breaks silently: Volcengine has two routes
@@ -406,8 +406,8 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     var hasSourceChoice: Bool {
         guard let written = handWritten else { return false }
         return switch written {
-        case .claudeCode, .codex, .volcengine, .devin: true
-        case .kiro, .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
+        case .claudeCode, .codex, .volcengine, .devin, .antigravity: true
+        case .kiro, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
              .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .grok, .grokBot,
              .commandCode, .deepSeek, .xiaomiMiMo, .sub2api, .newAPI, .v2ex, .qoder, .stepFun,
              .pulseExtension: false
@@ -428,9 +428,6 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     var soleRoute: (name: String, note: String)? {
         guard let written = handWritten else { return profile?.soleRoute?() }
         return switch written {
-        case .antigravity:
-            (String.localized("Antigravity's language server or the agy CLI"),
-             String.localized("Reads Antigravity while it is open, and the agy CLI when it is not."))
         case .cursor:
             (String.localized("Cursor's own login"),
              String.localized("Uses the login Cursor already saved."))
@@ -448,7 +445,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
              String.localized("Uses Kiro CLI's signed-in session without reading its credentials."))
         // Either a choice of routes, or a key the user pastes: both are asked
         // about elsewhere, so there is nothing here to state.
-        case .claudeCode, .codex, .openCodeGo, .kimiCode, .ollamaCloud,
+        case .claudeCode, .codex, .antigravity, .openCodeGo, .kimiCode, .ollamaCloud,
              .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .volcengine,
              .commandCode, .deepSeek, .devin, .xiaomiMiMo, .sub2api, .newAPI, .v2ex, .qoder, .stepFun:
             nil

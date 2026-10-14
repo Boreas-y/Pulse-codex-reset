@@ -163,8 +163,27 @@ struct AntigravityCLITests {
 
     @Test("A CLI that was not asked changes nothing")
     func cliNotAsked() {
-        let result = AntigravityUsageService.weigh(server: Self.closed, cli: .notAsked)
+        let result = AntigravityUsageService.weigh(server: Self.closed, cli: .notAsked(.antigravityCLIMissing))
         #expect(result.state == Self.closed.state)
         #expect(result.attempts == Self.closed.attempts)
+    }
+
+    @Test("Antigravity offers automatic, the CLI and the desktop app, automatic by default")
+    func offersItsRoutes() {
+        let account = AccountKey(.antigravity)
+        #expect(Provider.antigravity.hasSourceChoice)
+        #expect(Provider.antigravity.soleRoute == nil)
+        #expect(UsageSource.options(for: account) == [.automatic, .tooling, .desktopApp])
+        #expect(UsageSource.tooling.title(for: .antigravity) != UsageSource.tooling.title)
+    }
+
+    @Test("Pinned to the CLI, every way it fails is reported as itself")
+    func cliOnlyReportsItsOwnReasons() {
+        #expect(AntigravityUsageService.cliOnly(.notAsked(.antigravityCLIMissing)).state == .unavailable(.antigravityCLIMissing))
+        #expect(AntigravityUsageService.cliOnly(.notAsked(.antigravityCLIOutdated)).state == .unavailable(.antigravityCLIOutdated))
+        #expect(AntigravityUsageService.cliOnly(.failed(.unreachable)).state == .unavailable(.unreachable))
+        #expect(AntigravityUsageService.cliOnly(.noLimits).state == .unavailable(.noLimitsReported))
+        let failed = AntigravityUsageService.cliOnly(.failed(.unreachable))
+        #expect(failed.attempts.map(\.route) == [.antigravityCLI])
     }
 }

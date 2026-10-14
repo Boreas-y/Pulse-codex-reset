@@ -319,7 +319,10 @@
 "Open Antigravity to see its usage." = "使用量を読むには Antigravity を開いてください。";
 "Asks the language server Antigravity runs while it is open." = "Antigravity が起動中に走らせている言語サーバに問い合わせます。";
 "Reads Antigravity while it is open, and the agy CLI when it is not." = "Antigravity が開いているときはそこから、開いていないときは agy CLI から読み取ります。";
-"Antigravity's language server or the agy CLI" = "Antigravity の言語サーバまたは agy CLI";
+"CLI" = "CLI";
+"Asks the agy CLI, using the login it already saved." = "agy CLI を呼び出し、既に保存されているログインを使います。";
+"The agy CLI isn't installed. Install it, or choose another source in Settings." = "agy CLI がインストールされていません。インストールするか、設定で別の読み取り元を選んでください。";
+"This version of the agy CLI can't report usage. Update it to 1.1.11 or later." = "このバージョンの agy CLI は使用量を報告できません。1.1.11 以降に更新してください。";
 
 /* Cursor */
 "Sign in to Cursor to see usage." = "使用量を読むには Cursor にサインインしてください。";

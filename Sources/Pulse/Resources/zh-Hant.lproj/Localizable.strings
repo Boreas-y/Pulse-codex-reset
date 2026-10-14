@@ -318,8 +318,11 @@
 "Clearer to the right. Darker reads better over bright pages." = "越往右越透。偏暗一點，在淺色頁面上更容易看清。";
 "Open Antigravity to see its usage." = "開啟 Antigravity 才讀得到它的用量。";
 "Asks the language server Antigravity runs while it is open." = "向 Antigravity 開啟時執行的語言伺服器讀取。";
-"Reads Antigravity while it is open, and the agy CLI when it is not." = "Antigravity 開啟時從它讀取，未開啟時透過 agy 命令列讀取。";
-"Antigravity's language server or the agy CLI" = "Antigravity 的語言伺服器或 agy 命令列";
+"Reads Antigravity while it is open, and the agy CLI when it is not." = "Antigravity 開啟時從它讀取，未開啟時透過 agy CLI讀取。";
+"CLI" = "CLI";
+"Asks the agy CLI, using the login it already saved." = "透過 agy CLI 讀取，沿用它已儲存的登入。";
+"The agy CLI isn't installed. Install it, or choose another source in Settings." = "未安裝 agy CLI。請安裝它，或在設定中選擇其他用量來源。";
+"This version of the agy CLI can't report usage. Update it to 1.1.11 or later." = "目前版本的 agy CLI 無法回報用量，請更新到 1.1.11 或更新的版本。";
 
 /* Cursor */
 "Sign in to Cursor to see usage." = "在 Cursor 中登入後才讀得到用量。";
@@ -647,7 +650,7 @@
 "Enable a service in its settings to start monitoring." = "在服務的設定頁中開啟，即可開始監控。";
 "Reads Claude Code's saved login from Keychain or its credentials file. May ask for Keychain access, including Claude Desktop's cookie storage." = "讀取 Claude Code 存在鑰匙圈或憑證檔案中的登入資訊。可能要求鑰匙圈存取權限，其中包括 Claude 桌面版的 cookie 儲存空間。";
 "Reads ~/.codex/auth.json and may run codex app-server with its saved login. Pulse does not request Keychain access." = "讀取 ~/.codex/auth.json，也可能啟動 codex app-server 使用已儲存的登入。Pulse 不會要求鑰匙圈存取權限。";
-"Reads the running editor's local language server and connection token, or runs the agy CLI with its saved login. Pulse does not request Keychain access." = "連線至執行中的編輯器，讀取本機語言伺服器的用量與連線權杖；或啟動 agy 命令列，使用它已儲存的登入。Pulse 不會要求鑰匙圈存取權限。";
+"Reads the running editor's local language server and connection token, or runs the agy CLI with its saved login. Pulse does not request Keychain access." = "連線至執行中的編輯器，讀取本機語言伺服器的用量與連線權杖；或啟動 agy CLI，使用它已儲存的登入。Pulse 不會要求鑰匙圈存取權限。";
 "Reads the login saved in Cursor's local database. No Keychain prompt." = "讀取 Cursor 本機資料庫中儲存的登入資訊。不會出現鑰匙圈提示。";
 "Reads the login saved in ~/.grok/auth.json. No Keychain prompt." = "讀取 ~/.grok/auth.json 中儲存的登入資訊。不會出現鑰匙圈提示。";
 "Uses a key entered in Settings, or reads OpenCode's auth.json. No Keychain prompt." = "使用在設定中輸入的金鑰，或讀取 OpenCode 的 auth.json。不會出現鑰匙圈提示。";

@@ -19,7 +19,7 @@ Accounts the stored rail does not mention are appended **in name order**, not in
 | `.claudeCode` | Claude Code | `claude` | Borrow CLI login; Pulse OAuth for extras | yes | endpoint / desktop / status line | yes | `~/.claude`, Claude support directory, or `Claude.app` exists |
 | `.codex` | Codex | `openai` | Borrow `~/.codex/auth.json`; Pulse OAuth for extras | yes | endpoint / app-server | yes | `~/.codex` exists |
 | `.kiro` | Kiro | `kiro` | Borrow Kiro CLI login through ACP | no | native ACP | no | Kiro CLI data or app exists |
-| `.antigravity` | Antigravity | `antigravity` | Loopback language server while the app is open, else the `agy` CLI’s own login | no | one, named (server, then CLI) | no | `Antigravity.app` |
+| `.antigravity` | Antigravity | `antigravity` | Loopback language server while the app is open, else the `agy` CLI’s own login | no | automatic / CLI / desktop app | no | `Antigravity.app` |
 | `.cursor` | Cursor | `cursor` | Cookie built from the editor’s stored token | no (deliberate) | one, named | no | Cursor `state.vscdb` exists |
 | `.openCodeGo` | OpenCode Go | `opencode` | Pasted key, else OpenCode’s `auth.json`; the console's browser session as a second credential (limits without a key, and the request log) | no | pasted / found key | no | OpenCode `auth.json` exists |
 | `.kimiCode` | Kimi Code | `kimi` | Pasted key | no | pasted key | no | none — stays off until switched on |
@@ -182,7 +182,7 @@ Keys are read once per launch rather than once per refresh (`UsageStore.loadAPIK
 
 ### Source choice
 
-Claude Code, Codex, Volcengine and Devin have `hasSourceChoice`. The picker applies only to primary accounts; added accounts use their own endpoint credential. `.automatic` is the default; each service owns its fallback policy, including Volcengine's preference for configured keys ([volcengine.md](volcengine.md)). Pinning means a failure is *reported* rather than quietly answered from elsewhere.
+Claude Code, Codex, Volcengine, Devin and Antigravity have `hasSourceChoice`. The picker applies only to primary accounts; added accounts use their own endpoint credential. `.automatic` is the default; each service owns its fallback policy, including Volcengine's preference for configured keys ([volcengine.md](volcengine.md)). Pinning means a failure is *reported* rather than quietly answered from elsewhere. **Every provider with more than one route offers the choice**, automatic by default. Antigravity's are *Automatic* (language server, then CLI), *CLI* (`.tooling`, the `agy` CLI) and *Desktop app* (`.desktopApp`, the editor's language server); it has no endpoint, so `.endpoint` is not offered (`UsageSource.options(for:)`, `title(for:)`).
 
 `.desktopApp` is offered only on the **primary** Claude Code account. An added account’s picker must not offer a route `fetchAdded` would ignore.
 

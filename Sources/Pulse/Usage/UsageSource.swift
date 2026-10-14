@@ -23,7 +23,10 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
     case tooling
     /// Only the session the provider's own desktop app is signed in with.
     ///
-    /// Claude Code alone, and the **primary** account's only. `.automatic`
+    /// For Antigravity, its desktop app's language server (Settings: *Desktop
+    /// app*); it has no endpoint of its own to offer.
+    ///
+    /// For Claude Code, the **primary** account's only. `.automatic`
     /// does fall back to it — but only once the keychain has already been
     /// granted, which is what keeps a default from going looking for a prompt
     /// of its own. Pinning it here means the other two routes are not tried at
@@ -40,8 +43,13 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
     /// whichever account that is — not to a second account Pulse signed in to
     /// itself. Offered on an added account it would be a choice `fetchAdded`
     /// silently ignores, which is a control that lies about what it did.
+    ///
+    /// **Antigravity's are automatic, the CLI and the desktop app** — the
+    /// `agy` CLI as the tooling route and the editor's language server as
+    /// the desktop one. It has no endpoint, so none is offered.
     static func options(for account: AccountKey) -> [UsageSource] {
-        allCases.filter { $0 != .desktopApp || (account.provider == .claudeCode && account.isPrimary) }
+        if account.provider == .antigravity { return [.automatic, .tooling, .desktopApp] }
+        return allCases.filter { $0 != .desktopApp || (account.provider == .claudeCode && account.isPrimary) }
     }
 
     /// Whether *this route on this account* only produces a reading while the
@@ -77,6 +85,11 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    /// The name in a provider's picker, where its tooling is one program.
+    func title(for provider: Provider) -> String {
+        provider == .antigravity && self == .tooling ? .localized("CLI") : title
+    }
+
     /// What the tooling route actually is, which differs per provider.
     func detail(for provider: Provider) -> String {
         // Every profiled provider has one route and it needs a key, same as
@@ -86,6 +99,9 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
             return self == .automatic
                 ? .localized("Use the endpoint when possible, the other route when not.")
                 : .localized("Uses the key you entered.")
+        }
+        if self == .automatic, written == .antigravity {
+            return .localized("Reads Antigravity while it is open, and the agy CLI when it is not.")
         }
         return switch (self, written) {
         case (.automatic, _):
@@ -148,9 +164,10 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
         case (_, .ollamaCloud):
             // Never shown: one route, and it reads a page rather than an API.
             .localized("Reads your quota from Ollama's own settings page.")
-        case (_, .antigravity):
-            // Never shown — Antigravity has one route, so settings states it
-            // rather than offering a choice. See `Provider.hasSourceChoice`.
+        case (.tooling, .antigravity):
+            .localized("Asks the agy CLI, using the login it already saved.")
+        case (.desktopApp, .antigravity), (.endpoint, .antigravity):
+            // `.endpoint` is never offered (`options(for:)`).
             .localized("Asks the language server Antigravity runs while it is open.")
         case (_, .cursor):
             // Never shown, for the same reason: one route.

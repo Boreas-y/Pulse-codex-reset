@@ -62,10 +62,13 @@ struct AccountConnectionGroup: View {
                         // follows. A route already *pinned* is still offered,
                         // so deleting the desktop app says so on the card
                         // rather than silently switching to another route.
+                        // Claude's desktop route only: Antigravity's desktop
+                        // app is asked whether it is installed or not.
                         ForEach(UsageSource.options(for: account).filter {
-                            $0 != .desktopApp || ClaudeDesktopSession.isAvailable || source == .desktopApp
+                            $0 != .desktopApp || account.provider != .claudeCode
+                                || ClaudeDesktopSession.isAvailable || source == .desktopApp
                         }) { option in
-                            Text(option.title).tag(option)
+                            Text(option.title(for: account.provider)).tag(option)
                         }
                     }
                     .labelsHidden()

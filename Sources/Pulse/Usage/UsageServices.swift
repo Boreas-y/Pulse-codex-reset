@@ -88,7 +88,7 @@ final class LiveUsageServices: UsageServiceFactory {
             return { await claudeCode.fetch(source: source) }
         case .antigravity:
             let antigravity = self.antigravity
-            return { await antigravity.fetch() }
+            return { await antigravity.fetch(source: source) }
         case .cursor:
             let cursor = self.cursor
             return { await cursor.fetch() }

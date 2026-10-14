@@ -22,9 +22,10 @@ extension AntigravityUsageService {
         case noLimits
         /// It ran and did not answer. The reason is for the diagnostics.
         case failed(ProviderUsage.Unavailability)
-        /// It was not asked: it would not start, or is too old to be asked
-        /// safely (see `cliMinimumVersion`).
-        case notAsked
+        /// It was not asked: it would not start (`.antigravityCLIMissing`), or
+        /// is too old to be asked safely (`.antigravityCLIOutdated`, see
+        /// `cliMinimumVersion`).
+        case notAsked(ProviderUsage.Unavailability)
     }
 
     /// The first `agy` that answers `-p "/usage"` itself.
@@ -57,15 +58,19 @@ extension AntigravityUsageService {
     static func askCLI(_ binary: URL) async -> CLIAnswer {
         let environment = BoundedProcess.environment(leading: binary, over: BoundedProcess.inheritedEnvironment)
 
-        guard
-            case .success(let printed) = await BoundedProcess.run(
-                binary, ["--version"],
-                environment: environment,
-                deadline: versionDeadline,
-                outputCeiling: 4 * 1024
-            ),
-            answersUsageItself(version: String(decoding: printed, as: UTF8.self))
-        else { return .notAsked }
+        switch await BoundedProcess.run(
+            binary, ["--version"],
+            environment: environment,
+            deadline: versionDeadline,
+            outputCeiling: 4 * 1024
+        ) {
+        case .success(let printed) where answersUsageItself(version: String(decoding: printed, as: UTF8.self)):
+            break
+        case .failure(.couldNotStart):
+            return .notAsked(.antigravityCLIMissing)
+        default:
+            return .notAsked(.antigravityCLIOutdated)
+        }
 
         switch await BoundedProcess.run(
             binary, cliArguments,
@@ -77,7 +82,7 @@ extension AntigravityUsageService {
             outputCeiling: cliOutputCeiling
         ) {
         case .success(let data): return cliAnswer(from: data)
-        case .failure(.couldNotStart): return .notAsked
+        case .failure(.couldNotStart): return .notAsked(.antigravityCLIMissing)
         case .failure(.timedOut): return .failed(.unreachable)
         // A failed run exits 1 with `status: "ERROR"` and a message, which
         // does not say reliably whether the cause is the network or the login.
@@ -151,6 +156,21 @@ extension AntigravityUsageService {
 
         case .notAsked:
             return server
+        }
+    }
+
+    /// The CLI's answer when it is the only route asked (Settings → *Read
+    /// usage from* → *CLI*). Unlike `weigh`, every way it can fail is
+    /// reported as itself: there is no other route's reason to stand
+    /// instead, and a pinned route that fails quietly is a setting that lies.
+    static func cliOnly(_ cli: CLIAnswer, now: Date = Date()) -> ProviderUsage {
+        switch cli {
+        case .windows:
+            return weigh(server: .unavailable(.antigravity, reason: .loading), cli: cli, now: now)
+        case .noLimits:
+            return ProviderUsage.unavailable(.antigravity, reason: .noLimitsReported).recording(.antigravityCLI)
+        case .failed(let reason), .notAsked(let reason):
+            return ProviderUsage.unavailable(.antigravity, reason: reason).recording(.antigravityCLI)
         }
     }
 

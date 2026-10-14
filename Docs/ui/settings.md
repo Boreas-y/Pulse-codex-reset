@@ -126,7 +126,7 @@ The second is **Credits**, and anything shipped here that somebody else made bel
 
 ## Provider panes
 
-A provider with one route has that route **named**, and the name belongs to the provider (`Provider.soleRoute`). A ternary (Cursor vs else Antigravity) made the next single-route provider inherit Antigravity’s sentence. Exhaustive `Provider` switch; omit the row when nil.
+A provider with more than one route offers the choice, automatic by default; one with one route has that route **named**, and the name belongs to the provider (`Provider.soleRoute`). A ternary (Cursor vs else Antigravity) made the next single-route provider inherit Antigravity’s sentence. Exhaustive `Provider` switch; omit the row when nil.
 
 Each pane has its own refresh, with last-reading time. Rail click is not the only way.
 

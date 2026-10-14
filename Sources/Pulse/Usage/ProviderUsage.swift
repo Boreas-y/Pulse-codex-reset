@@ -582,6 +582,13 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
         /// because the remedy is a specific command and the alternative — an
         /// access key pair — is a different thing to be told about.
         case volcengineCLIMissing
+        /// Antigravity's `agy` CLI is not on this Mac, with *CLI* chosen as
+        /// the route. Automatically its absence is no reason at all: the
+        /// language server's stands (`AntigravityUsageService.weigh`).
+        case antigravityCLIMissing
+        /// `agy` is older than 1.1.11, where `/usage` would be sent to the
+        /// model as a prompt, so it is not asked (`cliMinimumVersion`).
+        case antigravityCLIOutdated
         /// It is installed and has never been signed in, or the session went.
         case volcengineSignInRequired
         /// The key works and the account has no Coding Plan running on it.
@@ -720,6 +727,8 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
             case .ollamaSessionExpired: .localized("The Ollama session expired. Sign in again and add it.")
             case .ollamaPageChanged: .localized("Ollama's page has changed and can no longer be read.")
             case .volcengineCLIMissing: .localized("Install arkcli and run `arkcli auth login`, or add access keys in Settings.")
+            case .antigravityCLIMissing: .localized("The agy CLI isn't installed. Install it, or choose another source in Settings.")
+            case .antigravityCLIOutdated: .localized("This version of the agy CLI can't report usage. Update it to 1.1.11 or later.")
             case .volcengineSignInRequired: .localized("arkcli isn't signed in. Run `arkcli auth login`.")
             case .zaiNoCodingPlan: .localized("That key works. The account has no Coding Plan running on it.")
             case .devinAppMissing: .localized("Devin isn't installed.")

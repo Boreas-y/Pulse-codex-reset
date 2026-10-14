@@ -43,16 +43,31 @@ struct AntigravityUsageService: Sendable {
     private static let statusMethod = "exa.language_server_pb.LanguageServerService/GetUserStatus"
     private static let csrfHeader = "x-codeium-csrf-token"
 
-    /// The language server first, then the CLI.
+    /// The route Settings chose: the desktop app's language server, the
+    /// `agy` CLI, or — the default — the language server first, then the CLI.
     ///
-    /// The server goes first because it is local and fast, and it belongs to
-    /// the account the open editor is using. The CLI starts a process that
-    /// makes a network request, so it is asked only when the server produced
-    /// no figures: with Antigravity closed, or open and not answering.
-    func fetch() async -> ProviderUsage {
-        let server = await languageServer().recording(.languageServer)
-        guard !server.reportsSomething, let binary = Self.locateCLI() else { return server }
-        return Self.weigh(server: server, cli: await Self.askCLI(binary))
+    /// Automatically the server goes first because it is local and fast, and
+    /// it belongs to the account the open editor is using. The CLI starts a
+    /// process that makes a network request, so it is asked only when the
+    /// server produced no figures: with Antigravity closed, or open and not
+    /// answering.
+    func fetch(source: UsageSource) async -> ProviderUsage {
+        switch source {
+        case .desktopApp:
+            return await languageServer().recording(.languageServer)
+        case .tooling:
+            guard let binary = Self.locateCLI() else {
+                return ProviderUsage.unavailable(.antigravity, reason: .antigravityCLIMissing)
+                    .recording(.antigravityCLI)
+            }
+            return Self.cliOnly(await Self.askCLI(binary))
+        // `.endpoint` is never offered (`UsageSource.options(for:)`); a
+        // value stored before that is read as automatic by `source(for:)`.
+        case .automatic, .endpoint:
+            let server = await languageServer().recording(.languageServer)
+            guard !server.reportsSomething, let binary = Self.locateCLI() else { return server }
+            return Self.weigh(server: server, cli: await Self.askCLI(binary))
+        }
     }
 
     private func languageServer() async -> ProviderUsage {

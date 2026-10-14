@@ -53,7 +53,7 @@ enum ConnectionRemedy: Equatable {
         case .sessionMissing, .sessionExpired: return .readBrowser
         case .localLoginMissing, .localLoginExpired, .localAppMissing, .noPlan: return .help
         case .codexNotInstalled, .kiroNotInstalled, .kiroVersionUnsupported,
-             .volcengineCLIMissing, .noLimitsReported,
+             .volcengineCLIMissing, .antigravityCLIMissing, .antigravityCLIOutdated, .noLimitsReported,
              .grokBotNotIncluded, .zaiNoCodingPlan, .xiaomiNoCodingPlan, .qoderNoCredits,
              .stepFunNoPlan,
              .ollamaPageChanged, .unreadableReply:
