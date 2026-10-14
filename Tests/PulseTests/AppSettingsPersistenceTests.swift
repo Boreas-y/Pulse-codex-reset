@@ -42,6 +42,7 @@ struct AppSettingsPersistenceTests {
             ("settings.hidesInFullScreen", \.hidesInFullScreen, false),
             ("settings.hidesFromScreenCapture", \.hidesFromScreenCapture, true),
             ("settings.followsActiveDisplay", \.followsActiveDisplay, true),
+            ("settings.snapsToEdges", \.snapsToEdges, false),
             ("settings.showsCodexResetCredits", \.showsCodexResetCredits, true),
             ("settings.usesGlass", \.usesGlass, true),
             ("settings.usesLightPanel", \.usesLightPanel, true),

@@ -22,6 +22,7 @@ extension AppSettings.Key {
     static let hidesInFullScreen = "settings.hidesInFullScreen"
     static let hidesFromScreenCapture = "settings.hidesFromScreenCapture"
     static let followsActiveDisplay = "settings.followsActiveDisplay"
+    static let snapsToEdges = "settings.snapsToEdges"
     static let panelSize = "settings.panelSize"
     static let railSpacing = "settings.railSpacing"
     static let topRailShowsPercentages = "settings.topRailShowsPercentages"
@@ -44,6 +45,7 @@ extension AppSettings.Default {
     static let hidesInFullScreen = true
     static let hidesFromScreenCapture = false
     static let followsActiveDisplay = false
+    static let snapsToEdges = true
     static let topRailShowsPercentages = false
     static let sideRailShowsPercentages = true
     static let labelAboveRing = false
@@ -80,6 +82,13 @@ extension AppSettings {
         guard followsActiveDisplay != old else { return }
         defaults.set(followsActiveDisplay, forKey: Key.followsActiveDisplay)
         onLayoutChange?()
+    }
+
+    /// Only stored: it changes what the next drag does, not where the panel
+    /// is now, so there is nothing to re-place.
+    func snapsToEdgesChanged(from old: Bool) {
+        guard snapsToEdges != old else { return }
+        defaults.set(snapsToEdges, forKey: Key.snapsToEdges)
     }
 
     func panelSizeChanged(from old: PanelSize) {

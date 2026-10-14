@@ -203,6 +203,7 @@ final class FloatingPanelController {
         panel.railSize = { [settings, store] axis, docked in
             DockLayout.size(for: Self.shownSlotCount(settings, usage: { store.usage(for: $0) }), on: axis, docked: docked)
         }
+        panel.snapsToEdges = { [settings] in settings.snapsToEdges }
         panel.grabArea = { [settings, store, placement] in
             if placement.notch != nil && !placement.isRailExpanded { return .zero }
             let size = DockLayout.size(for: Self.shownSlotCount(settings, usage: { store.usage(for: $0) }), on: placement.edge.axis, docked: placement.isDocked)
@@ -502,6 +503,9 @@ private final class FloatingPanel: NSPanel {
     /// The rail's size on a given axis, docked or not, which the drag needs
     /// for a dock the panel has not reached yet.
     var railSize: ((PanelEdge.Axis, Bool) -> CGSize)?
+    /// Whether a drag may dock the rail and turn it (Settings → *Snap to
+    /// screen edges*), asked on every frame so a change takes effect at once.
+    var snapsToEdges: (() -> Bool)?
 
     /// Where a top-docked rail's top edge belongs: the display's physical top,
     /// less whatever a notch takes out of it.
@@ -651,49 +655,18 @@ private final class FloatingPanel: NSPanel {
             y: min(max(pointer.y - grab.height, visible.minY), visible.maxY - rail.height)
         )
 
-        // Docking is decided *during* the drag, not on release: a snap that
-        // waited for mouse-up would jump the panel out from under the pointer.
-        //
-        // The top is tested against the **pointer**, not the rail. A rail
-        // standing on its end is most of the screen tall, so its top edge
-        // reaches the top of the display almost as soon as it is lifted at all
-        // — testing that would flip it on its side the moment it was picked
-        // up. Throwing the pointer at the top of the screen is the deliberate
-        // gesture, and it is the same one that reaches the menu bar.
-        //
-        // Off every edge the rail stands free **the way it already runs**:
-        // lifted off the top it stays lying across, lifted off a side it stays
-        // upright. Turning it on the way out would undo the free placement
-        // somebody chose in settings the first time they moved the panel.
-        //
-        // The bottom is the top's mirror: the pointer thrown at the screen's
-        // **own** bottom — level with the Dock, beside it — docks the rail
-        // there. Just above the Dock, short of that, it lies across and
-        // stands free with its card opening up; with the Dock hidden the two
-        // lines meet and docking wins.
-        //
-        // **Staying docked there is the rail's, not the pointer's.** A ring is
-        // held 32pt or more above the screen's bottom — more with figures — so
-        // the pointer rule would lift a bottom rail off on the first sideways
-        // frame. The top has the menu bar's height in hand for the same slack;
-        // the bottom has nothing, so a docked rail stays while its own bottom
-        // is within reach of the edge.
-        let railBottom = pointer.y - grab.height
-        let staysOnBottom = placement.dock == .edge(.bottom)
-            && railBottom - screen.frame.minY <= PanelPlacement.dockDistance
-        let dock: PanelDock = if visible.maxY - pointer.y <= PanelPlacement.dockDistance {
-            .edge(.top)
-        } else if staysOnBottom || pointer.y - screen.frame.minY <= PanelPlacement.dockDistance {
-            .edge(.bottom)
-        } else if pointer.y - visible.minY <= PanelPlacement.dockDistance {
-            .floating(.horizontal)
-        } else if wanted.x - visible.minX <= PanelPlacement.dockDistance {
-            .edge(.left)
-        } else if visible.maxX - (wanted.x + rail.width) <= PanelPlacement.dockDistance {
-            .edge(.right)
-        } else {
-            .floating(placement.edge.axis)
-        }
+        // Where it lands is `PanelPlacement.dragDock`'s to say. The rail's
+        // bottom is the pointer's, not `wanted`'s: kept on screen, `wanted`
+        // never goes below the Dock, and a rail docked beside it is.
+        let dock = PanelPlacement.dragDock(
+            pointer: pointer,
+            rail: CGRect(origin: CGPoint(x: wanted.x, y: pointer.y - grab.height), size: rail),
+            screen: screen.frame,
+            visible: visible,
+            current: placement.dock,
+            axis: placement.edge.axis,
+            snaps: snapsToEdges?() ?? true
+        )
 
         // The rail turns as it crosses onto the other axis, so everything from
         // here is measured in the orientation it is about to be in — not the

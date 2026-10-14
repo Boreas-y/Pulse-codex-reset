@@ -542,6 +542,78 @@ final class PanelPlacement {
     /// parking the panel *near* an edge on purpose still works.
     static let dockDistance: CGFloat = 32
 
+    /// Where a rail being carried lands on this frame of the drag.
+    ///
+    /// Docking is decided *during* the drag, not on release: a snap that
+    /// waited for mouse-up would jump the panel out from under the pointer.
+    ///
+    /// The top is tested against the **pointer**, not the rail. A rail
+    /// standing on its end is most of the screen tall, so its top edge
+    /// reaches the top of the display almost as soon as it is lifted at all
+    /// — testing that would flip it on its side the moment it was picked
+    /// up. Throwing the pointer at the top of the screen is the deliberate
+    /// gesture, and it is the same one that reaches the menu bar.
+    ///
+    /// **The sides are the same for a rail lying across** (issue #85). It is
+    /// most of the screen wide, so its end reached a side long before the
+    /// pointer was anywhere near the bottom, and a rail carried into a
+    /// bottom corner stood up against the side instead of staying across.
+    /// An upright rail is as narrow as the hand holding it, so for it the
+    /// rail's own edge is the gesture and stays the test.
+    ///
+    /// Off every edge the rail stands free **the way it already runs**:
+    /// lifted off the top it stays lying across, lifted off a side it stays
+    /// upright. Turning it on the way out would undo the free placement
+    /// somebody chose in settings the first time they moved the panel.
+    ///
+    /// The bottom is the top's mirror: the pointer thrown at the screen's
+    /// **own** bottom — level with the Dock, beside it — docks the rail
+    /// there. Just above the Dock, short of that, it lies across and
+    /// stands free with its card opening up; with the Dock hidden the two
+    /// lines meet and docking wins.
+    ///
+    /// **Staying docked there is the rail's, not the pointer's.** A ring is
+    /// held 32pt or more above the screen's bottom — more with figures — so
+    /// the pointer rule would lift a bottom rail off on the first sideways
+    /// frame. The top has the menu bar's height in hand for the same slack;
+    /// the bottom has nothing, so a docked rail stays while its own bottom
+    /// is within reach of the edge.
+    ///
+    /// With `snaps` off (Settings → *Snap to screen edges*) none of that
+    /// applies: the rail stands free and keeps running the way it did when
+    /// it was picked up, wherever it is carried.
+    static func dragDock(
+        pointer: CGPoint,
+        rail: CGRect,
+        screen: CGRect,
+        visible: CGRect,
+        current: PanelDock,
+        axis: PanelEdge.Axis,
+        snaps: Bool
+    ) -> PanelDock {
+        guard snaps else { return .floating(axis) }
+
+        let staysOnBottom = current == .edge(.bottom)
+            && rail.minY - screen.minY <= dockDistance
+        let (left, right) = axis == .horizontal
+            ? (pointer.x, pointer.x)
+            : (rail.minX, rail.maxX)
+
+        return if visible.maxY - pointer.y <= dockDistance {
+            .edge(.top)
+        } else if staysOnBottom || pointer.y - screen.minY <= dockDistance {
+            .edge(.bottom)
+        } else if pointer.y - visible.minY <= dockDistance {
+            .floating(.horizontal)
+        } else if left - visible.minX <= dockDistance {
+            .edge(.left)
+        } else if visible.maxX - right <= dockDistance {
+            .edge(.right)
+        } else {
+            .floating(axis)
+        }
+    }
+
     private enum Key {
         static let edge = "panel.edge"
         static let floating = "panel.floating"

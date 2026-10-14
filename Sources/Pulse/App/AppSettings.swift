@@ -179,6 +179,16 @@ final class AppSettings {
         didSet { followsActiveDisplayChanged(from: oldValue) }
     }
 
+    /// Whether dragging the panel near a screen edge docks it there, turning
+    /// it to run along that edge.
+    ///
+    /// On by default. Off, a drag only moves the panel: it stays free and
+    /// keeps the direction it had, so a rail lying across can be put in a
+    /// corner (issue #85). Choosing a position in Settings still docks it.
+    var snapsToEdges: Bool {
+        didSet { snapsToEdgesChanged(from: oldValue) }
+    }
+
     /// How big the floating panel is drawn.
     var panelSize: PanelSize {
         didSet { panelSizeChanged(from: oldValue) }
@@ -909,6 +919,7 @@ final class AppSettings {
         hidesInFullScreen: Bool = Default.hidesInFullScreen,
         hidesFromScreenCapture: Bool = Default.hidesFromScreenCapture,
         followsActiveDisplay: Bool = Default.followsActiveDisplay,
+        snapsToEdges: Bool = Default.snapsToEdges,
         openSettingsShortcut: GlobalShortcut? = nil,
         togglePanelShortcut: GlobalShortcut? = nil,
         deepSeekBasis: BalanceBasis = .default,
@@ -967,6 +978,7 @@ final class AppSettings {
         self.hidesInFullScreen = hidesInFullScreen
         self.hidesFromScreenCapture = hidesFromScreenCapture
         self.followsActiveDisplay = followsActiveDisplay
+        self.snapsToEdges = snapsToEdges
         self.openSettingsShortcut = openSettingsShortcut
         self.togglePanelShortcut = togglePanelShortcut
         self.deepSeekBasis = deepSeekBasis
@@ -1069,6 +1081,7 @@ final class AppSettings {
             followsActiveDisplay: defaults.settingsFlag(
                 Key.followsActiveDisplay, default: Default.followsActiveDisplay
             ),
+            snapsToEdges: defaults.settingsFlag(Key.snapsToEdges, default: Default.snapsToEdges),
             openSettingsShortcut: defaults.string(forKey: Key.openSettingsShortcut)
                 .flatMap(GlobalShortcut.init(storage:)),
             togglePanelShortcut: defaults.string(forKey: Key.togglePanelShortcut)

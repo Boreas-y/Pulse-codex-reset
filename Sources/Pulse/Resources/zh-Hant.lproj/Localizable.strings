@@ -81,6 +81,8 @@
 "Screenshot tools that support it leave the floating panel out. Recordings and screen sharing may still show it." = "支援此設定的截圖工具不會截到浮動面板；錄影和共享螢幕時仍可能顯示。";
 "Follow the active display" = "跟隨使用中的螢幕";
 "With more than one display, the rail moves to the one the pointer is on." = "有多台螢幕時，膠囊會移到指標所在的那一台。";
+"Snap to screen edges" = "自動貼齊螢幕邊緣";
+"Dragged near an edge, the rail docks to it and turns to run along it. When this is off, dragging only moves the rail and keeps its direction." = "拖到螢幕邊緣附近時，膠囊會貼齊該邊緣，並轉為沿邊緣排列。關閉後，拖移只改變位置，方向維持不變。";
 "Left" = "左側";
 "Top" = "上方";
 "Percentages across" = "橫放時顯示百分比";

@@ -93,7 +93,7 @@ enum SettingsPane: Hashable {
         case .placement:
             [.localized("Show floating panel"), .localized("Hide in full screen"),
              .localized("Hide until pointed at"), .localized("Position"),
-             .localized("Follow the active display"), .localized("Order")]
+             .localized("Snap to screen edges"), .localized("Follow the active display"), .localized("Order")]
         case .general:
             [.localized("Open at login"), .localized("Hide menu bar icon"), .localized("Shortcuts"),
              .localized("Interface language")]
