@@ -11,6 +11,7 @@ struct ConnectionDiagnosticsView: View {
     let repair: (ConnectionRemedy) -> Void
 
     @State private var copied = false
+    @State private var showsRouteChecks = false
 
     private var reading: ProviderUsage { store.usage(for: account) }
     private var diagnostic: ConnectionDiagnostic? { store.diagnostics[account.id] }
@@ -57,7 +58,7 @@ struct ConnectionDiagnosticsView: View {
 
             if let diagnostic, !diagnostic.attempts.isEmpty {
                 SettingsRowDivider()
-                DisclosureGroup {
+                DisclosureGroup(isExpanded: $showsRouteChecks) {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(Array(diagnostic.attempts.enumerated()), id: \.offset) { _, attempt in
                             VStack(alignment: .leading, spacing: 3) {
@@ -70,8 +71,15 @@ struct ConnectionDiagnosticsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 8)
                 } label: {
+                    // On macOS only the chevron toggles a disclosure group;
+                    // the whole row has to, or clicking the title does nothing.
                     Text(localized: "Route checks")
                         .font(.system(size: 13))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.2)) { showsRouteChecks.toggle() }
+                        }
                 }
                 .padding(14)
             }
