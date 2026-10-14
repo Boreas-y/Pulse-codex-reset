@@ -394,10 +394,10 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
 
     /// Whether the route to this provider's figures is a choice.
     ///
-    /// The two CLIs can each be read two ways, which is a setting. Antigravity
-    /// and Cursor have exactly one route each — a server one of them runs
-    /// itself, a login the other one stored — so it is stated rather than
-    /// offered.
+    /// The two CLIs can each be read two ways, which is a setting. Cursor has
+    /// exactly one route, a login it stored, and Antigravity has two in a
+    /// fixed order — its language server, then its `agy` CLI — so both are
+    /// stated rather than offered.
     /// **Not `keepsLocalTranscripts`**, which it used to be. The two happened
     /// to agree while only the CLIs had a choice, and reading one for the other
     /// is the kind of coincidence that breaks silently: Volcengine has two routes
@@ -429,8 +429,8 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         guard let written = handWritten else { return profile?.soleRoute?() }
         return switch written {
         case .antigravity:
-            (String.localized("Antigravity's language server"),
-             String.localized("Only while Antigravity is open."))
+            (String.localized("Antigravity's language server or the agy CLI"),
+             String.localized("Reads Antigravity while it is open, and the agy CLI when it is not."))
         case .cursor:
             (String.localized("Cursor's own login"),
              String.localized("Uses the login Cursor already saved."))

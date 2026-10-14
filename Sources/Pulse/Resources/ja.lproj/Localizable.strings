@@ -318,8 +318,8 @@
 "Clearer to the right. Darker reads better over bright pages." = "右ほど透明になります。暗めにすると、明るいページの上でも読みやすくなります。";
 "Open Antigravity to see its usage." = "使用量を読むには Antigravity を開いてください。";
 "Asks the language server Antigravity runs while it is open." = "Antigravity が起動中に走らせている言語サーバに問い合わせます。";
-"Only while Antigravity is open." = "Antigravity が開いているあいだだけ読めます。";
-"Antigravity's language server" = "Antigravity の言語サーバ";
+"Reads Antigravity while it is open, and the agy CLI when it is not." = "Antigravity が開いているときはそこから、開いていないときは agy CLI から読み取ります。";
+"Antigravity's language server or the agy CLI" = "Antigravity の言語サーバまたは agy CLI";
 
 /* Cursor */
 "Sign in to Cursor to see usage." = "使用量を読むには Cursor にサインインしてください。";
@@ -647,7 +647,7 @@
 "Enable a service in its settings to start monitoring." = "監視を始めるには、そのサービスの設定で有効にしてください。";
 "Reads Claude Code's saved login from Keychain or its credentials file. May ask for Keychain access, including Claude Desktop's cookie storage." = "キーチェーンまたは認証情報ファイルから Claude Code のログインを読み取ります。Claude デスクトップの Cookie 保存領域を含め、キーチェーンへのアクセスを求めることがあります。";
 "Reads ~/.codex/auth.json and may run codex app-server with its saved login. Pulse does not request Keychain access." = "~/.codex/auth.json を読み取り、保存済みのログインで codex app-server を起動する場合があります。Pulse はキーチェーンへのアクセスを求めません。";
-"Reads the running editor's local language server and connection token. No Keychain prompt." = "起動中のエディタのローカル言語サーバから使用量と接続トークンを読み取ります。キーチェーンの確認はありません。";
+"Reads the running editor's local language server and connection token, or runs the agy CLI with its saved login. Pulse does not request Keychain access." = "起動中のエディタのローカル言語サーバから使用量と接続トークンを読み取るか、保存済みのログインで agy CLI を起動します。Pulse はキーチェーンへのアクセスを求めません。";
 "Reads the login saved in Cursor's local database. No Keychain prompt." = "Cursor のローカルデータベースに保存されたログインを読み取ります。キーチェーンの確認はありません。";
 "Reads the login saved in ~/.grok/auth.json. No Keychain prompt." = "~/.grok/auth.json に保存されたログインを読み取ります。キーチェーンの確認はありません。";
 "Uses a key entered in Settings, or reads OpenCode's auth.json. No Keychain prompt." = "設定で入力したキーを使うか、OpenCode の auth.json を読み取ります。キーチェーンの確認はありません。";

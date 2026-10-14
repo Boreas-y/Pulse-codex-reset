@@ -318,8 +318,8 @@
 "Clearer to the right. Darker reads better over bright pages." = "Чем правее, тем прозрачнее. Тёмная панель лучше читается на светлых страницах.";
 "Open Antigravity to see its usage." = "Откройте Antigravity, чтобы видеть расход.";
 "Asks the language server Antigravity runs while it is open." = "Запрашивает языковой сервер, который работает, пока открыт Antigravity.";
-"Only while Antigravity is open." = "Только пока открыт Antigravity.";
-"Antigravity's language server" = "Языковой сервер Antigravity";
+"Reads Antigravity while it is open, and the agy CLI when it is not." = "Пока Antigravity открыт, данные читаются из него, а когда закрыт — через CLI agy.";
+"Antigravity's language server or the agy CLI" = "Языковой сервер Antigravity или CLI agy";
 
 /* Cursor */
 "Sign in to Cursor to see usage." = "Войдите в Cursor, чтобы видеть расход.";
@@ -647,7 +647,7 @@
 "Enable a service in its settings to start monitoring." = "Включите сервис в его настройках, чтобы начать отслеживание.";
 "Reads Claude Code's saved login from Keychain or its credentials file. May ask for Keychain access, including Claude Desktop's cookie storage." = "Читает сохранённый вход Claude Code из связки ключей или файла учётных данных. Может запросить доступ к связке ключей, в том числе к хранилищу cookie Claude Desktop.";
 "Reads ~/.codex/auth.json and may run codex app-server with its saved login. Pulse does not request Keychain access." = "Читает ~/.codex/auth.json и может запускать codex app-server с сохранённым входом. Pulse не запрашивает доступ к связке ключей.";
-"Reads the running editor's local language server and connection token. No Keychain prompt." = "Подключается к локальному языковому серверу запущенного редактора с помощью его токена. Доступ к связке ключей не запрашивается.";
+"Reads the running editor's local language server and connection token, or runs the agy CLI with its saved login. Pulse does not request Keychain access." = "Подключается к локальному языковому серверу запущенного редактора с помощью его токена или запускает CLI agy с сохранённым в нём входом. Pulse не запрашивает доступ к связке ключей.";
 "Reads the login saved in Cursor's local database. No Keychain prompt." = "Читает данные входа из локальной базы данных Cursor. Доступ к связке ключей не запрашивается.";
 "Reads the login saved in ~/.grok/auth.json. No Keychain prompt." = "Читает данные входа из ~/.grok/auth.json. Доступ к связке ключей не запрашивается.";
 "Uses a key entered in Settings, or reads OpenCode's auth.json. No Keychain prompt." = "Использует ключ, введённый в настройках, или читает auth.json OpenCode. Доступ к связке ключей не запрашивается.";

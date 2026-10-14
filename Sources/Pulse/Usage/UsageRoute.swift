@@ -11,6 +11,8 @@ enum UsageRoute: String, Codable, Sendable {
     case languageServer
     case webSession
     case arkCLI
+    /// Antigravity's `agy` CLI, asked `/usage` in print mode.
+    case antigravityCLI
     /// A reading taken out of a desktop app's own saved state rather than
     /// asked of anybody. Devin's: written when that app starts.
     case appCache
@@ -27,6 +29,7 @@ enum UsageRoute: String, Codable, Sendable {
         case .languageServer: .localized("Local language server")
         case .webSession: .localized("Signed-in web page")
         case .arkCLI: "arkcli"
+        case .antigravityCLI: "agy"
         case .appCache: .localized("The app's saved plan")
         case .extensionProgram: .localized("Extension program")
         }
@@ -47,8 +50,9 @@ enum UsageRoute: String, Codable, Sendable {
             }
         }
         switch written {
-        case .claudeCode, .codex, .volcengine, .devin: return nil
-        case .antigravity: return .languageServer
+        // Antigravity has the language server and the `agy` CLI, and its
+        // service records which one answered on every path.
+        case .claudeCode, .codex, .volcengine, .devin, .antigravity: return nil
         // All four read a signed-in browser session rather than a key.
         case .ollamaCloud, .xiaomiMiMo, .qoder, .stepFun: return .webSession
         case .kiro: return .kiroACP
