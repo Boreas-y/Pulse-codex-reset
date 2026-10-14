@@ -315,7 +315,7 @@
 "Black" = "Black";
 "Light" = "Light";
 "Transparency" = "Transparency";
-"Clearer to the right. Darker reads better over bright pages." = "Clearer to the right. Darker reads better over bright pages.";
+"Clearer to the right, and the text turns from white to black. Black text is hard to read over dark windows." = "Clearer to the right, and the text turns from white to black. Black text is hard to read over dark windows.";
 "Open Antigravity to see its usage." = "Open Antigravity to see its usage.";
 "Asks the language server Antigravity runs while it is open." = "Asks the language server Antigravity runs while it is open.";
 "Reads Antigravity while it is open, and the agy CLI when it is not." = "Reads Antigravity while it is open, and the agy CLI when it is not.";

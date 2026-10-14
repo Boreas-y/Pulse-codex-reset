@@ -110,7 +110,7 @@ struct AppearancePane: View {
 
                     SettingsRow(
                         String.localized("Transparency"),
-                        subtitle: String.localized("Clearer to the right. Darker reads better over bright pages.")
+                        subtitle: String.localized("Clearer to the right, and the text turns from white to black. Black text is hard to read over dark windows.")
                     ) {
                         Slider(
                             value: Binding(

@@ -315,7 +315,7 @@
 "Black" = "黒";
 "Light" = "ライト";
 "Transparency" = "透明度";
-"Clearer to the right. Darker reads better over bright pages." = "右ほど透明になります。暗めにすると、明るいページの上でも読みやすくなります。";
+"Clearer to the right, and the text turns from white to black. Black text is hard to read over dark windows." = "右へ行くほど透明になり、文字は白から黒へ変わります。黒い文字は暗いウインドウの上では読みにくくなります。";
 "Open Antigravity to see its usage." = "使用量を読むには Antigravity を開いてください。";
 "Asks the language server Antigravity runs while it is open." = "Antigravity が起動中に走らせている言語サーバに問い合わせます。";
 "Reads Antigravity while it is open, and the agy CLI when it is not." = "Antigravity が開いているときはそこから、開いていないときは agy CLI から読み取ります。";

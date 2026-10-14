@@ -233,6 +233,11 @@ struct FloatingUsagePanelContent: View {
             //
             // The light panel (#74) is the one exception, and only on the
             // solid surface: `panelScheme`.
+            // On glass the text follows the Transparency slider from white
+            // to black (`PanelGlass.ink`), and past `schemeTurns` the scheme
+            // follows it. Always an `AnyShapeStyle`, so switching it never
+            // changes the tree's identity.
+            .foregroundStyle(panelInk)
             .environment(\.colorScheme, panelScheme)
             .environment(\.glassTransparency, settings.glassTransparency)
             // Where red begins, for every ring, bar and figure below here at
@@ -254,7 +259,15 @@ struct FloatingUsagePanelContent: View {
     /// reads its fill off this, and the usage colours deepen with it, so the
     /// surface and everything drawn on it change together.
     private var panelScheme: ColorScheme {
-        settings.usesLightPanel && !settings.usesGlass ? .light : .dark
+        if settings.usesGlass { return PanelGlass.scheme(transparency: settings.glassTransparency) }
+        return settings.usesLightPanel ? .light : .dark
+    }
+
+    private var panelInk: AnyShapeStyle {
+        guard settings.usesGlass, let ink = PanelGlass.ink(transparency: settings.glassTransparency) else {
+            return AnyShapeStyle(.primary)
+        }
+        return AnyShapeStyle(ink)
     }
 
     /// Whether the rail is drawn out in full.

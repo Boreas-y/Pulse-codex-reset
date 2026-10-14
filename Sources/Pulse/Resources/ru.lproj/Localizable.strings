@@ -315,7 +315,7 @@
 "Black" = "Чёрный";
 "Light" = "Светлый";
 "Transparency" = "Прозрачность";
-"Clearer to the right. Darker reads better over bright pages." = "Чем правее, тем прозрачнее. Тёмная панель лучше читается на светлых страницах.";
+"Clearer to the right, and the text turns from white to black. Black text is hard to read over dark windows." = "Чем правее, тем прозрачнее, а текст переходит от белого к чёрному. Чёрный текст плохо виден поверх тёмных окон.";
 "Open Antigravity to see its usage." = "Откройте Antigravity, чтобы видеть расход.";
 "Asks the language server Antigravity runs while it is open." = "Запрашивает языковой сервер, который работает, пока открыт Antigravity.";
 "Reads Antigravity while it is open, and the agy CLI when it is not." = "Пока Antigravity открыт, данные читаются из него, а когда закрыт — через CLI agy.";

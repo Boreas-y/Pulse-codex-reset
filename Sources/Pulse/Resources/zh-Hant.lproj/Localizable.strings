@@ -315,7 +315,7 @@
 "Black" = "黑色";
 "Light" = "淺色";
 "Transparency" = "透明度";
-"Clearer to the right. Darker reads better over bright pages." = "越往右越透。偏暗一點，在淺色頁面上更容易看清。";
+"Clearer to the right, and the text turns from white to black. Black text is hard to read over dark windows." = "越往右越透，文字也隨之從白色逐漸變黑。黑色文字在深色視窗上不易看清。";
 "Open Antigravity to see its usage." = "開啟 Antigravity 才讀得到它的用量。";
 "Asks the language server Antigravity runs while it is open." = "向 Antigravity 開啟時執行的語言伺服器讀取。";
 "Reads Antigravity while it is open, and the agy CLI when it is not." = "Antigravity 開啟時從它讀取，未開啟時透過 agy CLI讀取。";
