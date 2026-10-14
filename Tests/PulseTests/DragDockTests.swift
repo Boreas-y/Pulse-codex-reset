@@ -99,4 +99,21 @@ struct DragDockTests {
             #expect(land(pointer: pointer, railAt: origin, size: size, from: from, snaps: false) == expected)
         }
     }
+
+    @Test("With snapping off a free rail's room is the whole screen; otherwise, and docked, the usable area")
+    func roomFollowsSnapping() {
+        #expect(PanelPlacement.room(snaps: false, dock: .floating(.horizontal), visible: visible, screen: screen) == screen)
+        #expect(PanelPlacement.room(snaps: false, dock: .floating(.vertical), visible: visible, screen: screen) == screen)
+        #expect(PanelPlacement.room(snaps: true, dock: .floating(.horizontal), visible: visible, screen: screen) == visible)
+        #expect(PanelPlacement.room(snaps: false, dock: .edge(.top), visible: visible, screen: screen) == visible)
+    }
+
+    @Test("A rail reaching over the menu bar or the Dock is beyond the usable area; one inside it is not")
+    func beyondTheUsableArea() {
+        // Top-left origins.
+        #expect(!PanelPlacement.isBeyond(visible, railOrigin: CGPoint(x: 0, y: visible.maxY), rail: across))
+        #expect(!PanelPlacement.isBeyond(visible, railOrigin: CGPoint(x: 900, y: visible.minY + across.height), rail: across))
+        #expect(PanelPlacement.isBeyond(visible, railOrigin: CGPoint(x: 0, y: screen.maxY), rail: across))
+        #expect(PanelPlacement.isBeyond(visible, railOrigin: CGPoint(x: 900, y: across.height), rail: across))
+    }
 }

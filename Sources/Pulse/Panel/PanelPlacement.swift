@@ -169,6 +169,30 @@ final class PanelPlacement {
         snapsToEdges && axis == .vertical ? Self.dockDistance : 0
     }
 
+    /// The room the rail is placed in on a screen, which its two ratios are
+    /// fractions of.
+    ///
+    /// The usable area, except for a free rail with snapping off: that one
+    /// goes wherever it is put, over the menu bar and beside or over the
+    /// Dock as well (issue #85), and is raised above them there
+    /// (`isBeyond`). With snapping on the menu bar and the Dock are where
+    /// the top and bottom docks are, so a free rail stays clear of them.
+    static func room(snaps: Bool, dock: PanelDock, visible: CGRect, screen: CGRect) -> CGRect {
+        snaps || dock.isDocked ? visible : screen
+    }
+
+    func room(visible: CGRect, screen: CGRect) -> CGRect {
+        Self.room(snaps: snapsToEdges, dock: dock, visible: visible, screen: screen)
+    }
+
+    /// Whether a rail whose top-left is `railOrigin` reaches past the usable
+    /// area — over the menu bar or the Dock — where it has to be drawn above
+    /// them or it is hidden under them.
+    static func isBeyond(_ visible: CGRect, railOrigin: CGPoint, rail: CGSize) -> Bool {
+        let rect = CGRect(x: railOrigin.x, y: railOrigin.y - rail.height, width: rail.width, height: rail.height)
+        return !visible.insetBy(dx: -0.5, dy: -0.5).contains(rect)
+    }
+
     /// How tall a card may be on the side it opens to, for a rail lying
     /// across: from the rail to the screen's usable edge, less the gap. Nil
     /// down a side, where the card slides along the rail instead. Set where
