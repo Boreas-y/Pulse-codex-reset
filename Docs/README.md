@@ -11,7 +11,7 @@ Maintained map. Change the topic file that owns a behaviour in the same patch as
 | [architecture.md](architecture.md) | App shell, settings state, first-run / offer-once, login item, defaults domain |
 | [networking.md](networking.md) | System/manual proxy boundary, URLSession coverage, helper environment, Sparkle exception |
 | [ui/README.md](ui/README.md) | Panel geometry, input, rail menu, shortcuts, glass/rings, settings window |
-| [refresh-and-data.md](refresh-and-data.md) | Refresh loop, cache, activity, ledger, forecast, estimate, chart hover |
+| [refresh-and-data.md](refresh-and-data.md) | Refresh loop, cache, connection diagnostics and server replies, activity, ledger, forecast, estimate, currency, chart hover |
 | [token-spend.md](token-spend.md) | Token spend pane: agents read, model drill-down, pricing, what may be said about the figures |
 | [token-spend-sources.md](token-spend-sources.md) | The complete agent/source catalog: default macOS location, format, counters reported, evidence level |
 | [recap.md](recap.md) | The shareable month and year recap cards: which cards a recap gets, nil means left out, language rules, the review render |
@@ -25,7 +25,7 @@ Maintained map. Change the topic file that owns a behaviour in the same patch as
 | [build-from-source.md](build-from-source.md) | Toolchain, `swift build`, `#Preview`, local run |
 | [releasing.md](releasing.md) | Tag, bundle, Sparkle, DMG, CI |
 | [update-mirror.md](update-mirror.md) | update.qunqin.org: the Cloudflare mirror of the feed and downloads, deploying it, how the app picks GitHub or the mirror |
-| [providers/README.md](providers/README.md) | Per-provider routes, auth, cookies, extra accounts |
+| [providers/README.md](providers/README.md) | Per-provider routes, auth, cookies, extra accounts, service status pages |
 | [setup/](setup/) | Per-provider setup pages for users — what the in-app **Setup help** link opens |
 | [decisions/README.md](decisions/README.md) | Why / failure lessons (historical) |
 

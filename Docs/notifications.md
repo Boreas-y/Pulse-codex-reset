@@ -15,7 +15,7 @@ Seven things, and nothing else — each something you would want to know *while 
 | `reset` | A window that was warned about has unambiguously turned over | `alertsOnReset` + `alertThreshold` |
 | `unreadable(_:)` | Three eligible failures; cached figures remain protected for their first 30 minutes, while a failure with no usable figures counts immediately | `alertsOnFailure` |
 | `lowBalance(remaining:)` | A prepaid balance falls under the figure set for that account | `lowBalanceAlerts[account]` |
-| Service outage (`OutageMemory`) | Codex's, Claude Code's or DeepSeek's own status page reports one of its components down, worse, or back | `alertsOnOutage`, and the provider switched on |
+| Service outage (`OutageMemory`) | A provider's own status page (44 have one) reports a component its account runs on down, worse, or back | `alertsOnOutage`, and the provider switched on |
 | Recap ready (`RecapNoticeRule`) | In the first three days of a month, last month had records in the scan Pulse already holds, and that month has not been announced | `alertsOnRecap`, and Token spend reading on |
 
 **All off by default. All use the default sound; muting is macOS's own per-app "Play sound for notifications".** A notification with no `sound` is silent and the system switch cannot add one back (it only removes a sound the app asked for), so a silent notification leaves no working off switch and a banner on another display goes unseen. One rule for all, since macOS has one switch per app. `requestAuthorization` asks for `[.alert, .sound]`: without `.sound` in the grant, `soundSetting` is disabled and every `content.sound` is dropped.
