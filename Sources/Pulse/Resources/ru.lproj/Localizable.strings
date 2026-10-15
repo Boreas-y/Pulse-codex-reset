@@ -256,6 +256,8 @@
 "Reading logs" = "Чтение журналов";
 "No history yet" = "Истории пока нет";
 "Nothing has been logged on this Mac yet, so there is no history to add up." = "На этом Mac ещё нет записей в журналах, поэтому подсчитывать нечего.";
+"Token spend reading is off" = "Параметр «Читать локальные записи о расходе» выключен";
+"This history comes from the usage records on this Mac, which Pulse reads only while Token spend reading is on." = "Эта история складывается из записей о расходе на этом Mac, а Pulse читает их, только когда включено «Читать локальные записи о расходе».";
 "Account total" = "Всего по аккаунту";
 
 /* Budget estimate */

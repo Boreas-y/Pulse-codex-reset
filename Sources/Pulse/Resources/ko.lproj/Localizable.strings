@@ -256,6 +256,8 @@
 "Reading logs" = "로그를 읽는 중";
 "No history yet" = "아직 기록이 없습니다";
 "Nothing has been logged on this Mac yet, so there is no history to add up." = "이 Mac에는 아직 로그가 없어 합산할 기록이 없습니다.";
+"Token spend reading is off" = "‘로컬 사용량 기록 읽기’가 꺼져 있습니다";
+"This history comes from the usage records on this Mac, which Pulse reads only while Token spend reading is on." = "이 기록은 이 Mac의 사용량 기록으로 집계합니다. Pulse는 ‘로컬 사용량 기록 읽기’가 켜져 있는 동안에만 기록을 읽습니다.";
 "Account total" = "계정 누적";
 
 /* Budget estimate */

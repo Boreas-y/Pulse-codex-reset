@@ -116,7 +116,10 @@ struct AccountPane: View {
                     EstimatedValueGroup(account: account, store: store, history: history)
                 }
 
-                AccountHistoryGroup(account: account, history: history)
+                AccountHistoryGroup(
+                    account: account, history: history, settings: settings,
+                    openTokenSpend: { navigation.open(.spend) }
+                )
             }
 
             // Read from this Mac's sessions, like the history above: the

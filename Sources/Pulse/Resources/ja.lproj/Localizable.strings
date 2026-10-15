@@ -256,6 +256,8 @@
 "Reading logs" = "ログを読んでいます";
 "No history yet" = "履歴はまだありません";
 "Nothing has been logged on this Mac yet, so there is no history to add up." = "この Mac にはまだログがないため、集計できる履歴がありません。";
+"Token spend reading is off" = "「ローカルの使用量記録を読み取る」がオフです";
+"This history comes from the usage records on this Mac, which Pulse reads only while Token spend reading is on." = "この履歴は、この Mac の使用量記録から集計します。Pulse が記録を読むのは、「ローカルの使用量記録を読み取る」がオンのときだけです。";
 "Account total" = "アカウント累計";
 
 /* Budget estimate */

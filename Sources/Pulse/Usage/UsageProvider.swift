@@ -383,11 +383,13 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     /// request log is the account's own record, priced as charged. DeepSeek
     /// likewise once its console's sign-in is kept: the console's day-by-day
     /// usage, charged in the account's own currency.
-    var providesHistory: Bool {
-        keepsLocalTranscripts || self == .zai || self == .glmCoding
-            || (self == .openCodeGo && OpenCodeConsole.hasSession)
-            || (self == .deepSeek && DeepSeekConsole.hasSession)
-    }
+    ///
+    /// **Exactly where the detailed card has one** (`cardHistory`), the Token
+    /// spend agents that borrow a provider's mark included — MiniMax Code for
+    /// MiniMax, the Kimi CLI for Kimi Code. The settings pane used to ask a
+    /// narrower question of its own, so those providers' cards had a history
+    /// their panes did not.
+    var providesHistory: Bool { cardHistory != nil }
 
     /// Whether the route to this provider's figures is a choice.
     ///

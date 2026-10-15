@@ -256,6 +256,8 @@
 "Reading logs" = "Reading logs";
 "No history yet" = "No history yet";
 "Nothing has been logged on this Mac yet, so there is no history to add up." = "Nothing has been logged on this Mac yet, so there is no history to add up.";
+"Token spend reading is off" = "“Read local usage records” is off";
+"This history comes from the usage records on this Mac, which Pulse reads only while Token spend reading is on." = "This history comes from the usage records on this Mac, which Pulse reads only while “Read local usage records” is on.";
 "Account total" = "Account total";
 
 /* Budget estimate */

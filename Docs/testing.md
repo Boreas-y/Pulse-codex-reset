@@ -175,7 +175,7 @@ Synthetic stores, fixed clocks and UTC calendars; not live-client validation. [t
 | `CapturedUsageReadersTests` | Group E: export/capture readers and the `UsageImports/<client>` drop folder; Warp's tokens-are-zero contract; cross-file reconciliation with `isPartial`; a cross-day Cursor CSV session never borrows yesterday's usage. |
 | `CopilotLogReaderTests` | OTEL → Desktop → VS Code filtering so one call is not counted three times; a request without a timestamp is skipped, not dated at the epoch. |
 | `SpendAgentCatalogTests`, `AgentIconTests` | Seven verified readers plus forty-seven added clients in six disjoint families; legacy readers keep their paths and `rawValue`; "recognised" never reads as "counted"; every named icon loads, a provider-backed agent reuses the provider's file. |
-| `CardHistoryTests` | Which providers the card shows history for and from where; several agents add day by day with quarter-hours in order; no value estimate where the provider states the allowance. |
+| `CardHistoryTests` | Which providers the card shows history for and from where, and that the settings pane has one wherever the card does; several agents add day by day with quarter-hours in order; no value estimate where the provider states the allowance. |
 | `BudgetEstimateTests` | A limit's worth is in-window spend up to the reading over its percentage; too little use, an earlier reading or a lengthless window gives none. |
 | `CacheHitRateTests` | Cache reads over every input token; withheld where records cannot vouch for their split; per model, raw ids of one model on one line. |
 | `PromptCacheLapseTests` | Claude Code's cache lapses a tier after the last request (a tool result counts), not the answer's end; subagent lines are not the session. |

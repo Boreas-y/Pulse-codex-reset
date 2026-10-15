@@ -11,7 +11,7 @@ Same product, two storefronts, two accounts; a key for one is refused by the oth
 
 **There were two providers until 2026-10-15, MiniMax and MiniMax CN** (`.minimaxCN`). `MiniMaxMerge` folds the second into the first once, at launch, before settings are read: its key moves sealed to the `minimaxi.com` slot (`APIKeyStore.moveRetiredEntry`); where MiniMax CN was on and MiniMax was not, the site becomes `minimaxi.com` and its ring settings (place on the rail, colour, mark, pinned limit — the window id's `minimaxCN.` prefix is rewritten) become MiniMax's; otherwise MiniMax's stay and MiniMax CN's fill only what MiniMax lacked. Cached readings under `minimaxCN` are keyed by plain strings and are simply never asked for again. `MiniMaxMergeTests`.
 
-Extra accounts are not supported, so the two sites cannot be watched at once. `keepsLocalTranscripts` is false; **the usage history is MiniMax Code's**, read from this Mac (`SpendAgent.mcode`, which borrows MiniMax's mark — [../token-spend-sources.md](../token-spend-sources.md)): every model the app answered with, routed ones too, as Command Code's are, and only with Token spend on. No first-run file detection.
+Extra accounts are not supported, so the two sites cannot be watched at once. `keepsLocalTranscripts` is false; **the usage history is MiniMax Code's**, read from this Mac (`SpendAgent.mcode`, which borrows MiniMax's mark — [../token-spend-sources.md](../token-spend-sources.md)): every model the app answered with, routed ones too, as Command Code's are, and only with Token spend on. The detailed card and the settings pane's **Usage history** both show it. No first-run file detection.
 
 ## Route
 

@@ -256,6 +256,8 @@
 "Reading logs" = "正在读取日志";
 "No history yet" = "暂无记录";
 "Nothing has been logged on this Mac yet, so there is no history to add up." = "本机上还没有日志，无从统计。";
+"Token spend reading is off" = "「读取本机用量记录」未开启";
+"This history comes from the usage records on this Mac, which Pulse reads only while Token spend reading is on." = "这一节根据这台 Mac 上的用量记录统计。只有开启「读取本机用量记录」后，Pulse 才会读取这些记录。";
 "Account total" = "账号累计";
 
 /* Budget estimate */
