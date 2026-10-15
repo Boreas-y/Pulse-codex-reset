@@ -1026,7 +1026,7 @@
 "%@ uptime" = "Доступность %@";
 "No data" = "Нет данных";
 "When a service is down" = "При сбое сервиса";
-"Codex, Claude Code and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code и DeepSeek — по их страницам статуса; только включённые вами сервисы.";
+"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code, Cursor и DeepSeek — по их страницам статуса; только включённые вами сервисы.";
 "%@ reports %@." = "%@ сообщает: %@.";
 "Back to normal: %@." = "Снова в норме: %@.";
 "%@ (%@)" = "%@ (%@)";

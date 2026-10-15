@@ -9,12 +9,15 @@ enum StatusPage: Sendable, Hashable, CaseIterable {
     case claude
     /// status.deepseek.com, every component it shows.
     case deepSeek
+    /// status.cursor.com, every component it shows. Statuspage, as Claude's.
+    case cursor
 
     var address: URL {
         switch self {
         case .openAI: URL(string: "https://status.openai.com")!
         case .claude: URL(string: "https://status.claude.com")!
         case .deepSeek: URL(string: "https://status.deepseek.com")!
+        case .cursor: URL(string: "https://status.cursor.com")!
         }
     }
 
@@ -26,6 +29,7 @@ enum StatusPage: Sendable, Hashable, CaseIterable {
         case .openAI: "OpenAI"
         case .claude: "Anthropic"
         case .deepSeek: "DeepSeek"
+        case .cursor: "Cursor"
         }
     }
 
@@ -35,6 +39,7 @@ enum StatusPage: Sendable, Hashable, CaseIterable {
         case .openAI: .codex
         case .claude: .claudeCode
         case .deepSeek: .deepSeek
+        case .cursor: .cursor
         }
     }
 
@@ -45,12 +50,16 @@ enum StatusPage: Sendable, Hashable, CaseIterable {
     /// because names change and ids don't. DeepSeek's by name: Pulse reads
     /// its API account, its API rows are named after the model ("DeepSeek V4
     /// Pro API服务"), and a new model is a new row; the chat site is not the
-    /// API. Codex's page is read as its group already.
+    /// API. Codex's page is read as its group already. Cursor's by id, as
+    /// Claude's: the IDE, the CLI and Cloud Agents — what the account's usage
+    /// is spent through — not cursor.com, Automations, Review Agents, the
+    /// unexplained "Origin", or Grok Bot, which is a provider of its own.
     func notifiesAbout(_ component: ServiceStatus.Component) -> Bool {
         switch self {
         case .openAI: true
         case .claude: ["yyzkbfz2thpt", "k8w3r06qmzrp"].contains(component.id)
         case .deepSeek: component.name.contains("API")
+        case .cursor: ["rflc60xp5jp2", "vsny1qv7v86c", "mwv1g9sc7kdh"].contains(component.id)
         }
     }
 
@@ -58,7 +67,7 @@ enum StatusPage: Sendable, Hashable, CaseIterable {
     var dayCount: Int {
         switch self {
         case .openAI: 91
-        case .claude, .deepSeek: 90
+        case .claude, .deepSeek, .cursor: 90
         }
     }
 }
@@ -70,6 +79,7 @@ extension Provider {
         case .codex: .openAI
         case .claudeCode: .claude
         case .deepSeek: .deepSeek
+        case .cursor: .cursor
         default: nil
         }
     }
@@ -193,7 +203,8 @@ struct ServiceStatus: Equatable, Sendable {
     static func read(_ page: StatusPage, now: Date = .now) async -> ServiceStatus? {
         switch page {
         case .openAI: await readOpenAI(now: now)
-        case .claude: await readClaude()
+        case .claude: await readStatuspage(.claude, root: claudeRoot)
+        case .cursor: await readStatuspage(.cursor, root: cursorRoot)
         case .deepSeek:
             await fetch(deepSeekPage, accept: "text/html").flatMap {
                 flashcat(from: $0, now: now, days: calendarDays(endingAt: now, count: StatusPage.deepSeek.dayCount))
@@ -210,8 +221,9 @@ struct ServiceStatus: Equatable, Sendable {
         case .openAI:
             guard let summary = await fetch(openAIFeed) else { return nil }
             return incidentIOComponents(from: summary, group: openAIGroup)
-        case .claude:
-            guard let summary = await fetch(claudeSummary) else { return nil }
+        case .claude, .cursor:
+            let root = page == .claude ? claudeRoot : cursorRoot
+            guard let summary = await fetch(root.appending(path: "api/v2/summary.json")) else { return nil }
             return statuspageComponents(from: summary)
         case .deepSeek:
             guard let page = await fetch(deepSeekPage, accept: "text/html") else { return nil }
@@ -221,7 +233,8 @@ struct ServiceStatus: Equatable, Sendable {
 
     private static let openAIFeed = URL(string: "https://status.openai.com/proxy/status.openai.com")!
     private static let openAIGroup = "Codex"
-    private static let claudeSummary = URL(string: "https://status.claude.com/api/v2/summary.json")!
+    private static let claudeRoot = URL(string: "https://status.claude.com")!
+    private static let cursorRoot = URL(string: "https://status.cursor.com")!
     /// The page itself: Flashcat publishes no feed without an account key, and
     /// renders its data into the page.
     private static let deepSeekPage = URL(string: "https://status.deepseek.com/")!
@@ -253,22 +266,23 @@ struct ServiceStatus: Equatable, Sendable {
         return ServiceStatus(page: .openAI, components: components)
     }
 
-    /// The summary first, because it says which components there are; then
-    /// their history in one request (the page asks up to 60 at a time).
-    private static func readClaude() async -> ServiceStatus? {
+    /// A Statuspage page — Claude's, Cursor's. The summary first, because it
+    /// says which components there are; then their history in one request
+    /// (the page asks up to 60 at a time).
+    private static func readStatuspage(_ page: StatusPage, root: URL) async -> ServiceStatus? {
         guard
-            let summary = await fetch(claudeSummary),
+            let summary = await fetch(root.appending(path: "api/v2/summary.json")),
             var components = statuspageComponents(from: summary)
         else { return nil }
 
-        var history = URLComponents(string: "https://status.claude.com/uptime_showcase")
+        var history = URLComponents(url: root.appending(path: "uptime_showcase"), resolvingAgainstBaseURL: false)
         history?.queryItems = [
             URLQueryItem(name: "components", value: components.map(\.id).joined(separator: ",")),
         ]
         if let showcase = await fetch(history?.url) {
             components = statuspageHistory(from: showcase, applyingTo: components)
         }
-        return ServiceStatus(page: .claude, components: components)
+        return ServiceStatus(page: page, components: components)
     }
 
     private static func fetch(_ url: URL?, accept: String = "application/json") async -> Data? {

@@ -83,7 +83,7 @@ struct NotificationsPane: View {
 
                 SettingsRow(
                     String.localized("When a service is down"),
-                    subtitle: String.localized("Codex, Claude Code and DeepSeek, from their own status pages — only the ones you have switched on.")
+                    subtitle: String.localized("Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on.")
                 ) {
                     Toggle("", isOn: Binding(
                         get: { settings.alertsOnOutage },

@@ -1026,7 +1026,7 @@
 "%@ uptime" = "稼働率 %@";
 "No data" = "データなし";
 "When a service is down" = "サービスに障害が起きたとき";
-"Codex, Claude Code and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex・Claude Code・DeepSeek のそれぞれのステータスページに基づき、オンにしているものだけ通知します。";
+"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex・Claude Code・Cursor・DeepSeek のそれぞれのステータスページに基づき、オンにしているものだけ通知します。";
 "%@ reports %@." = "%@ の発表：%@。";
 "Back to normal: %@." = "復旧しました：%@。";
 "%@ (%@)" = "%@（%@）";

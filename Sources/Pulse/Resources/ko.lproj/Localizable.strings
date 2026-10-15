@@ -1026,7 +1026,7 @@
 "%@ uptime" = "가동률 %@";
 "No data" = "데이터 없음";
 "When a service is down" = "서비스에 장애가 있을 때";
-"Codex, Claude Code and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code, DeepSeek 각각의 상태 페이지를 기준으로, 켜 둔 서비스만 알립니다.";
+"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code, Cursor, DeepSeek 각각의 상태 페이지를 기준으로, 켜 둔 서비스만 알립니다.";
 "%@ reports %@." = "%@ 발표: %@.";
 "Back to normal: %@." = "정상으로 돌아왔습니다: %@.";
 "%@ (%@)" = "%@ (%@)";

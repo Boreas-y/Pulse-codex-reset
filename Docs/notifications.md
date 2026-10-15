@@ -41,10 +41,10 @@ Prepaid providers (DeepSeek first) report **no allowance**, so `alertThreshold` 
 
 ### A service outage is the provider's word about its service
 
-Requested 2026-10-04, after the status rows on the Codex, Claude Code and DeepSeek panes ([providers/codex.md](providers/codex.md#service-status)). One switch, **When a service is down**, off by default; its subtitle names the three. Pinned by `OutageMemoryTests`.
+Requested 2026-10-04, after the status rows on the Codex, Claude Code and DeepSeek panes (Cursor's joined 2026-10-15) ([providers/codex.md](providers/codex.md#service-status)). One switch, **When a service is down**, off by default; its subtitle names the four. Pinned by `OutageMemoryTests`.
 
 - **Only for a provider switched on.** `UsageAlerts.checkServices` reads the pages of providers among `shownAccounts` only.
-- **Only about what the tool runs on** (`StatusPage.notifiesAbout`). Claude: of the six status.claude.com components the pane shows, only **Claude Code** and **Claude API**, by id. Codex: its Codex group, all four. DeepSeek: rows whose name contains "API" ([providers/deepseek.md](providers/deepseek.md#service-status)).
+- **Only about what the tool runs on** (`StatusPage.notifiesAbout`). Claude: of the six status.claude.com components the pane shows, only **Claude Code** and **Claude API**, by id. Codex: its Codex group, all four. DeepSeek: rows whose name contains "API" ([providers/deepseek.md](providers/deepseek.md#service-status)). Cursor: the IDE, the CLI and Cloud Agents, by id ([providers/cursor.md](providers/cursor.md#service-status)).
 - **Down means the page says so**: degraded performance, partial or full outage. Maintenance and unreadable values are not outages; an unreadable page changes nothing.
 - **Once per outage.** Said when a component first goes down, again only when worse (degraded → full), and once when operational again — only if it was announced. Better-but-still-down is recorded silently. An outage already under way when the switch goes on is said at once: the switch calls `checkServices` itself (not `reconsiderAlerts`, which would refetch every provider), and so does launch, right after the grant is read.
 - **Only what is still watched is remembered.** Memory is per page. A component no longer listed (a Statuspage row shown only while degraded) and a page no longer watched (switch or provider off) are forgotten silently; kept, they silenced the next outage and later said "back to normal" about one that ended unwatched.

@@ -1026,7 +1026,7 @@
 "%@ uptime" = "可用率 %@";
 "No data" = "無資料";
 "When a service is down" = "服務發生故障時";
-"Codex, Claude Code and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex、Claude Code 和 DeepSeek，以各自的狀態頁為準，只通知你已開啟的服務。";
+"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex、Claude Code、Cursor 和 DeepSeek，以各自的狀態頁為準，只通知你已開啟的服務。";
 "%@ reports %@." = "%@ 公布：%@。";
 "Back to normal: %@." = "已恢復正常：%@。";
 "%@ (%@)" = "%@（%@）";

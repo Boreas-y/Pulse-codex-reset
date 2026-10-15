@@ -1026,7 +1026,7 @@
 "%@ uptime" = "%@ uptime";
 "No data" = "No data";
 "When a service is down" = "When a service is down";
-"Codex, Claude Code and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code and DeepSeek, from their own status pages — only the ones you have switched on.";
+"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on.";
 "%@ reports %@." = "%@ reports %@.";
 "Back to normal: %@." = "Back to normal: %@.";
 "%@ (%@)" = "%@ (%@)";

@@ -150,14 +150,15 @@ private struct DayBars: View {
 }
 
 /// Each page's own colours, taken off the page (2026-10-04): incident.io's
-/// for OpenAI, Claude's Statuspage theme for Claude, Flashcat's for DeepSeek.
+/// for OpenAI, Claude's Statuspage theme for Claude, Flashcat's for DeepSeek;
+/// Cursor's Statuspage theme (2026-10-15).
 private struct StatusPalette {
     let page: StatusPage
 
     init(_ page: StatusPage) { self.page = page }
 
     /// incident.io and Flashcat round their bars; Statuspage's are square.
-    var barCornerRadius: CGFloat { page == .claude ? 0 : 1.5 }
+    var barCornerRadius: CGFloat { page == .claude || page == .cursor ? 0 : 1.5 }
 
     func colour(for state: ServiceStatus.State) -> Color {
         switch (page, state) {
@@ -178,6 +179,11 @@ private struct StatusPalette {
         case (.deepSeek, .fullOutage): Self.rgb(0xEF4444)
         // Not seen on the page; the same Tailwind set's blue.
         case (.deepSeek, .maintenance): Self.rgb(0x3B82F6)
+        case (.cursor, .operational): Self.rgb(0x1E8542)
+        case (.cursor, .degraded): Self.rgb(0xF1C40F)
+        case (.cursor, .partialOutage): Self.rgb(0xB35E14)
+        case (.cursor, .fullOutage): Self.rgb(0xDE2F1B)
+        case (.cursor, .maintenance): Self.rgb(0x207AB6)
         case (_, .unrecognised): .secondary
         }
     }
