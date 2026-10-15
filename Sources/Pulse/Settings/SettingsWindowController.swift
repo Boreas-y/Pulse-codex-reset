@@ -51,7 +51,6 @@ final class SettingsWindowController {
         if let pane { navigation.open(pane) }
         let window = window ?? makeWindow()
         self.window = window
-        window.title = String.localized("Pulse Settings")
 
         // The system may have taken the grant away since launch, and this
         // window is the only place Pulse reports it.
@@ -64,12 +63,6 @@ final class SettingsWindowController {
         if !wasVisible { window.center() }
         dock.apply()
         NSApp.activate(ignoringOtherApps: true)
-    }
-
-    /// Re-reads the title, which is set once at creation but has to follow a
-    /// language change while the window is open.
-    func refreshTitle() {
-        window?.title = String.localized("Pulse Settings")
     }
 
     private func makeWindow() -> NSWindow {
@@ -89,24 +82,19 @@ final class SettingsWindowController {
             backing: .buffered,
             defer: false
         )
-        // **The sidebar runs up behind the traffic lights**, as System
-        // Settings' does. AppKit gives a split view's sidebar that treatment
-        // only when the window has a toolbar and its content is a view
-        // *controller*: SwiftUI's `NavigationSplitView` then bridges to an
-        // `NSSplitViewController` with a sidebar item. Measured in a harness
-        // on macOS 26: an `NSHostingView` as the content view never got it,
-        // with or without `.fullSizeContentView` or a unified toolbar — which
-        // is what this window was, and why the sidebar used to start under a
-        // bar of its own. An `NSHostingController` with a unified toolbar does.
-        //
-        // The title bar stays opaque. A transparent one drew nothing, and
-        // content scrolled under it printed over "Pulse Settings". With the
-        // toolbar, macOS fades scrolled content out beneath the title, so
-        // no separator line is drawn either.
-        window.toolbar = NSToolbar()
+        // **The window's title bar and toolbar are SwiftUI's**
+        // (`sceneBridgingOptions = [.toolbars, .title]` below): the pane's
+        // name as the title, back and forward as its items. That is what
+        // gives the window System Settings' look on macOS 26 — the sidebar
+        // running up behind the traffic lights, and content fading softly
+        // out under the title as it scrolls. Measured in a harness, each of
+        // the alternatives missed one half: an `NSToolbar` made here put the
+        // sidebar up top but drew a hard band and line under the title,
+        // because the soft fade is SwiftUI's and SwiftUI cannot see a toolbar
+        // it did not make; no toolbar at all kept the soft fade but the
+        // sidebar stopped under the title bar. A transparent title bar turns
+        // the fade off altogether and prints scrolled content over the title.
         window.toolbarStyle = .unified
-        window.titlebarAppearsTransparent = false
-        window.titlebarSeparatorStyle = .none
         window.isReleasedWhenClosed = false
         dock.track(window)
         window.onClose = { [weak self, weak window] in
@@ -115,20 +103,16 @@ final class SettingsWindowController {
             // window is named rather than read from `isVisible`.
             self?.dock.apply(closing: window)
         }
-        let content = NSHostingController(
+        let content = NSHostingView(
             rootView: SettingsView(
                 store: store, settings: settings, placement: placement, update: update, alerts: alerts,
                 shortcuts: shortcuts, navigation: navigation, openRecap: openRecap
             )
         )
-        // Its minimum size, from the view's own frame, and no more: left to
-        // follow the content's ideal size, the window would resize itself to
-        // whatever pane was open.
-        content.sizingOptions = [.minSize]
-        window.contentViewController = content
-        // Setting a content view controller sizes the window to it; put back
-        // the size chosen above.
-        window.setContentSize(NSSize(width: 920, height: 660))
+        // A hosting **view**: with a hosting controller, the window binds its
+        // title to the controller's, which is nil.
+        content.sceneBridgingOptions = [.toolbars, .title]
+        window.contentView = content
         return window
     }
 }

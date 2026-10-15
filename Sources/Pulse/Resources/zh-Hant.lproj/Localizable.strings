@@ -478,6 +478,8 @@
 
 /* Settings sidebar search */
 "Search" = "搜尋";
+"Back" = "上一頁";
+"Forward" = "下一頁";
 "No matches" = "沒有符合的項目";
 
 /* Resetting the rail order */

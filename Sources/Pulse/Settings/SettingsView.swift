@@ -124,7 +124,10 @@ struct SettingsView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 22) {
-                        heading
+                        // Where a new pane scrolls to. The pane's name is the
+                        // window's title now, in the toolbar, as System
+                        // Settings has it; it used to be drawn here too.
+                        Color.clear.frame(height: 0)
                             .id("heading")
 
                         switch pane {
@@ -168,9 +171,34 @@ struct SettingsView: View {
                 .task(id: spend.summaryRequest) { await spend.recompute() }
                 .onChange(of: navigation.requestID) { proxy.scrollTo("heading", anchor: .top) }
             }
+            .navigationTitle(pane.title(in: settings))
+            .toolbar {
+                // **The toolbar needs an item of its own.** A toolbar with
+                // nothing in it is not drawn, and without one the sidebar
+                // stops under the title bar instead of running up behind the
+                // traffic lights (`SettingsWindowController`). Back and
+                // forward are what System Settings puts there.
+                ToolbarItemGroup(placement: .navigation) {
+                    Button {
+                        navigation.goBack(where: exists)
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                    .help(String.localized("Back"))
+                    .keyboardShortcut("[", modifiers: .command)
+                    .disabled(navigation.back.isEmpty)
+
+                    Button {
+                        navigation.goForward(where: exists)
+                    } label: {
+                        Image(systemName: "chevron.right")
+                    }
+                    .help(String.localized("Forward"))
+                    .keyboardShortcut("]", modifiers: .command)
+                    .disabled(navigation.forward.isEmpty)
+                }
+            }
         }
-        // No `navigationTitle`: each pane already prints its own heading, and
-        // the toolbar would repeat it right above.
         .frame(minWidth: 720, minHeight: 460)
         .onChange(of: navigation.requestID) { search = "" }
         // Rebuild everything when the language changes — the strings are read
@@ -178,15 +206,11 @@ struct SettingsView: View {
         .id(settings.language)
     }
 
-    private var heading: some View {
-        HStack(spacing: 9) {
-            if case .account(let account) = pane {
-                LobeIconView(provider: account.provider, size: 19)
-            }
-
-            Text(pane.title(in: settings))
-                .font(.system(size: 17, weight: .semibold))
-        }
+    /// Whether a pane in the history can still be shown: an account's only
+    /// while the account exists.
+    private func exists(_ pane: SettingsPane) -> Bool {
+        if case .account(let account) = pane { return settings.allAccounts.contains(account) }
+        return true
     }
 }
 

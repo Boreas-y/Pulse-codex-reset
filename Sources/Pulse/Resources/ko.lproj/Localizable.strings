@@ -478,6 +478,8 @@
 
 /* Settings sidebar search */
 "Search" = "검색";
+"Back" = "뒤로";
+"Forward" = "앞으로";
 "No matches" = "일치하는 항목 없음";
 
 /* Resetting the rail order */

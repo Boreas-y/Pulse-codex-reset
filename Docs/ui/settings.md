@@ -6,7 +6,7 @@ Chrome and why it is AppKit-owned: [../architecture.md](../architecture.md). Loc
 
 ## Where the code lives
 
-All of it is in `Sources/Pulse/Settings`. `SettingsView.swift` is the shell only: the split view, the heading, the switch that picks a pane, the search text, and the three models below. A pane is a view that draws rows; what a pane edits through a button is in a model.
+All of it is in `Sources/Pulse/Settings`. `SettingsView.swift` is the shell only: the split view, the window's title and back/forward toolbar (the pane's name is the title — no heading is drawn in the pane), the switch that picks a pane, the search text, and the three models below. A pane is a view that draws rows; what a pane edits through a button is in a model.
 
 | File | Holds |
 |---|---|

@@ -478,6 +478,8 @@
 
 /* Settings sidebar search */
 "Search" = "Поиск";
+"Back" = "Назад";
+"Forward" = "Вперёд";
 "No matches" = "Нет совпадений";
 
 /* Resetting the rail order */

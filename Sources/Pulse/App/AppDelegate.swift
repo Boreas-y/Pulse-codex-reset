@@ -139,7 +139,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     private func settingsChanged() {
         restoreMenuBarEntryPointIfNeeded()
-        settingsWindow?.refreshTitle()
+        // Settings has no title to re-read: it is the open pane's name,
+        // SwiftUI's, and the view is rebuilt in the new language.
         recapWindow?.refreshTitle()
         providerSetupWindow?.refreshTitle()
         guard !settings.needsProviderSelection else { return }

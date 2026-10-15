@@ -478,6 +478,8 @@
 
 /* Settings sidebar search */
 "Search" = "Search";
+"Back" = "Back";
+"Forward" = "Forward";
 "No matches" = "No matches";
 
 /* Resetting the rail order */
