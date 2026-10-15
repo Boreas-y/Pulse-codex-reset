@@ -21,6 +21,8 @@ History and the two bugs that taught this: [../decisions/panel-frame.md](../deci
 
 **On glass the surface is two shapes fused, not the one outline** (`LiquidBubbleSurface` in UsageDetailCard.swift): `UsageBubbleShape.only(.body)` and `.only(.tail)` as two `glassEffect`s in a `GlassEffectContainer` (spacing 12pt × scale). Drawn as one outline, Liquid Glass treated the narrow tail as all rim — it refracted what was behind it sharply and lighter while the body beside it blurred, so over a busy backdrop it read as a crystal stuck onto the card. Fused, the tail shades on from the body with a smooth neck. Ruled out first, measured on real glass from a bundled build: the flowing tail on glass (no visible change) and making the whole outline a single contour (pixel-identical). A spacing of 40 rippled the body's edge beside the tail. Content is still masked to the whole outline; the solid card still fills the whole outline in one go.
 
+**A limit's bar is continuous or segmented** (`AppSettings.usageBarStyle`, `UsageBar`, shared with the menu's dashboard). Segmented is a row of 2.5pt ticks 2pt apart, as many as fit, lit in proportion — at least one once a limit is touched, all only when it is spent (`UsageBarTests`). It is drawn 12pt tall against the continuous bar's 6, so the ticks read as ticks, and that height is in the card's budget: `DetailCardLayout.progressBarHeight` reads `PanelMetrics.usageBarStyle`, set before the change is announced, and the panel's tree is rebuilt on it (`.id`).
+
 On the card, the window’s name has the top row to itself; spent and reset pair on the line below the bar. Sharing the top line fails when a limit is scoped to a model group.
 
 ### Detailed card

@@ -30,7 +30,11 @@ enum DetailCardLayout {
     /// Spacing between a row's title line, its progress bar, and its
     /// percent line.
     static var rowInternalSpacing: CGFloat { 7 * PanelMetrics.scale }
-    static var progressBarHeight: CGFloat { 6 * PanelMetrics.scale }
+    /// Taller segmented, so its ticks read as ticks (`UsageBarStyle`).
+    static var progressBarHeight: CGFloat {
+        (PanelMetrics.usageBarStyle == .segmented ? UsageBar.segmentedHeight : UsageBar.continuousHeight)
+            * PanelMetrics.scale
+    }
     /// Rendered line height of the header row (icon + title).
     static var headerHeight: CGFloat { 19 * PanelMetrics.scale }
 
@@ -1173,16 +1177,13 @@ private struct PulseProgressStyle: ProgressViewStyle {
     let accent: Color
 
     func makeBody(configuration: Configuration) -> some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Color.primary.opacity(0.17))
-
-                Capsule()
-                    .fill(accent)
-                    .frame(width: proxy.size.width * (configuration.fractionCompleted ?? 0))
-            }
-        }
+        UsageBar(
+            fraction: configuration.fractionCompleted ?? 0,
+            accent: accent,
+            track: Color.primary.opacity(0.17),
+            style: PanelMetrics.usageBarStyle,
+            scale: PanelMetrics.scale
+        )
         .frame(height: DetailCardLayout.progressBarHeight)
     }
 }

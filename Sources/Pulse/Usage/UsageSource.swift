@@ -259,6 +259,29 @@ enum PanelSize: String, CaseIterable, Identifiable, Sendable {
 /// the gap, so the rings stay the size they were and the rail gets shorter or
 /// longer around them. Someone watching seven accounts wants it tighter than
 /// someone watching two, and that is not the same wish as wanting bigger rings.
+/// How a limit's bar is drawn on the card and in the menu.
+///
+/// Continuous is the bar Pulse has always drawn. Segmented draws the same
+/// fraction as a row of thin ticks, lit up to it — taller, so the ticks read
+/// as ticks, which is why it is a `PanelMetrics` entry: the card's frame is
+/// worked out from `DetailCardLayout.progressBarHeight` before SwiftUI lays
+/// anything out.
+enum UsageBarStyle: String, CaseIterable, Identifiable, Sendable {
+    case continuous
+    case segmented
+
+    static let `default` = UsageBarStyle.continuous
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .continuous: .localized("Continuous")
+        case .segmented: .localized("Segmented")
+        }
+    }
+}
+
 enum RailSpacing: String, CaseIterable, Identifiable, Sendable {
     case compact
     case standard
@@ -413,6 +436,16 @@ enum PanelMetrics {
     }
 
     static var freeAcrossFiguresBeside: Bool { lock.withLock { storedFreeAcrossBeside } }
+
+    /// `AppSettings.usageBarStyle`: a segmented bar is taller
+    /// (`DetailCardLayout.progressBarHeight`).
+    nonisolated(unsafe) private static var storedBarStyle = UsageBarStyle.default
+
+    static func use(_ style: UsageBarStyle) {
+        lock.withLock { storedBarStyle = style }
+    }
+
+    static var usageBarStyle: UsageBarStyle { lock.withLock { storedBarStyle } }
 
     static func useRoundEnds(_ uses: Bool) {
         lock.withLock { storedRoundEnds = uses }

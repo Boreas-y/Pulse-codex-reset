@@ -83,7 +83,7 @@ enum SettingsPane: Hashable {
     var searchTerms: [String] {
         switch self {
         case .appearance:
-            [.localized("Size"), .localized("Spacing"), .localized("Round ends"),
+            [.localized("Size"), .localized("Spacing"), .localized("Round ends"), .localized("Progress bars"),
              .localized("Panel colour"), .localized("Liquid Glass"), .localized("Transparency"), .localized("Ring activity animation")]
         case .rings:
             [.localized("Percentages at the side"), .localized("Percentages across"), .localized("Figures beside the rings"),

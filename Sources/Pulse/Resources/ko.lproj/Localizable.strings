@@ -286,6 +286,10 @@
 "Size" = "전체 크기";
 "Spacing" = "간격";
 "Round ends" = "양 끝을 둥글게";
+"Progress bars" = "진행 막대";
+"How limit bars are drawn on the card and in the menu." = "카드와 메뉴에 표시되는 한도 막대의 모양입니다.";
+"Continuous" = "연속";
+"Segmented" = "분할";
 "The rail's ends and the card's tail follow the ring's own curve." = "레일의 양 끝과 카드 꼬리가 링과 같은 곡선을 그립니다.";
 "How much air there is between the rings." = "링 사이의 간격을 조절합니다.";
 "Tight" = "좁게";

@@ -58,7 +58,7 @@ A joined sentence needs no extra space after a Chinese full stop (`。`). `Usage
 
 | Sidebar section | Pane | Holds |
 |---|---|---|
-| Panel | **Appearance** | Size, Spacing, Round ends, Panel colour, Liquid Glass (+ Transparency), Ring activity animation |
+| Panel | **Appearance** | Size, Spacing, Round ends, Progress bars (Continuous / Segmented, `UsageBarStyle`; the card's and the menu's limit bars), Panel colour, Liquid Glass (+ Transparency), Ring activity animation |
 | Panel | **Rings and figures** | *Figures*: percentages at the side / across (*Percentages across*: any rail lying across — docked to the top or bottom, or free), figures beside the rings (free across only, off by default; needs percentages across), figure above the ring, show what's left, forecast. *Rings*: second limit, time until reset, time ring direction, turn red at, alert colour when docked |
 | Panel | **Position and behavior** | Show floating panel, hide in full screen, hide from screenshots, hide until pointed at, position (Left, Top, Bottom, Free across, Free upright, Right — a segmented control sized to its labels, since that many segments truncate under `controlWidth`), snap to screen edges, follow the active display; **Order** |
 | Panel | Token spend | unchanged |

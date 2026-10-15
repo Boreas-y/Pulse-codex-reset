@@ -303,6 +303,13 @@ final class AppSettings {
         didSet { showsForecastChanged(from: oldValue) }
     }
 
+    /// How limit bars are drawn on the card and in the menu (`UsageBarStyle`).
+    /// A `PanelMetrics` entry for the forecast's reason: a segmented bar is
+    /// taller, and the card's frame is worked out before SwiftUI lays it out.
+    var usageBarStyle: UsageBarStyle {
+        didSet { usageBarStyleChanged(from: oldValue) }
+    }
+
     /// The accounts whose card is the detailed one, by account id: the plan,
     /// how far through each window the clock is and, with Token spend on,
     /// what this Mac has put through the account lately.
@@ -969,6 +976,7 @@ final class AppSettings {
         warningThreshold: WarningThreshold = .default,
         dockShowsAlertColor: Bool = Default.dockShowsAlertColor,
         showsForecast: Bool = Default.showsForecast,
+        usageBarStyle: UsageBarStyle = .default,
         showsSecondRing: Bool = Default.showsSecondRing,
         animatesRingActivity: Bool = Default.animatesRingActivity,
         splitAccounts: Set<String> = [],
@@ -1029,6 +1037,7 @@ final class AppSettings {
         self.warningThreshold = warningThreshold
         self.dockShowsAlertColor = dockShowsAlertColor
         self.showsForecast = showsForecast
+        self.usageBarStyle = usageBarStyle
         self.showsSecondRing = showsSecondRing
         self.animatesRingActivity = animatesRingActivity
         self.splitAccounts = splitAccounts
@@ -1143,6 +1152,7 @@ final class AppSettings {
             warningThreshold: defaults.settingsIntChoice(Key.warningThreshold) ?? .default,
             dockShowsAlertColor: defaults.settingsFlag(Key.dockShowsAlertColor, default: Default.dockShowsAlertColor),
             showsForecast: defaults.settingsFlag(Key.showsForecast, default: Default.showsForecast),
+            usageBarStyle: defaults.settingsChoice(Key.usageBarStyle) ?? .default,
             showsSecondRing: defaults.settingsFlag(Key.showsSecondRing, default: Default.showsSecondRing),
             animatesRingActivity: defaults.settingsFlag(
                 Key.animatesRingActivity, default: Default.animatesRingActivity

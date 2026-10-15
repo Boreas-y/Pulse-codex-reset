@@ -68,6 +68,27 @@ struct AppearancePane: View {
 
                 SettingsRowDivider()
 
+                // Not greyed out with the panel hidden: the menu's bars
+                // follow it too.
+                SettingsRow(
+                    String.localized("Progress bars"),
+                    subtitle: String.localized("How limit bars are drawn on the card and in the menu.")
+                ) {
+                    Picker("", selection: Binding(
+                        get: { settings.usageBarStyle },
+                        set: { settings.usageBarStyle = $0 }
+                    )) {
+                        ForEach(UsageBarStyle.allCases) { style in
+                            Text(style.title).tag(style)
+                        }
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.segmented)
+                    .frame(width: SettingsLayout.controlWidth, alignment: .trailing)
+                }
+
+                SettingsRowDivider()
+
                 // Always shown, and greyed out under glass rather than
                 // hidden: glass is always drawn dark (`AppSettings.usesLightPanel`),
                 // and a row that vanishes is one nobody finds again.

@@ -286,6 +286,10 @@
 "Size" = "整體大小";
 "Spacing" = "間距";
 "Round ends" = "正圓兩端";
+"Progress bars" = "進度條";
+"How limit bars are drawn on the card and in the menu." = "詳情卡片和選單中額度進度條的樣式。";
+"Continuous" = "連續";
+"Segmented" = "分段";
 "The rail's ends and the card's tail follow the ring's own curve." = "膠囊兩端與卡片尾部，跟隨圓環自身的弧度。";
 "How much air there is between the rings." = "調整圓環之間的間距。";
 "Tight" = "緊湊";

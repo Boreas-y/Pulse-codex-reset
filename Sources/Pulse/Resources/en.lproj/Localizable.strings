@@ -286,6 +286,10 @@
 "Size" = "Size";
 "Spacing" = "Spacing";
 "Round ends" = "Round ends";
+"Progress bars" = "Progress bars";
+"How limit bars are drawn on the card and in the menu." = "How limit bars are drawn on the card and in the menu.";
+"Continuous" = "Continuous";
+"Segmented" = "Segmented";
 "The rail's ends and the card's tail follow the ring's own curve." = "The rail's ends and the card's tail follow the ring's own curve.";
 "How much air there is between the rings." = "How much air there is between the rings.";
 "Tight" = "Tight";

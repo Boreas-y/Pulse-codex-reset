@@ -273,16 +273,13 @@ private struct MenuAccountDetail: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
-            GeometryReader { proxy in
-                let fraction = remaining && !spent ? window.remainingFraction : window.usedFraction
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Color.primary.opacity(0.12))
-                    Capsule()
-                        .fill(window.tint(warningAt: settings.warningThreshold.fraction))
-                        .frame(width: proxy.size.width * min(max(fraction, 0), 1))
-                }
-            }
-            .frame(height: 6)
+            UsageBar(
+                fraction: remaining && !spent ? window.remainingFraction : window.usedFraction,
+                accent: window.tint(warningAt: settings.warningThreshold.fraction),
+                track: Color.primary.opacity(0.12),
+                style: settings.usageBarStyle
+            )
+            .frame(height: settings.usageBarStyle == .segmented ? UsageBar.segmentedHeight : UsageBar.continuousHeight)
             Text(verbatim: remaining ? String.localized("\(percent) Left") : String.localized("\(percent) Used"))
                 .font(.system(size: 11, weight: .medium).monospacedDigit())
                 .foregroundStyle(spent ? Color.red : Color.secondary)

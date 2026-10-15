@@ -103,6 +103,8 @@ struct AppSettingsPersistenceTests {
         #expect(defaults.string(forKey: "settings.panelSize") == "large")
         settings.railSpacing = .roomy
         #expect(defaults.string(forKey: "settings.railSpacing") == "roomy")
+        settings.usageBarStyle = .segmented
+        #expect(defaults.string(forKey: "settings.usageBarStyle") == "segmented")
         settings.windowClockDirection = .remaining
         #expect(defaults.string(forKey: "settings.windowClockDirection") == "remaining")
         settings.warningThreshold = .ninety
@@ -224,6 +226,7 @@ struct AppSettingsPersistenceTests {
         first.autoCollapse = false
         first.panelSize = .large
         first.railSpacing = .roomy
+        first.usageBarStyle = .segmented
         first.usesGlass = true
         first.glassTransparency = 0.25
         first.usesLightPanel = true
@@ -296,6 +299,7 @@ struct AppSettingsPersistenceTests {
         #expect(back.autoCollapse == false)
         #expect(back.panelSize == .large)
         #expect(back.railSpacing == .roomy)
+        #expect(back.usageBarStyle == .segmented)
         #expect(back.usesGlass)
         #expect(back.glassTransparency == 0.25)
         #expect(back.usesLightPanel)

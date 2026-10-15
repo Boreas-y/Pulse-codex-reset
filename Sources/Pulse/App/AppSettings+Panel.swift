@@ -32,6 +32,7 @@ extension AppSettings.Key {
     static let usesRoundEnds = "settings.usesRoundEnds"
     static let showsWindowClock = "settings.showsWindowClock"
     static let showsForecast = "settings.showsForecast"
+    static let usageBarStyle = "settings.usageBarStyle"
     static let detailedCards = "settings.detailedCards"
     static let usesGlass = "settings.usesGlass"
     static let glassTransparency = "settings.glassTransparency"
@@ -150,6 +151,13 @@ extension AppSettings {
         onLayoutChange?()
     }
 
+    func usageBarStyleChanged(from old: UsageBarStyle) {
+        guard usageBarStyle != old else { return }
+        if drivesPanelMetrics { PanelMetrics.use(usageBarStyle) }
+        defaults.set(usageBarStyle.rawValue, forKey: Key.usageBarStyle)
+        onLayoutChange?()
+    }
+
     func showsForecastChanged(from old: Bool) {
         guard showsForecast != old else { return }
         if drivesPanelMetrics { PanelMetrics.showForecast(showsForecast) }
@@ -253,6 +261,7 @@ extension AppSettings {
         PanelMetrics.showWindowClock(showsWindowClock)
         PanelMetrics.useRoundEnds(usesRoundEnds)
         PanelMetrics.showForecast(showsForecast)
+        PanelMetrics.use(usageBarStyle)
         PanelMetrics.showDetailedCard(!detailedCards.isEmpty)
     }
 

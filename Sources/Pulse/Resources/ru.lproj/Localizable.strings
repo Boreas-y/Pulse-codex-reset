@@ -286,6 +286,10 @@
 "Size" = "Размер";
 "Spacing" = "Интервал";
 "Round ends" = "Скруглённые концы";
+"Progress bars" = "Шкалы";
+"How limit bars are drawn on the card and in the menu." = "Как рисуются шкалы лимитов на карточке и в меню.";
+"Continuous" = "Сплошные";
+"Segmented" = "Делениями";
 "The rail's ends and the card's tail follow the ring's own curve." = "Концы ленты и хвостик карточки повторяют изгиб кольца.";
 "How much air there is between the rings." = "Расстояние между кольцами.";
 "Tight" = "Узкий";
