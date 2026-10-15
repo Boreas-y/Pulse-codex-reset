@@ -80,6 +80,12 @@ struct AppSettingsPersistenceTests {
 
         settings.menuBarStyle = .ring
         #expect(defaults.string(forKey: "settings.menuBarStyle") == "ring")
+        settings.displayCurrency = .cny
+        #expect(defaults.string(forKey: "settings.displayCurrency") == "cny")
+        settings.setManualExchangeRate(7.1, for: .cny)
+        #expect(defaults.dictionary(forKey: "settings.manualExchangeRates") as? [String: Double] == ["CNY": 7.1])
+        settings.setManualExchangeRate(nil, for: .cny)
+        #expect(defaults.dictionary(forKey: "settings.manualExchangeRates") as? [String: Double] == [:])
         settings.menuBarAccount = "claudeCode"
         #expect(defaults.string(forKey: "settings.menuBarAccount") == "claudeCode")
         settings.menuBarAccount = nil
@@ -201,6 +207,8 @@ struct AppSettingsPersistenceTests {
         first.showsMenuDashboard = true
         first.menuBarAccount = "codex"
         first.menuBarStyle = .ring
+        first.displayCurrency = .jpy
+        first.setManualExchangeRate(150, for: .jpy)
         first.hidesInFullScreen = false
         first.followsActiveDisplay = true
         first.openSettingsShortcut = GlobalShortcut(keyCode: 35, modifiers: [.command, .option])
@@ -273,6 +281,8 @@ struct AppSettingsPersistenceTests {
         #expect(back.showsMenuDashboard)
         #expect(back.menuBarAccount == "codex")
         #expect(back.menuBarStyle == .ring)
+        #expect(back.displayCurrency == .jpy)
+        #expect(back.manualExchangeRates == ["JPY": 150])
         #expect(back.hidesInFullScreen == false)
         #expect(back.followsActiveDisplay)
         #expect(back.openSettingsShortcut == first.openSettingsShortcut)

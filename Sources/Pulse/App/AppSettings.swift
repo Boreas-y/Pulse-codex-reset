@@ -134,6 +134,28 @@ final class AppSettings {
         didSet { languageChanged(from: oldValue) }
     }
 
+    /// The currency estimates are shown in. Dollars by default, which is what
+    /// the price lists are in; any other is converted at `exchangeRates` or a
+    /// rate typed into `manualExchangeRates`. What a service reports itself
+    /// is never converted — see `DisplayCurrency`.
+    var displayCurrency: DisplayCurrency = .default {
+        didSet { displayCurrencyChanged(from: oldValue) }
+    }
+
+    /// A rate the reader typed, units of the currency to one US dollar, keyed
+    /// by ISO code. Wins over the fetched rate; a missing entry means "use the
+    /// fetched one".
+    var manualExchangeRates: [String: Double] = [:] {
+        didSet { manualExchangeRatesChanged(from: oldValue) }
+    }
+
+    /// The last rates fetched (`ExchangeRateKeeper`), kept on disk rather
+    /// than here in `UserDefaults`. Nil until a currency other than the dollar
+    /// has been chosen once.
+    var exchangeRates: ExchangeRates.Stored? {
+        didSet { exchangeRatesChanged(from: oldValue) }
+    }
+
     // MARK: - Panel (AppSettings+Panel)
 
     /// Whether the floating panel is on screen.
@@ -406,7 +428,7 @@ final class AppSettings {
     }
 
     /// Whether this is the settings the running app is drawn from, and so the
-    /// one allowed to move `PanelMetrics`.
+    /// one allowed to move `PanelMetrics` — and `Money`, by the same rule.
     ///
     /// **Global state, owned by one instance.** The rail's budget is a static
     /// the AppKit frame reads, and every other `AppSettings` — a preview's, a
@@ -1182,6 +1204,8 @@ final class AppSettings {
         applyLanguage()
         NetworkSession.apply(networkProxy)
         applyPanelMetrics()
+        exchangeRates = ExchangeRates.load()
+        applyMoney()
         drivesPanelMetrics = true
         resizeRail()
     }

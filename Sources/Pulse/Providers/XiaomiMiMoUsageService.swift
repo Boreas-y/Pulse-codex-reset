@@ -390,10 +390,6 @@ struct XiaomiMiMoUsageService: Sendable {
     /// line is offered for something Pulse cannot say is running out.
     private static func money(_ snapshot: XiaomiMiMoSnapshot) -> String? {
         guard let balance = snapshot.balance, let currency = snapshot.currency else { return nil }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = currency
-        formatter.locale = LocalizationSource.locale
-        return formatter.string(from: NSNumber(value: balance))
+        return Money.reported(balance, code: currency)
     }
 }

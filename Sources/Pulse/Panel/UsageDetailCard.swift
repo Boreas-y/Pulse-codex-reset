@@ -740,7 +740,7 @@ private struct ActivitySection: View {
             if priced {
                 // No "≈": the section's footnote says when the money is an
                 // estimate, and when it is what the provider charged.
-                Text(verbatim: cost > 0 ? AccountUsageCard.money(cost, currency: currency) : " ")
+                Text(verbatim: cost > 0 ? AccountUsageCard.money(cost, currency: currency, isCharged: isCharged) : " ")
                     .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded).monospacedDigit())
                     .foregroundStyle(.primary.opacity(0.45))
                     .frame(height: DetailCardLayout.figureLabelHeight)

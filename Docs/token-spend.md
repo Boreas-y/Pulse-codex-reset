@@ -74,7 +74,7 @@ The shared pricing pass prices each raw model ID's own input, output, cache-writ
 
 These are USD API estimates, not subscription charges. `costBreakdown`/`cost` are absent when none of a model's tokens can be priced; a published zero rate is a real zero. When only part can be priced, the amount is that part's subtotal and `unpricedTokens` names the excluded count; the headline labels a partial estimate, affected agent/day amounts are visibly marked, and category amounts cover the same priced subset. Missing per-model cost metadata or inconsistent token detail is left unpriced, not reconstructed from a combined total.
 
-Positive amounts below one cent display as less than $0.01; true zero is $0.00; hover values use higher precision. Formatting follows the selected locale; the currency stays USD.
+Positive amounts below one cent display as less than $0.01; true zero is $0.00; hover values use higher precision. Formatting follows the selected locale; the amounts are converted into the currency chosen in Settings → General, or stay in dollars while there is no rate ([refresh-and-data.md](refresh-and-data.md#currency)).
 
 ## An agent is not a provider
 

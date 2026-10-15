@@ -321,11 +321,7 @@ struct NewAPIUsageService: Sendable {
     }
 
     static func money(_ wallet: ProviderUsage.CreditAmount) -> String {
-        wallet.amount.formatted(
-            .currency(code: wallet.currency)
-                .precision(.fractionLength(2))
-                .locale(LocalizationSource.locale)
-        )
+        wallet.amount.formatted(Money.reportedStyle(wallet.currency))
     }
 
     static func storedKey() -> String? { APIKeyStore.key(for: .newAPI) }

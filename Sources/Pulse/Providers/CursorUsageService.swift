@@ -245,11 +245,7 @@ struct CursorUsageService: Sendable {
 
         // Cents, and Cursor prices in dollars whatever the reader's own
         // currency is — hence a fixed code rather than the locale's.
-        return (remaining / 100).formatted(
-            .currency(code: "USD")
-                .precision(.fractionLength(2))
-                .locale(LocalizationSource.locale)
-        )
+        return (remaining / 100).formatted(Money.reportedStyle("USD"))
     }
 
     /// "pro_plus" → "Pro+". An unfamiliar tier is tidied and passed through

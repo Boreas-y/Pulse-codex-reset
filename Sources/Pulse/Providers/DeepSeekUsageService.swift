@@ -256,11 +256,7 @@ struct DeepSeekUsageService: Sendable {
 
     /// What is left, in the currency the account is priced in.
     static func balance(_ purse: Purse) -> String {
-        purse.total.formatted(
-            .currency(code: purse.currency)
-                .precision(.fractionLength(2))
-                .locale(LocalizationSource.locale)
-        )
+        purse.total.formatted(Money.reportedStyle(purse.currency))
     }
 
     static func storedKey() -> String? { APIKeyStore.key(for: .deepSeek) }

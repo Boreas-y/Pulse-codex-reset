@@ -1197,3 +1197,20 @@
 "Unclassified" = "Unclassified";
 "These records do not report this token category separately." = "These records do not report this token category separately.";
 "Reported tokens without a usable category breakdown." = "Reported tokens without a usable category breakdown.";
+
+// Currency (Settings → General)
+"Currency" = "Currency";
+"Show estimates in" = "Show estimates in";
+"Money worked out from API prices: Token spend, estimated value, usage history and the recap. Balances and charges a service reports stay in the currency it gives." = "Money worked out from API prices: Token spend, estimated value, usage history and the recap. Balances and charges a service reports stay in the currency it gives.";
+"Exchange rate" = "Exchange rate";
+"Rate source" = "Rate source";
+"Your rate is used. Clear the field to use the day's rate." = "Your rate is used. Clear the field to use the day's rate.";
+"The day's rate, updated %@. Type a rate to use your own." = "The day's rate, updated %@. Type a rate to use your own.";
+"No rate yet, so estimates stay in US dollars. Type a rate, or wait for the day's." = "No rate yet, so estimates stay in US dollars. Type a rate, or wait for the day's.";
+"US dollar" = "US dollar";
+"Chinese yuan" = "Chinese yuan";
+"Hong Kong dollar" = "Hong Kong dollar";
+"New Taiwan dollar" = "New Taiwan dollar";
+"Japanese yen" = "Japanese yen";
+"South Korean won" = "South Korean won";
+"Russian rouble" = "Russian rouble";

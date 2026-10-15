@@ -41,20 +41,16 @@ enum BudgetEstimator {
     /// And below this there isn't enough money in play to be worth reporting.
     static let minimumSpend = 0.20
 
-    /// "$220": whole dollars from a hundred up, because the figure is an
-    /// estimate and cents would claim a precision it does not have. Shared by
-    /// the account's settings pane and the detailed card, so the two agree.
+    /// "$220": whole units from a hundred up, because the figure is an
+    /// estimate and cents would claim a precision it does not have, in the
+    /// currency chosen in Settings (`Money.estimate`). Shared by the account's
+    /// settings pane and the detailed card, so the two agree.
     ///
     /// **No "≈".** Every place that shows it already says in words that it is
     /// an estimate — "Estimated value" on the card, the group and its
     /// explanation in Settings — and the sign beside the words said it twice.
     static func approximate(_ amount: Double) -> String {
-        let text = amount.formatted(
-            .currency(code: "USD")
-                .precision(.fractionLength(amount >= 100 ? 0 : 2))
-                .locale(LocalizationSource.locale)
-        )
-        return text
+        Money.estimate(amount, wholeFrom: 100)
     }
 
     /// - Parameter observedAt: when the percentage was read. The spend is

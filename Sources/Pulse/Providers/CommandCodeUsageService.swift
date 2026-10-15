@@ -666,11 +666,7 @@ struct CommandCodeUsageService: Sendable {
         guard amounts.contains(where: { $0 != nil }) else { return nil }
 
         return amounts.compactMap { $0 }.reduce(0) { $0 + max(0, $1) }
-            .formatted(
-                .currency(code: "USD")
-                    .precision(.fractionLength(2))
-                    .locale(LocalizationSource.locale)
-            )
+            .formatted(Money.reportedStyle("USD"))
     }
 
     /// Built per call: `ISO8601DateFormatter` is not `Sendable`.

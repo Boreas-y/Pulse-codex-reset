@@ -20,6 +20,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private lazy var store = UsageStore(settings: settings, alerts: alerts, elsewhere: .shared)
     /// Reads Token spend in the background while it is on.
     private lazy var spendWarmer = SpendWarmer(settings: settings)
+    /// The day's exchange rates, while a currency other than the dollar is chosen.
+    private lazy var rateKeeper = ExchangeRateKeeper(settings: settings)
     /// Which tab the menu bar's menu last had open, kept between openings.
     private let dashboard = MenuDashboardModel()
     /// Starts usage windows after they reset, for the providers switched on.
@@ -90,6 +92,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         // Daily at most, and only from a bundle — see `AppUpdate`.
         update.checkIfDue()
+        rateKeeper.start()
 
         settings.onChange = { [weak self] in
             self?.settingsChanged()

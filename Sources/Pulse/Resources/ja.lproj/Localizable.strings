@@ -1197,3 +1197,20 @@
 "Unclassified" = "未分類";
 "These records do not report this token category separately." = "この種類のトークンは個別に記録されていません。";
 "Reported tokens without a usable category breakdown." = "トークン数は記録されていますが、利用できる分類の内訳がありません。";
+
+// Currency (Settings → General)
+"Currency" = "通貨";
+"Show estimates in" = "推定額の通貨";
+"Money worked out from API prices: Token spend, estimated value, usage history and the recap. Balances and charges a service reports stay in the currency it gives." = "API 価格から計算した金額をこの通貨で表示します（トークン使用量、使った分の推定額、使用量の履歴、まとめ）。サービスが報告する残高や請求額は、そのサービスの通貨のまま表示します。";
+"Exchange rate" = "為替レート";
+"Rate source" = "レートの提供元";
+"Your rate is used. Clear the field to use the day's rate." = "入力したレートを使っています。空欄にするとその日のレートに戻ります。";
+"The day's rate, updated %@. Type a rate to use your own." = "その日のレートです（%@ 更新）。自分のレートを入力することもできます。";
+"No rate yet, so estimates stay in US dollars. Type a rate, or wait for the day's." = "まだレートがないため、推定額は米ドルのまま表示しています。レートを入力するか、その日のレートの取得を待ってください。";
+"US dollar" = "米ドル";
+"Chinese yuan" = "人民元";
+"Hong Kong dollar" = "香港ドル";
+"New Taiwan dollar" = "新台湾ドル";
+"Japanese yen" = "日本円";
+"South Korean won" = "韓国ウォン";
+"Russian rouble" = "ロシア・ルーブル";

@@ -1197,3 +1197,20 @@
 "Unclassified" = "미분류";
 "These records do not report this token category separately." = "이 유형의 토큰은 별도로 기록되지 않았습니다.";
 "Reported tokens without a usable category breakdown." = "토큰 수는 기록되었지만 사용할 수 있는 유형별 내역이 없습니다.";
+
+// Currency (Settings → General)
+"Currency" = "통화";
+"Show estimates in" = "추정 금액 통화";
+"Money worked out from API prices: Token spend, estimated value, usage history and the recap. Balances and charges a service reports stay in the currency it gives." = "API 가격으로 계산한 금액을 이 통화로 표시합니다(토큰 사용량, 사용분 추정 금액, 사용 기록, 리포트). 서비스가 직접 알려 주는 잔액과 청구 금액은 그 서비스의 통화로 표시합니다.";
+"Exchange rate" = "환율";
+"Rate source" = "환율 출처";
+"Your rate is used. Clear the field to use the day's rate." = "직접 입력한 환율을 사용합니다. 칸을 비우면 당일 환율로 돌아갑니다.";
+"The day's rate, updated %@. Type a rate to use your own." = "당일 환율이며 %@에 업데이트되었습니다. 직접 환율을 입력할 수도 있습니다.";
+"No rate yet, so estimates stay in US dollars. Type a rate, or wait for the day's." = "아직 환율이 없어 추정 금액은 미국 달러로 표시됩니다. 환율을 입력하거나 당일 환율을 받아올 때까지 기다려 주세요.";
+"US dollar" = "미국 달러";
+"Chinese yuan" = "중국 위안";
+"Hong Kong dollar" = "홍콩 달러";
+"New Taiwan dollar" = "신대만 달러";
+"Japanese yen" = "일본 엔";
+"South Korean won" = "대한민국 원";
+"Russian rouble" = "러시아 루블";

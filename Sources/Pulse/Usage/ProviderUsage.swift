@@ -879,14 +879,11 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
             ) + suffix
         }
 
-        /// The currency's narrow symbol, taken from a formatted zero so the
-        /// locale's own choice is used rather than a table of symbols here.
+        /// The currency's symbol as every other amount in Pulse writes it
+        /// (`Money.symbol`), so the ring's short figure and the card's full
+        /// one agree.
         private func symbol(_ locale: Locale) -> String {
-            0.formatted(
-                .currency(code: currency).presentation(.narrow)
-                    .precision(.fractionLength(0)).locale(locale)
-            )
-            .filter { !$0.isNumber && !$0.isWhitespace }
+            Money.symbol(currency, locale: locale)
         }
     }
 

@@ -1197,3 +1197,20 @@
 "Unclassified" = "Без категории";
 "These records do not report this token category separately." = "В этих записях эта категория токенов отдельно не указывается.";
 "Reported tokens without a usable category breakdown." = "Токены, для которых нет пригодной разбивки по категориям.";
+
+// Currency (Settings → General)
+"Currency" = "Валюта";
+"Show estimates in" = "Валюта оценок";
+"Money worked out from API prices: Token spend, estimated value, usage history and the recap. Balances and charges a service reports stay in the currency it gives." = "Суммы, рассчитанные по ценам API, показываются в этой валюте: расход токенов, оценочная стоимость, история расхода и итоги. Баланс и списания, о которых сообщает сервис, остаются в его валюте.";
+"Exchange rate" = "Курс";
+"Rate source" = "Источник курса";
+"Your rate is used. Clear the field to use the day's rate." = "Используется ваш курс. Очистите поле, чтобы вернуться к курсу дня.";
+"The day's rate, updated %@. Type a rate to use your own." = "Курс дня, обновлён %@. Можно ввести свой.";
+"No rate yet, so estimates stay in US dollars. Type a rate, or wait for the day's." = "Курса пока нет, поэтому оценки показываются в долларах США. Введите курс или дождитесь курса дня.";
+"US dollar" = "Доллар США";
+"Chinese yuan" = "Китайский юань";
+"Hong Kong dollar" = "Гонконгский доллар";
+"New Taiwan dollar" = "Новый тайваньский доллар";
+"Japanese yen" = "Японская иена";
+"South Korean won" = "Южнокорейская вона";
+"Russian rouble" = "Российский рубль";

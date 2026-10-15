@@ -1197,3 +1197,20 @@
 "Unclassified" = "未分類";
 "These records do not report this token category separately." = "來源未單獨記錄這類 token。";
 "Reported tokens without a usable category breakdown." = "來源記錄了這些 token，但沒有可用的分類明細。";
+
+// Currency (Settings → General)
+"Currency" = "貨幣";
+"Show estimates in" = "估算金額的貨幣";
+"Money worked out from API prices: Token spend, estimated value, usage history and the recap. Balances and charges a service reports stay in the currency it gives." = "依 API 價格算出的金額會換算成這種貨幣：Token 消耗、額度價值推算、用量紀錄與月報、年報。服務商自己回報的餘額和扣款仍以其提供的貨幣顯示。";
+"Exchange rate" = "匯率";
+"Rate source" = "匯率來源";
+"Your rate is used. Clear the field to use the day's rate." = "正在使用你填寫的匯率。清空即改用當日匯率。";
+"The day's rate, updated %@. Type a rate to use your own." = "當日匯率，更新於 %@。也可以填寫自己的匯率。";
+"No rate yet, so estimates stay in US dollars. Type a rate, or wait for the day's." = "尚無匯率，估算金額暫時仍以美元顯示。可以填寫匯率，或等待取得當日匯率。";
+"US dollar" = "美元";
+"Chinese yuan" = "人民幣";
+"Hong Kong dollar" = "港幣";
+"New Taiwan dollar" = "新臺幣";
+"Japanese yen" = "日圓";
+"South Korean won" = "韓元";
+"Russian rouble" = "盧布";
