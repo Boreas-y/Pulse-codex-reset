@@ -89,28 +89,24 @@ final class SettingsWindowController {
             backing: .buffered,
             defer: false
         )
-        // These two go together, and the pairing is the whole point.
+        // **The sidebar runs up behind the traffic lights**, as System
+        // Settings' does. AppKit gives a split view's sidebar that treatment
+        // only when the window has a toolbar and its content is a view
+        // *controller*: SwiftUI's `NavigationSplitView` then bridges to an
+        // `NSSplitViewController` with a sidebar item. Measured in a harness
+        // on macOS 26: an `NSHostingView` as the content view never got it,
+        // with or without `.fullSizeContentView` or a unified toolbar — which
+        // is what this window was, and why the sidebar used to start under a
+        // bar of its own. An `NSHostingController` with a unified toolbar does.
         //
-        // `.fullSizeContentView` lets the scrolling content run under the
-        // title bar, so it is *blurred away* as you scroll rather than being
-        // chopped off at a hard edge. Nothing is hidden at rest: AppKit
-        // reports the bar as a 52pt top safe area and the scroll view already
-        // insets by it.
-        //
-        // But that only works if something actually draws up there. A
-        // transparent title bar draws nothing, so the scrolled content came
-        // straight through and printed over "Pulse Settings" — which is the
-        // bug this pairing fixes. Opaque means AppKit's own material does the
-        // blurring.
-        //
-        // Measured, in case it comes up: the sidebar does *not* run behind the
-        // traffic lights either way. AppKit gives that treatment to an
-        // `NSSplitViewController` with a sidebar item, and SwiftUI's
-        // `NavigationSplitView` inside an `NSHostingView` doesn't get it —
-        // neither `.fullSizeContentView` nor a unified `NSToolbar` changes it.
+        // The title bar stays opaque. A transparent one drew nothing, and
+        // content scrolled under it printed over "Pulse Settings". With the
+        // toolbar, macOS fades scrolled content out beneath the title, so
+        // no separator line is drawn either.
+        window.toolbar = NSToolbar()
+        window.toolbarStyle = .unified
         window.titlebarAppearsTransparent = false
-        // The documented "hairline once content is scrolled under it" setting.
-        window.titlebarSeparatorStyle = .automatic
+        window.titlebarSeparatorStyle = .none
         window.isReleasedWhenClosed = false
         dock.track(window)
         window.onClose = { [weak self, weak window] in
@@ -119,12 +115,20 @@ final class SettingsWindowController {
             // window is named rather than read from `isVisible`.
             self?.dock.apply(closing: window)
         }
-        window.contentView = NSHostingView(
+        let content = NSHostingController(
             rootView: SettingsView(
                 store: store, settings: settings, placement: placement, update: update, alerts: alerts,
                 shortcuts: shortcuts, navigation: navigation, openRecap: openRecap
             )
         )
+        // Its minimum size, from the view's own frame, and no more: left to
+        // follow the content's ideal size, the window would resize itself to
+        // whatever pane was open.
+        content.sizingOptions = [.minSize]
+        window.contentViewController = content
+        // Setting a content view controller sizes the window to it; put back
+        // the size chosen above.
+        window.setContentSize(NSSize(width: 920, height: 660))
         return window
     }
 }

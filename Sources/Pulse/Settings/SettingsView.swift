@@ -112,9 +112,9 @@ struct SettingsView: View {
                 // land on the same width; `max` keeps a stretched sidebar from
                 // eating the pane.
                 .navigationSplitViewColumnWidth(min: 220, ideal: 240, max: 320)
-                // `.sidebar`, not `.automatic`: this window has no `NSToolbar` —
-                // see `SettingsWindowController` on why the title bar is left to
-                // AppKit — and automatic placement has nowhere to put the field.
+                // `.sidebar`, not `.automatic`: at the top of the list, under the
+                // traffic lights, as System Settings has it. Automatic would put
+                // the field in the window's toolbar, which carries only the title.
                 .searchable(
                     text: $search,
                     placement: .sidebar,
