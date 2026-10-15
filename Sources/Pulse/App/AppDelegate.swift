@@ -134,6 +134,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
     }
 
+    /// The Dock's Quit closes Pulse's windows rather than Pulse (`DockQuit`);
+    /// every other way of quitting quits.
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard DockQuit.isFromDock(NSAppleEventManager.shared().currentAppleEvent) else { return .terminateNow }
+        dock.closeWindows()
+        return .terminateCancel
+    }
+
     private func showProviderSelection(providers: Set<Provider>, isInitial: Bool) {
         let window = ProviderSetupWindowController(settings: settings, providers: providers, isInitial: isInitial)
         providerSetupWindow = window
