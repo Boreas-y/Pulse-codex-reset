@@ -1025,10 +1025,11 @@
 "Status page" = "ステータスページ";
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "%@ がステータスページで公表している内容です。このページを開いたときに読み込み、開いている間は 5 分ごとに更新します。";
 "90 days ago" = "90 日前";
+"%@ days ago" = "%@ 日前";
 "%@ uptime" = "稼働率 %@";
 "No data" = "データなし";
 "When a service is down" = "サービスに障害が起きたとき";
-"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex・Claude Code・Cursor・DeepSeek のそれぞれのステータスページに基づき、オンにしているものだけ通知します。";
+"From each provider's own status page, for the providers you have switched on and only about what their accounts run on." = "各サービスのステータスページに基づき、オンにしているサービスについて、アカウントが実際に使う部分だけを通知します。";
 "%@ reports %@." = "%@ の発表：%@。";
 "Back to normal: %@." = "復旧しました：%@。";
 "%@ (%@)" = "%@（%@）";

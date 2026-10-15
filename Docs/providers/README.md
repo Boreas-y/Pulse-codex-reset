@@ -205,6 +205,63 @@ Shared counting, cache filename, burn rate and estimate: [`../refresh-and-data.m
 
 Token-field differences (cache excluded vs included; per-turn vs running total): [claude-code.md](claude-code.md), [codex.md](codex.md).
 
+## Service status
+
+A provider with a status page Pulse can read gets a **Service status** group in its pane (`ServiceStatusGroup`) and, with **When a service is down** on, outage notifications ([../notifications.md](../notifications.md#a-service-outage-is-the-providers-word-about-its-service)). The catalogue is `StatusPage.of(_:minimaxSite:)` (`Providers/Status/StatusPage.swift`); one reader per platform beside it (`ServiceStatus+Statuspage`, `+IncidentIO`, `+Flashcat`, `+BetterStack`, `+Monitors`, `+Companies`).
+
+- **A page is a feed and two rules.** The feed (`StatusFeed`) is the company's and is read once per check for every provider on it — Cursor and Grok Bot, Kimi Code and Moonshot, Codex and the OpenAI Platform. `shows` picks the provider's rows: by id where the page has stable ids, by group where rows come and go (Kimi Code's, a row per model), never other companies' rows a page mirrors (Factory's Models, Kilo's Service Provider, Amp's suppliers, JetBrains' AI Providers, Windsurf's Netlify). `notifies` narrows that to what the account runs on — the API or the agent, not the marketing site.
+- **Bars only where the page publishes days.** Statuspage's uptime showcase, incident.io's impacts, Flashcat's payload, Better Stack's history, UptimeRobot's ratios and Google Cloud's incidents give days; Instatus, Upptime, Gatus, OpenCode, DeepInfra and IBM publish none Pulse can read, so those rows are the state now and no bars — never ninety green days nobody recorded. Zoom's page draws no bars for any row, and Cloudflare's answers the showcase with a 404. The uptime figure is the page's own, and left out where the page leaves it out (incident.io's `chart_only`).
+- **Found, not guessed** (2026-10-15): every address is the provider's own or the one its `status.` address redirects to, and every page was read with the request Pulse makes. A row that disappears makes the pane say it couldn't read the page rather than show nothing.
+
+| Provider | Page | Platform | Notified about |
+|---|---|---|---|
+| Claude Code | status.claude.com | Statuspage | Claude Code, Claude API |
+| Cursor | status.cursor.com | Statuspage | IDE, CLI, Cloud Agents (Grok Bot's row is Grok Bot's) |
+| Grok Bot | status.cursor.com | Statuspage | its row |
+| Copilot | githubstatus.com | Statuspage | Copilot, Copilot AI Model Providers (shown alone) |
+| Devin | devinstatus.com | Statuspage | Cloud Agent, Cloud Web Client |
+| Windsurf | status.windsurf.com | Statuspage | Cascade, Windsurf Tab |
+| Augment | status.augmentcode.com | Statuspage | API |
+| Factory | status.factory.ai | Statuspage | api.factory.ai, CLI, Desktop |
+| Kilo Code | status.kilo.ai | Statuspage | Kilo AI Gateway, Kilo Cloud Platform |
+| MiniMax | status.minimax.io / status.minimaxi.com, by site | Statuspage | the LLM row |
+| Kimi Code | status.moonshot.cn | Statuspage | the Kimi Code group |
+| Moonshot | status.moonshot.cn | Statuspage | Open API, Open Platform Portal |
+| Warp | status.warp.dev | Statuspage | agent harness, cloud agents, account services |
+| Manus | status.manus.im | Statuspage | all |
+| Venice | veniceai-status.com | Statuspage | Venice API |
+| ZoomMate | zoomstatus.com | Statuspage, state only | its row |
+| Replicate | cloudflarestatus.com | Statuspage, state only | its row |
+| Codex | status.openai.com | incident.io | the Codex group |
+| OpenAI Platform | status.openai.com | incident.io | the APIs group |
+| JetBrains AI | status.jetbrains.cloud | incident.io | JetBrains AI |
+| Amp | ampcodestatus.com | incident.io | Amp Agent, ampcode.com |
+| AIXY | status.aixy-gateway.com | incident.io | API |
+| ElevenLabs | status.elevenlabs.io | incident.io | the ElevenAPI group |
+| Notion AI | notion-status.com | incident.io | the Notion AI group |
+| Perplexity | status.perplexity.com | incident.io | API |
+| Poe | status.poe.com | incident.io | all |
+| v0 | v0-status.com | incident.io | Platform API, Website |
+| DeepSeek | status.deepseek.com | Flashcat | rows named "API" |
+| Hugging Face | status.huggingface.co | Better Stack | Hub, Spaces Proxy |
+| Chutes | status.chutes.ai | Better Stack | API Heartbeat |
+| Synthetic | status.synthetic.new | Better Stack (30 days) | the hosted models' section |
+| DevPass | status.llmgateway.io | Better Stack | Gateway |
+| Raycast AI | status.raycast.com | Better Stack | Raycast AI |
+| TypeSafe | status.typesafe.ai | Better Stack | api.typesafe.ai |
+| Zed | status.zed.dev | Instatus, state only | Agent, Edit Prediction |
+| GitKraken | cloud.gitkrakenstatus.com | Instatus, state only | API Services, Identity Services |
+| Atlas Cloud | atlascloud.instatus.com | Instatus, state only | all |
+| Command Code | status.commandcode.ai | Upptime, state only | all |
+| Cline Pass | status.cline.bot | Gatus, state only | all |
+| Hyper | status.charm.sh | UptimeRobot | Hyper Prod (shown alone) |
+| OpenCode Go | status.opencode.ai | its own, state only | Go |
+| DeepInfra | status.deepinfra.com | its own, state only | API |
+| IBM Bob | status.bob.ibm.com | its own, state only | Chat/Code Completion, Login/SSO |
+| Gemini | status.cloud.google.com | Google Cloud incidents | Gemini Code Assist |
+
+**Not here, and why:** xAI's (status.x.ai, for Grok and the xAI API) and Mistral's answer anything but a browser with a bot check; Volcengine's and xKiro's publish their state only inside the page's HTML; Alibaba Cloud's dashboard (Bailian, Qoder CN) marks a day with an event but not how bad it was; Kiro's is AWS's whole health dashboard; Antigravity and Qwen Cloud have no page of their own. Z.ai, GLM Coding, Ollama Cloud, Xiaomi MiMo, LongCat, Sakana, Codebuff, Neuralwatt, ZenMux, StepFun, Abacus, Nous Portal and T3 Chat have none; the self-hosted gateways (Sub2API, New API, LiteLLM and the rest) have nobody's.
+
 ## Adding a provider
 
 **New providers are profiled.** Write a `ProviderProfile` in its own file, `Sources/Pulse/Providers/Profiled/<Name>UsageService.swift`, carrying name, icon, credential kind, access sentence, key subtitle, route, balance and pacing flags, colour, setup slug, discovery hints and fetch. Add the case to `Provider` and one line to `Provider.profile` in `Profiled/ProfiledProviders.swift` — nothing else. Every case-by-case switch switches over `Provider.HandWrittenProvider` via `provider.handWritten` (nil for a profiled provider, whose answer then comes from the switch's `guard`/`else`), so a profiled case has no arm to add. `UsageStore` asks every primary account, profiled or not, side by side in one task group. Reference: [`Profiled/ClinePassUsageService.swift`](../../Sources/Pulse/Providers/Profiled/ClinePassUsageService.swift).

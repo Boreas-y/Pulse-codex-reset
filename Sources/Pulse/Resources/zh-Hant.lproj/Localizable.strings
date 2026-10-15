@@ -1025,10 +1025,11 @@
 "Status page" = "狀態頁";
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "以 %@ 狀態頁公布的為準。開啟此頁時讀取一次，頁面保持開啟期間每 5 分鐘更新。";
 "90 days ago" = "90 天前";
+"%@ days ago" = "%@ 天前";
 "%@ uptime" = "可用率 %@";
 "No data" = "無資料";
 "When a service is down" = "服務發生故障時";
-"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex、Claude Code、Cursor 和 DeepSeek，以各自的狀態頁為準，只通知你已開啟的服務。";
+"From each provider's own status page, for the providers you have switched on and only about what their accounts run on." = "以各服務商自己的狀態頁為準，只通知你已開啟的服務商，且只針對帳號實際用到的服務。";
 "%@ reports %@." = "%@ 公布：%@。";
 "Back to normal: %@." = "已恢復正常：%@。";
 "%@ (%@)" = "%@（%@）";

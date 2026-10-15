@@ -865,9 +865,9 @@ final class AppSettings {
         didSet { alertsOnFailureChanged(from: oldValue) }
     }
 
-    /// Say when a provider's own status page — Codex's, Claude Code's,
-    /// DeepSeek's — reports an outage: for whichever is switched on, and only
-    /// about what it runs on (`StatusPage.notifiesAbout`). Rules: `OutageMemory`.
+    /// Say when a provider's own status page reports an outage: for whichever
+    /// is switched on, and only about what it runs on
+    /// (`StatusPage.notifiesAbout`). Rules: `OutageMemory`.
     var alertsOnOutage = false {
         didSet { alertsOnOutageChanged(from: oldValue) }
     }

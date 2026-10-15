@@ -134,7 +134,7 @@ struct ServiceStatusTests {
     func cursorNotifies() throws {
         let components = try #require(ServiceStatus.statuspageComponents(from: try fixture("cursor-status-summary")))
         #expect(components.filter(StatusPage.cursor.notifiesAbout).map(\.name) == ["CLI", "Cloud Agents", "IDE"])
-        #expect(Provider.cursor.statusPage == .cursor)
+        #expect(StatusPage.of(.cursor) == .cursor)
         #expect(StatusPage.cursor.provider == .cursor)
     }
 

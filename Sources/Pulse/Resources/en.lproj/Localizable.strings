@@ -1025,10 +1025,11 @@
 "Status page" = "Status page";
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open.";
 "90 days ago" = "90 days ago";
+"%@ days ago" = "%@ days ago";
 "%@ uptime" = "%@ uptime";
 "No data" = "No data";
 "When a service is down" = "When a service is down";
-"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on.";
+"From each provider's own status page, for the providers you have switched on and only about what their accounts run on." = "From each provider's own status page, for the providers you have switched on and only about what their accounts run on.";
 "%@ reports %@." = "%@ reports %@.";
 "Back to normal: %@." = "Back to normal: %@.";
 "%@ (%@)" = "%@ (%@)";

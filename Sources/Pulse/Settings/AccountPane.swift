@@ -68,7 +68,7 @@ struct AccountPane: View {
 
             // The service, not the account, so every account of it shows
             // this; a switched-off one fetches nothing.
-            if let page = provider.statusPage, settings.isEnabled(account) {
+            if let page = settings.statusPage(for: provider), settings.isEnabled(account) {
                 ServiceStatusGroup(page: page)
             }
 

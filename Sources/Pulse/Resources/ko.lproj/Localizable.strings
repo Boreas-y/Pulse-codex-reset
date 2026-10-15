@@ -1025,10 +1025,11 @@
 "Status page" = "상태 페이지";
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "%@이(가) 상태 페이지에 공개한 내용입니다. 이 페이지를 열 때 읽어 오고, 열려 있는 동안 5분마다 업데이트합니다.";
 "90 days ago" = "90일 전";
+"%@ days ago" = "%@일 전";
 "%@ uptime" = "가동률 %@";
 "No data" = "데이터 없음";
 "When a service is down" = "서비스에 장애가 있을 때";
-"Codex, Claude Code, Cursor and DeepSeek, from their own status pages — only the ones you have switched on." = "Codex, Claude Code, Cursor, DeepSeek 각각의 상태 페이지를 기준으로, 켜 둔 서비스만 알립니다.";
+"From each provider's own status page, for the providers you have switched on and only about what their accounts run on." = "각 서비스의 상태 페이지를 기준으로, 켜 둔 서비스에 대해 계정이 실제로 쓰는 부분만 알립니다.";
 "%@ reports %@." = "%@ 발표: %@.";
 "Back to normal: %@." = "정상으로 돌아왔습니다: %@.";
 "%@ (%@)" = "%@ (%@)";

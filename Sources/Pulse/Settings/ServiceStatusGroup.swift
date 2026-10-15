@@ -3,7 +3,8 @@ import SwiftUI
 
 /// How the provider says its service is doing, drawn the way its status page
 /// draws it: per component, the state now, one bar a day for about ninety
-/// days, and the page's uptime figure between "90 days ago" and "Today".
+/// days, and the page's uptime figure between "90 days ago" and "Today" — the
+/// bars only where the page publishes its days.
 ///
 /// **The provider's word, and said to be.** Pulse does not test the service;
 /// the footnote names who reports it, the uptime is the page's own figure,
@@ -86,7 +87,13 @@ private struct ServiceStatusRow: View {
                     .frame(height: 24)
 
                 HStack(spacing: 8) {
-                    Text(localized: "90 days ago")
+                    // The page's own words: ninety days back, whether it
+                    // draws ninety bars or ninety-one; Synthetic's draws thirty.
+                    if component.days.count >= 90 {
+                        Text(localized: "90 days ago")
+                    } else {
+                        Text(localized: "\(String(component.days.count)) days ago")
+                    }
                     rule
                     if let uptime = component.uptime {
                         Text(localized: "\(Self.percent(uptime)) uptime")
@@ -149,42 +156,39 @@ private struct DayBars: View {
     }
 }
 
-/// Each page's own colours, taken off the page (2026-10-04): incident.io's
-/// for OpenAI, Claude's Statuspage theme for Claude, Flashcat's for DeepSeek;
-/// Cursor's Statuspage theme (2026-10-15).
+/// Each page's own colours where they were taken off it — incident.io's for
+/// OpenAI (2026-10-04), Claude's and Cursor's Statuspage themes, Flashcat's
+/// for DeepSeek — and otherwise its platform's defaults: Statuspage's stock
+/// theme, incident.io's, and a plain set for the rest. A Statuspage page's
+/// bars come in its own colours whatever this says (`Day.rgb`).
 private struct StatusPalette {
-    let page: StatusPage
+    /// Operational, degraded, partial outage, full outage, maintenance.
+    let colours: [UInt32]
+    /// Statuspage's bars are square; the others round theirs.
+    let barCornerRadius: CGFloat
 
-    init(_ page: StatusPage) { self.page = page }
-
-    /// incident.io and Flashcat round their bars; Statuspage's are square.
-    var barCornerRadius: CGFloat { page == .claude || page == .cursor ? 0 : 1.5 }
+    init(_ page: StatusPage) {
+        switch (page.host, page.feed) {
+        case ("status.openai.com", _): colours = [0x24C19A, 0xFBBF24, 0xF5785C, 0xF87171, 0x60A5FA]
+        case ("status.claude.com", _): colours = [0x76AD2A, 0xFAA72A, 0xE86235, 0xE04343, 0x2C84DB]
+        case ("status.cursor.com", _): colours = [0x1E8542, 0xF1C40F, 0xB35E14, 0xDE2F1B, 0x207AB6]
+        case (_, .statuspage): colours = [0x2FCC66, 0xF1C40F, 0xE67E22, 0xE74C3C, 0x3498DB]
+        // incident.io's own; maintenance not seen on OpenAI's page.
+        case (_, .incidentIO): colours = [0x24C19A, 0xFBBF24, 0xF5785C, 0xF87171, 0x60A5FA]
+        // Tailwind's, as Flashcat draws DeepSeek's.
+        default: colours = [0x22C55E, 0xEAB308, 0xF97316, 0xEF4444, 0x3B82F6]
+        }
+        if case .statuspage = page.feed { barCornerRadius = 0 } else { barCornerRadius = 1.5 }
+    }
 
     func colour(for state: ServiceStatus.State) -> Color {
-        switch (page, state) {
-        case (.openAI, .operational): Self.rgb(0x24C19A)
-        case (.openAI, .degraded): Self.rgb(0xFBBF24)
-        case (.openAI, .partialOutage): Self.rgb(0xF5785C)
-        case (.openAI, .fullOutage): Self.rgb(0xF87171)
-        // Not seen on the page; incident.io's blue.
-        case (.openAI, .maintenance): Self.rgb(0x60A5FA)
-        case (.claude, .operational): Self.rgb(0x76AD2A)
-        case (.claude, .degraded): Self.rgb(0xFAA72A)
-        case (.claude, .partialOutage): Self.rgb(0xE86235)
-        case (.claude, .fullOutage): Self.rgb(0xE04343)
-        case (.claude, .maintenance): Self.rgb(0x2C84DB)
-        case (.deepSeek, .operational): Self.rgb(0x22C55E)
-        case (.deepSeek, .degraded): Self.rgb(0xEAB308)
-        case (.deepSeek, .partialOutage): Self.rgb(0xF97316)
-        case (.deepSeek, .fullOutage): Self.rgb(0xEF4444)
-        // Not seen on the page; the same Tailwind set's blue.
-        case (.deepSeek, .maintenance): Self.rgb(0x3B82F6)
-        case (.cursor, .operational): Self.rgb(0x1E8542)
-        case (.cursor, .degraded): Self.rgb(0xF1C40F)
-        case (.cursor, .partialOutage): Self.rgb(0xB35E14)
-        case (.cursor, .fullOutage): Self.rgb(0xDE2F1B)
-        case (.cursor, .maintenance): Self.rgb(0x207AB6)
-        case (_, .unrecognised): .secondary
+        switch state {
+        case .operational: Self.rgb(colours[0])
+        case .degraded: Self.rgb(colours[1])
+        case .partialOutage: Self.rgb(colours[2])
+        case .fullOutage: Self.rgb(colours[3])
+        case .maintenance: Self.rgb(colours[4])
+        case .unrecognised: .secondary
         }
     }
 
@@ -206,7 +210,7 @@ private struct StatusPalette {
 }
 
 #Preview("Claude") {
-    ServiceStatusGroup(page: .claude)
+    ServiceStatusGroup(page: StatusPage.of(.claudeCode)!)
         .padding(24)
         .frame(width: 560)
 }

@@ -39,9 +39,9 @@ Billing-cycle length is 28 to 31 days, stored as a flat 30 with `reportsLength: 
 
 ## Service status
 
-Settings › Cursor › **Service status** (`ServiceStatus`, `ServiceStatusGroup`, `StatusPage.cursor`, added 2026-10-15): **every component status.cursor.com shows** — Automations, Review Agents, CLI, Cloud Agents, cursor.com, IDE, Origin and Grok Bot as of that day — each with the state now, ninety days of bars and the page's uptime figure. It is a **Statuspage** page like Claude's and is read the same way (`readStatuspage`): `/api/v2/summary.json` for the components, `/uptime_showcase?components=<ids>` for the history ([claude-code.md](claude-code.md#service-status)). Colours are the page's theme: operational `#1E8542`, degraded `#F1C40F`, partial `#B35E14`, major `#DE2F1B`, maintenance `#207AB6`; square bars.
+Settings › Cursor › **Service status** (`ServiceStatus`, `ServiceStatusGroup`, `StatusPage.of(.cursor)`, added 2026-10-15): **every component status.cursor.com shows but Grok Bot's** — Automations, Review Agents, CLI, Cloud Agents, cursor.com, IDE and Origin as of that day; Grok Bot's row is shown in Grok Bot's pane, from the same feed read once — each with the state now, ninety days of bars and the page's uptime figure. It is a **Statuspage** page like Claude's and is read the same way (`readStatuspage`): `/api/v2/summary.json` for the components, `/uptime_showcase?components=<ids>` for the history ([claude-code.md](claude-code.md#service-status)). Colours are the page's theme: operational `#1E8542`, degraded `#F1C40F`, partial `#B35E14`, major `#DE2F1B`, maintenance `#207AB6`; square bars.
 
-**The outage notification is narrower: the IDE, the CLI and Cloud Agents, by id** (`StatusPage.notifiesAbout`) — what the account's usage is spent through. Not cursor.com, Automations or Review Agents; not "Origin", which the page does not explain; not Grok Bot, a provider of its own ([grok-bot.md](grok-bot.md)), whose row is still shown here.
+**The outage notification is narrower: the IDE, the CLI and Cloud Agents, by id** (`StatusPage.notifiesAbout`) — what the account's usage is spent through. Not cursor.com, Automations or Review Agents; not "Origin", which the page does not explain; not Grok Bot, a provider of its own ([grok-bot.md](grok-bot.md)), whose row is its pane's.
 
 ## Grok Bot is not this card
 
