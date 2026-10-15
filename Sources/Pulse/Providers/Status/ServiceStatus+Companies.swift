@@ -11,14 +11,34 @@ import Foundation
 extension ServiceStatus {
     // MARK: - OpenCode
 
-    /// `/api/status`: one row per service, named as the page names them.
-    static func openCode(from data: Data) -> [Component]? {
+    /// `/api/status`: one row per service, named as the page names them,
+    /// with the bars the page draws — `history`, three hours a bar for about
+    /// two and a half days, each bar every service's state then. A service
+    /// the bar has no word for, or calls `unknown`, has no record there.
+    static func openCode(from data: Data, calendar: Calendar = .current) -> [Component]? {
         guard let feed = try? JSONDecoder().decode(OpenCodeFeed.self, from: data) else { return nil }
+        let buckets = feed.history.sorted { $0.start < $1.start }
         let components = feed.components.map { service in
-            Component(id: service.service, name: openCodeName(service.service), state: State(feedValue: service.status))
+            Component(
+                id: service.service,
+                name: openCodeName(service.service),
+                state: State(feedValue: service.status),
+                days: buckets.map { bucket in
+                    let start = Date(timeIntervalSince1970: bucket.start / 1000)
+                    let word = bucket.services[service.service]
+                    return Day(
+                        date: calendar.dateComponents([.year, .month, .day, .hour, .minute], from: start),
+                        state: word.flatMap { $0 == "unknown" ? nil : State(feedValue: $0) },
+                        hours: openCodeBarHours
+                    )
+                }
+            )
         }
         return components.isEmpty ? nil : components
     }
+
+    /// How long one of OpenCode's bars is: its buckets start three hours apart.
+    static let openCodeBarHours = 3
 
     /// The page's own names for the services the feed lists by id; one this
     /// build doesn't know is shown by its id.
@@ -36,16 +56,25 @@ extension ServiceStatus {
 
     private struct OpenCodeFeed: Decodable {
         let components: [Service]
+        let history: [Bucket]
 
-        enum CodingKeys: String, CodingKey { case components }
+        enum CodingKeys: String, CodingKey { case components, history }
 
         init(from decoder: any Decoder) throws {
-            components = try decoder.container(keyedBy: CodingKeys.self).lenient(.components)
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            components = try container.lenient(.components)
+            history = try container.lenient(.history)
         }
 
         struct Service: Decodable {
             let service: String
             let status: String
+        }
+
+        /// Milliseconds since 1970, and each service's word for the bar.
+        struct Bucket: Decodable {
+            let start: Double
+            let services: [String: String]
         }
     }
 

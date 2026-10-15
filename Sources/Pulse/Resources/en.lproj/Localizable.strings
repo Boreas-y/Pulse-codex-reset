@@ -1026,6 +1026,7 @@
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open.";
 "90 days ago" = "90 days ago";
 "%@ days ago" = "%@ days ago";
+"Now" = "Now";
 "%@ uptime" = "%@ uptime";
 "No data" = "No data";
 "When a service is down" = "When a service is down";

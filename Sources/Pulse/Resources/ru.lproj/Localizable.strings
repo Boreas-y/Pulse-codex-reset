@@ -1026,6 +1026,7 @@
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "По данным страницы статуса %@. Обновляется при открытии этой страницы и каждые пять минут, пока она открыта.";
 "90 days ago" = "90 дней назад";
 "%@ days ago" = "%@ дн. назад";
+"Now" = "Сейчас";
 "%@ uptime" = "Доступность %@";
 "No data" = "Нет данных";
 "When a service is down" = "При сбое сервиса";

@@ -119,7 +119,11 @@ private struct ServiceStatusRow: View {
                 HStack(spacing: 8) {
                     // The page's own words: ninety days back, whether it
                     // draws ninety bars or ninety-one; Synthetic's draws thirty.
-                    if component.days.count >= 90 {
+                    // Bars shorter than a day (OpenCode's three hours) run from
+                    // the first one's start to now.
+                    if let first = component.days.first, first.hours != nil {
+                        Text(verbatim: Self.start(of: first))
+                    } else if component.days.count >= 90 {
                         Text(localized: "90 days ago")
                     } else {
                         Text(localized: "\(String(component.days.count)) days ago")
@@ -129,7 +133,11 @@ private struct ServiceStatusRow: View {
                         Text(localized: "\(Self.percent(uptime)) uptime")
                         rule
                     }
-                    Text(localized: "Today")
+                    if component.days.first?.hours != nil {
+                        Text(localized: "Now")
+                    } else {
+                        Text(localized: "Today")
+                    }
                 }
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
@@ -147,14 +155,21 @@ private struct ServiceStatusRow: View {
             .frame(maxWidth: .infinity)
     }
 
+    /// When the first of a page's sub-day bars starts: "Oct 13, 09:00".
+    private static func start(of bar: ServiceStatus.Day) -> String {
+        guard let date = Calendar.current.date(from: bar.date) else { return "" }
+        return date.formatted(.dateTime.month(.abbreviated).day().hour().minute().locale(LocalizationSource.locale))
+    }
+
     /// The page's figure as it gives it: up to two decimals, none for 100.
     private static func percent(_ value: Double) -> String {
         (value / 100).formatted(.percent.precision(.fractionLength(0...2)).locale(LocalizationSource.locale))
     }
 }
 
-/// A bar a day, oldest on the left, at the page's own proportions: bars three
-/// units wide with two between, stretched across the row.
+/// A bar a day — or a bar a few hours, where the page draws them so —
+/// oldest on the left, at the page's own proportions: bars three units wide
+/// with two between, stretched across the row.
 private struct DayBars: View {
     let days: [ServiceStatus.Day]
     let palette: StatusPalette
@@ -182,6 +197,13 @@ private struct DayBars: View {
     private static func tooltip(_ day: ServiceStatus.Day, _ formatter: DateFormatter) -> String {
         let state = day.state?.title ?? String.localized("No data")
         guard let date = Calendar.current.date(from: day.date) else { return state }
+        // A bar shorter than a day says its hours: "Oct 13, 09:00–12:00".
+        if let hours = day.hours, let end = Calendar.current.date(byAdding: .hour, value: hours, to: date) {
+            let locale = LocalizationSource.locale
+            let from = date.formatted(.dateTime.month(.abbreviated).day().hour().minute().locale(locale))
+            let to = end.formatted(.dateTime.hour().minute().locale(locale))
+            return "\(from)–\(to) · \(state)"
+        }
         return "\(formatter.string(from: date)) · \(state)"
     }
 }

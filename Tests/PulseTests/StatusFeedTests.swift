@@ -187,12 +187,25 @@ struct StatusFeedTests {
 
     // MARK: - Companies' own
 
-    @Test("OpenCode: the page's names for its services")
+    @Test("OpenCode: the page's names for its services, and its three-hour bars")
     func openCode() throws {
-        let feed = data(#"{"status":"operational","components":[{"service":"go","status":"degraded"},{"service":"payg","status":"unknown"},{"service":"new","status":"operational"}]}"#)
-        let components = try #require(ServiceStatus.openCode(from: feed))
+        let feed = data("""
+        {"status":"operational","components":[{"service":"go","status":"degraded"},{"service":"payg","status":"unknown"},{"service":"new","status":"operational"}],
+         "history":[{"start":1792033200000,"services":{"go":"degraded","payg":"operational"}},
+                    {"start":1792022400000,"services":{"go":"unknown","payg":"operational"}}]}
+        """)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        let components = try #require(ServiceStatus.openCode(from: feed, calendar: calendar))
         #expect(components.map(\.name) == ["Go", "Pay-as-you-go", "new"])
         #expect(components.map(\.state) == [.degraded, .unrecognised, .operational])
+        // Oldest first; "unknown", or no word at all, is no record.
+        let go = components[0]
+        #expect(go.days.map(\.state) == [nil, .degraded])
+        #expect(go.days.allSatisfy { $0.hours == 3 })
+        #expect(go.days.first?.date.hour == 0)
+        #expect(go.days.last?.date.hour == 3)
+        #expect(components[2].days.map(\.state) == [nil, nil])
     }
 
     @Test("DeepInfra: its services, not its models")

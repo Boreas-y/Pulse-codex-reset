@@ -1026,6 +1026,7 @@
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "以 %@ 状态页公布的为准。打开此页时读取一次，页面保持打开期间每 5 分钟更新。";
 "90 days ago" = "90 天前";
 "%@ days ago" = "%@ 天前";
+"Now" = "现在";
 "%@ uptime" = "可用率 %@";
 "No data" = "无数据";
 "When a service is down" = "服务出故障时";

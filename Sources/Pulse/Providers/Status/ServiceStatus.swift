@@ -92,6 +92,10 @@ struct ServiceStatus: Equatable, Sendable {
         /// The colour the page drew, where it says: status.claude.com grades a
         /// day by how long it was out, which a state alone can't. 0xRRGGBB.
         var rgb: UInt32?
+        /// Hours, for a page whose bars are shorter than a day — OpenCode's
+        /// are three — with `date` carrying the hour the bar starts; nil for
+        /// a day.
+        var hours: Int?
     }
 
     struct Component: Equatable, Sendable, Identifiable {
@@ -156,7 +160,7 @@ struct ServiceStatus: Equatable, Sendable {
         case .uptimeRobot(let url):
             return await fetch(url).flatMap(uptimeRobot)
         case .openCode(let url):
-            return await fetch(url).flatMap(openCode)
+            return await fetch(url).flatMap { openCode(from: $0) }
         case .deepInfra(let url):
             return await fetch(url).flatMap(deepInfra)
         case .ibmBob(let url):

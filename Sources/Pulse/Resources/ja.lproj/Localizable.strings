@@ -1026,6 +1026,7 @@
 "As %@ reports it on its status page, read when this page opens and every five minutes while it stays open." = "%@ がステータスページで公表している内容です。このページを開いたときに読み込み、開いている間は 5 分ごとに更新します。";
 "90 days ago" = "90 日前";
 "%@ days ago" = "%@ 日前";
+"Now" = "現在";
 "%@ uptime" = "稼働率 %@";
 "No data" = "データなし";
 "When a service is down" = "サービスに障害が起きたとき";
