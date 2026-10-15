@@ -63,7 +63,7 @@ struct DeepSeekUsageService: Sendable {
         request.timeoutInterval = 15
 
         let keyed: ProviderUsage
-        if let (data, response) = try? await NetworkSession.shared.data(for: request) {
+        if let (data, response) = try? await NetworkSession.shared.recordedData(for: request) {
             keyed = reading(data: data, status: (response as? HTTPURLResponse)?.statusCode)
         } else {
             keyed = .unavailable(.deepSeek, reason: .unreachable)

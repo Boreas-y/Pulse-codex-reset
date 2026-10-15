@@ -47,7 +47,7 @@ struct CursorUsageService: Sendable {
         let http = URLSession(configuration: configuration, delegate: NoRedirects(), delegateQueue: nil)
         defer { http.invalidateAndCancel() }
 
-        guard let (data, response) = try? await http.data(for: request) else {
+        guard let (data, response) = try? await http.recordedData(for: request) else {
             return .unavailable(.cursor, reason: .unreachable)
         }
 

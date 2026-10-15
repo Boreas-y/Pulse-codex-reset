@@ -326,7 +326,7 @@ struct AntigravityUsageService: Sendable {
         )
         defer { session.finishTasksAndInvalidate() }
 
-        guard let (data, response) = try? await session.data(for: request) else {
+        guard let (data, response) = try? await session.recordedData(for: request) else {
             return .failure(.wrongPort)
         }
 

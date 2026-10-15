@@ -1215,3 +1215,10 @@
 "Japanese yen" = "Japanese yen";
 "South Korean won" = "South Korean won";
 "Russian rouble" = "Russian rouble";
+
+// Connection diagnostics: server replies
+"Server replies" = "Server replies";
+"Copy replies" = "Copy replies";
+"No reply" = "No reply";
+"Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check." = "Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check.";
+"%@ bytes, not text" = "%@ bytes, not text";

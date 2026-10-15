@@ -1215,3 +1215,10 @@
 "Japanese yen" = "일본 엔";
 "South Korean won" = "대한민국 원";
 "Russian rouble" = "러시아 루블";
+
+// Connection diagnostics: server replies
+"Server replies" = "서버 원본 응답";
+"Copy replies" = "응답 복사";
+"No reply" = "응답 없음";
+"Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check." = "인증 정보는 가렸습니다. 응답에 계정의 이메일, 요금제, 잔액이 들어 있을 수 있어 공유용 진단 정보에는 넣지 않습니다. 다음 확인 때 바뀝니다.";
+"%@ bytes, not text" = "%@바이트, 텍스트 아님";

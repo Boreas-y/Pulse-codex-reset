@@ -213,7 +213,7 @@ struct XiaomiMiMoClient: Sendable {
         request.setValue("https://\(Self.host)", forHTTPHeaderField: "Origin")
         request.setValue(Self.consoleURL.absoluteString, forHTTPHeaderField: "Referer")
 
-        let (data, response) = try await (session ?? NetworkSession.shared).data(for: request)
+        let (data, response) = try await (session ?? NetworkSession.shared).recordedData(for: request)
         guard let http = response as? HTTPURLResponse else {
             throw XiaomiMiMoError.unreadableReply("no HTTP response")
         }

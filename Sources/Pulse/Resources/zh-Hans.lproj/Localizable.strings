@@ -1215,3 +1215,10 @@
 "Japanese yen" = "日元";
 "South Korean won" = "韩元";
 "Russian rouble" = "卢布";
+
+// Connection diagnostics: server replies
+"Server replies" = "服务器原始回应";
+"Copy replies" = "复制回应";
+"No reply" = "没有回应";
+"Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check." = "凭证已隐藏。回应中仍可能有账号的邮箱、套餐或余额，因此不会放进可分享的诊断信息。下次检查时替换。";
+"%@ bytes, not text" = "%@ 字节，不是文本";

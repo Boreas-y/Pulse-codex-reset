@@ -327,7 +327,7 @@ enum MistralUsageService {
     static func data(for request: URLRequest, session: URLSession? = nil) async
         -> Result<Data, ProviderUsage.Unavailability> {
         guard let (data, response) = try? await (session ?? NetworkSession.shared)
-                .data(for: request, delegate: StayPut.shared),
+                .recordedData(for: request, delegate: StayPut.shared),
               let http = response as? HTTPURLResponse
         else { return .failure(.unreachable) }
         return status(ProfileHTTP.Reply(data: data, status: http.statusCode))

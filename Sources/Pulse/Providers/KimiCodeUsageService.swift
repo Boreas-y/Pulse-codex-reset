@@ -33,7 +33,7 @@ struct KimiCodeUsageService: Sendable {
         request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 15
 
-        guard let (data, response) = try? await NetworkSession.shared.data(for: request) else {
+        guard let (data, response) = try? await NetworkSession.shared.recordedData(for: request) else {
             return .unavailable(.kimiCode, reason: .unreachable)
         }
 

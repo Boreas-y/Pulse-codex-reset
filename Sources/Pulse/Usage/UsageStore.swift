@@ -628,7 +628,9 @@ final class UsageStore {
         } else {
             key = apiKeys[provider]
         }
-        return services.fetch(for: account, key: key)
+        // Every request the check makes is recorded for the diagnostics.
+        let fetch = services.fetch(for: account, key: key)
+        return { await ResponseLog.capture(fetch) }
     }
 
     /// Asks every account at once and returns the answers in the order given.
@@ -659,6 +661,7 @@ final class UsageStore {
         guard isHoldingBack, raw.state == .unavailable(.unreachable) else { return raw }
         var named = ProviderUsage.unavailable(raw.account, reason: .systemProxyOff)
         named.attempts = raw.attempts
+        named.responses = raw.responses
         named.origin = raw.origin
         named.sourceScope = raw.sourceScope
         return named
@@ -702,6 +705,10 @@ final class UsageStore {
     /// restored cache through the alert rules would announce a fortnight of
     /// crossings the moment the app opened.
     private func commit(_ fetched: ProviderUsage, raw: ProviderUsage, for id: String) {
+        // The replies belong to the diagnostics, not to the table every view
+        // of the panel reads.
+        var fetched = fetched
+        fetched.responses = []
         usage[id] = fetched
         diagnostics[id] = ConnectionDiagnostic(
             raw: raw.recordingSoleRoute(), displayed: fetched,

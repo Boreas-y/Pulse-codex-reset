@@ -793,6 +793,11 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
     /// under the limits; never the ring, and never a reading on their own.
     var metrics: [UsageMetric] = []
 
+    /// What the servers said during the check that produced this reading,
+    /// for the connection diagnostics (`ResponseLog`). Only on a raw reading
+    /// fresh from a check; the table the panel draws from never keeps it.
+    var responses: [ResponseLog.Entry] = []
+
     var origin: UsageRoute?
     /// The account *and organization* the figures belong to, where the route
     /// can name them.
