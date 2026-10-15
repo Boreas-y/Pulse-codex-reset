@@ -11,7 +11,7 @@ Two places, in this order:
 1. A key pasted into Settings (`keys.dat`). It wins — otherwise a stale key left behind by OpenCode would quietly override a deliberate choice.
 2. What OpenCode saved for itself in `~/.local/share/opencode/auth.json`. Anyone already signed in there configures nothing.
 
-A key the service refuses reports `.apiKeyRefused`, **not** `.signInRequired` (that message names Codex). There is no `.openCodeKeyRefused` case.
+A key the service refuses reports `.apiKeyRefused`, **not** `.signInRequired` (that message names Codex). There is no `.openCodeKeyRefused` case. **A 403 is not always the key** (`OpenCodeGoUsageService.refusal`): a valid key whose workspace has no Go subscription gets `403` with `"type":"EntitlementError"` ("OpenCode Go subscription required.", measured 2026-10-15) and reports `.noPlan`; calling it a refused key sent people to replace a key that worked. A 401, and any other 403, is the key.
 
 ### The console session (second credential)
 
@@ -19,7 +19,7 @@ Settings › OpenCode Go › **OpenCode console** reads the signed-in console's 
 
 It answers two things:
 
-1. **The plan's limits**, when there is no key at all, or the key route came back `.apiKeyRefused` / `.unreachable` / `.serverError` / `.unreadableReply`. Never instead of a key that works. Reading: `origin = .webSession`.
+1. **The plan's limits**, when there is no key at all, or the key route came back `.apiKeyRefused` / `.noPlan` (the key's workspace has no Go, the session's may) / `.unreachable` / `.serverError` / `.unreadableReply`. Never instead of a key that works. Reading: `origin = .webSession`.
 2. **The account's request log** for the detailed card ([../ui/panel-geometry.md](../ui/panel-geometry.md#detailed-card)).
 
 ## Route
