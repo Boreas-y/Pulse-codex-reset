@@ -196,7 +196,7 @@ struct ServiceStatus: Equatable, Sendable {
         request.setValue(accept, forHTTPHeaderField: "Accept")
 
         guard
-            let (data, response) = try? await NetworkSession.shared.data(for: request),
+            let (data, response) = try? await NetworkSession.shared.recordedData(for: request),
             (response as? HTTPURLResponse)?.statusCode == 200
         else { return nil }
         return data

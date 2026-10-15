@@ -1222,3 +1222,8 @@
 "No reply" = "No reply";
 "Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check." = "Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check.";
 "%@ bytes, not text" = "%@ bytes, not text";
+
+// Service status: why a read failed
+"No request was made." = "No request was made.";
+"The page answered, but not with anything Pulse reads for this provider." = "The page answered, but not with anything Pulse reads for this provider.";
+"The page answered HTTP %@." = "The page answered HTTP %@.";

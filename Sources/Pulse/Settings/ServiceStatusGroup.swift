@@ -17,6 +17,15 @@ struct ServiceStatusGroup: View {
 
     @State private var status: ServiceStatus?
     @State private var isReading = true
+    /// Why the last read came back with nothing (`ResponseLog.failure`).
+    @State private var failure: String?
+    /// Bumped by Refresh, which reads again at once.
+    @State private var refreshes = 0
+
+    private struct Trigger: Hashable {
+        let page: StatusPage
+        let refreshes: Int
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -31,14 +40,29 @@ struct ServiceStatusGroup: View {
                         ProgressView().controlSize(.small)
                     }
                 } else {
-                    SettingsRow(String.localized("Couldn't read the status page.")) { EmptyView() }
+                    SettingsRow(String.localized("Couldn't read the status page."), subtitle: failure) { EmptyView() }
                 }
 
                 SettingsRowDivider()
 
                 SettingsRow(String.localized("Status page"), subtitle: page.host) {
-                    Button(String.localized("Open")) {
-                        NSWorkspace.shared.open(page.address)
+                    HStack(spacing: 8) {
+                        // Reads again now, rather than at the next five-minute
+                        // turn; the rows already shown stay until it answers.
+                        Button {
+                            refreshes += 1
+                        } label: {
+                            if isReading, status != nil {
+                                ProgressView().controlSize(.small)
+                            } else {
+                                Text(localized: "Refresh")
+                            }
+                        }
+                        .disabled(isReading)
+
+                        Button(String.localized("Open")) {
+                            NSWorkspace.shared.open(page.address)
+                        }
                     }
                 }
             }
@@ -49,19 +73,25 @@ struct ServiceStatusGroup: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 4)
         }
-        // Read on opening and again every `checkInterval` while open; leaving
-        // the pane cancels it. A later read that fails replaces the rows with
-        // "couldn't read" rather than leaving old ones to pass for current.
-        .task(id: page) {
-            isReading = true
-            status = nil
+        // Read on opening, on Refresh, and again every `checkInterval` while
+        // open; leaving the pane cancels it. A later read that fails replaces
+        // the rows with "couldn't read" and why, rather than leaving old ones
+        // to pass for current.
+        .task(id: Trigger(page: page, refreshes: refreshes)) {
             while !Task.isCancelled {
-                let read = await ServiceStatus.read(page)
+                isReading = true
+                let (read, replies) = await ResponseLog.capturing { await ServiceStatus.read(page) }
                 guard !Task.isCancelled else { return }
                 status = read
+                failure = read == nil ? ResponseLog.failure(of: replies) : nil
                 isReading = false
                 try? await Task.sleep(for: ServiceStatus.checkInterval)
             }
+        }
+        // Another provider's pane: its own rows, never this one's.
+        .onChange(of: page) {
+            status = nil
+            failure = nil
         }
     }
 }

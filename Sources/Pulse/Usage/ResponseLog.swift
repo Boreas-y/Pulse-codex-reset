@@ -25,8 +25,9 @@ import Foundation
 ///
 /// Requests are recorded by `URLSession.recordedData(for:)`, which the
 /// providers use for every request they make while their check runs
-/// (`capture`). A request made outside a check — a sign-in, a status page —
-/// records nothing.
+/// (`capture`), and the status pages while their pane reads them
+/// (`capturing`, to say why a read failed). A request made outside either —
+/// a sign-in, the background outage check — records nothing.
 enum ResponseLog {
     struct Entry: Equatable, Sendable {
         let at: Date
@@ -66,10 +67,30 @@ enum ResponseLog {
     /// Runs one account's check with its requests recorded, and returns them
     /// with its reading.
     static func capture(_ check: @Sendable () async -> ProviderUsage) async -> ProviderUsage {
-        let collector = Collector()
-        var reading = await $collector.withValue(collector) { await check() }
-        reading.responses = collector.entries
+        var (reading, entries) = await capturing(check)
+        reading.responses = entries
         return reading
+    }
+
+    /// Runs `work` with its requests recorded, and returns them with its
+    /// result — a status page's read, for saying why it failed.
+    static func capturing<Value: Sendable>(_ work: @Sendable () async -> Value) async -> (Value, [Entry]) {
+        let collector = Collector()
+        let value = await $collector.withValue(collector) { await work() }
+        return (value, collector.entries)
+    }
+
+    /// Why a read came back with nothing, in one line: the last request that
+    /// got no 200 — its status, or its failure — or, when every request was
+    /// answered, that the answer was not one Pulse could use.
+    static func failure(of entries: [Entry]) -> String {
+        guard let failed = entries.last(where: { $0.status != 200 }) else {
+            return entries.isEmpty
+                ? String.localized("No request was made.")
+                : String.localized("The page answered, but not with anything Pulse reads for this provider.")
+        }
+        guard let status = failed.status else { return failed.body }
+        return String.localized("The page answered HTTP \(String(status)).")
     }
 
     static func record(_ request: URLRequest, response: URLResponse?, data: Data?, error: (any Error)?, at date: Date = Date()) {

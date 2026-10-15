@@ -1222,3 +1222,8 @@
 "No reply" = "沒有回應";
 "Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check." = "憑證已隱藏。回應中仍可能有帳號的電子郵件、方案或餘額，因此不會放進可分享的診斷資訊。下次檢查時取代。";
 "%@ bytes, not text" = "%@ 位元組，不是文字";
+
+// Service status: why a read failed
+"No request was made." = "沒有發出請求。";
+"The page answered, but not with anything Pulse reads for this provider." = "狀態頁有回應，但其中沒有 Pulse 能為這個服務商讀取的內容。";
+"The page answered HTTP %@." = "狀態頁回傳了 HTTP %@。";

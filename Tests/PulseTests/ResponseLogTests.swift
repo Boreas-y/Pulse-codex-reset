@@ -96,4 +96,15 @@ struct ResponseLogTests {
         #expect(long.count <= ResponseLog.bodyLimit + 2)
         #expect(!ResponseLog.text(of: Data([0xFF, 0xFE, 0x00, 0x81]), contentType: nil).isEmpty)
     }
+
+    @Test("A failed status page read says which request failed and how")
+    func failureLine() {
+        let request = URLRequest(url: URL(string: "https://status.example.com/api/status")!)
+        let ok = ResponseLog.Entry(at: Date(), method: "GET", address: "a", status: 200, contentType: nil, body: "{}", byteCount: 2)
+        let refused = ResponseLog.Entry(at: Date(), method: "GET", address: "b", status: 503, contentType: nil, body: "", byteCount: 0)
+        let dropped = ResponseLog.entry(request, response: nil, data: nil, error: URLError(.timedOut), at: Date())
+        #expect(ResponseLog.failure(of: [ok, refused]).contains("503"))
+        #expect(ResponseLog.failure(of: [dropped]).contains("-1001"))
+        #expect(ResponseLog.failure(of: [ok]) != ResponseLog.failure(of: []))
+    }
 }

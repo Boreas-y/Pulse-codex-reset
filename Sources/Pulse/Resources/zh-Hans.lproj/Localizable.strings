@@ -1222,3 +1222,8 @@
 "No reply" = "没有回应";
 "Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check." = "凭证已隐藏。回应中仍可能有账号的邮箱、套餐或余额，因此不会放进可分享的诊断信息。下次检查时替换。";
 "%@ bytes, not text" = "%@ 字节，不是文本";
+
+// Service status: why a read failed
+"No request was made." = "没有发出请求。";
+"The page answered, but not with anything Pulse reads for this provider." = "状态页有回应，但其中没有 Pulse 能为这个服务商读取的内容。";
+"The page answered HTTP %@." = "状态页返回了 HTTP %@。";

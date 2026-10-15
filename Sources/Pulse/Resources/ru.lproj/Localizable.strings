@@ -1222,3 +1222,8 @@
 "No reply" = "Нет ответа";
 "Credentials are hidden. A reply can still show the account's email, plan or balance, so it is not in the shared diagnostics. Kept until the next check." = "Учётные данные скрыты. В ответе всё же может быть почта аккаунта, тариф или баланс, поэтому он не входит в диагностику для отправки. Заменяется при следующей проверке.";
 "%@ bytes, not text" = "%@ байт, не текст";
+
+// Service status: why a read failed
+"No request was made." = "Запрос не отправлялся.";
+"The page answered, but not with anything Pulse reads for this provider." = "Страница ответила, но в ответе нет того, что Pulse читает для этого сервиса.";
+"The page answered HTTP %@." = "Страница ответила HTTP %@.";
