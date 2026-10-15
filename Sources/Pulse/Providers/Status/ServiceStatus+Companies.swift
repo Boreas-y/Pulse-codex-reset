@@ -12,22 +12,30 @@ extension ServiceStatus {
     // MARK: - OpenCode
 
     /// `/api/status`: one row per service, named as the page names them,
-    /// with the bars the page draws — `history`, three hours a bar for about
-    /// two and a half days, each bar every service's state then. A service
-    /// the bar has no word for, or calls `unknown`, has no record there.
-    static func openCode(from data: Data, calendar: Calendar = .current) -> [Component]? {
+    /// with the bars the page draws — the last seven days in three-hour
+    /// slots, 56 of them, aligned to UTC and ending with the slot now under
+    /// way. The feed's `history` fills the slots it covers (about two and a
+    /// half days); a slot it doesn't, or one it calls `unknown`, has no
+    /// record, as the page draws it. Checked against status.opencode.ai on
+    /// 2026-10-15: 56 bars, "Thu, Oct 8, 09:00–12:00 UTC" to "Today,
+    /// 06:00–09:00 UTC".
+    static func openCode(from data: Data, now: Date = Date(), calendar: Calendar = .current) -> [Component]? {
         guard let feed = try? JSONDecoder().decode(OpenCodeFeed.self, from: data) else { return nil }
-        let buckets = feed.history.sorted { $0.start < $1.start }
+        let slot = Double(openCodeBarHours * 3600)
+        let current = (now.timeIntervalSince1970 / slot).rounded(.down) * slot
+        let starts = (0..<openCodeBarCount).reversed().map { current - Double($0) * slot }
+        let buckets = Dictionary(feed.history.map { ($0.start / 1000, $0.services) }, uniquingKeysWith: { first, _ in first })
         let components = feed.components.map { service in
             Component(
                 id: service.service,
                 name: openCodeName(service.service),
                 state: State(feedValue: service.status),
-                days: buckets.map { bucket in
-                    let start = Date(timeIntervalSince1970: bucket.start / 1000)
-                    let word = bucket.services[service.service]
+                days: starts.map { start in
+                    let word = buckets[start]?[service.service]
                     return Day(
-                        date: calendar.dateComponents([.year, .month, .day, .hour, .minute], from: start),
+                        date: calendar.dateComponents(
+                            [.year, .month, .day, .hour, .minute], from: Date(timeIntervalSince1970: start)
+                        ),
                         state: word.flatMap { $0 == "unknown" ? nil : State(feedValue: $0) },
                         hours: openCodeBarHours
                     )
@@ -37,19 +45,20 @@ extension ServiceStatus {
         return components.isEmpty ? nil : components
     }
 
-    /// How long one of OpenCode's bars is: its buckets start three hours apart.
+    /// The page's bars: three hours each, seven days of them.
     static let openCodeBarHours = 3
+    static let openCodeBarCount = 56
 
     /// The page's own names for the services the feed lists by id; one this
     /// build doesn't know is shown by its id.
     static func openCodeName(_ id: String) -> String {
         switch id {
-        case "console": "Console"
-        case "logs": "Logs"
-        case "inference": "Inference"
+        case "console": "Console API"
+        case "logs": "Request logs"
+        case "inference": "Inference API"
         case "go": "Go"
         case "payg": "Pay-as-you-go"
-        case "free": "Free"
+        case "free": "Free inference"
         default: id
         }
     }

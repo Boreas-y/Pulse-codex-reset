@@ -28,8 +28,8 @@ enum StatusFeed: Hashable, Sendable {
     case gatus(URL)
     /// UptimeRobot: a public page's `getMonitorList`, ninety daily ratios.
     case uptimeRobot(URL)
-    /// OpenCode's own `/api/status`: the state, and the page's bars — three
-    /// hours each, for about two and a half days.
+    /// OpenCode's own `/api/status`: the state, and the page's bars — seven
+    /// days in three-hour slots.
     case openCode(URL)
     /// DeepInfra's own `/api/v1/status`, its services (not its models).
     case deepInfra(URL)

@@ -187,7 +187,7 @@ struct StatusFeedTests {
 
     // MARK: - Companies' own
 
-    @Test("OpenCode: the page's names for its services, and its three-hour bars")
+    @Test("OpenCode: the page's names, and its 56 three-hour slots ending with the one under way")
     func openCode() throws {
         let feed = data("""
         {"status":"operational","components":[{"service":"go","status":"degraded"},{"service":"payg","status":"unknown"},{"service":"new","status":"operational"}],
@@ -196,16 +196,20 @@ struct StatusFeedTests {
         """)
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "UTC")!
-        let components = try #require(ServiceStatus.openCode(from: feed, calendar: calendar))
+        // 1792033200 is a slot's start; an hour into it is still that slot.
+        let now = Date(timeIntervalSince1970: 1_792_033_200 + 3600)
+        let components = try #require(ServiceStatus.openCode(from: feed, now: now, calendar: calendar))
         #expect(components.map(\.name) == ["Go", "Pay-as-you-go", "new"])
         #expect(components.map(\.state) == [.degraded, .unrecognised, .operational])
-        // Oldest first; "unknown", or no word at all, is no record.
         let go = components[0]
-        #expect(go.days.map(\.state) == [nil, .degraded])
+        #expect(go.days.count == 56)
         #expect(go.days.allSatisfy { $0.hours == 3 })
-        #expect(go.days.first?.date.hour == 0)
-        #expect(go.days.last?.date.hour == 3)
-        #expect(components[2].days.map(\.state) == [nil, nil])
+        // The last slot is the one under way, the one before it three hours back.
+        #expect(go.days.last?.state == .degraded)
+        #expect(go.days[54].state == nil)  // "unknown" is no record
+        #expect(go.days[53].state == nil)  // outside the history
+        #expect(components[1].days[54].state == .operational)
+        #expect(go.days.last?.date.hour == calendar.component(.hour, from: Date(timeIntervalSince1970: 1_792_033_200)))
     }
 
     @Test("DeepInfra: its services, not its models")

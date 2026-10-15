@@ -119,10 +119,10 @@ private struct ServiceStatusRow: View {
                 HStack(spacing: 8) {
                     // The page's own words: ninety days back, whether it
                     // draws ninety bars or ninety-one; Synthetic's draws thirty.
-                    // Bars shorter than a day (OpenCode's three hours) run from
-                    // the first one's start to now.
-                    if let first = component.days.first, first.hours != nil {
-                        Text(verbatim: Self.start(of: first))
+                    // Bars shorter than a day (OpenCode's three hours) say how
+                    // many days they span, and end now.
+                    if let hours = component.days.first?.hours {
+                        Text(localized: "\(String(component.days.count * hours / 24)) days ago")
                     } else if component.days.count >= 90 {
                         Text(localized: "90 days ago")
                     } else {
@@ -155,12 +155,6 @@ private struct ServiceStatusRow: View {
             .frame(maxWidth: .infinity)
     }
 
-    /// When the first of a page's sub-day bars starts: "Oct 13, 09:00".
-    private static func start(of bar: ServiceStatus.Day) -> String {
-        guard let date = Calendar.current.date(from: bar.date) else { return "" }
-        return date.formatted(.dateTime.month(.abbreviated).day().hour().minute().locale(LocalizationSource.locale))
-    }
-
     /// The page's figure as it gives it: up to two decimals, none for 100.
     private static func percent(_ value: Double) -> String {
         (value / 100).formatted(.percent.precision(.fractionLength(0...2)).locale(LocalizationSource.locale))
@@ -168,8 +162,8 @@ private struct ServiceStatusRow: View {
 }
 
 /// A bar a day — or a bar a few hours, where the page draws them so —
-/// oldest on the left, at the page's own proportions: bars three units wide
-/// with two between, stretched across the row.
+/// oldest on the left, at the page's own proportions (`barProportions`),
+/// stretched across the row.
 private struct DayBars: View {
     let days: [ServiceStatus.Day]
     let palette: StatusPalette
@@ -182,12 +176,13 @@ private struct DayBars: View {
         formatter.setLocalizedDateFormatFromTemplate("yMMMd")
 
         return GeometryReader { geometry in
-            let unit = geometry.size.width / CGFloat(max(days.count * 5 - 2, 1))
-            HStack(spacing: unit * 2) {
+            let (bar, gap) = palette.barProportions
+            let unit = geometry.size.width / max(CGFloat(days.count) * (bar + gap) - gap, 1)
+            HStack(spacing: unit * gap) {
                 ForEach(Array(days.enumerated()), id: \.offset) { _, day in
                     RoundedRectangle(cornerRadius: palette.barCornerRadius, style: .continuous)
                         .fill(palette.colour(for: day))
-                        .frame(width: unit * 3)
+                        .frame(width: unit * bar)
                         .help(Self.tooltip(day, formatter))
                 }
             }
@@ -218,9 +213,25 @@ private struct StatusPalette {
     let colours: [UInt32]
     /// Statuspage's bars are square; the others round theirs.
     let barCornerRadius: CGFloat
+    /// A bar's width and the gap after it, in the same units: three and two
+    /// for ninety days; OpenCode's 56 are seven and two (2026-10-15).
+    let barProportions: (CGFloat, CGFloat)
+    /// How strongly a bar with no record is drawn. OpenCode's page draws most
+    /// of its week that way, barely there (6% white on its dark page); the
+    /// others have a few such days at most.
+    let noDataOpacity: Double
 
     init(_ page: StatusPage) {
+        if case .openCode = page.feed {
+            barProportions = (7, 2)
+            noDataOpacity = 0.1
+        } else {
+            barProportions = (3, 2)
+            noDataOpacity = 0.2
+        }
         switch (page.host, page.feed) {
+        // Its page's own (2026-10-15); it has no maintenance colour.
+        case (_, .openCode): colours = [0x3F7A55, 0xF2CF76, 0xF17471, 0xF17471, 0x3B82F6]
         case ("status.openai.com", _): colours = [0x24C19A, 0xFBBF24, 0xF5785C, 0xF87171, 0x60A5FA]
         case ("status.claude.com", _): colours = [0x76AD2A, 0xFAA72A, 0xE86235, 0xE04343, 0x2C84DB]
         case ("status.cursor.com", _): colours = [0x1E8542, 0xF1C40F, 0xB35E14, 0xDE2F1B, 0x207AB6]
@@ -248,7 +259,7 @@ private struct StatusPalette {
     /// with no record is drawn faint in both light and dark.
     func colour(for day: ServiceStatus.Day) -> Color {
         if let rgb = day.rgb { return Self.rgb(rgb) }
-        guard let state = day.state else { return Color.secondary.opacity(0.2) }
+        guard let state = day.state else { return Color.secondary.opacity(noDataOpacity) }
         return colour(for: state)
     }
 
