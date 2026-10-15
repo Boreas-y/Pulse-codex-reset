@@ -241,7 +241,7 @@ Pulse 只呈现各服务上报的数字，每个百分比都来自那份回复�
 | <img src="Docs/icons/junie.svg" width="24" height="24" alt=""> | **Junie** | `~/.junie/sessions/` | JetBrains AI |
 | | **Zed** | `~/Library/Application Support/Zed/threads/threads.db` | Zed |
 | | **Warp** | `~/.config/tokscale/warp-cache/` † | Warp |
-| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax Code** | `~/.config/tokscale/headless/mcode/` † | MiniMax |
+| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax Code** | `~/.minimax/v2/sessions/`（或 `~/.config/tokscale/headless/mcode/` 中的捕获 †） | MiniMax |
 | <img src="Docs/icons/openclaw.svg" width="24" height="24" alt=""> | **OpenClaw** | `~/.openclaw/agents/` | — |
 | <img src="Docs/icons/hermesagent.svg" width="24" height="24" alt=""> | **Hermes** | `~/.hermes/state.db` | — |
 | <img src="Docs/icons/goose.svg" width="24" height="24" alt=""> | **Goose** | `~/Library/Application Support/goose/sessions/sessions.db` | — |

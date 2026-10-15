@@ -17,7 +17,12 @@ import Foundation
 /// - `warp` reads a synced account snapshot that carries requests and money but
 ///   **no tokens at all**.
 /// - `hindsight` reads a JSONL ledger mirrored out of a self-hosted service.
-/// - `mcode` reads a captured `mcode exec --output-format stream-json` stream.
+/// - `mcode` reads a captured `mcode exec --output-format stream-json` stream
+///   — and, unlike the rest, MiniMax Code's own session log too, which the
+///   desktop app now writes as it runs (`MiniMaxCodeSessionReader`). Where that
+///   log has records, it is the reading and captures are left unread: the
+///   same work in both would otherwise count twice, and the two do not share
+///   an id to fold one into the other.
 ///
 /// Pulse itself does not log in, capture a cookie, call a language server or
 /// sync anything. `inputs` names the standard cache/capture location plus
@@ -51,7 +56,7 @@ enum CapturedUsageReaders {
         case "trae": [cache.appending(path: "trae-cache/sessions"), imported]
         case "warp": [cache.appending(path: "warp-cache"), imported]
         case "hindsight": [hindsightRoot(home: home, environment: environment), imported]
-        case "mcode": [cache.appending(path: "headless/mcode"), imported]
+        case "mcode": [MiniMaxCodeSessionReader.root(home: home), cache.appending(path: "headless/mcode"), imported]
         default: []
         }
     }
@@ -66,9 +71,28 @@ enum CapturedUsageReaders {
         case "trae": CapturedTraeReader.records(roots: roots)
         case "warp": CapturedWarpReader.records(roots: roots)
         case "hindsight": CapturedHindsightReader.records(roots: roots)
-        case "mcode": CapturedMcodeReader.records(roots: roots)
+        case "mcode": mcodeRecords(roots: roots)
         default: []
         }
+    }
+
+    /// MiniMax Code's own log where it has records, else the captures.
+    private static func mcodeRecords(roots: [URL]) -> [AgentUsageRecord] {
+        let native = roots.filter(isMiniMaxCodeLog)
+        let logged = MiniMaxCodeSessionReader.records(roots: native)
+        if !logged.isEmpty { return logged }
+        return CapturedMcodeReader.records(roots: roots.filter { !isMiniMaxCodeLog($0) })
+    }
+
+    private static func isMiniMaxCodeLog(_ root: URL) -> Bool {
+        root.standardizedFileURL.path.hasSuffix("/.minimax/v2/sessions")
+    }
+
+    /// Whether this read is a product's own log rather than an export or
+    /// capture: MiniMax Code's, once its session log has files. It decides the
+    /// ledger's origin (`AgentLedgers`).
+    static func readsOwnLog(client: String, roots: [URL]) -> Bool {
+        client == "mcode" && !MiniMaxCodeSessionReader.files(in: roots.filter(isMiniMaxCodeLog)).isEmpty
     }
 
     // MARK: - Roots
