@@ -18,7 +18,6 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     case zai
     case glmCoding
     case minimax
-    case minimaxCN
     case copilot
     case grok
     case grokBot
@@ -117,7 +116,6 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         case zai
         case glmCoding
         case minimax
-        case minimaxCN
         case copilot
         case grok
         case grokBot
@@ -192,10 +190,9 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         // knows, so it is the whole name.
         case .zai: "z.ai"
         case .glmCoding: "Zhipu"
-        // Same product, two storefronts and two accounts. There is no separate
-        // brand name for the mainland one, so the region is the distinction.
+        // One provider for both storefronts, minimax.io and minimaxi.com:
+        // which one is a setting (`AppSettings.minimaxSite`), as Qoder's is.
         case .minimax: "MiniMax"
-        case .minimaxCN: "MiniMax CN"
         case .copilot: "GitHub Copilot"
         // The account's pool is spent across every Grok product, not just
         // Grok Build's CLI, so the ring is about the account and the name
@@ -279,7 +276,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         case .zai, .glmCoding: "zai"
         // One mark for both, since there is only one brand. Two accounts of one
         // provider already share a mark on the rail; this is the same case.
-        case .minimax, .minimaxCN: "minimax"
+        case .minimax: "minimax"
         case .copilot: "github"
         case .grok: "grok"
         // The parent brand's mark rather than Grok's own, which is the one
@@ -336,7 +333,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         // ledger cannot read it yet. False here means "no history shown",
         // which is true today and better than a column of zeroes.
         case .kiro, .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
-             .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .grok, .grokBot,
+             .zai, .glmCoding, .minimax, .copilot, .grok, .grokBot,
              .volcengine, .commandCode, .deepSeek, .devin, .xiaomiMiMo, .sub2api,
              .newAPI, .v2ex, .qoder, .stepFun, .pulseExtension: false
         }
@@ -351,7 +348,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         return switch written {
         case .claudeCode, .codex, .kiro, .zai, .glmCoding: true
         case .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
-             .minimax, .minimaxCN, .copilot, .grok, .grokBot, .volcengine,
+             .minimax, .copilot, .grok, .grokBot, .volcengine,
              .commandCode, .deepSeek, .devin, .xiaomiMiMo,
              .sub2api, .newAPI, .v2ex, .qoder, .stepFun, .pulseExtension: false
         }
@@ -408,7 +405,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         return switch written {
         case .claudeCode, .codex, .volcengine, .devin, .antigravity: true
         case .kiro, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
-             .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .grok, .grokBot,
+             .zai, .glmCoding, .minimax, .copilot, .grok, .grokBot,
              .commandCode, .deepSeek, .xiaomiMiMo, .sub2api, .newAPI, .v2ex, .qoder, .stepFun,
              .pulseExtension: false
         }
@@ -446,7 +443,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
         // Either a choice of routes, or a key the user pastes: both are asked
         // about elsewhere, so there is nothing here to state.
         case .claudeCode, .codex, .antigravity, .openCodeGo, .kimiCode, .ollamaCloud,
-             .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .volcengine,
+             .zai, .glmCoding, .minimax, .copilot, .volcengine,
              .commandCode, .deepSeek, .devin, .xiaomiMiMo, .sub2api, .newAPI, .v2ex, .qoder, .stepFun:
             nil
         // Stated on its own pane, which names the program instead.
@@ -462,7 +459,7 @@ enum Provider: String, CaseIterable, Identifiable, Codable, Sendable {
     /// anyone on the plan who doesn't run the CLI on this Mac.
     var usesAPIKey: Bool {
         if let profile { return profile.credential != .localLogin }
-        return [.openCodeGo, .kimiCode, .ollamaCloud, .zai, .glmCoding, .minimax, .minimaxCN, .volcengine,
+        return [.openCodeGo, .kimiCode, .ollamaCloud, .zai, .glmCoding, .minimax, .volcengine,
          .commandCode, .deepSeek, .devin, .xiaomiMiMo, .sub2api, .newAPI,
          .v2ex, .qoder, .stepFun].contains(self)
     }

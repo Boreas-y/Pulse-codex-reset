@@ -30,7 +30,7 @@
   <img src="Docs/panel.webp" height="400" alt="リングにポインタを乗せると、すべての上限とリセット時刻を並べたカードが開きます">
 </p>
 
-- **77 のサービスをひと目で**——Claude Code、Codex、Cursor、GitHub Copilot、Antigravity、Kiro、Grok、DeepSeek、Kimi Code など。それぞれに専用のリングがあります。
+- **76 のサービスをひと目で**——Claude Code、Codex、Cursor、GitHub Copilot、Antigravity、Kiro、Grok、DeepSeek、Kimi Code など。それぞれに専用のリングがあります。
 - **Pulse のアカウントもサーバーもなし**——いまお使いのログインをそのまま使い、何も送り返しません。
 - **表示するのは実際の数字だけ**——使用率はすべてサービス自身が報告した値です。数少ない推定値にはそう明記し、サービスが数字を出さないときは、推測せずにそのことを表示します。
 - **ネイティブで控えめ**——Swift と SwiftUI 製で、macOS 26 では Liquid Glass。画面の左・右・上、または下の Dock の横に寄せられ、使っていないときは細い線に畳まれます。メニューバーだけで使うこともできます。
@@ -81,11 +81,11 @@
 
 ### マルチアカウントとローカル台帳
 - **マルチアカウント対応**：同じプロバイダの複数のサブスクリプション（Claude Code、Codex、Grok、Grok Bot）を並べて監視し、ラベルを付けられます。
-- **トークン使用量（設定内のみ）**：初期状態はオフです。ページ上部でオンにするとローカル記録を読み始め、オフにすると停止します。ログ・データベース・エクスポートを含む **54 のクライアントソース**に対応しています（Gemini CLI、Cline、Roo Code、OpenClaw、GitHub Copilot など）。Cursor や Trae などのエクスポート系ソースは、事前のエクスポートかキャプチャが必要です。これらはレールに表示する 77 のクォータプロバイダとは別物で、対応状況と実クライアントでの検証状況はソースごとに異なります。[ソースと対応範囲](Docs/token-spend-sources.md)。
+- **トークン使用量（設定内のみ）**：初期状態はオフです。ページ上部でオンにするとローカル記録を読み始め、オフにすると停止します。ログ・データベース・エクスポートを含む **54 のクライアントソース**に対応しています（Gemini CLI、Cline、Roo Code、OpenClaw、GitHub Copilot など）。Cursor や Trae などのエクスポート系ソースは、事前のエクスポートかキャプチャが必要です。これらはレールに表示する 76 のクォータプロバイダとは別物で、対応状況と実クライアントでの検証状況はソースごとに異なります。[ソースと対応範囲](Docs/token-spend-sources.md)。
 - **明確な使用量の推定**：直近 7 日を初期表示し、選んだ期間を記憶します。コストは公開 API 価格で算出し、サブスクリプションの請求額ではありません。価格が不明な場合やトークン数の集計が不完全な場合、時刻の詳細が分からない場合はその旨を表示します。トークン数を記録しないソースは、その旨をそのまま表示します。
 - **モデル詳細とチャート**：モデルを開くと、入力・出力・キャッシュのトークン数と推定コスト、記録に基づく日次・時間別チャート、エージェント別の内訳、並べ替えとページ送りができる詳細テーブルを表示します。チャートにポインタを合わせると、日付または時刻とそのトークン数を読み取れます。利用できない日次・時間別の内訳は「利用不可」と表示し、ゼロとはみなしません。
 - **月間まとめ・年間まとめ**：好きな月や年について、トークン使用量と同じローカル記録から、シェアしやすいカードをまとめて作ります。トークン数と概算金額、前の月との比較、毎日のカレンダー、いちばん作業する時間帯、使ったモデル・エージェント・プロジェクト、連続日数。毎月のサブスク料金を入れれば、何倍元を取ったかも出ます。各カードは画像として保存・コピー・共有でき、6 つの言語に対応。プロジェクト名はスイッチひとつで隠せます。トークン使用量のページから開けて、毎月 1 日に先月分ができたと知らせる通知もオンにできます。
-- **77 のプロバイダ**：Claude Code、Codex、Kiro、Antigravity、Cursor、GitHub Copilot、Grok、Grok Bot、OpenCode Go、Kimi Code、Ollama Cloud、z.ai、Zhipu、MiniMax（国際・中国本土）、Volcengine、Command Code、DeepSeek、Devin、Xiaomi Coding Plan、sub2api、New API、V2EX、Qoder、StepFun。ほかに Abacus AI、Aixy、Alibaba Coding Plan、Alibaba Token Plan、Amp、Atlas Cloud、Augment Code、Bifrost、Chutes、ClawRouter、ClinePass、Codebuff、DeepInfra、DevPass、ElevenLabs、Factory、Gemini、GitKraken AI、Hugging Face、Hyper、IBM Bob、JetBrains AI、Kilo Code、LiteLLM、LLM API Key Proxy、LongCat、Manus、Mistral、Moonshot、Neuralwatt、Notion AI、Nous Portal、OpenAI API、Perplexity、Poe、Qwen Cloud、Raycast AI、Replicate、Sakana AI、Synthetic、T3 Chat、TypeSafe、v0、Venice、Vercel AI Gateway、Warp、Windsurf、xAI API、xKiro、Zed、ZenMux、ZoomMate。
+- **76 のプロバイダ**：Claude Code、Codex、Kiro、Antigravity、Cursor、GitHub Copilot、Grok、Grok Bot、OpenCode Go、Kimi Code、Ollama Cloud、z.ai、Zhipu、MiniMax（国際・中国本土）、Volcengine、Command Code、DeepSeek、Devin、Xiaomi Coding Plan、sub2api、New API、V2EX、Qoder、StepFun。ほかに Abacus AI、Aixy、Alibaba Coding Plan、Alibaba Token Plan、Amp、Atlas Cloud、Augment Code、Bifrost、Chutes、ClawRouter、ClinePass、Codebuff、DeepInfra、DevPass、ElevenLabs、Factory、Gemini、GitKraken AI、Hugging Face、Hyper、IBM Bob、JetBrains AI、Kilo Code、LiteLLM、LLM API Key Proxy、LongCat、Manus、Mistral、Moonshot、Neuralwatt、Notion AI、Nous Portal、OpenAI API、Perplexity、Poe、Qwen Cloud、Raycast AI、Replicate、Sakana AI、Synthetic、T3 Chat、TypeSafe、v0、Venice、Vercel AI Gateway、Warp、Windsurf、xAI API、xKiro、Zed、ZenMux、ZoomMate。
 - **スクリプト可**：`Pulse --json` が最後の読み取り値——プラン、すべての上限、リセット時刻、数字がどれだけ古いか——を出力します。tmux、sketchybar、Raycast、シェルプロンプトにどうぞ。キャッシュを読むだけなので、ポーリングのコストはかかりません。
 - **開発者向け連携**：設定から Raycast 拡張と、そのまま設定できる tmux・sketchybar・シェルのスクリプトを書き出せます。アカウントのリンクは該当ペインを直接開きます。[セットアップガイド](Docs/integrations.md)。
 - **拡張機能**：自作の小さなプログラムで、1 つのアカウントの使用量（社内のクォータ API など）を Pulse のリングに表示できます。フォークを保守する必要はありません。オンにするまでは実行されず、Pulse が認証情報を渡すこともありません。中継サービスの応答時間など独自の指標も報告でき、カードに数値と推移のグラフが表示されます。[作り方](Docs/extensions.md)（英語）。
@@ -135,7 +135,7 @@ Pulse は各サービスが報告する数字をそのまま表示します。�
 | <img src="Docs/icons/kimi.svg" width="24" height="24" alt=""> | **Kimi Code** | API キーを直接 | 設定で構成 |
 | <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **z.ai** | API キーを直接 | 国際ストア（`api.z.ai`） |
 | <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **Zhipu** | API キーを直接、または保存済みの GLM ツール認証情報 | 中国本土ストア（`open.bigmodel.cn`） |
-| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax / MiniMax CN** | API キーを直接 | 国際（`minimax.io`）と中国本土（`minimaxi.com`）に対応 |
+| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax** | API キーを直接 | 国際（`minimax.io`）か中国本土（`minimaxi.com`）を設定で選択。キーはサイトごとに保存 |
 | <img src="Docs/icons/ollama.svg" width="24" height="24" alt=""> | **Ollama Cloud** | ブラウザのセッション Cookie | ブラウザからローカルで読み取り。詳細は [Docs/ollama-cloud.md](Docs/ollama-cloud.md) |
 | <img src="Docs/icons/volcengine.svg" width="24" height="24" alt=""> | **Volcengine** | `arkcli` ログイン、または貼り付けたアクセスキー（Top OpenAPI に署名） | Ark Coding / Agent プラン。自動では CLI より貼り付けたキーを優先 |
 | <img src="Docs/icons/commandcode.svg" width="24" height="24" alt=""> | **Command Code** | 貼り付けたキー、または `cmd login` がすでに保存したログイン | ドル建てのクレジット残高と、5時間・週ごとのローリング上限。月次プランの行は**推定**と表示 |

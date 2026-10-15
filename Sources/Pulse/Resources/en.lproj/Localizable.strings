@@ -695,6 +695,7 @@
 "No Qoder session found. Sign in at %@ first." = "No Qoder session found. Sign in at %@ first.";
 "Site" = "Site";
 "Where you signed in. Changing it clears the saved session." = "Where you signed in. Changing it clears the saved session.";
+"Where your key is from. Each site keeps its own key." = "Where your key is from. Each site keeps its own key.";
 "Sign in to StepFun's platform in a browser to see usage." = "Sign in to StepFun's platform in a browser to see usage.";
 "StepFun's saved session expired. Sign in again in your browser." = "StepFun's saved session expired. Sign in again in your browser.";
 "No Step Plan on this StepFun account." = "No Step Plan on this StepFun account.";

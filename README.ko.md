@@ -30,7 +30,7 @@
   <img src="Docs/panel.webp" height="400" alt="링에 포인터를 올리면 모든 한도와 초기화 시각을 담은 카드가 열립니다">
 </p>
 
-- **77개 서비스를 한눈에**——Claude Code, Codex, Cursor, GitHub Copilot, Antigravity, Kiro, Grok, DeepSeek, Kimi Code 등, 서비스마다 링이 하나씩 있습니다.
+- **76개 서비스를 한눈에**——Claude Code, Codex, Cursor, GitHub Copilot, Antigravity, Kiro, Grok, DeepSeek, Kimi Code 등, 서비스마다 링이 하나씩 있습니다.
 - **Pulse 계정도, Pulse 서버도 없습니다**——이미 쓰고 있는 로그인을 그대로 사용하며, 아무것도 되돌려 보내지 않습니다.
 - **실제 숫자만 보여 줍니다**——사용률은 모두 서비스가 직접 보고한 값입니다. 몇 안 되는 추정치는 추정이라고 표시하고, 서비스가 숫자를 주지 않으면 짐작하지 않고 그렇다고 알려 줍니다.
 - **네이티브하고 조용합니다**——Swift와 SwiftUI로 만들었고, macOS 26에서는 Liquid Glass로 그려집니다. 화면 왼쪽·오른쪽·위쪽, 또는 아래쪽 Dock 옆에 붙일 수 있고, 쓰지 않을 때는 가는 선으로 접히며, 메뉴 막대에만 둘 수도 있습니다.
@@ -81,11 +81,11 @@
 
 ### 다중 계정과 로컬 원장
 - **다중 계정 지원**: 같은 제공업체의 여러 구독(Claude Code, Codex, Grok, Grok Bot)을 나란히 모니터링하고 라벨을 붙일 수 있습니다.
-- **토큰 사용량(설정에서만)**: 기본값은 꺼짐입니다. 페이지 상단에서 켜면 로컬 기록을 읽기 시작하며, 끄면 스캔을 중단합니다. **54개 클라이언트 소스**의 로컬 로그, 데이터베이스, 내보내기 파일을 지원합니다. Gemini CLI, Cline, Roo Code, OpenClaw, GitHub Copilot 등이 포함됩니다. Cursor, Trae 및 기타 내보내기 소스는 사전 내보내기나 캡처가 필요합니다. 이는 레일의 77개 할당량 제공업체와는 다르며, 지원 범위와 실제 클라이언트 검증 여부는 소스마다 다릅니다. [소스와 지원 범위](Docs/token-spend-sources.md).
+- **토큰 사용량(설정에서만)**: 기본값은 꺼짐입니다. 페이지 상단에서 켜면 로컬 기록을 읽기 시작하며, 끄면 스캔을 중단합니다. **54개 클라이언트 소스**의 로컬 로그, 데이터베이스, 내보내기 파일을 지원합니다. Gemini CLI, Cline, Roo Code, OpenClaw, GitHub Copilot 등이 포함됩니다. Cursor, Trae 및 기타 내보내기 소스는 사전 내보내기나 캡처가 필요합니다. 이는 레일의 76개 할당량 제공업체와는 다르며, 지원 범위와 실제 클라이언트 검증 여부는 소스마다 다릅니다. [소스와 지원 범위](Docs/token-spend-sources.md).
 - **명확한 사용량 추정**: 기본적으로 최근 7일을 보여 주며 선택한 기간을 기억합니다. 비용은 공개된 API 가격으로 계산한 추정치이며 구독 청구액이 아닙니다. 가격을 알 수 없거나 집계가 불완전한 경우, 세부 시간 정보가 없는 경우에는 이를 표시합니다. 토큰 수 정보가 없는 소스는 그대로 표시합니다.
 - **모델 상세와 차트**: 모델을 열면 입력/출력/캐시 수치와 추정 비용, 기록이 뒷받침하는 일별·시간별 차트, 에이전트별 기여, 정렬과 페이지 이동이 가능한 상세 표를 볼 수 있습니다. 차트를 가리키면 해당 날짜나 시간과 토큰 수를 읽을 수 있습니다. 제공되지 않는 일별·시간별 상세는 0이 아니라 사용할 수 없음으로 표시됩니다.
 - **월간·연간 리포트**: 원하는 달이나 해를 골라, 토큰 사용량과 같은 로컬 기록으로 공유하기 좋은 카드 묶음을 만듭니다. 토큰 수와 예상 금액, 지난달 대비 변화, 하루하루를 담은 달력, 가장 많이 작업한 시간대, 사용한 모델·에이전트·프로젝트, 연속 사용일. 매달 내는 구독료를 입력하면 구독료의 몇 배를 썼는지도 보여 줍니다. 카드마다 이미지로 저장·복사·공유할 수 있고 여섯 가지 언어를 지원하며, 프로젝트 이름은 스위치 하나로 숨길 수 있습니다. 토큰 사용량 페이지에서 열고, 매달 1일에 지난달 리포트가 준비됐다고 알려 주는 알림도 켤 수 있습니다.
-- **일흔일곱 개 제공업체**: Claude Code, Codex, Kiro, Antigravity, Cursor, GitHub Copilot, Grok, Grok Bot, OpenCode Go, Kimi Code, Ollama Cloud, z.ai, Zhipu, MiniMax(국제 및 중국 본토), Volcengine, Command Code, DeepSeek, Devin, Xiaomi Coding Plan, sub2api, New API, V2EX, Qoder, StepFun. 그 밖에 Abacus AI, Aixy, Alibaba Coding Plan, Alibaba Token Plan, Amp, Atlas Cloud, Augment Code, Bifrost, Chutes, ClawRouter, ClinePass, Codebuff, DeepInfra, DevPass, ElevenLabs, Factory, Gemini, GitKraken AI, Hugging Face, Hyper, IBM Bob, JetBrains AI, Kilo Code, LiteLLM, LLM API Key Proxy, LongCat, Manus, Mistral, Moonshot, Neuralwatt, Notion AI, Nous Portal, OpenAI API, Perplexity, Poe, Qwen Cloud, Raycast AI, Replicate, Sakana AI, Synthetic, T3 Chat, TypeSafe, v0, Venice, Vercel AI Gateway, Warp, Windsurf, xAI API, xKiro, Zed, ZenMux, ZoomMate.
+- **일흔여섯 개 제공업체**: Claude Code, Codex, Kiro, Antigravity, Cursor, GitHub Copilot, Grok, Grok Bot, OpenCode Go, Kimi Code, Ollama Cloud, z.ai, Zhipu, MiniMax(국제 및 중국 본토), Volcengine, Command Code, DeepSeek, Devin, Xiaomi Coding Plan, sub2api, New API, V2EX, Qoder, StepFun. 그 밖에 Abacus AI, Aixy, Alibaba Coding Plan, Alibaba Token Plan, Amp, Atlas Cloud, Augment Code, Bifrost, Chutes, ClawRouter, ClinePass, Codebuff, DeepInfra, DevPass, ElevenLabs, Factory, Gemini, GitKraken AI, Hugging Face, Hyper, IBM Bob, JetBrains AI, Kilo Code, LiteLLM, LLM API Key Proxy, LongCat, Manus, Mistral, Moonshot, Neuralwatt, Notion AI, Nous Portal, OpenAI API, Perplexity, Poe, Qwen Cloud, Raycast AI, Replicate, Sakana AI, Synthetic, T3 Chat, TypeSafe, v0, Venice, Vercel AI Gateway, Warp, Windsurf, xAI API, xKiro, Zed, ZenMux, ZoomMate.
 - **스크립트 가능**: `Pulse --json`이 마지막으로 읽은 값——플랜, 모든 한도, 초기화 시각, 숫자가 얼마나 오래됐는지——을 출력합니다. tmux, sketchybar, Raycast, 셸 프롬프트에 쓰세요. 캐시만 읽으므로 폴링 비용이 들지 않습니다.
 - **개발자 통합**: 설정에서 Raycast 확장과 바로 설정할 수 있는 tmux, sketchybar, 셸 스크립트를 내보냅니다. 계정 링크는 해당 패널을 바로 엽니다. [설정 가이드](Docs/integrations.md).
 - **확장**: 직접 만든 작은 프로그램으로 계정 하나의 사용량(사내 할당량 API 등)을 Pulse 링에 표시할 수 있습니다. 포크를 따로 관리할 필요가 없습니다. 켜기 전에는 실행되지 않고, Pulse가 인증 정보를 넘기지도 않습니다. 중계 서비스의 응답 시간 같은 자체 지표도 보고할 수 있으며, 카드에 수치와 추이 그래프로 표시됩니다. [만드는 방법](Docs/extensions.md)(영문).
@@ -135,7 +135,7 @@ Pulse는 각 서비스가 보고하는 숫자를 그대로 보여 줍니다. 화
 | <img src="Docs/icons/kimi.svg" width="24" height="24" alt=""> | **Kimi Code** | API 키 직접 입력 | 설정에서 구성 |
 | <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **z.ai** | API 키 직접 입력 | 국제 스토어(`api.z.ai`) |
 | <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **Zhipu** | API 키 직접 입력 또는 저장된 GLM 도구 자격 증명 | 중국 본토 스토어(`open.bigmodel.cn`) |
-| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax / MiniMax CN** | API 키 직접 입력 | 국제(`minimax.io`)와 중국 본토(`minimaxi.com`) 지원 |
+| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax** | API 키 직접 입력 | 설정에서 국제(`minimax.io`) 또는 중국 본토(`minimaxi.com`) 선택, 사이트마다 키를 따로 저장 |
 | <img src="Docs/icons/ollama.svg" width="24" height="24" alt=""> | **Ollama Cloud** | 브라우저 세션 쿠키 | 브라우저에서 로컬로 읽음. [Docs/ollama-cloud.md](Docs/ollama-cloud.md) 참고 |
 | <img src="Docs/icons/volcengine.svg" width="24" height="24" alt=""> | **Volcengine** | `arkcli` 로그인, 없으면 붙여 넣은 액세스 키 쌍(Top OpenAPI 서명) | Ark Coding 및 Agent 플랜. 자동에서는 CLI보다 붙여 넣은 키를 우선 |
 | <img src="Docs/icons/commandcode.svg" width="24" height="24" alt=""> | **Command Code** | 붙여 넣은 키, 없으면 `cmd login`이 이미 저장한 로그인 | 달러 단위 크레딧 잔액과 롤링 5시간·주간 한도. 월간 플랜 행은 **추정**으로 표시 |

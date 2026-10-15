@@ -46,7 +46,7 @@ Per-provider pages: [claude-code.md](claude-code.md), [codex.md](codex.md), [kir
 
 Ollama Cloud, Xiaomi Coding Plan, Qoder and StepFun are the four hand-written providers read from a **browser session** rather than a key or another tool's files (the profiled ones with a browser credential are in [their table](#profiled-providers)); they share [`BrowserCookies.swift`](../../Sources/Pulse/Auth/BrowserCookies.swift) and nothing else, because what counts as a session differs per site and a shared filter would forward whichever cookie any one of them adds next. Qoder's filter is the one deny list among them, because its session cookie has no published name ([qoder.md](qoder.md)).
 
-Z.ai and GLM Coding Plan share [`ZaiUsageService.swift`](../../Sources/Pulse/Providers/ZaiUsageService.swift). MiniMax and MiniMax CN share [`MiniMaxUsageService.swift`](../../Sources/Pulse/Providers/MiniMaxUsageService.swift). Two rings, two accounts, two keys — not a region switch inside one provider.
+Z.ai and GLM Coding Plan share [`ZaiUsageService.swift`](../../Sources/Pulse/Providers/ZaiUsageService.swift). MiniMax's two sites are one provider with a site setting, each keeping its own key ([minimax.md](minimax.md)); Z.ai and GLM stay two rings, two accounts, two keys — not a region switch inside one provider.
 
 ## Subscriptions and API accounts
 
@@ -173,7 +173,7 @@ Do not paper over `.apiKeyMissing`, `.ollamaSessionMissing`, `.signedOut`, `.cla
 
 Not the same question as “does Settings draw a paste field”.
 
-- `usesAPIKey` — Settings paste UI; for a profiled provider, any credential but `.localLogin`. The hand-written ones: OpenCode Go, Kimi Code, Ollama Cloud, Z.ai, GLM Coding Plan, MiniMax, MiniMax CN, Volcengine, Command Code, DeepSeek, Devin, Xiaomi Coding Plan, sub2api, New API, V2EX, Qoder, StepFun. Volcengine’s, Command Code’s and Devin’s are **optional** — each has a route that needs nothing pasted. Devin’s field holds a token *and* an organization, whitespace-separated, and is only for a reader whose browser is not a Chromium ([devin.md](devin.md)). Ollama’s, Xiaomi’s, Qoder’s and StepFun’s value is a **session cookie** (`usesSessionCookie`); calling it an API key in Settings would send people looking for one that does not exist.
+- `usesAPIKey` — Settings paste UI; for a profiled provider, any credential but `.localLogin`. The hand-written ones: OpenCode Go, Kimi Code, Ollama Cloud, Z.ai, GLM Coding Plan, MiniMax, Volcengine, Command Code, DeepSeek, Devin, Xiaomi Coding Plan, sub2api, New API, V2EX, Qoder, StepFun. Volcengine’s, Command Code’s and Devin’s are **optional** — each has a route that needs nothing pasted. Devin’s field holds a token *and* an organization, whitespace-separated, and is only for a reader whose browser is not a Chromium ([devin.md](devin.md)). Ollama’s, Xiaomi’s, Qoder’s and StepFun’s value is a **session cookie** (`usesSessionCookie`); calling it an API key in Settings would send people looking for one that does not exist.
 - `keepsOwnCredential` — Pulse stores something in `keys.dat`: the paste providers **plus Copilot**. Reading `usesAPIKey` where *storage* was meant left a signed-in Copilot account reporting “sign in again”: the token was saved and then never loaded for the fetch.
 - Extra-account OAuth / Cursor web logins live in `accounts.dat`, not `keys.dat`. See [authentication.md](authentication.md).
 

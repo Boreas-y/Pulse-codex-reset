@@ -695,6 +695,7 @@
 "No Qoder session found. Sign in at %@ first." = "Сеанс Qoder не найден. Сначала войдите на %@.";
 "Site" = "Сайт";
 "Where you signed in. Changing it clears the saved session." = "Сайт, на котором выполнен вход. При смене сохранённый сеанс удаляется.";
+"Where your key is from. Each site keeps its own key." = "Сайт, на котором выдан ключ. Для каждого сайта хранится свой ключ.";
 "Sign in to StepFun's platform in a browser to see usage." = "Войдите на платформу StepFun в браузере, чтобы видеть расход.";
 "StepFun's saved session expired. Sign in again in your browser." = "Сохранённый сеанс StepFun истёк. Войдите снова в браузере.";
 "No Step Plan on this StepFun account." = "У этого аккаунта StepFun нет Step Plan.";

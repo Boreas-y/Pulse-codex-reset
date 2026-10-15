@@ -1285,7 +1285,7 @@ actor UsageLedgerReader {
         // Antigravity is an editor and keeps nothing; OpenCode keeps its own
         // store rather than the JSONL these two parsers read.
         case .kiro, .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
-             .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .grok, .grokBot,
+             .zai, .glmCoding, .minimax, .copilot, .grok, .grokBot,
              .volcengine, .commandCode, .deepSeek, .devin, .xiaomiMiMo,
              .sub2api, .newAPI, .v2ex, .qoder, .stepFun, .pulseExtension: []
         }
@@ -1408,7 +1408,7 @@ actor UsageLedgerReader {
         case .claudeCode: return parseClaudeCode(LogLines(at: file))
         case .codex: return parseCodex(LogLines(at: file))
         case .kiro, .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
-             .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .grok, .grokBot,
+             .zai, .glmCoding, .minimax, .copilot, .grok, .grokBot,
              .volcengine, .commandCode, .deepSeek, .devin, .xiaomiMiMo,
              .sub2api, .newAPI, .v2ex, .qoder, .stepFun, .pulseExtension: return Scanned()
         }

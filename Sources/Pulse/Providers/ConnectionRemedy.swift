@@ -97,7 +97,7 @@ enum ConnectionRemedy: Equatable {
             case .ollamaCloud: "ollama-cloud"
             case .xiaomiMiMo: "xiaomi-coding-plan"
             case .zai, .glmCoding: "zai"
-            case .minimax, .minimaxCN: "minimax"
+            case .minimax: "minimax"
             case .copilot: "copilot"
             case .grok: "grok"
             case .grokBot: "grok-bot"

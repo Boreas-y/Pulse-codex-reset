@@ -689,6 +689,14 @@ final class AppSettings {
         didSet { stepFunSiteChanged(from: oldValue) }
     }
 
+    /// Which MiniMax site the key is from: `minimax.io` or `minimaxi.com`,
+    /// one company's two storefronts and two accounts. It decides where the
+    /// request goes and which key is used — each site keeps its own
+    /// (`keySlot(for:)`), so changing it loses neither.
+    var minimaxSite: MiniMaxSite {
+        didSet { minimaxSiteChanged(from: oldValue) }
+    }
+
     /// Where Pulse sends a self-hosted gateway's request, per account.
     ///
     /// sub2api and New API are somebody's own deployments, so unlike every
@@ -927,6 +935,7 @@ final class AppSettings {
         deepSeekCurrency: String? = nil,
         qoderSite: QoderSite = Default.qoderSite,
         stepFunSite: StepFunSite = Default.stepFunSite,
+        minimaxSite: MiniMaxSite = Default.minimaxSite,
         serverAddresses: [String: String] = [:],
         lowBalanceAlerts: [String: Double] = [:],
         enabledAccounts: Set<String> = Set(Provider.builtIn.map(\.rawValue)),
@@ -986,6 +995,7 @@ final class AppSettings {
         self.deepSeekCurrency = deepSeekCurrency
         self.qoderSite = qoderSite
         self.stepFunSite = stepFunSite
+        self.minimaxSite = minimaxSite
         self.serverAddresses = serverAddresses
         self.lowBalanceAlerts = lowBalanceAlerts
         self.enabledAccounts = enabledAccounts
@@ -1036,6 +1046,8 @@ final class AppSettings {
     /// everything that has to follow it put into effect — the language, the
     /// proxy session, `PanelMetrics`.
     static func restored() -> AppSettings {
+        // Before anything is read: MiniMax CN's settings become MiniMax's.
+        MiniMaxMerge.migrate(defaults: .standard)
         let settings = restoredSettings(from: .standard)
         settings.applyRestored()
         return settings
@@ -1091,6 +1103,7 @@ final class AppSettings {
             deepSeekCurrency: defaults.string(forKey: Key.deepSeekCurrency),
             qoderSite: defaults.settingsChoice(Key.qoderSite) ?? Default.qoderSite,
             stepFunSite: defaults.settingsChoice(Key.stepFunSite) ?? Default.stepFunSite,
+            minimaxSite: defaults.settingsChoice(Key.minimaxSite) ?? Default.minimaxSite,
             serverAddresses: defaults.dictionary(forKey: Key.serverAddresses) as? [String: String] ?? [:],
             lowBalanceAlerts: defaults.dictionary(forKey: Key.lowBalanceAlerts) as? [String: Double] ?? [:],
             enabledAccounts: selection.enabledAccounts,

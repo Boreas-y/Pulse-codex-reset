@@ -695,6 +695,7 @@
 "No Qoder session found. Sign in at %@ first." = "Qoder 세션을 찾지 못했습니다. 먼저 %@에 로그인하십시오.";
 "Site" = "사이트";
 "Where you signed in. Changing it clears the saved session." = "로그인한 사이트입니다. 바꾸면 저장된 세션이 지워집니다.";
+"Where your key is from. Each site keeps its own key." = "키를 발급받은 사이트입니다. 사이트마다 키가 따로 저장됩니다.";
 "Sign in to StepFun's platform in a browser to see usage." = "브라우저에서 StepFun 플랫폼에 로그인하면 사용량이 표시됩니다.";
 "StepFun's saved session expired. Sign in again in your browser." = "저장된 StepFun 세션이 만료되었습니다. 브라우저에서 다시 로그인하십시오.";
 "No Step Plan on this StepFun account." = "이 StepFun 계정에는 Step Plan이 없습니다.";

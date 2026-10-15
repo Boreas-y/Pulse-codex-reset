@@ -3,11 +3,11 @@ import Foundation
 
 /// The MiniMax Coding Plan's limits, from its token-plan endpoint.
 ///
-/// **Two providers, one service**, for the same reason as the GLM plan:
-/// `api.minimax.io` and `api.minimaxi.com` are one company's international and
-/// mainland storefronts, and a key for one is refused by the other. CodexBar
-/// models this as a region switch inside one provider; each gets its own ring
-/// here.
+/// **One provider, two sites** (`MiniMaxSite`): `api.minimax.io` and
+/// `api.minimaxi.com` are one company's international and mainland
+/// storefronts, and a key for one is refused by the other. They were two
+/// providers, MiniMax and MiniMax CN, until both were one choice in Settings,
+/// as Qoder's and StepFun's sites are; each site keeps its own key.
 ///
 /// `GET {host}/v1/token_plan/remains` with the key as a bearer token, falling
 /// back to the older coding-plan path. Undocumented, and it can change without
@@ -28,13 +28,12 @@ import Foundation
 ///   video. Read literally that is a ring pinned at 0% for a thing the account
 ///   cannot use, so they are left out.
 struct MiniMaxUsageService: Sendable {
-    let provider: Provider
+    let site: MiniMaxSite
     let enteredKey: String?
+    private let provider = Provider.minimax
 
     /// The mainland service is a different host *and* a different account.
-    private var apiHost: String {
-        provider == .minimaxCN ? "https://api.minimaxi.com" : "https://api.minimax.io"
-    }
+    private var apiHost: String { site.apiHost }
 
     /// The current path first, then the one it replaced. A plan that answers
     /// 404 on the first is not a failure, it is an older account.
@@ -322,4 +321,39 @@ struct MiniMaxUsageService: Sendable {
 
 private extension String {
     var nilWhenEmpty: String? { isEmpty ? nil : self }
+}
+
+/// Which MiniMax storefront the key belongs to: `minimax.io` or
+/// `minimaxi.com`, one company's international and mainland sites, two
+/// accounts on two hosts. A key for one is refused by the other, so the site
+/// decides where the request goes — and each site keeps its own key
+/// (`keySlot`), so choosing the other one never throws a key away.
+enum MiniMaxSite: String, CaseIterable, Codable, Sendable {
+    case international
+    case china
+
+    var apiHost: String {
+        switch self {
+        case .international: "https://api.minimax.io"
+        case .china: "https://api.minimaxi.com"
+        }
+    }
+
+    /// What the site picker shows: the domain people name the two by.
+    var label: String {
+        switch self {
+        case .international: "minimax.io"
+        case .china: "minimaxi.com"
+        }
+    }
+
+    /// Where this site's key is kept beside the provider's (`APIKeyStore`).
+    /// The international one keeps the provider's own entry, which is where
+    /// every MiniMax key was before there were two sites to choose between.
+    var keySlot: String? {
+        switch self {
+        case .international: nil
+        case .china: "minimaxi.com"
+        }
+    }
 }

@@ -213,7 +213,9 @@ final class UsageStore {
         apiKeys = Dictionary(
             uniqueKeysWithValues: Provider.builtIn
                 .filter { $0.keepsOwnCredential && settings.isEnabled(AccountKey($0)) }
-                .compactMap { provider in APIKeyStore.key(for: provider).map { (provider, $0) } }
+                .compactMap { provider in
+                    APIKeyStore.key(for: provider, slot: settings.keySlot(for: provider)).map { (provider, $0) }
+                }
         )
 
         // Entering or clearing a key changes what a provider *can* report, and

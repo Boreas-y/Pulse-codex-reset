@@ -695,6 +695,7 @@
 "No Qoder session found. Sign in at %@ first." = "找不到 Qoder 的登入資訊，請先在 %@ 登入。";
 "Site" = "網站";
 "Where you signed in. Changing it clears the saved session." = "即你登入時使用的網站。更改後會清除已儲存的登入狀態。";
+"Where your key is from. Each site keeps its own key." = "即金鑰所屬的網站。兩個網站各自保存自己的金鑰。";
 "Sign in to StepFun's platform in a browser to see usage." = "在瀏覽器裡登入階躍星辰開放平台後才能看到用量。";
 "StepFun's saved session expired. Sign in again in your browser." = "階躍星辰的登入資訊已過期，請在瀏覽器裡重新登入。";
 "No Step Plan on this StepFun account." = "這個階躍星辰帳號沒有訂閱 Step Plan。";

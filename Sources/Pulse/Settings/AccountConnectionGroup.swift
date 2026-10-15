@@ -148,6 +148,11 @@ struct AccountConnectionGroup: View {
                 StepFunSiteRow(account: account, settings: settings, credentials: credentials)
                 SettingsRowDivider()
             }
+            // Above the key: which site decides which key the field holds.
+            if account.provider == .minimax {
+                MiniMaxSiteRow(account: account, settings: settings, credentials: credentials)
+                SettingsRowDivider()
+            }
 
             if account.provider.usesAPIKey {
                 // Takes precedence over the key OpenCode saved for itself —
@@ -170,7 +175,7 @@ struct AccountConnectionGroup: View {
                             : account.provider == .devin
                                 ? String.localized("Token and organization")
                                 : String.localized("API key"),
-                    subtitle: Self.keySubtitle(for: account.provider)
+                    subtitle: Self.keySubtitle(for: account.provider, minimaxSite: settings.minimaxSite)
                 ) {
                     HStack(spacing: 8) {
                         Group {
@@ -306,7 +311,7 @@ struct AccountConnectionGroup: View {
     /// storefronts, and a key from the wrong console is refused with no hint
     /// as to why, so those two name the site instead of leaving the user to
     /// guess which of the two they signed up for.
-    private static func keySubtitle(for provider: Provider) -> String {
+    private static func keySubtitle(for provider: Provider, minimaxSite: MiniMaxSite) -> String {
         switch provider {
         case _ where provider.profile?.keySubtitle != nil:
             provider.profile?.keySubtitle?() ?? ""
@@ -316,10 +321,11 @@ struct AccountConnectionGroup: View {
             .localized("From z.ai. Stored encrypted on this Mac.")
         case .glmCoding:
             .localized("From bigmodel.cn. Stored encrypted on this Mac.")
+        // The key field is the chosen site's: each keeps its own.
+        case .minimax where minimaxSite == .china:
+            .localized("From platform.minimaxi.com. Stored encrypted on this Mac.")
         case .minimax:
             .localized("From platform.minimax.io. Stored encrypted on this Mac.")
-        case .minimaxCN:
-            .localized("From platform.minimaxi.com. Stored encrypted on this Mac.")
         // The one field holding two secrets. Says the format, because a pair
         // pasted the wrong way round fails as a signature mismatch — a 403
         // with nothing in it to suggest what went wrong.

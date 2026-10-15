@@ -1,15 +1,17 @@
-# MiniMax and MiniMax CN
+# MiniMax
 
-One service, two providers: [`MiniMaxUsageService.swift`](../../Sources/Pulse/Providers/MiniMaxUsageService.swift).
+One provider, two sites: [`MiniMaxUsageService.swift`](../../Sources/Pulse/Providers/MiniMaxUsageService.swift).
 
-| Provider | Ring name | Host | Icon |
+| Site (`MiniMaxSite`) | Picker | Host | Key |
 |---|---|---|---|
-| `.minimax` | MiniMax | `https://api.minimax.io` | `minimax` |
-| `.minimaxCN` | MiniMax CN | `https://api.minimaxi.com` | `minimax` |
+| `.international` | minimax.io | `https://api.minimax.io` | the provider's own entry |
+| `.china` | minimaxi.com | `https://api.minimaxi.com` | slot `minimaxi.com` |
 
-Same product, two storefronts, two accounts. There is no separate brand name for the mainland one, so the region is the distinction. A key for one is refused by the other. One mark: two accounts of one brand already share a mark on the rail.
+Same product, two storefronts, two accounts; a key for one is refused by the other. **The site is a setting** (`AppSettings.minimaxSite`, Settings → MiniMax → Connection → *Site*, above the key), as Qoder's and StepFun's are. **Each site keeps its own key** (`MiniMaxSite.keySlot`, read through `AppSettings.keySlot(for:)` by the store, the services and the key field): unlike Qoder's session, a pasted key cannot be read back from a browser, so choosing the other site must not throw it away. The key field and its subtitle follow the chosen site. Changing the site goes through `onChange`, which reloads the keys.
 
-Extra accounts are not supported. `keepsLocalTranscripts` is false. No first-run file detection.
+**There were two providers until 2026-10-15, MiniMax and MiniMax CN** (`.minimaxCN`). `MiniMaxMerge` folds the second into the first once, at launch, before settings are read: its key moves sealed to the `minimaxi.com` slot (`APIKeyStore.moveRetiredEntry`); where MiniMax CN was on and MiniMax was not, the site becomes `minimaxi.com` and its ring settings (place on the rail, colour, mark, pinned limit — the window id's `minimaxCN.` prefix is rewritten) become MiniMax's; otherwise MiniMax's stay and MiniMax CN's fill only what MiniMax lacked. Cached readings under `minimaxCN` are keyed by plain strings and are simply never asked for again. `MiniMaxMergeTests`.
+
+Extra accounts are not supported, so the two sites cannot be watched at once. `keepsLocalTranscripts` is false. No first-run file detection.
 
 ## Route
 

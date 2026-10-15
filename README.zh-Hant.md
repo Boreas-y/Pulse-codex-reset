@@ -30,7 +30,7 @@
   <img src="Docs/panel.webp" height="400" alt="指標移到圓環上，會打開一張卡片，列出每項額度與重置時間">
 </p>
 
-- **77 個服務，一眼看完**——Claude Code、Codex、Cursor、GitHub Copilot、Antigravity、Kiro、Grok、DeepSeek、Kimi Code 等等，每個都有自己的圓環。
+- **76 個服務，一眼看完**——Claude Code、Codex、Cursor、GitHub Copilot、Antigravity、Kiro、Grok、DeepSeek、Kimi Code 等等，每個都有自己的圓環。
 - **沒有 Pulse 帳號，也沒有 Pulse 伺服器**——直接使用你已有的登入，不回傳任何東西。
 - **只顯示真實數字**——每個用量百分比都是服務商自己回報的。少數估算會明確標示；服務商沒有提供數字時，Pulse 會直接說明，不去猜測。
 - **原生、安靜**——以 Swift 與 SwiftUI 撰寫，macOS 26 上是 Liquid Glass。可以停靠在左側、右側、頂端，或底部 Dock 旁邊，閒置時收成一條細線，也可以只待在選單列裡。
@@ -81,11 +81,11 @@
 
 ### 多帳號與本機帳本
 - **多帳號支援**：可同時監看同一服務商的多個訂閱（Claude Code、Codex、Grok、Grok Bot），並排顯示並自訂標籤。
-- **Token 消耗（僅限設定）**：預設關閉，在頁面頂端開啟後才讀取本機記錄，關閉即可停止掃描。支援本機日誌、資料庫與匯出檔，來源目錄涵蓋 **54 個用戶端來源**，包括 Gemini CLI、Cline、Roo Code、OpenClaw 與 GitHub Copilot。Cursor、Trae 等來源需要事先匯出或擷取記錄。這些來源與浮動膠囊上的 77 個配額服務商不同；各來源的支援程度與真實用戶端驗證情形不一。[來源與涵蓋範圍](Docs/token-spend-sources.md)。
+- **Token 消耗（僅限設定）**：預設關閉，在頁面頂端開啟後才讀取本機記錄，關閉即可停止掃描。支援本機日誌、資料庫與匯出檔，來源目錄涵蓋 **54 個用戶端來源**，包括 Gemini CLI、Cline、Roo Code、OpenClaw 與 GitHub Copilot。Cursor、Trae 等來源需要事先匯出或擷取記錄。這些來源與浮動膠囊上的 76 個配額服務商不同；各來源的支援程度與真實用戶端驗證情形不一。[來源與涵蓋範圍](Docs/token-spend-sources.md)。
 - **清楚的用量估算**：預設開啟最近 7 天，並記住你選擇的區間。費用採用公開的 API 價格，而非訂閱費用。未知價格會保留為不可用，計數不完整或時間粒度較粗者會明確標示；沒有 token 計數器的來源會如實標示為不可用。
 - **模型詳情與圖表**：點開單一模型可查看輸入／輸出／快取用量與估算費用、記錄足以支撐時的每日與每小時圖表、各 agent 的貢獻，以及可排序、分頁的明細表。將指標移到圖表上，即可讀取對應日期或小時及其 token 數量。無法取得的每日或每小時明細會標註為不可用。
 - **月報與年報**：任選一個月或一年，用和 Token 消耗同一份本機紀錄產生一組適合分享的卡片：Token 總量與估算金額、與上個月相比的變化、每一天的日曆、你最常工作的時段、背後的模型、工具與專案、連續使用天數；填上每月訂閱花多少錢，還能看到訂閱回本了幾倍。每張卡都能存成圖片、複製或分享，六種語言都支援；專案名稱可以一鍵隱藏。從 Token 消耗頁面開啟；也可以開啟每月 1 日的提醒，告訴你上個月的月報好了。
-- **七十七個服務商**：Claude Code、Codex、Kiro、Antigravity、Cursor、GitHub Copilot、Grok、Grok Bot、OpenCode Go、Kimi Code、Ollama Cloud、z.ai、Zhipu、MiniMax（國際與中國大陸）、Volcengine、Command Code、DeepSeek、Devin、小米 Coding Plan、sub2api、New API、V2EX、Qoder 與階躍星辰（StepFun）；另有 Abacus AI、Aixy、Alibaba Coding Plan、Alibaba Token Plan、Amp、Atlas Cloud、Augment Code、Bifrost、Chutes、ClawRouter、ClinePass、Codebuff、DeepInfra、DevPass、ElevenLabs、Factory、Gemini、GitKraken AI、Hugging Face、Hyper、IBM Bob、JetBrains AI、Kilo Code、LiteLLM、LLM API Key Proxy、LongCat、Manus、Mistral、Moonshot、Neuralwatt、Notion AI、Nous Portal、OpenAI API、Perplexity、Poe、Qwen Cloud、Raycast AI、Replicate、Sakana AI、Synthetic、T3 Chat、TypeSafe、v0、Venice、Vercel AI Gateway、Warp、Windsurf、xAI API、xKiro、Zed、ZenMux、ZoomMate。
+- **七十六個服務商**：Claude Code、Codex、Kiro、Antigravity、Cursor、GitHub Copilot、Grok、Grok Bot、OpenCode Go、Kimi Code、Ollama Cloud、z.ai、Zhipu、MiniMax（國際與中國大陸）、Volcengine、Command Code、DeepSeek、Devin、小米 Coding Plan、sub2api、New API、V2EX、Qoder 與階躍星辰（StepFun）；另有 Abacus AI、Aixy、Alibaba Coding Plan、Alibaba Token Plan、Amp、Atlas Cloud、Augment Code、Bifrost、Chutes、ClawRouter、ClinePass、Codebuff、DeepInfra、DevPass、ElevenLabs、Factory、Gemini、GitKraken AI、Hugging Face、Hyper、IBM Bob、JetBrains AI、Kilo Code、LiteLLM、LLM API Key Proxy、LongCat、Manus、Mistral、Moonshot、Neuralwatt、Notion AI、Nous Portal、OpenAI API、Perplexity、Poe、Qwen Cloud、Raycast AI、Replicate、Sakana AI、Synthetic、T3 Chat、TypeSafe、v0、Venice、Vercel AI Gateway、Warp、Windsurf、xAI API、xKiro、Zed、ZenMux、ZoomMate。
 - **可腳本化**：`Pulse --json` 印出最近一次讀數——方案、每一條額度、重設時間，以及數字有多舊——可接 tmux、sketchybar、Raycast 或 shell 提示字元。它只讀快取，所以高頻輪詢幾乎沒有成本。
 - **開發者整合**：在設定中匯出 Raycast 擴充功能，以及可直接設定的 tmux、sketchybar 與 shell 指令碼。帳號連結會直接開啟對應頁面。[設定指南](Docs/integrations.md)。
 - **擴充功能**：自己寫個小程式，就能讓 Pulse 顯示某個帳號的用量，例如公司內部的額度 API，不必再維護一份分支。開啟之前不會執行，Pulse 也不會交給它任何憑證。擴充功能也可以回報自訂指標，例如中轉站的首字時間，顯示在卡片上並畫出趨勢線。[撰寫說明](Docs/extensions.md)（英文）。
@@ -135,7 +135,7 @@ Pulse 只呈現各服務回報的數字，每個百分比都來自那份回覆�
 | <img src="Docs/icons/kimi.svg" width="24" height="24" alt=""> | **Kimi Code** | 直接使用 API 金鑰 | 在設定中設定 |
 | <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **z.ai** | 直接使用 API 金鑰 | 國際站（`api.z.ai`） |
 | <img src="Docs/icons/zai.svg" width="24" height="24" alt=""> | **Zhipu** | 直接使用 API 金鑰，或已儲存的 GLM 工具憑證 | 中國大陸站（`open.bigmodel.cn`） |
-| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax / MiniMax CN** | 直接使用 API 金鑰 | 支援國際站（`minimax.io`）與中國大陸站（`minimaxi.com`） |
+| <img src="Docs/icons/minimax.svg" width="24" height="24" alt=""> | **MiniMax** | 直接使用 API 金鑰 | 在設定中選擇國際站（`minimax.io`）或中國大陸站（`minimaxi.com`），兩個網站各自保存金鑰 |
 | <img src="Docs/icons/ollama.svg" width="24" height="24" alt=""> | **Ollama Cloud** | 瀏覽器工作階段 cookie | 從瀏覽器本機讀取。詳見 [Docs/ollama-cloud.md](Docs/ollama-cloud.md) |
 | <img src="Docs/icons/volcengine.svg" width="24" height="24" alt=""> | **Volcengine（火山引擎）** | `arkcli` 登入，否則使用貼上的 access-key 組（簽署 Top OpenAPI） | Ark Coding 與 Agent 方案；自動模式偏好貼上的金鑰而非 CLI |
 | <img src="Docs/icons/commandcode.svg" width="24" height="24" alt=""> | **Command Code** | 貼上的金鑰，否則使用 `cmd login` 已儲存的登入 | 以美元計價的額度餘額，含滾動 5 小時／每週限額；每月方案列標示為**估算** |
