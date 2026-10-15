@@ -10,7 +10,7 @@ There was no test target until 2026-09-07. What prompted one was not a policy: t
 
 ## What is covered
 
-Performance-cache regressions: `ModelPriceLookupTests` (alias/vendor precedence and price-snapshot isolation), `LedgerCacheWriteTests` (unchanged repricing does not rewrite the raw cache; edits/deletions persist, a deletion into the archive), `SpendSummaryCacheTests` (scope/snapshot/calendar-window invalidation and cancellation), and the cached-tail cases in `AgentActivityTests` (grace expiration and changed/new/deleted files). These are synthetic production-code checks, not whole-app profiling or real pointer-input verification.
+Performance-cache regressions: `ModelPriceLookupTests` (alias/vendor precedence and price-snapshot isolation), `LedgerCacheWriteTests` (unchanged repricing does not rewrite the raw cache; edits/deletions persist, a deletion into the archive), `TranscriptCacheCodecTests` (the cache's bytes read back exactly; damaged files are no cache; the JSON cache migrates once), `SpendSummaryCacheTests` (scope/snapshot/calendar-window invalidation and cancellation), and the cached-tail cases in `AgentActivityTests` (grace expiration and changed/new/deleted files). These are synthetic production-code checks, not whole-app profiling or real pointer-input verification.
 
 | Suite | Covers |
 |---|---|

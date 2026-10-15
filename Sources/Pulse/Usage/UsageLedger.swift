@@ -761,7 +761,7 @@ struct UsageLedger: Sendable, Equatable {
 actor UsageLedgerReader {
     static let shared = UsageLedgerReader()
 
-    /// The number in `ledger-<n>-<provider>.json`; see `FileCache.file`.
+    /// The number in `ledger-<n>-<provider>.bin`; see `FileCache.file`.
     nonisolated static let cacheVersion = 9
 
     /// Tokens by quarter-hour (`yyyy-MM-dd HH:mm`, local) and then by model.
@@ -1109,7 +1109,7 @@ actor UsageLedgerReader {
         // Repricing unchanged transcripts does not change either file or
         // warrant a write.
         let keptSafely = !archives || !archiveChanged || archive?.save(for: provider, directory: cacheDirectory) == true
-        if changed || !cache.files.isEmpty {
+        if changed || !cache.files.isEmpty || cache.isFromJSON {
             cache.files = fresh
             if archive == nil || !keptSafely { cache.files.merge(gone) { live, _ in live } }
             cache.save(for: provider, directory: cacheDirectory)
@@ -1981,7 +1981,10 @@ actor UsageLedgerReader {
 
 /// What has already been counted, so opening settings a second time doesn't
 /// re-read a few hundred megabytes of transcripts.
-private struct FileCache: Codable {
+///
+/// On disk it is `TranscriptCacheCodec`'s bytes (`ledger-9-<provider>.bin`);
+/// `Codable` remains only to read the JSON file it replaced, once.
+struct FileCache: Codable, Equatable {
     struct Stamp: Codable, Equatable {
         let size: Int
         let modified: Double
@@ -2003,7 +2006,7 @@ private struct FileCache: Codable {
         }
     }
 
-    struct Entry: Codable {
+    struct Entry: Codable, Equatable {
         let stamp: Stamp
         let days: [String: [String: TokenTally]]
         /// What the transcript called itself, and where it ran. Optional
@@ -2035,21 +2038,41 @@ private struct FileCache: Codable {
     }
 
     var files: [String: Entry] = [:]
+    /// Read from the JSON file this format replaced: written out as bytes at
+    /// the next scan whether or not anything changed, so the JSON is read
+    /// once and not on every scan until a transcript happens to change.
+    var isFromJSON = false
+
+    private enum CodingKeys: String, CodingKey { case files }
 
     static func load(for provider: Provider, directory: URL?) -> FileCache {
+        if let data = try? Data(contentsOf: file(for: provider, directory: directory)) {
+            // A file that does not read is no cache, as a JSON file that did
+            // not decode was: the transcripts are read again.
+            return (try? TranscriptCacheCodec.decode(data)) ?? FileCache()
+        }
         guard
-            let data = try? Data(contentsOf: file(for: provider, directory: directory)),
-            let cache = try? JSONDecoder().decode(FileCache.self, from: data)
+            let data = try? Data(contentsOf: jsonFile(for: provider, directory: directory)),
+            var cache = try? JSONDecoder().decode(FileCache.self, from: data)
         else { return FileCache() }
+        cache.isFromJSON = true
         return cache
     }
 
     func save(for provider: Provider, directory: URL?) {
         guard !Task.isCancelled else { return }
         if directory == nil { PulseStorage.prepare() }
-        guard let data = try? JSONEncoder().encode(self) else { return }
+        let data = TranscriptCacheCodec.encode(self)
         guard !Task.isCancelled else { return }
-        try? data.write(to: Self.file(for: provider, directory: directory), options: .atomic)
+        guard (try? data.write(to: Self.file(for: provider, directory: directory), options: .atomic)) != nil
+        else { return }
+        // Only once the bytes are down: until then the JSON is the cache.
+        try? FileManager.default.removeItem(at: Self.jsonFile(for: provider, directory: directory))
+    }
+
+    /// The JSON file of the same number, from before `TranscriptCacheCodec`.
+    private static func jsonFile(for provider: Provider, directory: URL?) -> URL {
+        file(for: provider, directory: directory).deletingPathExtension().appendingPathExtension("json")
     }
 
     private static func file(for provider: Provider, directory: URL?) -> URL {
@@ -2105,7 +2128,13 @@ private struct FileCache: Codable {
         // **The number lives in `UsageLedgerReader.cacheVersion`**, where
         // `PulseStorage.isSuperseded` reads it: every `ledger-<n>-*` below it
         // is cleaned away without a name being added to a list.
-        (directory ?? PulseStorage.directory).appending(path: "ledger-\(UsageLedgerReader.cacheVersion)-\(provider.rawValue).json")
+        //
+        // **`.bin`, not a new number** (`TranscriptCacheCodec`): what an entry
+        // holds is unchanged, only how it is written. A new number would have
+        // thrown away every entry — and with them the record of transcripts
+        // deleted since the last scan. The `.json` of the same number is read
+        // once and removed when the bytes are written.
+        (directory ?? PulseStorage.directory).appending(path: "ledger-\(UsageLedgerReader.cacheVersion)-\(provider.rawValue).bin")
     }
 }
 
