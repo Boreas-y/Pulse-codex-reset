@@ -62,8 +62,16 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        NavigationSplitView {
+        // **The sidebar stays.** With the toggle SwiftUI adds, collapsing it and
+        // drawing it back at a width that cannot hold the sidebar beside the
+        // pane overflowed both ways: the list slid out past the left edge, the
+        // pane past the right, and the title bar put up an overflow "»" for
+        // items it no longer had room for. A settings window's sidebar is how
+        // it is navigated, as System Settings' is; there is nothing to gain by
+        // hiding it.
+        NavigationSplitView(columnVisibility: .constant(.all)) {
             SettingsSidebar(settings: settings, navigation: navigation, search: search)
+                .toolbar(removing: .sidebarToggle)
                 // **The floor is this frame, not `navigationSplitViewColumnWidth`.**
                 //
                 // `ideal:` is read once, when a column is first laid out. The whole

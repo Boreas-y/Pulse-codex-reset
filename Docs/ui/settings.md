@@ -139,6 +139,8 @@ In the sidebar's last, untitled section. It copies the actual executable's `--js
 
 **SwiftUI `Picker` / `Menu` on macOS cannot be given a width.** `.frame`, min/max, `fixedSize` and a fixed-width custom label were measured (historical) and none moved the control. Right-align at `SettingsLayout.controlWidth` (180) as a *ceiling*; long labels truncate. An `NSPopUpButton` wrapper gave a true 180pt box and was removed because short labels floated in empty chrome; do not rebuild it without checking that first.
 
+**The sidebar cannot be hidden** (`NavigationSplitView(columnVisibility: .constant(.all))`, `.toolbar(removing: .sidebarToggle)`). With SwiftUI's toggle, collapsing it and drawing it back at a width that could not hold sidebar and pane side by side overflowed both ways — the list past the left edge, the pane past the right — and the title bar showed an overflow "»". The sidebar is how the window is navigated, as in System Settings.
+
 **Sidebar column: min 220, ideal 240, max 320**, sized to "Alibaba Coding Plan", the longest (brand) name (121.4pt of text at 13pt; "Xiaomi Coding Plan" 117.3), with the scroller always showing; at 200 it read "Alibaba Coding Pl…". `ideal` was scaled from a fourteen-character name that fit, not measured, so check a longer name in the running app. `min` matters most: AppKit saves the divider position, so `ideal` is read once per install while `min` clamps everyone.
 
 **Default window: 920 × 660**, set on the `NSWindow`'s `contentRect`; the view's `minWidth` / `minHeight` (720 × 460) are the drag-down limit. The former 760 × 500 scrolled in both columns on opening. The size is not remembered: the window is rebuilt and `center()`ed on each launch.
