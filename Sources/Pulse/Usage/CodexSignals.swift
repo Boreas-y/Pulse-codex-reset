@@ -11,20 +11,27 @@ import Foundation
 /// probe or sitting in the traffic, and Pulse does neither: it reads.
 /// What *is* written leaves two kinds of trace, and this reads both.
 ///
-/// **Reasoning cut short.** Every response's `token_count` event carries
-/// `last_token_usage.reasoning_output_tokens`. Reasoning that stops on its own
-/// lands on any count; reasoning that is cut lands on 516, 1034, 1552… —
-/// `518·n − 2`, a lattice found in openai/codex#30364 over 390k responses and
-/// reproduced on this Mac (gpt-5.5: 41.6% of responses that reached 516
-/// stopped exactly on it; the codex models, none). By chance about one in
-/// 518 would. The step and the offset are empirical; nobody has published a
-/// cause. Counted per model, as a share of the responses that got that far.
+/// **Reasoning stopped at fixed points.** Every response's `token_count` event
+/// carries `last_token_usage.reasoning_output_tokens`. Far more of them stop on
+/// 516, 1034, 1552… — `518·n − 2`, a lattice found in openai/codex#30364 over
+/// 390k responses and reproduced on this Mac — than the one in 518 chance
+/// would put there. The step and the offset are empirical and nobody has
+/// published a cause, so whether a stop there is a cut is not known. Each
+/// model's share holds steady week to week and differs widely between models
+/// (gpt-6-astra about 72%, gpt-5.6-sol about 9%, at every reasoning effort and
+/// hour of day), so a share above chance is that model's usual behaviour, not
+/// a sign that it was weakened. Counted per model, as a share of the
+/// responses that got that far, and shown as a figure — never a verdict.
 ///
 /// **Settings changed under the session.** From Codex 0.144 every change the
 /// user makes is written as `thread_settings_applied`, and takes effect at the
-/// next `task_started`. A turn whose `turn_context` runs a different model, a
-/// lower reasoning effort, or a smaller context window than the settings in
-/// force when it started was changed by something other than the user.
+/// next `task_started`. A turn whose `turn_context` runs a different model or
+/// a lower reasoning effort than the settings in force when it started was
+/// changed by something other than the user. The context window is not read:
+/// `token_count`'s `model_context_window` is Codex's own sum — the configured
+/// window (`model_context_window` in `config.toml`, else the model's default)
+/// times the model's effective percentage — so a smaller one is a config edit,
+/// never what the server ran.
 /// Sessions written before 0.144 record no such event — a `/model` there is
 /// indistinguishable from a silent switch — so they are not judged at all;
 /// nor is a newer one with none applied, nor Codex's own helpers (sessions
@@ -52,11 +59,6 @@ struct CodexSignals: Sendable, Equatable {
 
         /// Enough responses reached the lattice to say anything about it.
         var isMeasurable: Bool { reachedLattice >= CodexSignals.fewestReached }
-
-        /// Many times what chance would put there, and not a stray hit or two.
-        var isSuspicious: Bool {
-            isMeasurable && onLattice >= CodexSignals.fewestHits && (share ?? 0) >= CodexSignals.suspiciousShare
-        }
     }
 
     /// A turn that ran on less than the settings in force when it started.
@@ -64,7 +66,6 @@ struct CodexSignals: Sendable, Equatable {
         enum Kind: Sendable, Equatable {
             case model(asked: String, ran: String)
             case effort(asked: String, ran: String)
-            case contextWindow(was: Int, now: Int)
         }
 
         let kind: Kind
@@ -85,9 +86,6 @@ struct CodexSignals: Sendable, Equatable {
     var judgedSessions = 0
 
     static let fewestReached = 20
-    static let fewestHits = 5
-    /// Twenty-five times chance (1 in 518).
-    static let suspiciousShare = 0.05
     /// The first Codex that writes the user's own changes down.
     static let firstJudgedVersion = (0, 144, 0)
 
@@ -158,9 +156,7 @@ actor CodexSignalReader {
             signals.changes += facts.changes.filter { change in since.map { change.date >= $0 } ?? true }
         }
 
-        signals.truncation = byModel.values.sorted {
-            ($0.isSuspicious ? 1 : 0, $0.responses) > ($1.isSuspicious ? 1 : 0, $1.responses)
-        }
+        signals.truncation = byModel.values.sorted { $0.responses > $1.responses }
         signals.changes.sort { $0.date > $1.date }
         return signals
     }
@@ -205,7 +201,9 @@ actor CodexSignalReader {
     private static let wanted = ["\"session_meta\"", "\"turn_context\"", "\"thread_settings_applied\"",
                                  "\"task_started\"", "\"token_count\""].map { Data($0.utf8) }
 
-    private static let efforts = ["none", "minimal", "low", "medium", "high", "xhigh"]
+    /// Lowest to highest, as Codex ranks them (`supported_reasoning_levels` in
+    /// `~/.codex/models_cache.json`). A level missing here is never compared.
+    private static let efforts = ["none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"]
 
     static func parse(_ lines: LogLines, session: String) -> FileFacts {
         var facts = FileFacts()
@@ -219,7 +217,6 @@ actor CodexSignalReader {
         var atStart: (model: String?, effort: String?) = (nil, nil)
         var previous: (model: String?, effort: String?) = (nil, nil)
         var subTurns: Set<String> = []
-        var window: (size: Int, model: String?)?
         var appliedAny = false
         var isOwnSession = false
         /// A fork starts by copying the session it came from, every copied
@@ -241,7 +238,6 @@ actor CodexSignalReader {
             case "session_meta":
                 // A resumed session writes its header again; only the first
                 // says what the session is.
-                window = nil
                 guard version == nil else { return }
                 version = (payload["cli_version"] as? String).flatMap(Self.version)
                 facts.isJudged = version.map { $0 >= CodexSignals.firstJudgedVersion } ?? false
@@ -285,12 +281,6 @@ actor CodexSignalReader {
                                settings["reasoning_effort"] as? String ?? applied.effort)
                 case "token_count":
                     guard let info = payload["info"] as? [String: Any] else { return }
-                    if facts.isJudged, let size = int(info["model_context_window"]), size > 0 {
-                        if let window, size < window.size, window.model == model, let date {
-                            facts.changes.append(.init(kind: .contextWindow(was: window.size, now: size), date: date, session: session))
-                        }
-                        window = (size, model)
-                    }
                     // The same count is written more than once; a repeat of
                     // the running totals is not another response.
                     let totals = (info["total_token_usage"] as? [String: Any]).map { usage in

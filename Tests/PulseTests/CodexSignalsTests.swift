@@ -112,19 +112,41 @@ struct CodexSignalsTests {
         #expect(facts.changes.isEmpty)
     }
 
-    @Test("A context window that shrinks under the same model is a change")
+    @Test("Effort is ranked through max and ultra; a level Codex added is compared, not skipped")
+    func topEfforts() {
+        let facts = Self.parse([
+            Self.meta("0.162.1"),
+            Self.started("t1", at: 1), Self.applied(model: "gpt-6-astra", effort: "ultra", at: 1),
+            Self.context("t1", model: "gpt-6-astra", effort: "ultra", at: 1),
+            // Lowered under the turn: ultra to max, then max to xhigh.
+            Self.started("t2", at: 2), Self.context("t2", model: "gpt-6-astra", effort: "max", at: 2),
+            Self.applied(model: "gpt-6-astra", effort: "max", at: 3),
+            Self.started("t3", at: 4), Self.context("t3", model: "gpt-6-astra", effort: "xhigh", at: 4),
+            // The user raises it to ultra: not a change.
+            Self.applied(model: "gpt-6-astra", effort: "ultra", at: 5),
+            Self.started("t4", at: 6), Self.context("t4", model: "gpt-6-astra", effort: "ultra", at: 6),
+        ])
+        #expect(facts.changes.map(\.kind) == [
+            .effort(asked: "ultra", ran: "max"),
+            .effort(asked: "max", ran: "xhigh"),
+        ])
+    }
+
+    @Test("A smaller context window is Codex's own sum from config, not a change")
     func contextWindow() {
         let facts = Self.parse([
             Self.meta("0.146.0"),
             Self.started("t1", at: 1), Self.applied(model: "gpt-6-sol", at: 1),
             Self.context("t1", model: "gpt-6-sol", at: 1),
-            Self.count(reasoning: 10, total: 10, window: 272_000, at: 2),
-            Self.count(reasoning: 10, total: 20, window: 128_000, at: 3),
+            // 872,000 × 95%, then 300,000 × 95% after `model_context_window` was edited.
+            Self.count(reasoning: 10, total: 10, window: 828_400, at: 2),
+            Self.count(reasoning: 10, total: 20, window: 285_000, at: 3),
         ])
-        #expect(facts.changes.map(\.kind) == [.contextWindow(was: 272_000, now: 128_000)])
+        #expect(facts.isJudged)
+        #expect(facts.changes.isEmpty)
     }
 
-    @Test("Per model, the share of long replies on the lattice; a few is too few, many is a sign")
+    @Test("Per model, the share of long replies on the lattice, as a figure; a few is too few")
     func truncation() async throws {
         let root = URL.temporaryDirectory.appending(path: "PulseCodexSigns-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: root) }
@@ -154,11 +176,12 @@ struct CodexSignalsTests {
         #expect(five.responses == 35)
         #expect(five.reachedLattice == 30)
         #expect(five.onLattice == 12)
-        #expect(five.isSuspicious)
+        #expect(five.share == 0.4)
+        #expect(five.isMeasurable)
         let codex = try #require(signals.truncation.first { $0.model == "gpt-5.3-codex" })
         #expect(!codex.isMeasurable)
-        #expect(!codex.isSuspicious)
-        #expect(signals.truncation.first?.model == "gpt-5.5")
+        // Most replies first; no share ranks a model above another.
+        #expect(signals.truncation.map(\.model) == ["gpt-5.5", "gpt-5.3-codex"])
         #expect(signals.sessions == 1)
     }
 
