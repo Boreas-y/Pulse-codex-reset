@@ -76,23 +76,32 @@ enum CapturedUsageReaders {
         }
     }
 
-    /// MiniMax Code's own log where it has records, else the captures.
+    /// MiniMax Code's own log where it has records, else the captures — and
+    /// which of the two it was. **One read decides both**: the origin once
+    /// asked only whether the log had files, so a log of nothing but zeroed
+    /// migration lines sent the read to the captures while the ledger still
+    /// called them this Mac's own transcripts.
+    static func mcodeRead(roots: [URL]) -> (records: [AgentUsageRecord], ownLog: Bool) {
+        let logged = MiniMaxCodeSessionReader.records(roots: roots.filter(isMiniMaxCodeLog))
+        if !logged.isEmpty { return (logged, true) }
+        return (CapturedMcodeReader.records(roots: roots.filter { !isMiniMaxCodeLog($0) }), false)
+    }
+
     private static func mcodeRecords(roots: [URL]) -> [AgentUsageRecord] {
-        let native = roots.filter(isMiniMaxCodeLog)
-        let logged = MiniMaxCodeSessionReader.records(roots: native)
-        if !logged.isEmpty { return logged }
-        return CapturedMcodeReader.records(roots: roots.filter { !isMiniMaxCodeLog($0) })
+        mcodeRead(roots: roots).records
     }
 
     private static func isMiniMaxCodeLog(_ root: URL) -> Bool {
         root.standardizedFileURL.path.hasSuffix("/.minimax/v2/sessions")
     }
 
-    /// Whether this read is a product's own log rather than an export or
-    /// capture: MiniMax Code's, once its session log has files. It decides the
-    /// ledger's origin (`AgentLedgers`).
+    /// Whether a read of these roots is a product's own log rather than an
+    /// export or capture: MiniMax Code's, when its session log yields records
+    /// (`mcodeRead`). The ledger takes it from the read itself
+    /// (`AgentRecordReaders.Read.readsOwnLog`); this asks again, for a caller
+    /// with no read in hand.
     static func readsOwnLog(client: String, roots: [URL]) -> Bool {
-        client == "mcode" && !MiniMaxCodeSessionReader.files(in: roots.filter(isMiniMaxCodeLog)).isEmpty
+        client == "mcode" && mcodeRead(roots: roots).ownLog
     }
 
     // MARK: - Roots

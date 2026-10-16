@@ -100,13 +100,15 @@ enum ResponseLog {
 
     static func entry(_ request: URLRequest, response: URLResponse?, data: Data?, error: (any Error)?, at date: Date) -> Entry {
         let http = response as? HTTPURLResponse
-        let body: String
+        var body: String
         if let error {
             let failure = error as NSError
             body = "\(failure.domain) \(failure.code): \(failure.localizedDescription)"
         } else {
             body = text(of: data ?? Data(), contentType: http?.value(forHTTPHeaderField: "Content-Type"))
         }
+        // Whatever this request carried, wherever the reply echoes it back.
+        body = masking(credentials(in: request), in: body)
         return Entry(
             at: date,
             method: request.httpMethod ?? "GET",
@@ -125,6 +127,43 @@ enum ResponseLog {
         parts.user = nil
         parts.password = nil
         return parts.string ?? ""
+    }
+
+    /// The credentials a request carries — the Authorization value and the
+    /// token after its scheme, API-key headers, each cookie's value, every
+    /// query value — for masking wherever a reply repeats them. Used while
+    /// one entry is built and never kept.
+    static func credentials(in request: URLRequest) -> [String] {
+        var found: [String] = []
+        let headers = request.allHTTPHeaderFields ?? [:]
+        for (name, value) in headers {
+            switch name.lowercased() {
+            case "authorization", "proxy-authorization":
+                found.append(value)
+                if let space = value.firstIndex(of: " ") {
+                    found.append(String(value[value.index(after: space)...]).trimmingCharacters(in: .whitespaces))
+                }
+            case "cookie":
+                for pair in value.split(separator: ";") {
+                    if let equals = pair.firstIndex(of: "=") {
+                        found.append(String(pair[pair.index(after: equals)...]).trimmingCharacters(in: .whitespaces))
+                    }
+                }
+            case let header where header.contains("key") || header.contains("token") || header.contains("secret"):
+                found.append(value)
+            default:
+                break
+            }
+        }
+        if let url = request.url, let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems {
+            found += items.compactMap(\.value)
+        }
+        // Short values ("1", "true") would mask ordinary words.
+        return Array(Set(found.filter { $0.count >= 8 })).sorted { $0.count > $1.count }
+    }
+
+    static func masking(_ values: [String], in text: String) -> String {
+        values.reduce(text) { $0.replacingOccurrences(of: $1, with: mask) }
     }
 
     /// The body as text, redacted and cut. JSON comes back laid out with its
@@ -152,36 +191,56 @@ enum ResponseLog {
             || lowered == "key" || lowered.hasSuffix("_key") || lowered.hasSuffix("key") && lowered.count <= 12
     }
 
-    static func redacted(_ object: Any) -> Any {
+    /// Masks the values under credential names — and everything inside them:
+    /// `"tokens": ["…"]` and `"session": {"id": "…"}` hide what they hold.
+    /// Text only, at any depth: `"input_tokens": 1200` is a count, not a
+    /// credential.
+    static func redacted(_ object: Any, underSecret: Bool = false) -> Any {
         if let dictionary = object as? [String: Any] {
             var result: [String: Any] = [:]
             for (name, value) in dictionary {
-                // Text only: "input_tokens": 1200 is a count, not a credential.
-                if isSecretName(name), value is String {
-                    result[name] = mask
-                } else {
-                    result[name] = redacted(value)
-                }
+                result[name] = redacted(value, underSecret: underSecret || isSecretName(name))
             }
             return result
         }
-        if let array = object as? [Any] { return array.map(redacted) }
-        if let text = object as? String { return redacted(text) }
+        if let array = object as? [Any] { return array.map { redacted($0, underSecret: underSecret) } }
+        if let text = object as? String { return underSecret ? mask : redacted(text) }
         return object
     }
 
     /// A run of the characters keys and tokens are made of — letters,
-    /// digits, `-_.~+/=` — that looks random: 40 or more with a digit in it,
-    /// or 24 or more mixing capitals, small letters and digits. A long model
-    /// name ("claude-opus-4-6-20260101") or a UUID survives; an `sk-…` key, a
-    /// JWT or a session cookie does not.
+    /// digits, `-_.~+/=` — that looks like one:
+    /// - 40 or more with a digit in it;
+    /// - 24 or more mixing capitals, small letters and digits;
+    /// - 16 or more starting the way keys do (`sk-`, `ghp_`, `AIza`, a JWT's
+    ///   `eyJ`, `xai-`…);
+    /// - or holding one piece, between separators, of 16 or more letters and
+    ///   digits mixed — `sk-` and 32 hex digits, a hex session id.
+    ///
+    /// A long model name ("claude-opus-4-6-20260101") or a UUID survives:
+    /// its pieces are short. Pulse's own guess at a format is the second line
+    /// of defence; the first is `credentials(in:)`, the values the request
+    /// really carried.
     static func redacted(_ text: String) -> String {
-        guard let pattern = try? Regex(#"[A-Za-z0-9\-_.~+/=]{24,}"#) else { return text }
+        guard let pattern = try? Regex(#"[A-Za-z0-9\-_.~+/=]{16,}"#) else { return text }
         return text.replacing(pattern) { match in
-            let run = text[match.range]
-            let digits = run.contains(where: \.isNumber)
-            let mixed = digits && run.contains(where: \.isUppercase) && run.contains(where: \.isLowercase)
-            return (run.count >= 40 && digits) || mixed ? mask : String(run)
+            let run = String(text[match.range])
+            return looksLikeCredential(run) ? mask : run
+        }
+    }
+
+    static let credentialPrefixes = [
+        "sk-", "sk_", "pk_", "rk_", "oc_sk", "xai-", "gsk_", "ghp_", "gho_", "ghu_", "ghs_", "ghr_",
+        "github_pat_", "glpat-", "hf_", "AIza", "eyJ", "xoxb-", "xoxp-", "xoxa-", "xoxs-", "ya29.",
+    ]
+
+    static func looksLikeCredential(_ run: String) -> Bool {
+        let digits = run.contains(where: \.isNumber)
+        if run.count >= 40, digits { return true }
+        if run.count >= 24, digits, run.contains(where: \.isUppercase), run.contains(where: \.isLowercase) { return true }
+        if credentialPrefixes.contains(where: { run.hasPrefix($0) }) { return true }
+        return run.split(whereSeparator: { "-_.~+/=".contains($0) }).contains { piece in
+            piece.count >= 16 && piece.contains(where: \.isNumber) && piece.contains(where: \.isLetter)
         }
     }
 

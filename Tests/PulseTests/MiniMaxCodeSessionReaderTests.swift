@@ -97,6 +97,29 @@ struct MiniMaxCodeSessionReaderTests {
         #expect(Self.ledger(home: home).0.allTime.tokens == 1100)
     }
 
+    @Test("A log with files but no records reads the captures, and the read says so")
+    func emptyLogIsNotOwnLog() throws {
+        let home = try Self.home()
+        defer { try? FileManager.default.removeItem(at: home) }
+        // Only a zeroed migration line: files, no records.
+        try Self.session(home, day: "2026/09/22", name: "03-00-00-000-session_OLD", lines: [
+            Self.assistant("legacy-1", model: "historical-transcript", input: 0, output: 0, at: Self.t1),
+        ])
+        let capture = home.appending(path: ".config/tokscale/headless/mcode/capture.jsonl")
+        try FileManager.default.createDirectory(at: capture.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try [
+            #"{"type":"message","message":{"id":"m-1","turnId":"turn-1","role":"assistant","timestamp":1717200000,"usage":{"inputTokens":100,"outputTokens":20}}}"#,
+            #"{"type":"exec.result","sessionId":"sess-1","turnId":"turn-1","status":"ok","model":{"providerId":"minimax","modelId":"MiniMax-M2.7"}}"#,
+        ].joined(separator: "\n").write(to: capture, atomically: true, encoding: .utf8)
+
+        let roots = CapturedUsageReaders.inputs(client: "mcode", home: home, environment: [:])
+        let read = AgentRecordReaders.read(client: "mcode", roots: roots)
+        #expect(!read.records.isEmpty)
+        // The captures were read, so this is not the Mac's own log.
+        #expect(!read.readsOwnLog)
+        #expect(!CapturedUsageReaders.readsOwnLog(client: "mcode", roots: roots))
+    }
+
     @Test("MiniMax's card and pane take their history from MiniMax Code")
     func history() {
         #expect(SpendAgent.mcode.iconProvider == .minimax)

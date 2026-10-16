@@ -1,4 +1,5 @@
 // Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
+import CryptoKit
 import Foundation
 
 /// The MiniMax Coding Plan's limits, from its token-plan endpoint.
@@ -45,6 +46,22 @@ struct MiniMaxUsageService: Sendable {
     }
 
     func fetch() async -> ProviderUsage {
+        var usage = await read()
+        usage.sourceScope = Self.scope(site: site, key: enteredKey)
+        return usage
+    }
+
+    /// Which site and which key a reading came from, for the cache: the two
+    /// sites are two accounts, and the site is a setting, so a failed read on
+    /// one must never fall back to the other's figures. The key is named by
+    /// its SHA-256, never by itself. See `QoderUsageService.scope`.
+    static func scope(site: MiniMaxSite, key: String?) -> UsageScope? {
+        guard let key = key?.trimmingCharacters(in: .whitespacesAndNewlines), !key.isEmpty else { return nil }
+        let fingerprint = SHA256.hash(data: Data(key.utf8)).map { String(format: "%02x", $0) }.joined()
+        return UsageScope(route: .endpoint, organization: site.apiHost, identity: fingerprint)
+    }
+
+    private func read() async -> ProviderUsage {
         guard let key = enteredKey.flatMap({ $0.isEmpty ? nil : $0 }) else {
             return .unavailable(provider, reason: .apiKeyMissing)
         }

@@ -826,10 +826,11 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
     ///
     /// The two gateways too: each reading is only as good as the server it was
     /// read from, and the reader can point the account at another one. Qoder
-    /// likewise: its two sites are two accounts, and the site is a setting.
+    /// likewise: its two sites are two accounts, and the site is a setting;
+    /// and StepFun's and MiniMax's.
     var requiresScopeMatch: Bool {
         switch account.provider {
-        case .devin, .sub2api, .newAPI, .qoder, .stepFun: true
+        case .devin, .sub2api, .newAPI, .qoder, .stepFun, .minimax: true
         default: account.provider.profile?.requiresScopeMatch ?? false
         }
     }

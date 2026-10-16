@@ -107,4 +107,31 @@ struct ResponseLogTests {
         #expect(ResponseLog.failure(of: [dropped]).contains("-1001"))
         #expect(ResponseLog.failure(of: [ok]) != ResponseLog.failure(of: []))
     }
+
+    @Test("Keys in the shapes the review found leaking are masked")
+    func reviewLeaks() {
+        // `sk-` and 32 small hex digits: no capitals, under 40 characters.
+        let hexKey = "sk-" + String(repeating: "a1b2c3d4", count: 4)
+        #expect(!ResponseLog.redacted("Invalid key \(hexKey)").contains(hexKey))
+        // Short tokens in an array under a credential name.
+        let body = Data(#"{"tokens":["abc123","def456"],"session":{"id":"s-1"},"usage":{"input_tokens":12}}"#.utf8)
+        let text = ResponseLog.text(of: body, contentType: "application/json")
+        #expect(!text.contains("abc123") && !text.contains("def456") && !text.contains("s-1"))
+        #expect(text.contains("\"input_tokens\" : 12"))
+        // Known prefixes, however short the rest.
+        #expect(!ResponseLog.redacted("ghp_abcdefghijklmnop").contains("ghp_"))
+    }
+
+    @Test("Whatever credential the request carried is masked wherever the reply repeats it")
+    func echoedCredentials() {
+        var request = URLRequest(url: URL(string: "https://example.com/v1/usage?api_key=plainwordsecret")!)
+        request.setValue("Bearer shortsecretvalue", forHTTPHeaderField: "Authorization")
+        request.setValue("session=cookievalue123; theme=dark", forHTTPHeaderField: "Cookie")
+        let reply = Data(#"{"error":"bad token shortsecretvalue for plainwordsecret, cookie cookievalue123"}"#.utf8)
+        let entry = ResponseLog.entry(request, response: nil, data: reply, error: nil, at: Date())
+        #expect(!entry.body.contains("shortsecretvalue"))
+        #expect(!entry.body.contains("plainwordsecret"))
+        #expect(!entry.body.contains("cookievalue123"))
+        #expect(entry.body.contains("bad token"))
+    }
 }

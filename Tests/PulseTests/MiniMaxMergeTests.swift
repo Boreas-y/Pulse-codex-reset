@@ -110,3 +110,58 @@ struct MiniMaxMergeTests {
         #expect(MiniMaxMerge.folded(["minimaxCN": 0.5], cnWins: false) as? [String: Double] == ["minimax": 0.5])
     }
 }
+
+/// The two MiniMax sites are two accounts: a failed read on one never stands
+/// in for the other's figures (review, 2026-10-16).
+@Suite("MiniMax site scope")
+struct MiniMaxSiteScopeTests {
+    private func reading(site: MiniMaxSite, key: String, used: Double? = nil) -> ProviderUsage {
+        var usage: ProviderUsage
+        if let used {
+            let window = UsageWindow(id: "w", kind: .monthly, scope: nil, usedFraction: used,
+                                     windowSeconds: 0, resetsAt: nil, reportsLength: false)
+            usage = ProviderUsage(account: AccountKey(.minimax), windows: [window], observedAt: Date(),
+                                  state: .live, plan: nil, creditBalance: nil)
+        } else {
+            usage = .unavailable(AccountKey(.minimax), reason: .unreachable)
+        }
+        usage.sourceScope = MiniMaxUsageService.scope(site: site, key: key)
+        return usage
+    }
+
+    @Test("A failed read on the other site does not fall back to this site's figures")
+    func otherSiteIsNotAFallback() async {
+        let file = FileManager.default.temporaryDirectory.appending(path: "MiniMaxScope-\(UUID().uuidString).json")
+        defer { try? FileManager.default.removeItem(at: file) }
+        let cache = UsageCache(file: file)
+        _ = await cache.reconciled(reading(site: .international, key: "intl-key", used: 0.82))
+
+        let china = await cache.reconciled(reading(site: .china, key: "cn-key"))
+        #expect(china.state == .unavailable(.unreachable))
+        #expect(china.windows.isEmpty)
+
+        // The same site and key still fall back, as before.
+        let again = await cache.reconciled(reading(site: .international, key: "intl-key"))
+        #expect(again.windows.first?.usedFraction == 0.82)
+    }
+
+    @Test("The scope names the site and a fingerprint of the key, never the key")
+    func scopeNamesNoKey() throws {
+        let scope = try #require(MiniMaxUsageService.scope(site: .china, key: "secret-key"))
+        #expect(scope.organization == MiniMaxSite.china.apiHost)
+        #expect(scope.identity?.contains("secret") == false)
+        #expect(MiniMaxUsageService.scope(site: .china, key: "  ") == nil)
+        #expect(!UsageScope.match(scope, MiniMaxUsageService.scope(site: .international, key: "secret-key")))
+    }
+
+    @Test("Forgetting an account drops its kept reading")
+    func forget() async {
+        let file = FileManager.default.temporaryDirectory.appending(path: "MiniMaxForget-\(UUID().uuidString).json")
+        defer { try? FileManager.default.removeItem(at: file) }
+        let cache = UsageCache(file: file)
+        _ = await cache.reconciled(reading(site: .international, key: "k", used: 0.5))
+        #expect(await cache.lastReading(for: AccountKey(.minimax)) != nil)
+        await cache.forget(AccountKey(.minimax))
+        #expect(await cache.lastReading(for: AccountKey(.minimax)) == nil)
+    }
+}

@@ -87,25 +87,44 @@ struct CurrencySettingsGroup: View {
     /// Blank goes back to the fetched rate; anything that is not a positive
     /// number is refused and the field shows what is kept.
     private func commitRate() {
-        settings.setManualExchangeRate(Self.rate(rateText), for: currency)
+        switch Self.rateEntry(rateText) {
+        case .blank: settings.setManualExchangeRate(nil, for: currency)
+        case .rate(let rate): settings.setManualExchangeRate(rate, for: currency)
+        case .refused: break
+        }
         rateText = Self.text(settings.manualExchangeRates[currency.code])
     }
 
-    /// A rate typed into the field, read the reader's way (a comma decimal
-    /// separator included). Nil for blank or anything that is not a positive,
-    /// finite number — `Double(_:)` alone would take "inf".
-    nonisolated static func rate(_ typed: String, locale: Locale = LocalizationSource.locale) -> Double? {
-        let trimmed = typed.trimmingCharacters(in: .whitespaces)
-            .filter { $0.isNumber || $0 == "." || $0 == "," }
-        guard !trimmed.isEmpty else { return nil }
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.numberStyle = .decimal
-        let value = formatter.number(from: trimmed)?.doubleValue
-            ?? Double(trimmed.replacingOccurrences(of: ",", with: "."))
-        guard let value, value.isFinite, value > 0 else { return nil }
-        return value
+    enum RateEntry: Equatable {
+        case blank
+        case rate(Double)
+        case refused
     }
+
+    /// What was typed, read whole: digits with one decimal point or comma
+    /// ("7.12", "7,12"), or thousands grouped with commas before a point
+    /// ("1,339.81"). **Nothing is stripped to make it fit** — "-7.12" read as
+    /// 7.12 once, a rate every estimate was then converted at — so a sign, a
+    /// letter or a second separator refuses it, and so does zero or a rate
+    /// past `maximumRate`.
+    nonisolated static func rateEntry(_ typed: String) -> RateEntry {
+        let text = typed.trimmingCharacters(in: .whitespaces)
+        guard !text.isEmpty else { return .blank }
+        let number: String
+        if let plain = text.wholeMatch(of: /([0-9]+)(?:[.,]([0-9]+))?/) {
+            number = plain.1 + (plain.2.map { "." + $0 } ?? "")
+        } else if let grouped = text.wholeMatch(of: /([0-9]{1,3}(?:,[0-9]{3})+)(?:\.([0-9]+))?/) {
+            number = grouped.1.replacingOccurrences(of: ",", with: "") + (grouped.2.map { "." + $0 } ?? "")
+        } else {
+            return .refused
+        }
+        guard let value = Double(number), value.isFinite, value > 0, value <= maximumRate else { return .refused }
+        return .rate(value)
+    }
+
+    /// Well past any unit of these currencies to a dollar (the won is about
+    /// 1,400), and low enough that a stray digit is refused.
+    nonisolated static let maximumRate = 100_000.0
 
     /// A rate as the field shows it: up to four places, no grouping.
     nonisolated static func text(_ rate: Double?, locale: Locale = LocalizationSource.locale) -> String {

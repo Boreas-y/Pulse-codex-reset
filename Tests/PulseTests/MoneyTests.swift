@@ -98,13 +98,20 @@ struct MoneyTests {
         }
     }
 
-    @Test("The rate field reads a comma decimal and refuses what is not a positive number")
+    @Test("The rate field is read whole: a sign, a letter or a stray separator refuses it")
     func typedRates() {
-        #expect(CurrencySettingsGroup.rate("7.12", locale: Self.en) == 7.12)
-        #expect(CurrencySettingsGroup.rate("7,12", locale: Locale(identifier: "ru")) == 7.12)
-        #expect(CurrencySettingsGroup.rate("", locale: Self.en) == nil)
-        #expect(CurrencySettingsGroup.rate("0", locale: Self.en) == nil)
-        #expect(CurrencySettingsGroup.rate("inf", locale: Self.en) == nil)
+        #expect(CurrencySettingsGroup.rateEntry("7.12") == .rate(7.12))
+        #expect(CurrencySettingsGroup.rateEntry(" 7,12 ") == .rate(7.12))
+        #expect(CurrencySettingsGroup.rateEntry("1,339.81") == .rate(1339.81))
+        #expect(CurrencySettingsGroup.rateEntry("") == .blank)
+        // Stripping characters once turned "-7.12" into 7.12.
+        #expect(CurrencySettingsGroup.rateEntry("-7.12") == .refused)
+        #expect(CurrencySettingsGroup.rateEntry("7.1.2") == .refused)
+        #expect(CurrencySettingsGroup.rateEntry("7 CNY") == .refused)
+        #expect(CurrencySettingsGroup.rateEntry("¥7") == .refused)
+        #expect(CurrencySettingsGroup.rateEntry("0") == .refused)
+        #expect(CurrencySettingsGroup.rateEntry("inf") == .refused)
+        #expect(CurrencySettingsGroup.rateEntry("9999999") == .refused)
         #expect(CurrencySettingsGroup.text(7.0, locale: Self.en) == "7")
         #expect(CurrencySettingsGroup.text(6.706494, locale: Self.en) == "6.7065")
     }
