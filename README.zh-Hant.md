@@ -25,9 +25,9 @@
 </p>
 
 <p align="center">
-  <img src="Docs/demo.gif" height="400" alt="貼在螢幕邊緣的 Pulse 懸浮膠囊">
+  <img src="Docs/images/demo.gif" height="400" alt="貼在螢幕邊緣的 Pulse 懸浮膠囊">
   &nbsp;&nbsp;
-  <img src="Docs/panel.webp" height="400" alt="指標移到圓環上，會打開一張卡片，列出每項額度與重置時間">
+  <img src="Docs/images/panel.webp" height="400" alt="指標移到圓環上，會打開一張卡片，列出每項額度與重置時間">
 </p>
 
 - **76 個服務，一眼看完**——Claude Code、Codex、Cursor、GitHub Copilot、Antigravity、Kiro、Grok、DeepSeek、Kimi Code 等等，每個都有自己的圓環。
@@ -38,7 +38,7 @@
 **最近新增：** 在選單列顯示用量，並附上每個帳號的面板；額度重置後自動開始新視窗；會動的小機器人標記。[更新說明](https://github.com/qunqin24/Pulse/releases/latest)。
 
 <p align="center">
-  <img src="Docs/bot-mark.gif" width="300" alt="Pulse 動畫標記：每個環裡的小機器人會隨該帳號的狀態反應">
+  <img src="Docs/images/bot-mark.gif" width="300" alt="Pulse 動畫標記：每個環裡的小機器人會隨該帳號的狀態反應">
 </p>
 
 <p align="center">
@@ -80,7 +80,7 @@
 - **選單列**——把用得最多的圓環顯示成數字、小圓環或並排的額度，可選開啟用量面板。
 
 <p align="center">
-  <img src="Docs/detailed-card.webp" width="620" alt="同一個 Codex 帳號的精簡卡片與詳細卡片">
+  <img src="Docs/images/detailed-card.webp" width="620" alt="同一個 Codex 帳號的精簡卡片與詳細卡片">
 </p>
 
 ### 不打擾你
@@ -98,9 +98,9 @@
 - **進階**——同一服務商多個帳號、接入自己資料來源的擴充功能、供腳本使用的 `Pulse --json`。
 
 <p align="center">
-  <img src="Docs/spend.webp" height="290" alt="Token 消耗：總計、依類型的 token 與每日規律">
+  <img src="Docs/images/spend.webp" height="290" alt="Token 消耗：總計、依類型的 token 與每日規律">
   &nbsp;&nbsp;
-  <img src="Docs/spend-history.webp" height="290" alt="Token 消耗：逐日、逐月、依 agent">
+  <img src="Docs/images/spend-history.webp" height="290" alt="Token 消耗：逐日、逐月、依 agent">
 </p>
 
 **完整說明**（英文）：[Docs/features.md](Docs/features.md)。

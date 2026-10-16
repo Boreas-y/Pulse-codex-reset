@@ -25,9 +25,9 @@
 </p>
 
 <p align="center">
-  <img src="Docs/demo.gif" height="400" alt="Pulse floating rail docked against the screen edge">
+  <img src="Docs/images/demo.gif" height="400" alt="Pulse floating rail docked against the screen edge">
   &nbsp;&nbsp;
-  <img src="Docs/panel.webp" height="400" alt="Hovering a ring opens a card with every limit and its reset">
+  <img src="Docs/images/panel.webp" height="400" alt="Hovering a ring opens a card with every limit and its reset">
 </p>
 
 - **Seventy-six services at a glance** — Claude Code, Codex, Cursor, GitHub Copilot, Antigravity, Kiro, Grok, DeepSeek, Kimi Code and many more, each as its own ring.
@@ -38,7 +38,7 @@
 **Recently added:** usage in the menu bar with a dashboard for each account, starting usage windows after a reset, and animated bot marks. [What's new](https://github.com/qunqin24/Pulse/releases/latest).
 
 <p align="center">
-  <img src="Docs/bot-mark.gif" width="300" alt="Pulse animated marks: a bot in each ring reacting to what that account is doing">
+  <img src="Docs/images/bot-mark.gif" width="300" alt="Pulse animated marks: a bot in each ring reacting to what that account is doing">
 </p>
 
 <p align="center">
@@ -80,7 +80,7 @@
 - **In the menu bar** — the fullest ring as a figure, a small ring or split limits, with an optional dashboard.
 
 <p align="center">
-  <img src="Docs/detailed-card.webp" width="620" alt="The same Codex card, compact and detailed">
+  <img src="Docs/images/detailed-card.webp" width="620" alt="The same Codex card, compact and detailed">
 </p>
 
 ### Stays out of the way
@@ -98,9 +98,9 @@
 - **For power users** — several accounts per provider, extensions for your own sources, `Pulse --json` for scripts.
 
 <p align="center">
-  <img src="Docs/spend.webp" height="290" alt="Token spend: total, tokens by kind, and the daily pattern">
+  <img src="Docs/images/spend.webp" height="290" alt="Token spend: total, tokens by kind, and the daily pattern">
   &nbsp;&nbsp;
-  <img src="Docs/spend-history.webp" height="290" alt="Token spend day by day, by month and by agent">
+  <img src="Docs/images/spend-history.webp" height="290" alt="Token spend day by day, by month and by agent">
 </p>
 
 **Everything in detail:** [Docs/features.md](Docs/features.md).

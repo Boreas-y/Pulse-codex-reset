@@ -25,9 +25,9 @@
 </p>
 
 <p align="center">
-  <img src="Docs/demo.gif" height="400" alt="画面の端に寄せた Pulse のフローティングレール">
+  <img src="Docs/images/demo.gif" height="400" alt="画面の端に寄せた Pulse のフローティングレール">
   &nbsp;&nbsp;
-  <img src="Docs/panel.webp" height="400" alt="リングにポインタを乗せると、すべての上限とリセット時刻を並べたカードが開きます">
+  <img src="Docs/images/panel.webp" height="400" alt="リングにポインタを乗せると、すべての上限とリセット時刻を並べたカードが開きます">
 </p>
 
 - **76 のサービスをひと目で**——Claude Code、Codex、Cursor、GitHub Copilot、Antigravity、Kiro、Grok、DeepSeek、Kimi Code など。それぞれに専用のリングがあります。
@@ -38,7 +38,7 @@
 **最近の追加：** メニューバーでの使用量表示とアカウントごとのダッシュボード、リセット後に利用枠を自動で始める機能、動くボットのマーク。[更新内容](https://github.com/qunqin24/Pulse/releases/latest)。
 
 <p align="center">
-  <img src="Docs/bot-mark.gif" width="300" alt="Pulse のアニメーションマーク：各リングのボットがそのアカウントの状態に反応します">
+  <img src="Docs/images/bot-mark.gif" width="300" alt="Pulse のアニメーションマーク：各リングのボットがそのアカウントの状態に反応します">
 </p>
 
 <p align="center">
@@ -80,7 +80,7 @@
 - **メニューバー**——いちばん使っているリングを数字・小さなリング・上限の並びで。ダッシュボードも開けます。
 
 <p align="center">
-  <img src="Docs/detailed-card.webp" width="620" alt="同じ Codex アカウントのコンパクトなカードと詳細カード">
+  <img src="Docs/images/detailed-card.webp" width="620" alt="同じ Codex アカウントのコンパクトなカードと詳細カード">
 </p>
 
 ### じゃまにならない
@@ -98,9 +98,9 @@
 - **使い込む人に**——プロバイダごとの複数アカウント、自分のデータ源を足す拡張機能、スクリプト用の `Pulse --json`。
 
 <p align="center">
-  <img src="Docs/spend.webp" height="290" alt="トークン使用量：合計、種類別トークン、日ごとの傾向">
+  <img src="Docs/images/spend.webp" height="290" alt="トークン使用量：合計、種類別トークン、日ごとの傾向">
   &nbsp;&nbsp;
-  <img src="Docs/spend-history.webp" height="290" alt="トークン使用量：日別・月別・エージェント別">
+  <img src="Docs/images/spend-history.webp" height="290" alt="トークン使用量：日別・月別・エージェント別">
 </p>
 
 **すべての機能の詳細**（英語）：[Docs/features.md](Docs/features.md)。

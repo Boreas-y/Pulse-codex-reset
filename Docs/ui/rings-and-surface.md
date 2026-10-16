@@ -72,7 +72,7 @@ White arc on the band between the icon disc and the usage stroke — **or just o
 ## Animated marks
 
 <p align="center">
-  <img src="../bot-mark.gif" width="340" alt="A rail of animated marks, each reacting to what its account is doing">
+  <img src="../images/bot-mark.gif" width="340" alt="A rail of animated marks, each reacting to what its account is doing">
 </p>
 
 `AppSettings.botMarks`, **per account**, default off, switched on in that account's provider pane. It reaches the ring through `RailEntry.showsBotMark`, as the chosen tint does, not through the environment. A logo says which of seventy-seven products a ring is; a mark trades that for motion, worth it only on the rings somebody watches work. Provenance, rights, and why the motion follows the upstream: [../decisions/bot-mark-geometry.md](../decisions/bot-mark-geometry.md). Regenerate the data with [`Scripts/extract-bot-data.py`](../../Scripts/extract-bot-data.py).

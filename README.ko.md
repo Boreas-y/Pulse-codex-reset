@@ -25,9 +25,9 @@
 </p>
 
 <p align="center">
-  <img src="Docs/demo.gif" height="400" alt="화면 가장자리에 붙은 Pulse 플로팅 레일">
+  <img src="Docs/images/demo.gif" height="400" alt="화면 가장자리에 붙은 Pulse 플로팅 레일">
   &nbsp;&nbsp;
-  <img src="Docs/panel.webp" height="400" alt="링에 포인터를 올리면 모든 한도와 초기화 시각을 담은 카드가 열립니다">
+  <img src="Docs/images/panel.webp" height="400" alt="링에 포인터를 올리면 모든 한도와 초기화 시각을 담은 카드가 열립니다">
 </p>
 
 - **76개 서비스를 한눈에**——Claude Code, Codex, Cursor, GitHub Copilot, Antigravity, Kiro, Grok, DeepSeek, Kimi Code 등, 서비스마다 링이 하나씩 있습니다.
@@ -38,7 +38,7 @@
 **최근 추가:** 메뉴 막대 사용량 표시와 계정별 대시보드, 한도 초기화 후 사용 창 자동 시작, 움직이는 봇 마크. [새 소식](https://github.com/qunqin24/Pulse/releases/latest).
 
 <p align="center">
-  <img src="Docs/bot-mark.gif" width="300" alt="Pulse 애니메이션 마크: 각 링의 봇이 해당 계정의 상태에 반응합니다">
+  <img src="Docs/images/bot-mark.gif" width="300" alt="Pulse 애니메이션 마크: 각 링의 봇이 해당 계정의 상태에 반응합니다">
 </p>
 
 <p align="center">
@@ -80,7 +80,7 @@
 - **메뉴 막대**——가장 많이 쓴 링을 숫자, 작은 링, 나란한 한도로. 대시보드도 열 수 있습니다.
 
 <p align="center">
-  <img src="Docs/detailed-card.webp" width="620" alt="같은 Codex 계정의 간단한 카드와 자세한 카드">
+  <img src="Docs/images/detailed-card.webp" width="620" alt="같은 Codex 계정의 간단한 카드와 자세한 카드">
 </p>
 
 ### 방해하지 않는
@@ -98,9 +98,9 @@
 - **깊이 쓰는 분께**——제공업체별 여러 계정, 직접 만든 데이터 원본을 더하는 확장, 스크립트용 `Pulse --json`.
 
 <p align="center">
-  <img src="Docs/spend.webp" height="290" alt="토큰 사용량: 합계, 종류별 토큰, 일별 패턴">
+  <img src="Docs/images/spend.webp" height="290" alt="토큰 사용량: 합계, 종류별 토큰, 일별 패턴">
   &nbsp;&nbsp;
-  <img src="Docs/spend-history.webp" height="290" alt="토큰 사용량: 일별, 월별, 에이전트별">
+  <img src="Docs/images/spend-history.webp" height="290" alt="토큰 사용량: 일별, 월별, 에이전트별">
 </p>
 
 **모든 기능 자세히 보기**(영어): [Docs/features.md](Docs/features.md).

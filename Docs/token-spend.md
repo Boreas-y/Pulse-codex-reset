@@ -161,9 +161,9 @@ A model id that misses the table is not free; it is a bill that silently reads z
 
 Local SwiftUI row renderings with synthetic data (not live-client captures):
 
-![session pricing](session-pricing.png)
+![session pricing](images/session-pricing.png)
 
-![project identity](project-identity.png)
+![project identity](images/project-identity.png)
 
 ## The recap and `--recap`
 

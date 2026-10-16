@@ -15,7 +15,7 @@ Everything Pulse does, in full. The [README](../README.md) has the short version
 - **Pin Primary Window**: Pin whichever limit matters most to the ring, or let Pulse automatically track the one closest to exhaustion.
 
 <p align="center">
-  <img src="detailed-card.webp" width="620" alt="The same Codex card, compact and detailed">
+  <img src="images/detailed-card.webp" width="620" alt="The same Codex card, compact and detailed">
 </p>
 
 ## Native, Fluid & Non-Intrusive
@@ -48,25 +48,25 @@ Everything Pulse does, in full. The [README](../README.md) has the short version
 - **Privacy First**: Pulse runs on your Mac under your own provider logins. It makes five kinds of connection and they are all listed here: the providers you already use, their public status pages for Service status and its notification, [models.dev](https://models.dev) for public model prices in the token-spend pane, [ExchangeRate-API](https://www.exchangerate-api.com) for the day's exchange rate while estimates are shown in a currency other than the dollar, and GitHub/Sparkle for app updates. Provider requests, status pages, sign-in exchanges, models.dev and the exchange rate use the proxy chosen under Settings › Network and refresh; supported helper processes receive the same custom proxy, or none with No Proxy. Sparkle update checks always follow macOS system proxy settings.
 
 <p align="center">
-  <img src="settings.webp" height="300" alt="Pulse Settings">
+  <img src="images/settings.webp" height="300" alt="Pulse Settings">
 </p>
 
 <p align="center">
-  <img src="account-claude-code.webp" height="290" alt="An account pane: every reported limit, the estimated value of what was used, and the local history">
+  <img src="images/account-claude-code.webp" height="290" alt="An account pane: every reported limit, the estimated value of what was used, and the local history">
   &nbsp;&nbsp;
-  <img src="account-codex.webp" height="290" alt="Another account pane, with the plan, credit balance and limit reset credits it reports">
+  <img src="images/account-codex.webp" height="290" alt="Another account pane, with the plan, credit balance and limit reset credits it reports">
 </p>
 
 <p align="center">
-  <img src="spend.webp" height="290" alt="Token spend: total, tokens by kind, and the daily pattern">
+  <img src="images/spend.webp" height="290" alt="Token spend: total, tokens by kind, and the daily pattern">
   &nbsp;&nbsp;
-  <img src="spend-history.webp" height="290" alt="Token spend day by day, by month and by agent">
+  <img src="images/spend-history.webp" height="290" alt="Token spend day by day, by month and by agent">
 </p>
 
 <p align="center">
-  <img src="spend-agent.webp" height="290" alt="One agent's spending on its own">
+  <img src="images/spend-agent.webp" height="290" alt="One agent's spending on its own">
   &nbsp;&nbsp;
-  <img src="spend-model.webp" height="290" alt="One model's spending, priced by token kind">
+  <img src="images/spend-model.webp" height="290" alt="One model's spending, priced by token kind">
 </p>
 
 ## Privacy and security

@@ -25,9 +25,9 @@
 </p>
 
 <p align="center">
-  <img src="Docs/demo.gif" height="400" alt="贴在屏幕边缘的 Pulse 悬浮胶囊">
+  <img src="Docs/images/demo.gif" height="400" alt="贴在屏幕边缘的 Pulse 悬浮胶囊">
   &nbsp;&nbsp;
-  <img src="Docs/panel.webp" height="400" alt="指针移到圆环上，会打开一张卡片，列出每项额度和重置时间">
+  <img src="Docs/images/panel.webp" height="400" alt="指针移到圆环上，会打开一张卡片，列出每项额度和重置时间">
 </p>
 
 - **76 个服务，一眼看完**——Claude Code、Codex、Cursor、GitHub Copilot、Antigravity、Kiro、Grok、DeepSeek、Kimi Code 等等，每个都有自己的圆环。
@@ -38,7 +38,7 @@
 **最近新增：** 菜单栏显示用量，并带每个账号的面板；额度重置后自动开始新窗口；会动的小机器人标记。[更新说明](https://github.com/qunqin24/Pulse/releases/latest)。
 
 <p align="center">
-  <img src="Docs/bot-mark.gif" width="300" alt="Pulse 动画标记：每个环里的小机器人会随该账号的状态反应">
+  <img src="Docs/images/bot-mark.gif" width="300" alt="Pulse 动画标记：每个环里的小机器人会随该账号的状态反应">
 </p>
 
 <p align="center">
@@ -80,7 +80,7 @@
 - **菜单栏**——把用得最多的圆环显示成数字、小圆环或并排的限额，可选打开用量面板。
 
 <p align="center">
-  <img src="Docs/detailed-card.webp" width="620" alt="同一个 Codex 账号的简洁额度卡与详细额度卡">
+  <img src="Docs/images/detailed-card.webp" width="620" alt="同一个 Codex 账号的简洁额度卡与详细额度卡">
 </p>
 
 ### 不打扰你
@@ -98,9 +98,9 @@
 - **进阶**——同一服务商多个账号、接入自己数据源的扩展、供脚本使用的 `Pulse --json`。
 
 <p align="center">
-  <img src="Docs/spend.webp" height="290" alt="Token 消费：合计、按类型的用量与每日规律">
+  <img src="Docs/images/spend.webp" height="290" alt="Token 消费：合计、按类型的用量与每日规律">
   &nbsp;&nbsp;
-  <img src="Docs/spend-history.webp" height="290" alt="按天、按月、按 agent 的 Token 消费">
+  <img src="Docs/images/spend-history.webp" height="290" alt="按天、按月、按 agent 的 Token 消费">
 </p>
 
 **完整说明**（英文）：[Docs/features.md](Docs/features.md)。
