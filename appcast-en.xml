@@ -6,6 +6,24 @@
         <description>Updates for Pulse.</description>
         <language>en</language>
         <item>
+            <title>1.12.1</title>
+            <pubDate>Fri, 16 Oct 2026 06:16:19 -0000</pubDate>
+            <sparkle:version>1.12.1</sparkle:version>
+            <sparkle:shortVersionString>1.12.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.12.1</link>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.1</h2><p><strong>Changed and fixed</strong></p><ul><li><strong>Cursor shows the weekly usage limit.</strong> On Premium and other plans with weekly included usage, Cursor&#x27;s ring shows the week&#x27;s usage and reset in place of the two monthly pools that always read 0%. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/87">@HesionBlack</a> for the report.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.12.1/Pulse-1.12.1.zip"
+                       length="16076583"
+                       type="application/octet-stream"
+                       sparkle:edSignature="BSjiw9itRM9bKtd5E0VvzRCIQ1CGU0ZJoKI1Wtn6MDkrIPo7mI3sdqh0Hzu7XpGm3w3k2Dm3jQGmYPA/QfvXCw==" />
+        </item>
+        <item>
             <title>1.12.0</title>
             <pubDate>Fri, 16 Oct 2026 00:53:30 -0000</pubDate>
             <sparkle:version>1.12.0</sparkle:version>
