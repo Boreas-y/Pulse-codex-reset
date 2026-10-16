@@ -7,6 +7,20 @@ shows in the update window — see [Scripts/changelog.py](Scripts/changelog.py).
 Add the entry **before** tagging, in the small grammar the converter knows:
 bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
+## 1.12.1
+
+**中文**
+
+**改进与修复**
+
+- **Cursor 显示每周用量上限。** 在 Premium 等按周计算额度的套餐上，Cursor 的圆环显示每周用量和重置时间，取代一直显示 0% 的两个月度用量池。感谢 [@HesionBlack](https://github.com/qunqin24/Pulse/issues/87) 报告。
+
+**English**
+
+**Changed and fixed**
+
+- **Cursor shows the weekly usage limit.** On Premium and other plans with weekly included usage, Cursor's ring shows the week's usage and reset in place of the two monthly pools that always read 0%. Thanks to [@HesionBlack](https://github.com/qunqin24/Pulse/issues/87) for the report.
+
 ## 1.12.0
 
 **中文**
