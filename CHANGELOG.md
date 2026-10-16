@@ -7,6 +7,60 @@ shows in the update window — see [Scripts/changelog.py](Scripts/changelog.py).
 Add the entry **before** tagging, in the small grammar the converter knows:
 bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
+## 1.12.0
+
+**中文**
+
+**新功能**
+
+- **44 个服务商的服务状态。** Copilot、Devin、Windsurf、Hugging Face、Gemini 等服务商的设置页显示官方状态页公布的状态和历史，可以随时刷新，在「设置 → 通知 → 服务出故障时」打开故障提醒，[对照表](https://github.com/qunqin24/Pulse/blob/main/Docs/providers/README.md#service-status)见文档。
+- **估算金额可以换成你用的货币。** 在「设置 → 通用 → 货币」中选择人民币、港元、新台币、日元、韩元或卢布，按当日汇率或你填写的汇率换算，服务商自己报告的余额不换算。
+- **连接诊断显示服务器的原始回应。** 在服务商设置页的「连接诊断」中展开「服务器原始回应」，查看每个请求的状态码和返回内容，凭证会被隐藏。
+- **Antigravity 支持 agy CLI。** 编辑器没有运行时改用 `agy` CLI 读取额度，在 Antigravity 设置页的「用量来源」中选择自动、CLI 或桌面端。
+- **MiniMax Code 的用量记录。** 打开 Token 消耗后，MiniMax 的卡片和设置页显示本机 MiniMax Code 的用量记录。感谢 [@Eileenes](https://github.com/qunqin24/Pulse/issues/86) 提议。
+- **可以关闭自动吸附到屏幕边缘。** 在「设置 → 位置与行为」中关闭后，拖动只移动面板，可以放在屏幕任何位置，包括菜单栏和程序坞上方。感谢 [@GinWU05](https://github.com/qunqin24/Pulse/issues/85) 提议。
+- **进度条样式。** 在「设置 → 外观 → 进度条」中选择连续或分段。
+
+**改进与修复**
+
+- **MiniMax 与 MiniMax CN 合并为一个服务商。** 在 MiniMax 设置页选择国际站或国内站，两个站点各自保存 key，原 MiniMax CN 的 key 和设置会在启动时自动迁移。
+- **设置窗口改为系统设置的样式。** 侧栏延伸到窗口顶部，标题栏显示当前页面名称，并有后退和前进按钮（⌘[ 和 ⌘]）。
+- **程序坞菜单里的「退出」只关闭窗口。** Pulse 继续留在菜单栏，⌘Q 和菜单栏图标中的「退出 Pulse」仍会退出整个 app。
+- **金额不再显示「US$」。** 美元统一写作「$」，估算金额前也不再加「≈」。
+- **OpenCode Go 订阅到期时提示没有套餐。** 不再误报「key 被拒绝」。
+- **改进 Codex 的「较弱模型迹象」。** max 和 ultra 推理强度纳入比较，上下文窗口不再算作降级，推理在固定位置停下的比例只显示数字、不下结论。感谢 [@frankliness](https://github.com/qunqin24/Pulse/pull/83) 贡献。[#84](https://github.com/qunqin24/Pulse/pull/84)
+- **刘海处的面板不会被路过的指针展开。** 指针停留片刻才展开，展开后立即按下的点击也不会误刷新圆环。
+- **指针离开后，详情卡可靠收起。** 修复了偶尔要把指针移回去再移开才收起的问题。
+- **液态玻璃调得更透明时，文字仍然清晰。** 透明度滑块越过默认值后，文字从白色逐渐变为黑色。
+- **更省电，读取更快。** 面板收起时小机器人停止动画，读取本机用量记录更快、占用内存更少。
+- **「读取途径检查」整行都可以点击展开。** 不必再点右侧的箭头。
+
+**English**
+
+**New**
+
+- **Service status for 44 providers.** Copilot, Devin, Windsurf, Hugging Face, Gemini and others show their own status page's state and history in their settings, with Refresh; turn on outage alerts under Settings → Notifications → When a service is down, and see [which pages](https://github.com/qunqin24/Pulse/blob/main/Docs/providers/README.md#service-status).
+- **Estimates in your own currency.** Choose yuan, Hong Kong or New Taiwan dollars, yen, won or roubles under Settings → General → Currency, converted at the day's rate or one you type; balances a provider reports are not converted.
+- **Connection diagnostics show the servers' own replies.** Expand Server replies under Connection diagnostics in a provider's settings to see each request's status and what came back, with credentials hidden.
+- **Antigravity through the agy CLI.** With the editor closed, Pulse reads the quota through the `agy` CLI; choose Automatic, CLI or Desktop app under Read usage from in Antigravity's settings.
+- **MiniMax Code usage history.** With Token spend on, MiniMax's card and settings show this Mac's MiniMax Code usage. Thanks to [@Eileenes](https://github.com/qunqin24/Pulse/issues/86) for the suggestion.
+- **Snap to screen edges can be turned off.** Turn it off under Settings → Position and behavior and a drag only moves the panel, anywhere on screen, over the menu bar and the Dock included. Thanks to [@GinWU05](https://github.com/qunqin24/Pulse/issues/85) for the suggestion.
+- **Progress bar styles.** Choose Continuous or Segmented under Settings → Appearance → Progress bars.
+
+**Changed and fixed**
+
+- **MiniMax and MiniMax CN are one provider.** Choose the international or mainland site in MiniMax's settings, each keeping its own key; MiniMax CN's key and settings move over at launch.
+- **Settings looks like System Settings.** The sidebar runs to the top of the window, and the title bar shows the current pane with back and forward buttons (⌘[ and ⌘]).
+- **Quit in the Dock icon's menu closes the windows only.** Pulse stays in the menu bar; ⌘Q and Quit Pulse in the menu bar icon still quit the app.
+- **No more "US$".** Dollars are written "$" everywhere, and estimated amounts no longer carry "≈".
+- **An expired OpenCode Go subscription says there is no plan.** It is no longer reported as a refused key.
+- **Better Codex weaker-model signs.** Max and ultra reasoning effort are ranked, the context window no longer counts as a downgrade, and the share of reasoning stopped at fixed points is shown as a figure with no verdict. Thanks to [@frankliness](https://github.com/qunqin24/Pulse/pull/83) for the contribution. [#84](https://github.com/qunqin24/Pulse/pull/84)
+- **The panel at the notch no longer opens for a passing pointer.** It opens once the pointer rests there, and a click right after it opens no longer refreshes a ring by accident.
+- **The detailed card closes reliably once the pointer leaves.** It no longer sometimes waits for the pointer to come back and leave again.
+- **Text stays readable on clearer Liquid Glass.** Past the default transparency, the text turns gradually from white to black.
+- **Less power, faster reading.** The animated marks stop while the panel is collapsed, and this Mac's usage records are read faster with less memory.
+- **The whole Route checks row opens the list.** The arrow on the right is no longer the only target.
+
 ## 1.11.0
 
 **中文**
