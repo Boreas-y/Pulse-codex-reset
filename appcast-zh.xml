@@ -6,6 +6,24 @@
         <description>Updates for Pulse.</description>
         <language>en</language>
         <item>
+            <title>1.12.0</title>
+            <pubDate>Fri, 16 Oct 2026 00:53:30 -0000</pubDate>
+            <sparkle:version>1.12.0</sparkle:version>
+            <sparkle:shortVersionString>1.12.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.12.0</link>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.0</h2><p><strong>新功能</strong></p><ul><li><strong>44 个服务商的服务状态。</strong> Copilot、Devin、Windsurf、Hugging Face、Gemini 等服务商的设置页显示官方状态页公布的状态和历史，可以随时刷新，在「设置 → 通知 → 服务出故障时」打开故障提醒，<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/providers/README.md#service-status">对照表</a>见文档。</li><li><strong>估算金额可以换成你用的货币。</strong> 在「设置 → 通用 → 货币」中选择人民币、港元、新台币、日元、韩元或卢布，按当日汇率或你填写的汇率换算，服务商自己报告的余额不换算。</li><li><strong>连接诊断显示服务器的原始回应。</strong> 在服务商设置页的「连接诊断」中展开「服务器原始回应」，查看每个请求的状态码和返回内容，凭证会被隐藏。</li><li><strong>Antigravity 支持 agy CLI。</strong> 编辑器没有运行时改用 <code>agy</code> CLI 读取额度，在 Antigravity 设置页的「用量来源」中选择自动、CLI 或桌面端。</li><li><strong>MiniMax Code 的用量记录。</strong> 打开 Token 消耗后，MiniMax 的卡片和设置页显示本机 MiniMax Code 的用量记录。感谢 <a href="https://github.com/qunqin24/Pulse/issues/86">@Eileenes</a> 提议。</li><li><strong>可以关闭自动吸附到屏幕边缘。</strong> 在「设置 → 位置与行为」中关闭后，拖动只移动面板，可以放在屏幕任何位置，包括菜单栏和程序坞上方。感谢 <a href="https://github.com/qunqin24/Pulse/issues/85">@GinWU05</a> 提议。</li><li><strong>进度条样式。</strong> 在「设置 → 外观 → 进度条」中选择连续或分段。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>MiniMax 与 MiniMax CN 合并为一个服务商。</strong> 在 MiniMax 设置页选择国际站或国内站，两个站点各自保存 key，原 MiniMax CN 的 key 和设置会在启动时自动迁移。</li><li><strong>设置窗口改为系统设置的样式。</strong> 侧栏延伸到窗口顶部，标题栏显示当前页面名称，并有后退和前进按钮（⌘[ 和 ⌘]）。</li><li><strong>程序坞菜单里的「退出」只关闭窗口。</strong> Pulse 继续留在菜单栏，⌘Q 和菜单栏图标中的「退出 Pulse」仍会退出整个 app。</li><li><strong>金额不再显示「US$」。</strong> 美元统一写作「$」，估算金额前也不再加「≈」。</li><li><strong>OpenCode Go 订阅到期时提示没有套餐。</strong> 不再误报「key 被拒绝」。</li><li><strong>改进 Codex 的「较弱模型迹象」。</strong> max 和 ultra 推理强度纳入比较，上下文窗口不再算作降级，推理在固定位置停下的比例只显示数字、不下结论。感谢 <a href="https://github.com/qunqin24/Pulse/pull/83">@frankliness</a> 贡献。<a href="https://github.com/qunqin24/Pulse/pull/84">#84</a></li><li><strong>刘海处的面板不会被路过的指针展开。</strong> 指针停留片刻才展开，展开后立即按下的点击也不会误刷新圆环。</li><li><strong>指针离开后，详情卡可靠收起。</strong> 修复了偶尔要把指针移回去再移开才收起的问题。</li><li><strong>液态玻璃调得更透明时，文字仍然清晰。</strong> 透明度滑块越过默认值后，文字从白色逐渐变为黑色。</li><li><strong>更省电，读取更快。</strong> 面板收起时小机器人停止动画，读取本机用量记录更快、占用内存更少。</li><li><strong>「读取途径检查」整行都可以点击展开。</strong> 不必再点右侧的箭头。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.12.0/Pulse-1.12.0.zip"
+                       length="16050863"
+                       type="application/octet-stream"
+                       sparkle:edSignature="Vxjedpv1+DMoC2jlSe6iJmMLD8qOW8TCLKd1BOUduTX0i080loHOwidmhGcAFcHoXUPX2nrt6tcqTd+qJEh+BA==" />
+        </item>
+        <item>
             <title>1.11.0</title>
             <pubDate>Mon, 12 Oct 2026 08:29:34 -0000</pubDate>
             <sparkle:version>1.11.0</sparkle:version>
