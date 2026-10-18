@@ -1116,10 +1116,8 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "Итоги месяца";
 "Yearly Recap" = "Итоги года";
-"Monthly and Yearly Recap" = "Итоги месяца и года";
-"View %@ recap" = "Итоги за %@";
-"View %@ yearly recap" = "Итоги за %@ год";
-"Shareable cards for a month or a year, from this Mac's records." = "Карточки за месяц или год по записям этого Mac — ими можно поделиться.";
+"Recaps" = "Итоги";
+"Shareable cards for a day, a week, a month or a year, from this Mac's records." = "Карточки за день, неделю, месяц или год по записям этого Mac — ими можно поделиться.";
 "When a recap is ready" = "Когда итоги готовы";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "Итоги прошлого месяца — в начале месяца. Нужно включить «Читать локальные записи о расходе».";
 "Your %@ recap is ready" = "Итоги за %@ готовы";

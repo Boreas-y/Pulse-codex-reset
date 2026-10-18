@@ -1116,10 +1116,8 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "月間まとめ";
 "Yearly Recap" = "年間まとめ";
-"Monthly and Yearly Recap" = "月間まとめ・年間まとめ";
-"View %@ recap" = "%@のまとめを見る";
-"View %@ yearly recap" = "%@年の年間まとめを見る";
-"Shareable cards for a month or a year, from this Mac's records." = "この Mac の記録から、1 か月または 1 年分の共有用カードを作ります。";
+"Recaps" = "まとめ";
+"Shareable cards for a day, a week, a month or a year, from this Mac's records." = "この Mac の記録から、1 日・1 週間・1 か月・1 年分の共有用カードを作ります。";
 "When a recap is ready" = "まとめができたとき";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "月初に、先月のまとめができたことを知らせます。「ローカルの使用量記録を読み取る」がオンのときだけ使えます。";
 "Your %@ recap is ready" = "%@のまとめができました";

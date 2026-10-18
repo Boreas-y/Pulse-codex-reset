@@ -1116,10 +1116,8 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "月報";
 "Yearly Recap" = "年報";
-"Monthly and Yearly Recap" = "月報與年報";
-"View %@ recap" = "查看 %@ 的月報";
-"View %@ yearly recap" = "查看 %@ 年報";
-"Shareable cards for a month or a year, from this Mac's records." = "用這台 Mac 的本機記錄，製作可以分享的月度和年度卡片。";
+"Recaps" = "報告";
+"Shareable cards for a day, a week, a month or a year, from this Mac's records." = "用這台 Mac 的本機記錄，製作可以分享的日、週、月、年卡片。";
 "When a recap is ready" = "月報完成時";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "每月月初提醒上個月的月報已完成。需要先開啟「讀取本機用量記錄」。";
 "Your %@ recap is ready" = "%@ 的月報已完成";

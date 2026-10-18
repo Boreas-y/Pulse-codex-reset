@@ -188,7 +188,7 @@ What `build` works out itself:
 
 ### The recap window
 
-The pane's first group holds a **Monthly and Yearly Recap** row (reading on only) with two buttons. **View September recap** opens the month `RecapPeriods.defaultMonth` picks from the earliest record in the pane's ledgers: the month that just ended during the first seven days of a month, the running one after that. **View 2026 recap** opens the year `RecapPeriods.defaultYear` picks (January 1–7 the year that just ended, otherwise this one). Each opens the recap window on its period ([recap.md](recap.md#the-window)); no menu carries an entry for it. The window reads through `RecapSource.load`, which reuses the scan `SpendWarmer` keeps rather than reading the stores again; with reading off it sends the person back to this pane and **does not switch reading on**.
+The pane's first group holds a **Recaps** row (reading on only) with one **Open** button. It opens the recap window ([recap.md](recap.md#the-window)) on the month `RecapPeriods.defaultMonth` picks from the earliest record in the pane's ledgers: the month that just ended during the first seven days of a month, the running one after that. Day, week and year are the window's own switch; no menu carries an entry for it. The window reads through `RecapSource.load`, which reuses the scan `SpendWarmer` keeps rather than reading the stores again; with reading off it sends the person back to this pane and **does not switch reading on**.
 
 ### `Pulse --recap`
 

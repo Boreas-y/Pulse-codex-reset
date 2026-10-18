@@ -1116,10 +1116,8 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "월간 리포트";
 "Yearly Recap" = "연간 리포트";
-"Monthly and Yearly Recap" = "월간·연간 리포트";
-"View %@ recap" = "%@ 리포트 보기";
-"View %@ yearly recap" = "%@ 연간 리포트 보기";
-"Shareable cards for a month or a year, from this Mac's records." = "이 Mac의 기록으로 한 달 또는 한 해의 공유용 카드를 만듭니다.";
+"Recaps" = "리포트";
+"Shareable cards for a day, a week, a month or a year, from this Mac's records." = "이 Mac의 기록으로 하루, 한 주, 한 달 또는 한 해의 공유용 카드를 만듭니다.";
 "When a recap is ready" = "리포트가 준비되었을 때";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "매월 초에 지난달 리포트가 준비되었음을 알립니다. ‘로컬 사용량 기록 읽기’가 켜져 있어야 합니다.";
 "Your %@ recap is ready" = "%@ 리포트가 준비되었습니다";

@@ -1116,10 +1116,8 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "Monthly Recap";
 "Yearly Recap" = "Yearly Recap";
-"Monthly and Yearly Recap" = "Monthly and Yearly Recap";
-"View %@ recap" = "View %@ recap";
-"View %@ yearly recap" = "View %@ recap";
-"Shareable cards for a month or a year, from this Mac's records." = "Shareable cards for a month or a year, from this Mac's records.";
+"Recaps" = "Recaps";
+"Shareable cards for a day, a week, a month or a year, from this Mac's records." = "Shareable cards for a day, a week, a month or a year, from this Mac's records.";
 "When a recap is ready" = "When a recap is ready";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "Last month's recap, at the start of the month. Needs “Read local usage records”.";
 "Your %@ recap is ready" = "Your %@ recap is ready";
