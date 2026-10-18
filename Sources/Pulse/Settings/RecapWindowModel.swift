@@ -105,10 +105,18 @@ final class RecapWindowModel {
 
     /// The period one step earlier (-1) or later (1) among those offered, or
     /// nil at either end. By date, newest first: `offered` puts an asked-for
-    /// period outside the list at its top, which is not where it falls.
+    /// period outside the list at its top, which is not where it falls, so
+    /// it is put back where its date is. **No sort**: the list is already
+    /// newest first, the view asks this for both step buttons on every
+    /// redraw, and a day list can run to thousands.
     func neighbour(_ direction: Int) -> Recap.Period? {
-        let start = { (period: Recap.Period) in period.bounds(calendar: Recap.calendar)?.start ?? .distantPast }
-        let list = offered.sorted { start($0) > start($1) }
+        var list = RecapPeriods.offered(kind, earliest: earliest, now: now())
+        if !list.contains(period) {
+            let calendar = Recap.calendar
+            let start = period.bounds(calendar: calendar)?.start ?? .distantPast
+            let index = list.firstIndex { ($0.bounds(calendar: calendar)?.start ?? .distantPast) < start } ?? list.endIndex
+            list.insert(period, at: index)
+        }
         guard let index = list.firstIndex(of: period) else { return nil }
         let target = index - direction
         return list.indices.contains(target) ? list[target] : nil

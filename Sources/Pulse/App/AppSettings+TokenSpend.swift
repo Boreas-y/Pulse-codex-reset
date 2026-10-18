@@ -23,6 +23,11 @@ extension AppSettings {
     func spendSpanChanged(from old: SpendSpan) {
         guard spendSpan != old else { return }
         Self.storeSpendSpan(spendSpan, in: defaults)
+        // The first time the custom range is chosen it starts at the last
+        // seven days as of now, not as of whenever the settings were built.
+        if spendSpan == .custom, Self.storedSpendCustomDays(in: defaults) == nil {
+            spendCustomDays = Self.defaultSpendCustomDays()
+        }
     }
 
     func spendCustomDaysChanged(from old: ClosedRange<Date>) {
