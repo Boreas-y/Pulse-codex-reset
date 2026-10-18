@@ -155,7 +155,7 @@ struct AccountPanelGroup: View {
                         Text(localized: "Custom").tag(true)
                     }
                     .labelsHidden()
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.menu)
                     .frame(width: SettingsLayout.controlWidth, alignment: .trailing)
                 }
 
@@ -224,7 +224,7 @@ struct AccountPanelGroup: View {
                     Text(localized: "Custom").tag(true)
                 }
                 .labelsHidden()
-                .pickerStyle(.segmented)
+                .pickerStyle(.menu)
                 .frame(width: SettingsLayout.controlWidth, alignment: .trailing)
             }
 

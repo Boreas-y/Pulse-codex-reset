@@ -145,7 +145,7 @@ struct RingsPane: View {
                         }
                     }
                     .labelsHidden()
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.menu)
                     .frame(width: SettingsLayout.controlWidth, alignment: .trailing)
                     .disabled(!settings.isPanelVisible || !settings.showsWindowClock)
                 }
