@@ -233,7 +233,6 @@ extension AppSettings {
     /// The settings `init` has no parameter for.
     func restoreProviders(from defaults: UserDefaults) {
         showsCodexResetCredits = defaults.bool(forKey: Key.showsCodexResetCredits)
-        qoderShowsParts = defaults.bool(forKey: Key.qoderShowsParts)
         balanceBases = defaults.dictionary(forKey: Key.balanceBases) as? [String: String] ?? [:]
         balanceBudgets = (defaults.dictionary(forKey: Key.balanceBudgets) as? [String: Double] ?? [:])
             .filter { $0.value.isFinite && $0.value > 0 }

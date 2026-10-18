@@ -706,6 +706,11 @@ final class AppSettings {
     /// each part with an allowance gets its own row after the total, and the
     /// ring's automatic choice follows whichever is fullest. Changes what the
     /// service returns, so it goes through `onChange`.
+    ///
+    /// **Restored through `init`, never by assignment** (#89): turning it on
+    /// unpins a ring pinned to the total, and an assignment at launch, from
+    /// the `false` default to the stored `true`, read as a person turning it
+    /// on and dropped that pin on every launch.
     var qoderShowsParts = false {
         didSet { qoderShowsPartsChanged(from: oldValue) }
     }
@@ -963,6 +968,7 @@ final class AppSettings {
         deepSeekBudget: Double? = nil,
         deepSeekCurrency: String? = nil,
         qoderSite: QoderSite = Default.qoderSite,
+        qoderShowsParts: Bool = false,
         stepFunSite: StepFunSite = Default.stepFunSite,
         minimaxSite: MiniMaxSite = Default.minimaxSite,
         serverAddresses: [String: String] = [:],
@@ -1024,6 +1030,7 @@ final class AppSettings {
         self.deepSeekBudget = deepSeekBudget
         self.deepSeekCurrency = deepSeekCurrency
         self.qoderSite = qoderSite
+        self.qoderShowsParts = qoderShowsParts
         self.stepFunSite = stepFunSite
         self.minimaxSite = minimaxSite
         self.serverAddresses = serverAddresses
@@ -1133,6 +1140,7 @@ final class AppSettings {
             deepSeekBudget: defaults.object(forKey: Key.deepSeekBudget) as? Double,
             deepSeekCurrency: defaults.string(forKey: Key.deepSeekCurrency),
             qoderSite: defaults.settingsChoice(Key.qoderSite) ?? Default.qoderSite,
+            qoderShowsParts: defaults.bool(forKey: Key.qoderShowsParts),
             stepFunSite: defaults.settingsChoice(Key.stepFunSite) ?? Default.stepFunSite,
             minimaxSite: defaults.settingsChoice(Key.minimaxSite) ?? Default.minimaxSite,
             serverAddresses: defaults.dictionary(forKey: Key.serverAddresses) as? [String: String] ?? [:],
