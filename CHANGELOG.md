@@ -13,9 +13,9 @@ bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
 **新功能**
 
-- **日报和周报。** 在「设置 → Token 消耗 → 报告」中打开，在窗口顶部切换日、周、月、年，生成可以分享的卡片。
+- **日报和周报。** 在「设置 → Token 消耗 → 用量报告」中打开，在窗口顶部切换日、周、月、年，生成可以分享的卡片。
 - **Token 消耗可以自定义统计区间。** 「统计方式」新增本月、上月、今年和自定义范围，自定义范围可以选择开始和结束日期。
-- **Qoder 显示积分数值。** 在 Qoder 设置页打开「显示积分数值」后，卡片每一行同时显示积分数，例如 5,843 / 6,000。感谢 [@momusticks](https://github.com/qunqin24/Pulse/issues/88) 提议。
+- **Qoder 显示积分数值和近 7 天消耗。** 在 Qoder 设置页打开「显示积分数值」，卡片每一行同时显示积分数，例如 5,843 / 6,000；打开「显示近 7 天消耗」，卡片显示整个账号近 7 天消耗和扣除的积分。感谢 [@momusticks](https://github.com/qunqin24/Pulse/issues/88) 提议。
 
 **改进与修复**
 
@@ -29,9 +29,9 @@ bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
 **New**
 
-- **Daily and weekly recaps.** Open them from Settings › Token spend › Recaps and switch between day, week, month and year at the top of the window to make shareable cards.
+- **Daily and weekly recaps.** Open them from Settings › Token spend › Usage recaps and switch between day, week, month and year at the top of the window to make shareable cards.
 - **Token spend over a span of your own.** Counting adds this month, last month, this year and a custom range with its own first and last day.
-- **Qoder shows credit amounts.** Turn on Show credit amounts in Qoder's settings and each row on the card also shows its credits, such as 5,843 / 6,000. Thanks to [@momusticks](https://github.com/qunqin24/Pulse/issues/88) for the suggestion.
+- **Qoder shows credit amounts and the last 7 days.** In Qoder's settings, Show credit amounts adds each row's credits to the card, such as 5,843 / 6,000, and Show the last 7 days adds the whole account's credits used and charged over the last seven days. Thanks to [@momusticks](https://github.com/qunqin24/Pulse/issues/88) for the suggestion.
 
 **Changed and fixed**
 
