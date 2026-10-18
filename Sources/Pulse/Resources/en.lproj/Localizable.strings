@@ -1235,3 +1235,31 @@
 "No request was made." = "No request was made.";
 "The page answered, but not with anything Pulse reads for this provider." = "The page answered, but not with anything Pulse reads for this provider.";
 "The page answered HTTP %@." = "The page answered HTTP %@.";
+
+// Recap: day and week
+"Daily Recap" = "Daily Recap";
+"Weekly Recap" = "Weekly Recap";
+"Day" = "Day";
+"Week" = "Week";
+"Earlier" = "Earlier";
+"Later" = "Later";
+"On %@, you and AI worked through" = "On %@, you and AI worked through";
+"Over %@, you and AI worked through" = "Over %@, you and AI worked through";
+"On %@," = "On %@,";
+"Over %@," = "Over %@,";
+"Check back when the day is over" = "Check back when the day is over";
+"See you tomorrow" = "See you tomorrow";
+"Check back when the week is over" = "Check back when the week is over";
+"See you next week" = "See you next week";
+"vs the day before" = "vs the day before";
+"vs the same days last week" = "vs the same days last week";
+"vs the week before" = "vs the week before";
+"per day vs the week before" = "per day vs the week before";
+"That was your day." = "That was your day.";
+"So far, this is your day." = "So far, this is your day.";
+"That was your week." = "That was your week.";
+"So far, this is your week." = "So far, this is your week.";
+"Tokens · so far today" = "Tokens · so far today";
+"Top tool" = "Top tool";
+"Tokens · token share" = "Tokens · token share";
+"The plan price is the monthly price prorated by the days of this period." = "The plan price is the monthly price prorated by the days of this period.";

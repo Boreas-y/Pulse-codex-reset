@@ -1130,8 +1130,8 @@
 "No records for %@" = "%@ 沒有用量記錄";
 "Nothing in this Mac's usage records falls in this period." = "這台 Mac 的用量記錄裡，沒有這段時間的內容。";
 "The first read of a long history can take a minute or two." = "記錄很多時，第一次讀取可能要一兩分鐘。";
-"Month" = "月度";
-"Year" = "年度";
+"Month" = "月";
+"Year" = "年";
 "Monthly price" = "每月訂閱價格";
 "Only used for the payback card. Leave it empty to leave that card out." = "僅用於「訂閱回本」卡片。留空則不製作該卡片。";
 "Privacy" = "隱私";
@@ -1235,3 +1235,31 @@
 "No request was made." = "沒有發出請求。";
 "The page answered, but not with anything Pulse reads for this provider." = "狀態頁有回應，但其中沒有 Pulse 能為這個服務商讀取的內容。";
 "The page answered HTTP %@." = "狀態頁回傳了 HTTP %@。";
+
+// Recap: day and week
+"Daily Recap" = "日報";
+"Weekly Recap" = "週報";
+"Day" = "日";
+"Week" = "週";
+"Earlier" = "更早";
+"Later" = "更晚";
+"On %@, you and AI worked through" = "%@，你和 AI 一起處理了";
+"Over %@, you and AI worked through" = "%@這一週，你和 AI 一起處理了";
+"On %@," = "%@，";
+"Over %@," = "%@這一週，";
+"Check back when the day is over" = "今天結束後再來看看";
+"See you tomorrow" = "明天見";
+"Check back when the week is over" = "這週結束後再來看看";
+"See you next week" = "下週見";
+"vs the day before" = "比前一天";
+"vs the same days last week" = "比上週同期";
+"vs the week before" = "比前一週";
+"per day vs the week before" = "日均比前一週";
+"That was your day." = "這就是你的這一天。";
+"So far, this is your day." = "到目前為止，\n這是你的這一天。";
+"That was your week." = "這就是你的這一週。";
+"So far, this is your week." = "到目前為止，\n這是你的這一週。";
+"Tokens · so far today" = "Token · 截至此刻";
+"Top tool" = "主力工具";
+"Tokens · token share" = "Token 數 · 佔比";
+"The plan price is the monthly price prorated by the days of this period." = "訂閱價格按這段時間的天數從月費折算。";

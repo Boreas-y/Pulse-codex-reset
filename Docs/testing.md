@@ -195,6 +195,7 @@ Synthetic stores, fixed clocks and UTC calendars; not live-client validation. [t
 | `RecapInsightsTests`, `RecapVendorMarkTests` | What the redesigned cards read off a recap (weekdays, weeks, runs, hours, dearest day, bars withheld when one working day is unpriced) and which bundled mark a model gets, else a monogram. [recap.md](recap.md#the-four-redesigned-cards) |
 | `RecapDeckTests` | Which cards a deck has — a card is left out when its figure is missing — and payback charging a running month or year by the days gone. |
 | `RecapScoreDataTests` | The score card's bars (days to come drawn as future, not quiet), cost line, sessions per active day and change against the period before, a missing figure left out rather than drawn as zero. |
+| `RecapDayWeekTests` | Day and week bounds (midnight to midnight; 23- and 25-hour days; Chile's skipped midnight; February 30 refused, a leap day kept), the period before across a year, a week starting on the first weekday asked for, offered and default days and weeks, switching kind on the last day so far, `--recap` keys, a running week against the same days of the week before, payback by day, and which cards a day and a week get. [recap.md](recap.md#days-and-weeks) |
 | `RecapFormatTests` | Numbers, money, times, weekdays and months in each language's own units and names, agreeing with `TokenCount.short`. |
 | `RecapWindowTests` | Offered periods and the opening one (the month just ended during days 1–7, the running one from the 8th); typed prices (nothing and 0 are no price; over 10,000 refused); `RecapPeriods.earliest` clamped to 2020; a late cancelled read never replaces a newer one. **The notification rule**: on the 1st with records last month, once per month, never for a month without tokens or before a scan, only in the first three days and about the month before. [recap.md](recap.md#the-window), [notifications.md](notifications.md#the-monthly-recap) |
 
@@ -217,7 +218,7 @@ These write PNGs for a person to read and assert nothing about pixels; each runs
 | Suite | Run |
 |---|---|
 | `BotMarkChoreographyTests` (contact sheet via `drawBotMark` and `ImageRenderer`) | `PULSE_BOT_PREVIEW=/path/to/existing/folder/bot-personalities.png swift test --filter renderContactSheet` |
-| `RecapRenderTests` (every card of both decks, every language) | `PULSE_RECAP_PREVIEW=/tmp/recap swift test --filter RecapRenderTests` |
+| `RecapRenderTests` (every card of the day, week, month and year decks, every language) | `PULSE_RECAP_PREVIEW=/tmp/recap swift test --filter RecapRenderTests` |
 | `RecapWindowRenderTests` (window chrome in five states, AppKit controls via `cacheDisplay`) | `PULSE_RECAP_WINDOW_PREVIEW=/tmp/recap-window` |
 | `TokenActivityRenderTests` (three views, light/dark, zh-Hans/en, 460 and 900pt) | `PULSE_ACTIVITY_PREVIEW=/tmp/activity` |
 | `TokenKindRenderTests` (model detail and day table, all six languages, 480 and 900pt) | `PULSE_TOKEN_KINDS_PREVIEW=/tmp/token-kinds swift test --filter TokenKindRenderTests` |

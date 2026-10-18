@@ -1235,3 +1235,31 @@
 "No request was made." = "リクエストは送られていません。";
 "The page answered, but not with anything Pulse reads for this provider." = "ステータスページは応答しましたが、Pulse がこのサービスについて読み取れる内容はありませんでした。";
 "The page answered HTTP %@." = "ステータスページは HTTP %@ を返しました。";
+
+// Recap: day and week
+"Daily Recap" = "1 日のまとめ";
+"Weekly Recap" = "週間まとめ";
+"Day" = "日";
+"Week" = "週";
+"Earlier" = "前へ";
+"Later" = "次へ";
+"On %@, you and AI worked through" = "%@、あなたと AI が処理したのは";
+"Over %@, you and AI worked through" = "%@の 1 週間、あなたと AI が処理したのは";
+"On %@," = "%@、";
+"Over %@," = "%@の 1 週間、";
+"Check back when the day is over" = "今日が終わったら、また見に来てください";
+"See you tomorrow" = "また明日";
+"Check back when the week is over" = "今週が終わったら、また見に来てください";
+"See you next week" = "また来週";
+"vs the day before" = "前日比";
+"vs the same days last week" = "先週同期比";
+"vs the week before" = "前週比";
+"per day vs the week before" = "1 日平均・前週比";
+"That was your day." = "これが、あなたの 1 日。";
+"So far, this is your day." = "今のところ、\nこれがあなたの 1 日。";
+"That was your week." = "これが、あなたの 1 週間。";
+"So far, this is your week." = "今のところ、\nこれがあなたの 1 週間。";
+"Tokens · so far today" = "トークン · 現在まで";
+"Top tool" = "メインのツール";
+"Tokens · token share" = "トークン数 · トークンの割合";
+"The plan price is the monthly price prorated by the days of this period." = "プランの料金は、月額をこの期間の日数で日割りにしています。";

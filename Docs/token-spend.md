@@ -168,7 +168,7 @@ Local SwiftUI row renderings with synthetic data (not live-client captures):
 
 ## The recap and `--recap`
 
-`Recap` ([`Recap.swift`](../Sources/Pulse/Usage/Recap.swift), built by [`RecapBuild.swift`](../Sources/Pulse/Usage/RecapBuild.swift)) is one calendar month's or year's figures for the shareable recap cards: **facts only, no copy**, and a figure Pulse cannot stand behind is `nil`, never zero. `Recap.build(_:from:prices:now:calendar:)` builds it from the same `[SpendAgent: UsageLedger]` the pane holds; it reads nothing itself.
+`Recap` ([`Recap.swift`](../Sources/Pulse/Usage/Recap.swift), built by [`RecapBuild.swift`](../Sources/Pulse/Usage/RecapBuild.swift)) is one calendar day's, week's, month's or year's figures for the shareable recap cards: **facts only, no copy**, and a figure Pulse cannot stand behind is `nil`, never zero. `Recap.build(_:from:prices:now:calendar:)` builds it from the same `[SpendAgent: UsageLedger]` the pane holds; it reads nothing itself.
 
 **Everything is added up by `SpendSummary`**, through `SpendSummary.of(_:from:until:)`, the calendar-bounded form of `of(_:overLast:)`: `until` is exclusive; days, quarter-hours and session buckets outside `[from, until)` are cut; the series is padded from `from`; an `until` not after `from` is no days; streaks stay whole-history. So the recap cannot count a span differently from the pane. A running period ends at the end of today (`isInProgress`), and the **previous period is cut to the same number of days** (October 1–5 against September 1–5), clamped to its length (March against February); `previousTokens` is nil when nothing was recorded then.
 
@@ -193,10 +193,14 @@ The pane's first group holds a **Monthly and Yearly Recap** row (reading on only
 ### `Pulse --recap`
 
 ```bash
-./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap 2026-09   # a month
-./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap 2026      # a year
-./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap           # this month
+./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap 2026-10-18        # a day
+./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap week-2026-10-12   # the seven days from that date
+./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap 2026-09           # a month
+./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap 2026              # a year
+./build.noindex/Pulse.app/Contents/MacOS/Pulse --recap                   # this month
 ```
+
+A week is taken as written: `week-` and the date its seven days start on, not the week holding that date, so the command does not depend on the Mac's first weekday. `period` in the JSON is the same key. A date not on the calendar is refused.
 
 Prints the `Recap` as sorted, pretty JSON on stdout and exits ([`RecapReport.swift`](../Sources/Pulse/Usage/RecapReport.swift)): `period`, `start`/`end` (local dates; `end` is the first day after the span), `inProgress`, the totals (`unpricedTokens` beside `cost`), `days`, `months` (a year), `hours`, `latestMinute` (minutes after the midnight of the day the stretch began; above 1440 for the next morning), `persona`, `models`, `agents`, `projects`, `cacheHitRate`, `cacheSavings`, and the period's streaks. **A missing figure is absent**, not null or zero. Nothing is translated.
 

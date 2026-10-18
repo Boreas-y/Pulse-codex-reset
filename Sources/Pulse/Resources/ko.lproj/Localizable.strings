@@ -1235,3 +1235,31 @@
 "No request was made." = "요청을 보내지 않았습니다.";
 "The page answered, but not with anything Pulse reads for this provider." = "상태 페이지가 응답했지만, Pulse가 이 서비스에 대해 읽을 수 있는 내용이 없었습니다.";
 "The page answered HTTP %@." = "상태 페이지 응답: HTTP %@.";
+
+// Recap: day and week
+"Daily Recap" = "일간 리포트";
+"Weekly Recap" = "주간 리포트";
+"Day" = "일간";
+"Week" = "주간";
+"Earlier" = "이전";
+"Later" = "다음";
+"On %@, you and AI worked through" = "%@, AI와 함께 처리한 양";
+"Over %@, you and AI worked through" = "%@ 한 주 동안 AI와 함께 처리한 양";
+"On %@," = "%@에는";
+"Over %@," = "%@ 한 주 동안";
+"Check back when the day is over" = "오늘이 끝나면 다시 확인해 보세요";
+"See you tomorrow" = "내일 또 만나겠습니다";
+"Check back when the week is over" = "이번 주가 끝나면 다시 확인해 보세요";
+"See you next week" = "다음 주에 또 만나겠습니다";
+"vs the day before" = "전날 대비";
+"vs the same days last week" = "지난주 같은 기간 대비";
+"vs the week before" = "전주 대비";
+"per day vs the week before" = "전주 대비 하루 평균";
+"That was your day." = "이렇게 하루를 보냈습니다.";
+"So far, this is your day." = "지금까지 이렇게 하루를 보내고 있습니다.";
+"That was your week." = "이렇게 한 주를 보냈습니다.";
+"So far, this is your week." = "지금까지 이렇게 한 주를 보내고 있습니다.";
+"Tokens · so far today" = "토큰 · 지금까지";
+"Top tool" = "주력 도구";
+"Tokens · token share" = "토큰 · 토큰 비중";
+"The plan price is the monthly price prorated by the days of this period." = "요금제 가격은 월 요금을 이 기간의 일수로 나눠 계산했습니다.";
