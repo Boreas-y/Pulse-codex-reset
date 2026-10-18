@@ -181,6 +181,7 @@ Per-account choices about *one ring* live here rather than on the Panel panes ([
 - **Detailed card** on every account (`AppSettings.detailedCards`, account ids; off by default) — per account, because it is worth its height only on an account somebody watches closely. The subtitle says what the card adds and which history it will carry (`AccountPanelGroup.detailedCardSubtitle`): none, the account's month from the provider (Z.ai, Zhipu), or this Mac's recent activity with Token spend on. The card: [panel-geometry.md](panel-geometry.md#detailed-card).
 - **Reset credits on the card**, Codex's first account only: off by default; on, its hover card says how many limit reset credits Codex reports, or "Not available" ([../providers/codex.md](../providers/codex.md#limit-reset-credits)).
 - **Show each part of the credits**, Qoder only (`AppSettings.qoderShowsParts`, off by default): the plan's credits, a top-up pack and dedicated credits each get a row after the total, so the ring's automatic choice can follow the part closest to spent ([../providers/qoder.md](../providers/qoder.md#the-parts-issue-76)).
+- **Show credit amounts**, Qoder only (`AppSettings.qoderShowsAmounts`, off by default): each row on the card also shows its credits, "5,843 / 6,000", the same way round as its percentage; the rail keeps its percentages ([../providers/qoder.md](../providers/qoder.md#the-credits-themselves-issue-88)).
 
 ### Provider-specific groups
 

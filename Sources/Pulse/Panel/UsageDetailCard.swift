@@ -159,6 +159,9 @@ struct UsageDetailCard: View {
     var showsRemaining: Bool = false
     /// Say whether each limit will last its window.
     var showsForecast: Bool = false
+    /// Put the allowance in its own unit beside each row's name, where the
+    /// provider states one (`UsageWindow.amounts`; Qoder's credits, #88).
+    var showsAmounts: Bool = false
     /// Codex's limit reset credits, when its switch is on and it has been
     /// asked. Nil draws no row at all.
     var resetCredits: CodexResetCredits?
@@ -266,7 +269,8 @@ struct UsageDetailCard: View {
                     // stated, and `BurnRate` refuses the windows that lack one
                     // rather than being told in advance which they are.
                     burn: showsForecast ? BurnRate.reading(for: window) : nil,
-                    value: valueText(window)
+                    value: valueText(window),
+                    amount: showsAmounts ? Self.amountText(window, remaining: showsRemaining) : nil
                 )
                 .transition(Self.rowTransition)
             }
@@ -522,6 +526,24 @@ struct UsageDetailCard: View {
             return String.localized("From \(date): \(expiryAmount(total)) credits expire in turn")
         }
         return String.localized("\(date): \(expiryAmount(expiry.amount)) credits expire")
+    }
+
+    /// "5,843 / 6,000": what is left of the allowance, or what is gone, out of
+    /// all of it — the same way round as the percentage under it, which says
+    /// "Left" or "Used". Nil where the provider stated no remainder and the row
+    /// counts what is left: the two others are not subtracted for it.
+    static func amountText(_ window: UsageWindow, remaining: Bool) -> String? {
+        guard let amounts = window.amounts, amounts.limit > 0,
+              let figure = remaining ? amounts.remaining : amounts.used
+        else { return nil }
+        return "\(creditAmount(max(figure, 0))) / \(creditAmount(amounts.limit))"
+    }
+
+    /// Whole credits in full up to a million, a tenth where there is one.
+    private static func creditAmount(_ amount: Double) -> String {
+        amount >= 1_000_000
+            ? TokenCount.short(Int(amount))
+            : amount.formatted(.number.precision(.fractionLength(0...1)).locale(LocalizationSource.locale))
     }
 
     /// StepFun counts in Credits of which a plan holds billions: "1,599,913,834"
@@ -1069,6 +1091,10 @@ private struct ProgressMetricRow: View {
     var burn: BurnRate.Reading?
     /// The detailed card's estimate of what the window is worth. Nil draws no line.
     var value: String?
+    /// The allowance in its own unit, "5,843 / 6,000", beside the name. Nil
+    /// draws nothing; the line is the name's either way, so the row's height
+    /// does not change.
+    var amount: String?
 
     /// "88% Used", or "12% Left" when the figure is counted the other way.
     private var figureLabel: String {
@@ -1085,11 +1111,25 @@ private struct ProgressMetricRow: View {
             // Claude and GPT" next to "Resets 9月6日 18:14" does not fit in a
             // 250pt card, and it was the *name* that got cut — the half that
             // says which limit this is.
-            Text(title)
-                .foregroundStyle(.primary)
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .font(.system(size: DetailCardLayout.rowFontSize, weight: .regular, design: .rounded))
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text(title)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .layoutPriority(1)
+
+                if let amount {
+                    Spacer(minLength: 0)
+                    // Dim, as the reset line is: a figure about the row, under
+                    // the one the row is about.
+                    Text(verbatim: amount)
+                        .foregroundStyle(.primary.opacity(0.45))
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+            }
+            .font(.system(size: DetailCardLayout.rowFontSize, weight: .regular, design: .rounded))
 
             ProgressView(value: progress)
                 .progressViewStyle(PulseProgressStyle(accent: accent))
@@ -1147,9 +1187,10 @@ private struct ProgressMetricRow: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
         .accessibilityValue(
-            showsRemaining
+            (showsRemaining
                 ? String.localized("\(percentageText) left. \(resetDescription)")
-                : String.localized("\(percentageText) used. \(resetDescription)")
+                : String.localized("\(percentageText) used. \(resetDescription)"))
+                + (amount.map { " \($0)" } ?? "")
         )
     }
 }

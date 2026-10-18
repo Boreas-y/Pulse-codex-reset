@@ -691,6 +691,8 @@
 "Plan credits" = "方案點數";
 "Dedicated credits" = "專屬點數";
 "Show each part of the credits" = "分項顯示點數";
+"Show credit amounts" = "顯示點數數值";
+"Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "卡片上的每一列同時顯示點數，例如 5,843 / 6,000。膠囊上仍顯示百分比。";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "方案點數、加購包與專屬點數各自扣減。合計看起來尚有餘裕時，其中一項可能已所剩無幾。";
 "%@: %@ credits expire" = "其中 %2$@ 點數 %1$@ 到期";
 "All expire %@" = "%@全部到期";

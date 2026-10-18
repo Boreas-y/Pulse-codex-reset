@@ -691,6 +691,8 @@
 "Plan credits" = "요금제 크레딧";
 "Dedicated credits" = "전용 크레딧";
 "Show each part of the credits" = "크레딧을 항목별로 표시";
+"Show credit amounts" = "크레딧 수량 표시";
+"Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "카드의 각 줄에 크레딧 수량도 표시합니다(예: 5,843 / 6,000). 레일에는 계속 비율을 표시합니다.";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "요금제 크레딧, 충전 팩, 전용 크레딧은 각각 따로 차감됩니다. 합계에는 여유가 있어 보여도 그중 하나는 거의 바닥났을 수 있습니다.";
 "%@: %@ credits expire" = "그중 %2$@ 크레딧 %1$@ 만료";
 "All expire %@" = "%@ 전부 만료";

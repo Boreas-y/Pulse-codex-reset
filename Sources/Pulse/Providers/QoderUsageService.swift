@@ -531,6 +531,7 @@ struct QoderUsageService: Sendable {
             windowSeconds: 30 * 86_400,
             resetsAt: resetsAt,
             reportsLength: false,
-            isExhausted: pool.remaining.map { $0 <= 0 } ?? (pool.used >= pool.limit))
+            isExhausted: pool.remaining.map { $0 <= 0 } ?? (pool.used >= pool.limit),
+            amounts: UsageWindow.Amounts(used: pool.used, remaining: pool.remaining, limit: pool.limit))
     }
 }

@@ -691,6 +691,8 @@
 "Plan credits" = "套餐积分";
 "Dedicated credits" = "专属积分";
 "Show each part of the credits" = "分项显示积分";
+"Show credit amounts" = "显示积分数值";
+"Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "卡片上的每一行同时显示积分数，例如 5,843 / 6,000。胶囊上仍显示百分比。";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "套餐积分、加油包和专属积分各自扣减。合计看起来尚有余量时，其中一项可能已所剩无几。";
 "%@: %@ credits expire" = "其中 %2$@ 积分 %1$@ 到期";
 "All expire %@" = "%@全部到期";

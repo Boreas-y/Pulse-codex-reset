@@ -82,6 +82,12 @@ Both: fraction is `usedValue / limitValue` (not the rounded `usagePercentage`); 
 
 An absent or null `sharedQuota` means no team pool. A present pool must contain a readable summary with nonnegative used and limit values; malformed or incomplete figures are `unreadableReply`, never proof that the account has no credits. Those failures keep the usual same-site/session cache fallback. `QoderCacheTests` covers these transitions through the service and cache with synthetic HTTP responses, not a live account.
 
+### The credits themselves (issue #88)
+
+**Off by default** (`AppSettings.qoderShowsAmounts`, Panel group: "Show credit amounts"). Two parts at the same percentage can be 6,000 credits and 2,700, and only the credits say whether what is left will last. Every row Qoder draws carries `UsageWindow.amounts` — `usedValue`, `remainingValue` and `limitValue` as stated, nothing recomputed — and with the setting on the card puts "5,843 / 6,000" beside the row's name (`UsageDetailCard.amountText`): left out of all when the percentage counts what is left, used out of all when it counts what is used. A remainder Qoder did not state is not subtracted for it, so that row shows no amount while counting what is left. The card only: the rail, the ring and `--json` are unchanged. On the name's own line, so the row's height and the card's budget do not change; checked in all six languages with `CreditAmountRenderTests`.
+
+**The 7-day spend the same issue asked for is not read.** It needs Qoder's per-request history route, paged on every refresh, and an undocumented daily route that leaves today at zero. Pulse reads no local Qoder records either; whether Qoder keeps any on disk is unchecked (the Mac that wrote this had only `~/.qoder/skills`, no Qoder app).
+
 ## Unconfirmed
 
 - **Whether the route needs `Bx-V` or the browser `User-Agent`.** Sent because every reader sends them.

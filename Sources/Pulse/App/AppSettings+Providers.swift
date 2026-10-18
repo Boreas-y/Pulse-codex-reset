@@ -13,6 +13,7 @@ extension AppSettings.Key {
     static let deepSeekCurrency = "settings.deepSeekCurrency"
     static let qoderSite = "settings.qoderSite"
     static let qoderShowsParts = "settings.qoderShowsParts"
+    static let qoderShowsAmounts = "settings.qoderShowsAmounts"
     static let stepFunSite = "settings.stepFunSite"
     static let minimaxSite = "settings.minimaxSite"
     static let serverAddresses = "settings.serverAddresses"
@@ -76,6 +77,11 @@ extension AppSettings {
             }
         }
         onChange?()
+    }
+
+    func qoderShowsAmountsChanged(from old: Bool) {
+        guard qoderShowsAmounts != old else { return }
+        defaults.set(qoderShowsAmounts, forKey: Key.qoderShowsAmounts)
     }
 
     /// Through `onChange`: the store reloads its keys there, and the chosen

@@ -691,6 +691,8 @@
 "Plan credits" = "プランのクレジット";
 "Dedicated credits" = "専用クレジット";
 "Show each part of the credits" = "クレジットを内訳ごとに表示";
+"Show credit amounts" = "クレジット数を表示";
+"Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "カードの各行にクレジット数も表示します（例：5,843 / 6,000）。レールには引き続き割合を表示します。";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "プランのクレジット、追加パック、専用クレジットは別々に消費されます。合計に余裕があるように見えても、そのうち一つが残りわずかなことがあります。";
 "%@: %@ credits expire" = "うち %2$@ クレジットが %1$@に失効";
 "All expire %@" = "%@にすべて失効";

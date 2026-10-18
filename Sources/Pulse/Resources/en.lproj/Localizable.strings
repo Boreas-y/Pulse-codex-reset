@@ -691,6 +691,8 @@
 "Plan credits" = "Plan credits";
 "Dedicated credits" = "Dedicated credits";
 "Show each part of the credits" = "Show each part of the credits";
+"Show credit amounts" = "Show credit amounts";
+"Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages.";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone.";
 "%@: %@ credits expire" = "%@: %@ credits expire";
 "All expire %@" = "All expire %@";

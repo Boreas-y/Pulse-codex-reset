@@ -715,6 +715,14 @@ final class AppSettings {
         didSet { qoderShowsPartsChanged(from: oldValue) }
     }
 
+    /// Whether Qoder's rows on the detailed card say how many credits as well
+    /// as what share (issue #88): "5,843 / 6,000" beside the row's name, counted
+    /// the way the percentage is. Off by default. Display only, so it refetches
+    /// nothing; restored through `init` like the rest.
+    var qoderShowsAmounts = false {
+        didSet { qoderShowsAmountsChanged(from: oldValue) }
+    }
+
     /// Which StepFun site the saved session belongs to: `platform.stepfun.com`
     /// or `platform.stepfun.ai`, two sign-ins on two hosts. The same rules as
     /// `qoderSite`: it decides where cookies are read from and where the
@@ -969,6 +977,7 @@ final class AppSettings {
         deepSeekCurrency: String? = nil,
         qoderSite: QoderSite = Default.qoderSite,
         qoderShowsParts: Bool = false,
+        qoderShowsAmounts: Bool = false,
         stepFunSite: StepFunSite = Default.stepFunSite,
         minimaxSite: MiniMaxSite = Default.minimaxSite,
         serverAddresses: [String: String] = [:],
@@ -1031,6 +1040,7 @@ final class AppSettings {
         self.deepSeekCurrency = deepSeekCurrency
         self.qoderSite = qoderSite
         self.qoderShowsParts = qoderShowsParts
+        self.qoderShowsAmounts = qoderShowsAmounts
         self.stepFunSite = stepFunSite
         self.minimaxSite = minimaxSite
         self.serverAddresses = serverAddresses
@@ -1141,6 +1151,7 @@ final class AppSettings {
             deepSeekCurrency: defaults.string(forKey: Key.deepSeekCurrency),
             qoderSite: defaults.settingsChoice(Key.qoderSite) ?? Default.qoderSite,
             qoderShowsParts: defaults.bool(forKey: Key.qoderShowsParts),
+            qoderShowsAmounts: defaults.bool(forKey: Key.qoderShowsAmounts),
             stepFunSite: defaults.settingsChoice(Key.stepFunSite) ?? Default.stepFunSite,
             minimaxSite: defaults.settingsChoice(Key.minimaxSite) ?? Default.minimaxSite,
             serverAddresses: defaults.dictionary(forKey: Key.serverAddresses) as? [String: String] ?? [:],

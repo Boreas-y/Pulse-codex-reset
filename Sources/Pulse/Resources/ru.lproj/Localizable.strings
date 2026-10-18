@@ -691,6 +691,8 @@
 "Plan credits" = "Кредиты тарифа";
 "Dedicated credits" = "Целевые кредиты";
 "Show each part of the credits" = "Показывать кредиты по частям";
+"Show credit amounts" = "Показывать число кредитов";
+"Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "В каждой строке карточки также указано число кредитов, например 5 843 / 6 000. На ленте остаются проценты.";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Кредиты тарифа, пакет пополнения и целевые кредиты расходуются отдельно. Общий остаток может выглядеть большим, хотя одна из частей почти исчерпана.";
 "%@: %@ credits expire" = "Из них к %1$@ сгорит %2$@";
 "All expire %@" = "Всё сгорит к %@";
