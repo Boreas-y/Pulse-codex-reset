@@ -702,11 +702,11 @@
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "卡片上的每一列同時顯示點數，例如 5,843 / 6,000。膠囊上仍顯示百分比。";
 "No session" = "沒有登入資訊";
 "Read the session from your browser above to see the account's usage history." = "在上方從瀏覽器讀取登入資訊後，就能看到帳號的用量記錄。";
-"The whole account, editor and CLI alike. Used is before discounts and free allowances; charged is what was deducted." = "整個帳號的用量，編輯器和命令列都包括在內。消耗是折扣和免費額度抵扣之前的點數，扣除是實際扣掉的點數。";
-"Credits used per day" = "每天消耗的點數";
+"The whole account, editor and CLI alike. Used is before discounts and free allowances; charged is what was deducted." = "整個帳號的用量，編輯器和命令列都包括在內。大號數字是折扣和免費額度抵扣之前的點數，「消耗」是實際扣掉的點數。";
+"Credits used per day" = "每天的折前點數";
 "From Qoder's usage records, in credits." = "來自 Qoder 的用量記錄，單位是點數。";
-"Charged %@" = "扣除 %@";
-"%@ credits used, %@ charged" = "消耗 %@ 點數，扣除 %@";
+"Charged %@" = "消耗 %@";
+"%@ credits used, %@ charged" = "折前 %@ 點數，消耗 %@";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "方案點數、加購包與專屬點數各自扣減。合計看起來尚有餘裕時，其中一項可能已所剩無幾。";
 "%@: %@ credits expire" = "其中 %2$@ 點數 %1$@ 到期";
 "All expire %@" = "%@全部到期";
