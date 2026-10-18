@@ -134,6 +134,7 @@ A model id that misses the table is not free; it is a bill that silently reads z
 | `k3-256k`, `kimi-k3-256k` | `kimi-k3` | a context window is the same model with more room |
 | `k3`, `k2p6` | `kimi-k3`, `kimi-k2.6` | Kimi's CLI abbreviates the version |
 | `gpt-5-6-sol-medium` | `gpt-5.6-sol` | Devin writes dashes for dots and an effort on the end |
+| `gemini-3.5-flash-extra-low` | `gemini-3.5-flash` | Antigravity's lowest Flash effort; `-low` alone left `gemini-3.5-flash-extra` (#90) |
 | `minimax-m3` | `MiniMax-M3` | case only |
 
 **Rules, not fuzzy matching.** A loose match prices a model at another model's rate, a wrong number that looks right; `grok-build-0.1` is a real xAI model and must not be stripped to `grok`. A lookup that still misses stays unpriced (historical: eleven ids on one Mac, four of them `…-free` models that genuinely cost nothing).

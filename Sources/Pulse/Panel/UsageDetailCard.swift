@@ -681,7 +681,8 @@ private struct ActivitySection: View {
             case .signedOut:
                 message(String.localized("The console session has expired. Read it again in Settings."))
             case .ledger(let ledger):
-                figures(ledger)
+                let month = ledger.total(overLast: Self.span)
+                figures(ledger, month: month)
                 DaysChart(days: ledger.recent(Self.span), slots: Self.span)
                     .frame(height: DetailCardLayout.chartHeight)
                 topModel(ledger)
@@ -691,7 +692,9 @@ private struct ActivitySection: View {
                     ? String.localized("Costs as \(provider.displayName) charged them, for the whole account.")
                     : isAccountWide
                         ? String.localized("From \(provider.displayName), for the whole account.")
-                        : ledger.total(overLast: Self.span).unpriced > 0
+                        // Only beside a `*`: with no money line there is
+                        // none to explain.
+                        : Self.hasMoneyLine(month, isAccountWide: isAccountWide, isCharged: isCharged) && month.unpriced > 0
                             ? String.localized("API-price estimates. * Partly unpriced.")
                             : String.localized("Costs are estimates at API prices."))
                     .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded))
@@ -710,14 +713,18 @@ private struct ActivitySection: View {
             .frame(height: DetailCardLayout.rowTextLineHeight)
     }
 
-    private func figures(_ ledger: UsageLedger) -> some View {
+    /// No money line at all where there is no money anywhere — a provider's
+    /// own statistics, or nothing priced — rather than a blank band under the
+    /// figures. One priced column keeps the line on all three, level.
+    private static func hasMoneyLine(_ month: (tokens: Int, cost: Double, unpriced: Int),
+                                     isAccountWide: Bool, isCharged: Bool) -> Bool {
+        (isCharged || !isAccountWide) && month.cost > 0
+    }
+
+    private func figures(_ ledger: UsageLedger, month: (tokens: Int, cost: Double, unpriced: Int)) -> some View {
         let today = ledger.today
         let week = ledger.total(overLast: 7)
-        let month = ledger.total(overLast: Self.span)
-        // No money line at all where there is no money anywhere — a provider's
-        // own statistics, or nothing priced — rather than a blank band under
-        // the figures. One priced column keeps the line on all three, level.
-        let priced = (isCharged || !isAccountWide) && month.cost > 0
+        let priced = Self.hasMoneyLine(month, isAccountWide: isAccountWide, isCharged: isCharged)
         return HStack(alignment: .top, spacing: 8) {
             figure(String.localized("Today"), tokens: today?.tokens ?? 0, cost: today?.cost ?? 0,
                    unpriced: today?.unpricedTokens ?? 0, priced: priced)
