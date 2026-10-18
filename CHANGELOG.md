@@ -7,6 +7,40 @@ shows in the update window — see [Scripts/changelog.py](Scripts/changelog.py).
 Add the entry **before** tagging, in the small grammar the converter knows:
 bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
+## 1.12.2
+
+**中文**
+
+**新功能**
+
+- **日报和周报。** 在「设置 → Token 消耗 → 报告」中打开，在窗口顶部切换日、周、月、年，生成可以分享的卡片。
+- **Token 消耗可以自定义统计区间。** 「统计方式」新增本月、上月、今年和自定义范围，自定义范围可以选择开始和结束日期。
+- **Qoder 显示积分数值。** 在 Qoder 设置页打开「显示积分数值」后，卡片每一行同时显示积分数，例如 5,843 / 6,000。感谢 [@momusticks](https://github.com/qunqin24/Pulse/issues/88) 提议。
+
+**改进与修复**
+
+- **Grok 的缓存和推理 token 不再重复计算。** 缓存命中率、token 总数和估算金额改为与 Grok Build 自身的记录一致。感谢 [@Edfghdrtxxx](https://github.com/qunqin24/Pulse/issues/91) 报告。
+- **Antigravity 的金额估算更完整。** Gemini 3.1 Pro 和 Gemini 3.5 Flash (Low) 按公开价格估算；仍有模型没有公开价格时，卡片上的金额后标注 *。感谢 [@1206-skittle](https://github.com/qunqin24/Pulse/issues/90) 报告。
+- **Qoder 圆环固定在「积分额度」上后，重启不再被重置。** 感谢 [@momusticks](https://github.com/qunqin24/Pulse/issues/89) 报告。
+- **设置窗口的侧栏图标改为黑色，设置项中的选项改为弹出菜单。** 深色模式下图标为白色。
+- **缩短俄文的 Token 活动视图名称。** 切换按钮不再被截断。感谢 [@winstik13](https://github.com/qunqin24/Pulse/pull/92) 贡献。
+
+**English**
+
+**New**
+
+- **Daily and weekly recaps.** Open them from Settings › Token spend › Recaps and switch between day, week, month and year at the top of the window to make shareable cards.
+- **Token spend over a span of your own.** Counting adds this month, last month, this year and a custom range with its own first and last day.
+- **Qoder shows credit amounts.** Turn on Show credit amounts in Qoder's settings and each row on the card also shows its credits, such as 5,843 / 6,000. Thanks to [@momusticks](https://github.com/qunqin24/Pulse/issues/88) for the suggestion.
+
+**Changed and fixed**
+
+- **Grok's cached and reasoning tokens are counted once.** The cache hit rate, token totals and estimated cost now match Grok Build's own records. Thanks to [@Edfghdrtxxx](https://github.com/qunqin24/Pulse/issues/91) for the report.
+- **Antigravity's cost estimate is more complete.** Gemini 3.1 Pro and Gemini 3.5 Flash (Low) are priced at their published rates, and an amount that still leaves out a model with no published price is marked with *. Thanks to [@1206-skittle](https://github.com/qunqin24/Pulse/issues/90) for the report.
+- **A Qoder ring pinned to Credit allowance stays pinned after a restart.** Thanks to [@momusticks](https://github.com/qunqin24/Pulse/issues/89) for the report.
+- **Settings' sidebar icons are black, and choices in settings rows are pop-up menus.** The icons are white in dark mode.
+- **Shorter Russian names for the Token activity views.** The switcher no longer cuts them off. Thanks to [@winstik13](https://github.com/qunqin24/Pulse/pull/92) for the contribution.
+
 ## 1.12.1
 
 **中文**
