@@ -172,6 +172,9 @@ struct UsageDetailCard: View {
     /// Nil draws no section: Token spend is off, or this account keeps no
     /// records here.
     var spend: Spend?
+    /// Qoder's last 31 days in credits, from the account's records, for the
+    /// detailed card. Nil draws nothing — not asked yet, or not read whole.
+    var qoderCredits: QoderCreditDays?
     /// When each live session's prompt cache lapses, where the logs say. The
     /// card names the soonest; Settings lists them all.
     var promptCache: PromptCacheReading?
@@ -331,6 +334,12 @@ struct UsageDetailCard: View {
 
             if isDetailed, let spend {
                 ActivitySection(spend: spend, provider: usage.provider, promptCache: promptCache)
+                    .transition(Self.rowTransition)
+            }
+            // Qoder keeps no history on this Mac; its account's records stand
+            // in the same place, in credits (issue #88).
+            if isDetailed, let qoderCredits {
+                QoderCreditSection(credits: qoderCredits)
                     .transition(Self.rowTransition)
             }
         }
@@ -532,7 +541,7 @@ struct UsageDetailCard: View {
     /// all of it — the same way round as the percentage under it, which says
     /// "Left" or "Used". Nil where the provider stated no remainder and the row
     /// counts what is left: the two others are not subtracted for it.
-    static func amountText(_ window: UsageWindow, remaining: Bool) -> String? {
+    nonisolated static func amountText(_ window: UsageWindow, remaining: Bool) -> String? {
         guard let amounts = window.amounts, amounts.limit > 0,
               let figure = remaining ? amounts.remaining : amounts.used
         else { return nil }
@@ -540,7 +549,7 @@ struct UsageDetailCard: View {
     }
 
     /// Whole credits in full up to a million, a tenth where there is one.
-    private static func creditAmount(_ amount: Double) -> String {
+    nonisolated static func creditAmount(_ amount: Double) -> String {
         amount >= 1_000_000
             ? TokenCount.short(Int(amount))
             : amount.formatted(.number.precision(.fractionLength(0...1)).locale(LocalizationSource.locale))
@@ -635,6 +644,78 @@ extension UsageDetailCard {
         /// The provider turned the saved session away: read it again.
         case signedOut
         case ledger(UsageLedger)
+    }
+}
+
+/// Qoder's place for the activity section (issue #88): today, 7 days and 31
+/// days in credits — what was used, and under it what was deducted — and the
+/// month day by day. The account's own records, so the whole account's work,
+/// editor and CLI alike. Drawn in `ActivitySection`'s rows at its heights,
+/// so it fits the budget every detailed card already keeps for one.
+private struct QoderCreditSection: View {
+    let credits: QoderCreditDays
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DetailCardLayout.activitySpacing) {
+            Rectangle()
+                .fill(Color.primary.opacity(0.12))
+                .frame(height: 1)
+
+            Text(localized: "Whole account")
+                .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .medium, design: .rounded))
+                .foregroundStyle(.primary.opacity(0.5))
+                .frame(height: DetailCardLayout.figureLabelHeight)
+
+            HStack(alignment: .top, spacing: 8) {
+                figure(String.localized("Today"), credits.total(overLast: 1))
+                figure(String.localized("7 days"), credits.total(overLast: 7))
+                figure(String.localized("31 days"), credits.total(overLast: QoderCreditDays.span))
+            }
+            .frame(height: DetailCardLayout.figuresHeight, alignment: .top)
+
+            DaysChart(
+                days: credits.days.map {
+                    // Hundredths, so a day of 0.4 credits still has a bar.
+                    LedgerDay(date: $0.date, tokens: Int(($0.used * 100).rounded()), cost: 0,
+                              unpricedTokens: 0, models: [:])
+                },
+                slots: QoderCreditDays.span,
+                label: String.localized("Credits used per day")
+            )
+            .frame(height: DetailCardLayout.chartHeight)
+
+            Text(localized: "From Qoder's usage records, in credits.")
+                .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded))
+                .foregroundStyle(.primary.opacity(0.4))
+                .lineLimit(1)
+                .minimumScaleFactor(0.85)
+                .frame(height: DetailCardLayout.footnoteHeight)
+        }
+    }
+
+    /// The credits used, large, and what was deducted under it, dim: the
+    /// same two lines `ActivitySection` gives tokens and their money.
+    private func figure(_ label: String, _ total: (used: Double, charged: Double)) -> some View {
+        VStack(alignment: .leading, spacing: 2 * PanelMetrics.scale) {
+            Text(verbatim: label)
+                .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded))
+                .foregroundStyle(.primary.opacity(0.45))
+                .frame(height: DetailCardLayout.figureLabelHeight)
+            Text(verbatim: UsageDetailCard.creditAmount(total.used))
+                .font(.system(size: DetailCardLayout.figureFontSize, weight: .semibold, design: .rounded).monospacedDigit())
+                .foregroundStyle(.primary)
+                .frame(height: DetailCardLayout.figureValueHeight)
+            Text(String.localized("Charged \(UsageDetailCard.creditAmount(total.charged))"))
+                .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded).monospacedDigit())
+                .foregroundStyle(.primary.opacity(0.45))
+                .frame(height: DetailCardLayout.figureLabelHeight)
+        }
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label)
+        .accessibilityValue(String.localized("\(UsageDetailCard.creditAmount(total.used)) credits used, \(UsageDetailCard.creditAmount(total.charged)) charged"))
     }
 }
 
@@ -927,6 +1008,8 @@ private struct PromptCacheRow: View {
 private struct DaysChart: View {
     let days: [LedgerDay]
     let slots: Int
+    /// What the bars count, for VoiceOver.
+    var label = String.localized("Tokens per day")
 
     var body: some View {
         GeometryReader { proxy in
@@ -953,7 +1036,7 @@ private struct DaysChart: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(String.localized("Tokens per day"))
+        .accessibilityLabel(label)
     }
 }
 

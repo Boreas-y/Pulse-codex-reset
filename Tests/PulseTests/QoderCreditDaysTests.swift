@@ -17,16 +17,16 @@ private final class QoderHistoryStub: URLProtocol, @unchecked Sendable {
         let (status, body): (Int, String) = switch scenario {
         case "twoPages":
             (200, page == 1
-                ? QoderWeekSpendTests.pageJSON([QoderWeekSpendTests.record(daysAgo: 0, used: 10, charged: 1)], page: 1, next: 2, last: 2)
-                : QoderWeekSpendTests.pageJSON([QoderWeekSpendTests.record(daysAgo: 3, used: 5, charged: 0)], page: 2, next: nil, last: 2))
+                ? QoderCreditDaysTests.pageJSON([QoderCreditDaysTests.record(daysAgo: 0, used: 10, charged: 1)], page: 1, next: 2, last: 2)
+                : QoderCreditDaysTests.pageJSON([QoderCreditDaysTests.record(daysAgo: 3, used: 5, charged: 0)], page: 2, next: nil, last: 2))
         case "secondFails":
             page == 1
-                ? (200, QoderWeekSpendTests.pageJSON([QoderWeekSpendTests.record(daysAgo: 0, used: 10, charged: 1)], page: 1, next: 2, last: 2))
+                ? (200, QoderCreditDaysTests.pageJSON([QoderCreditDaysTests.record(daysAgo: 0, used: 10, charged: 1)], page: 1, next: 2, last: 2))
                 : (500, "")
         case "endless":
-            (200, QoderWeekSpendTests.pageJSON([QoderWeekSpendTests.record(daysAgo: 0, used: 1, charged: 1)], page: page, next: page + 1, last: 99))
+            (200, QoderCreditDaysTests.pageJSON([QoderCreditDaysTests.record(daysAgo: 0, used: 1, charged: 1)], page: page, next: page + 1, last: 99))
         case "empty":
-            (200, QoderWeekSpendTests.pageJSON([], page: 1, next: nil, last: 1))
+            (200, QoderCreditDaysTests.pageJSON([], page: 1, next: nil, last: 1))
         default:
             (401, "")
         }
@@ -37,13 +37,13 @@ private final class QoderHistoryStub: URLProtocol, @unchecked Sendable {
     }
 }
 
-/// Qoder's last seven days, from the account's own usage records (issue #88).
+/// Qoder's last 31 days, from the account's own usage records (issue #88).
 ///
 /// **The shape is second-hand**: written from the issue reporter's measured
 /// replies on a mainland account (fields, spelling and paging), not captured
 /// here. It pins what Pulse reads, not that the route still answers so.
-@Suite("Qoder week spend")
-struct QoderWeekSpendTests {
+@Suite("Qoder credit days")
+struct QoderCreditDaysTests {
     static let now = Date()
 
     static func record(daysAgo: Int, used: Double, charged: Double) -> String {
@@ -63,24 +63,30 @@ struct QoderWeekSpendTests {
         """
     }
 
-    private func fetch(_ scenario: String) async -> QoderWeekSpend? {
+    private func fetch(_ scenario: String) async -> QoderCreditDays? {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [QoderHistoryStub.self]
         let client = QoderClient(session: URLSession(configuration: configuration))
-        return await client.fetchWeekSpend(cookie: "session=\(scenario)", site: .china, now: Self.now)
+        return await client.fetchCreditDays(cookie: "session=\(scenario)", site: .china, now: Self.now)
     }
 
     @Test("Pages are followed and both figures added up")
     func followsPages() async {
-        let week = await fetch("twoPages")
-        #expect(week?.used == 15)
+        let credits = await fetch("twoPages")
+        #expect(credits?.days.count == QoderCreditDays.span)
+        #expect(credits?.total(overLast: QoderCreditDays.span).used == 15)
         // A record Qoder does not bill counts to what was used, not to what was deducted.
-        #expect(week?.charged == 1)
+        #expect(credits?.total(overLast: QoderCreditDays.span).charged == 1)
+        // Today's own figure, and three days back on its own day.
+        #expect(credits?.total(overLast: 1).used == 10)
+        #expect(credits?.days.dropLast(3).last?.used == 5)
     }
 
-    @Test("No records is a week of zeroes")
-    func emptyWeek() async {
-        #expect(await fetch("empty") == QoderWeekSpend(records: [], from: Self.now))
+    @Test("No records is a month of zeroes, not nothing")
+    func emptyMonth() async {
+        let credits = await fetch("empty")
+        #expect(credits?.days.count == QoderCreditDays.span)
+        #expect(credits?.total(overLast: QoderCreditDays.span).used == 0)
     }
 
     @Test("A failed page, a refused session or paging that never ends is no figure, not a part of one")
@@ -121,20 +127,24 @@ struct QoderWeekSpendTests {
         #expect(Page(nextPage: 5, lastPage: 3).following(after: 2) == .unreadable)
     }
 
-    @Test("A record that began before the week is not the week's")
-    func weekStartsAtMidnight() {
+    @Test("A record that began before the window is not counted, and each day is its own")
+    func daysStartAtMidnight() {
         let calendar = Calendar.current
-        let from = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: Self.now))!
+        let from = calendar.date(byAdding: .day, value: -30, to: calendar.startOfDay(for: Self.now))!
         let records = [
             QoderClient.HistoryReply.Record(beginAt: from.addingTimeInterval(-60), credits: 100, originalCredits: 100),
             QoderClient.HistoryReply.Record(beginAt: from, credits: 2, originalCredits: 3),
+            QoderClient.HistoryReply.Record(beginAt: from.addingTimeInterval(3_600), credits: 1, originalCredits: 1),
         ]
-        let week = QoderWeekSpend(records: records, from: from)
-        #expect(week.used == 3)
-        #expect(week.charged == 2)
+        let credits = QoderCreditDays(records: records, from: from, now: Self.now, calendar: calendar)
+        #expect(credits.days.count == 31)
+        #expect(credits.days.first?.used == 4)
+        #expect(credits.days.first?.charged == 3)
+        #expect(credits.total(overLast: 31).used == 4)
+        #expect(credits.total(overLast: 7).used == 0)
     }
 
-    @Test("The request asks for the week, newest first, as the account page does")
+    @Test("The request asks for the window, newest first, as the account page does")
     func requestShape() throws {
         let from = Date(timeIntervalSince1970: 1_789_000_000)
         let url = try #require(QoderSite.china.historiesURL(page: 2, from: from, to: from.addingTimeInterval(3_600)))

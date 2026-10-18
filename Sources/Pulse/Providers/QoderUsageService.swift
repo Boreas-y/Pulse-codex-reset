@@ -70,8 +70,8 @@ enum QoderSite: String, CaseIterable, Codable, Sendable {
         return components?.url
     }
 
-    /// The page itself asks 100; the route takes 500, so a week is one
-    /// request for every account seen.
+    /// The page itself asks 100; the route takes 500, so a month is one or
+    /// two requests for every account seen.
     static let historyPageSize = 500
 
     /// Where somebody is sent to sign in, and the page that makes this request
@@ -201,24 +201,54 @@ struct QoderSnapshot: Equatable, Sendable {
     var dedicated: Part?
 }
 
-/// The account's last seven local days of usage, from its own records
-/// (`QoderClient.fetchWeekSpend`, issue #88). Two figures because Qoder keeps
-/// two: what the work cost before discounts and free allowances, and what was
-/// deducted — on the reporter's account 1,341 and 51 for the same week.
-struct QoderWeekSpend: Equatable, Sendable {
-    static let days = 7
+/// The account's last 31 local days of usage, day by day, from its own
+/// records (`QoderClient.fetchCreditDays`, issue #88). Two figures a day
+/// because Qoder keeps two: what the work cost before discounts and free
+/// allowances, and what was deducted — on the reporter's account 1,341 and 51
+/// for the same week.
+struct QoderCreditDays: Equatable, Sendable {
+    /// The days asked for, today included: the detailed card's span.
+    static let span = 31
 
-    /// Σ `original_credits`.
-    let used: Double
-    /// Σ `credits`.
-    let charged: Double
+    struct Day: Equatable, Sendable {
+        /// Local midnight.
+        let date: Date
+        /// Σ `original_credits` of the records that began that day.
+        let used: Double
+        /// Σ `credits`.
+        let charged: Double
+    }
 
-    /// Every record from `from` on, added up. A record that began before it
-    /// (one the route returned for overlapping the window) is not this week's.
-    init(records: [QoderClient.HistoryReply.Record], from: Date) {
-        let inside = records.filter { $0.beginAt >= from }
-        used = inside.reduce(0) { $0 + $1.originalCredits }
-        charged = inside.reduce(0) { $0 + $1.credits }
+    /// Every day from `from` through today, oldest first, quiet ones as zero:
+    /// the records cover the whole window, so a day without one used nothing.
+    let days: [Day]
+
+    /// `begin_at` decides the day, in the reader's calendar: a session that
+    /// starts at 23:58 is that day's. A record from before `from` (one the
+    /// route returned for overlapping the window) is not counted.
+    init(records: [QoderClient.HistoryReply.Record], from: Date, now: Date = Date(),
+         calendar: Calendar = .current) {
+        var used: [Date: Double] = [:]
+        var charged: [Date: Double] = [:]
+        for record in records where record.beginAt >= from {
+            let day = calendar.startOfDay(for: record.beginAt)
+            used[day, default: 0] += record.originalCredits
+            charged[day, default: 0] += record.credits
+        }
+        var days: [Day] = []
+        var cursor = calendar.startOfDay(for: from)
+        let today = calendar.startOfDay(for: now)
+        while cursor <= today {
+            days.append(Day(date: cursor, used: used[cursor] ?? 0, charged: charged[cursor] ?? 0))
+            guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { break }
+            cursor = calendar.startOfDay(for: next)
+        }
+        self.days = days
+    }
+
+    /// The last `count` days' figures added up, today included.
+    func total(overLast count: Int) -> (used: Double, charged: Double) {
+        days.suffix(count).reduce((0, 0)) { ($0.0 + $1.used, $0.1 + $1.charged) }
     }
 }
 
@@ -281,7 +311,7 @@ struct QoderClient: Sendable {
 
     // MARK: - The account's own records (issue #88)
 
-    /// The last seven local days of the account's usage records, added up:
+    /// The last 31 local days of the account's usage records, day by day:
     /// what was used and what was deducted, the whole account's — the editor's
     /// work as much as the CLI's.
     ///
@@ -294,12 +324,12 @@ struct QoderClient: Sendable {
     /// **Nothing unless the week closed.** A page that fails, a body that is
     /// not this shape, a record with no start or no credit figure, or paging
     /// that still points on at `historyPageLimit`: any of them is nil, never a
-    /// sum of the part that came back, which would read as a quiet week. No
-    /// records at all is a week of zeroes, which the route stated.
-    func fetchWeekSpend(cookie: String, site: QoderSite, now: Date = Date(),
-                        calendar: Calendar = .current) async -> QoderWeekSpend? {
+    /// sum of the part that came back, which would read as a quiet month. No
+    /// records at all is a month of zeroes, which the route stated.
+    func fetchCreditDays(cookie: String, site: QoderSite, now: Date = Date(),
+                         calendar: Calendar = .current) async -> QoderCreditDays? {
         guard let header = try? QoderCookie.normalize(cookie),
-              let from = calendar.date(byAdding: .day, value: -(QoderWeekSpend.days - 1),
+              let from = calendar.date(byAdding: .day, value: -(QoderCreditDays.span - 1),
                                        to: calendar.startOfDay(for: now))
         else { return nil }
         var records: [HistoryReply.Record] = []
@@ -313,7 +343,7 @@ struct QoderClient: Sendable {
             else { return nil }
             records += reply.records
             switch reply.pageResult.following(after: page) {
-            case .last: return QoderWeekSpend(records: records, from: from)
+            case .last: return QoderCreditDays(records: records, from: from, now: now, calendar: calendar)
             case .next(let later): page = later
             case .unreadable: return nil
             }
@@ -321,8 +351,9 @@ struct QoderClient: Sendable {
         return nil
     }
 
-    /// Pages one read may ask for: 3,000 records, many times the busiest week
-    /// seen. Past it the sum would be a sample, so the read ends instead.
+    /// Pages one read may ask for: 3,000 records, four times the busiest month
+    /// seen (about 700). Past it the sum would be a sample, so the read ends
+    /// instead.
     static let historyPageLimit = 6
 
     /// One page of records and the paging beside it.

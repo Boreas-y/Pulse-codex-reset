@@ -75,23 +75,23 @@ final class CardLedgers {
     /// that "Today" is today's. The menu's tabs keep the same.
     static let lifetime: TimeInterval = 5 * 60
 
-    /// Qoder's last seven days from the account's own records (issue #88), or
-    /// nil: not asked, not answered, or answered with less than the whole week.
-    private(set) var qoderWeek: QoderWeekSpend?
+    /// Qoder's last 31 days from the account's own records (issue #88), or
+    /// nil: not asked, not answered, or answered with less than the whole month.
+    private(set) var qoderCredits: QoderCreditDays?
     @ObservationIgnored private var qoderReadAt: Date?
     @ObservationIgnored private var qoderReadWith: String?
     @ObservationIgnored private var readingQoder = false
 
-    /// Asks Qoder for the week when the card opens, at most once a `lifetime`
+    /// Asks Qoder for the month when the detailed card opens, at most once a `lifetime`
     /// for the same session and site — never on the refresh timer, so the
     /// records are requested only when somebody is looking at them. Another
     /// session or site drops the figures at once: they were another account's.
-    func readQoderWeek(cookie: String, site: QoderSite) {
+    func readQoderCredits(cookie: String, site: QoderSite) {
         let with = "\(site.rawValue)|\(cookie.hashValue)"
         if qoderReadWith != with {
             // Recorded now, not when a read starts: a read still out for the
             // old session must find it changed and drop what it brings back.
-            qoderWeek = nil
+            qoderCredits = nil
             qoderReadAt = nil
             qoderReadWith = with
         }
@@ -99,12 +99,12 @@ final class CardLedgers {
         guard !fresh, !readingQoder else { return }
         readingQoder = true
         Task { [weak self] in
-            let week = await QoderClient().fetchWeekSpend(cookie: cookie, site: site)
+            let credits = await QoderClient().fetchCreditDays(cookie: cookie, site: site)
             guard let self, self.qoderReadWith == with else {
                 self?.readingQoder = false
                 return
             }
-            self.qoderWeek = week
+            self.qoderCredits = credits
             self.qoderReadAt = Date()
             self.readingQoder = false
         }

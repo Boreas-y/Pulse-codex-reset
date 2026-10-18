@@ -14,7 +14,6 @@ extension AppSettings.Key {
     static let qoderSite = "settings.qoderSite"
     static let qoderShowsParts = "settings.qoderShowsParts"
     static let qoderShowsAmounts = "settings.qoderShowsAmounts"
-    static let qoderShowsWeekSpend = "settings.qoderShowsWeekSpend"
     static let stepFunSite = "settings.stepFunSite"
     static let minimaxSite = "settings.minimaxSite"
     static let serverAddresses = "settings.serverAddresses"
@@ -83,11 +82,6 @@ extension AppSettings {
     func qoderShowsAmountsChanged(from old: Bool) {
         guard qoderShowsAmounts != old else { return }
         defaults.set(qoderShowsAmounts, forKey: Key.qoderShowsAmounts)
-    }
-
-    func qoderShowsWeekSpendChanged(from old: Bool) {
-        guard qoderShowsWeekSpend != old else { return }
-        defaults.set(qoderShowsWeekSpend, forKey: Key.qoderShowsWeekSpend)
     }
 
     /// Through `onChange`: the store reloads its keys there, and the chosen

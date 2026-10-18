@@ -700,10 +700,13 @@
 "Show each part of the credits" = "分项显示积分";
 "Show credit amounts" = "显示积分数值";
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "卡片上的每一行同时显示积分数，例如 5,843 / 6,000。胶囊上仍显示百分比。";
-"Show the last 7 days" = "显示近 7 天消耗";
-"Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens." = "整个账号近 7 天用掉的积分和实际扣除的积分，编辑器和命令行都包括在内。卡片打开时，Pulse 会向 Qoder 读取账号的用量记录。";
-"Credits used, last 7 days" = "近 7 天消耗积分";
-"Credits charged, last 7 days" = "近 7 天扣除积分";
+"No session" = "没有登录信息";
+"Read the session from your browser above to see the account's usage history." = "在上方从浏览器读取登录信息后，就能看到账号的用量记录。";
+"The whole account, editor and CLI alike. Used is before discounts and free allowances; charged is what was deducted." = "整个账号的用量，编辑器和命令行都包括在内。消耗是打折和免费额度抵扣之前的积分，扣除是实际扣掉的积分。";
+"Credits used per day" = "每天消耗的积分";
+"From Qoder's usage records, in credits." = "来自 Qoder 的用量记录，单位是积分。";
+"Charged %@" = "扣除 %@";
+"%@ credits used, %@ charged" = "消耗 %@ 积分，扣除 %@";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "套餐积分、加油包和专属积分各自扣减。合计看起来尚有余量时，其中一项可能已所剩无几。";
 "%@: %@ credits expire" = "其中 %2$@ 积分 %1$@ 到期";
 "All expire %@" = "%@全部到期";

@@ -700,10 +700,13 @@
 "Show each part of the credits" = "Показывать кредиты по частям";
 "Show credit amounts" = "Показывать число кредитов";
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "В каждой строке карточки также указано число кредитов, например 5 843 / 6 000. На ленте остаются проценты.";
-"Show the last 7 days" = "Показывать последние 7 дней";
-"Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens." = "Израсходованные и списанные кредиты за последние 7 дней по всему аккаунту — и в редакторе, и в CLI. Pulse читает записи об использовании из Qoder, когда открывается карточка.";
-"Credits used, last 7 days" = "Израсходовано за 7 дней";
-"Credits charged, last 7 days" = "Списано за 7 дней";
+"No session" = "Нет сеанса";
+"Read the session from your browser above to see the account's usage history." = "Считайте сеанс из браузера выше, чтобы увидеть историю использования аккаунта.";
+"The whole account, editor and CLI alike. Used is before discounts and free allowances; charged is what was deducted." = "Весь аккаунт — и редактор, и CLI. «Израсходовано» — до скидок и бесплатных лимитов, «Списано» — то, что вычтено.";
+"Credits used per day" = "Кредиты по дням";
+"From Qoder's usage records, in credits." = "По записям Qoder, в кредитах.";
+"Charged %@" = "Списано %@";
+"%@ credits used, %@ charged" = "Израсходовано %@ кредитов, списано %@";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Кредиты тарифа, пакет пополнения и целевые кредиты расходуются отдельно. Общий остаток может выглядеть большим, хотя одна из частей почти исчерпана.";
 "%@: %@ credits expire" = "Из них к %1$@ сгорит %2$@";
 "All expire %@" = "Всё сгорит к %@";
