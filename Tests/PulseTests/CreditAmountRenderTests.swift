@@ -21,7 +21,7 @@ struct CreditAmountRenderTests {
                         windowSeconds: 30 * 86_400, resetsAt: nil, reportsLength: false,
                         amounts: .init(used: used, remaining: limit - used, limit: limit))
         }
-        let usage = ProviderUsage(
+        var usage = ProviderUsage(
             account: AccountKey(.qoder),
             windows: [
                 window("qoder.credits", .credits, used: 6_119, limit: 14_700),
@@ -31,6 +31,14 @@ struct CreditAmountRenderTests {
             ],
             observedAt: Date(), state: .live, plan: "Pro", creditBalance: nil
         )
+        // The week's two rows (`FloatingUsagePanelContent.withQoderWeek`), with
+        // the issue's own figures.
+        func addWeek() {
+            usage.metrics = [
+                UsageMetric(id: "qoder.week.used", label: String.localized("Credits used, last 7 days"), value: 1_341.21, unit: nil),
+                UsageMetric(id: "qoder.week.charged", label: String.localized("Credits charged, last 7 days"), value: 51.37, unit: nil),
+            ]
+        }
 
         let languages: [(String, AppLanguage)] = [
             ("en", .english), ("zh-Hans", .chineseSimplified), ("zh-Hant", .chineseTraditional),
@@ -38,6 +46,7 @@ struct CreditAmountRenderTests {
         ]
         for (name, language) in languages {
             LocalizationSource.use(language)
+            addWeek()
             for remaining in [true, false] {
                 let view = UsageDetailCard(
                     usage: usage, edge: .right, showsRemaining: remaining, showsAmounts: true,

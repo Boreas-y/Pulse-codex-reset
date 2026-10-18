@@ -118,7 +118,7 @@ struct FloatingUsagePanelContent: View {
                     if let selected = selectedUsage, let index = selectedIndex {
                         UsageDetailCard(
                             usesGlass: settings.usesGlass,
-                            usage: selected,
+                            usage: withQoderWeek(selected),
                             title: selectedTitle ?? "",
                             edge: placement.edge,
                             showsRemaining: settings.showsRemaining,
@@ -209,6 +209,12 @@ struct FloatingUsagePanelContent: View {
                    let source = account.provider.cardHistory {
                     cardLedgers.read(account.provider, from: source)
                     if source.readsThisMac { cardLedgers.readPromptCache(account.provider) }
+                }
+                // Qoder's week, from its records: asked as the card opens,
+                // never on the refresh timer (issue #88).
+                if selectedUsage?.account.provider == .qoder, settings.qoderShowsWeekSpend,
+                   let cookie = APIKeyStore.key(for: .qoder) {
+                    cardLedgers.readQoderWeek(cookie: cookie, site: settings.qoderSite)
                 }
             }
             .onChange(of: isNotchHeld) { _, held in
@@ -359,6 +365,23 @@ struct FloatingUsagePanelContent: View {
               let source = account.provider.cardHistory
         else { return false }
         return !source.readsThisMac || settings.readsTokenSpend
+    }
+
+    /// Qoder's card with the week's two figures under its limits, once they
+    /// are in: what was used and what was deducted. Nothing while they are
+    /// being asked for or when the week could not be read whole — a part of a
+    /// week is not drawn as a quiet one.
+    private func withQoderWeek(_ usage: ProviderUsage) -> ProviderUsage {
+        guard usage.provider == .qoder, settings.qoderShowsWeekSpend,
+              let week = cardLedgers.qoderWeek else { return usage }
+        var shown = usage
+        shown.metrics += [
+            UsageMetric(id: "qoder.week.used", label: String.localized("Credits used, last 7 days"),
+                        value: week.used, unit: nil),
+            UsageMetric(id: "qoder.week.charged", label: String.localized("Credits charged, last 7 days"),
+                        value: week.charged, unit: nil),
+        ]
+        return shown
     }
 
     private var selectedUsage: ProviderUsage? {

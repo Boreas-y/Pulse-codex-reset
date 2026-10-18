@@ -700,6 +700,10 @@
 "Show each part of the credits" = "分項顯示點數";
 "Show credit amounts" = "顯示點數數值";
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "卡片上的每一列同時顯示點數，例如 5,843 / 6,000。膠囊上仍顯示百分比。";
+"Show the last 7 days" = "顯示近 7 天消耗";
+"Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens." = "整個帳號近 7 天用掉的點數和實際扣除的點數，編輯器和命令列都包括在內。卡片開啟時，Pulse 會向 Qoder 讀取帳號的用量記錄。";
+"Credits used, last 7 days" = "近 7 天消耗點數";
+"Credits charged, last 7 days" = "近 7 天扣除點數";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "方案點數、加購包與專屬點數各自扣減。合計看起來尚有餘裕時，其中一項可能已所剩無幾。";
 "%@: %@ credits expire" = "其中 %2$@ 點數 %1$@ 到期";
 "All expire %@" = "%@全部到期";
@@ -1116,7 +1120,7 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "月報";
 "Yearly Recap" = "年報";
-"Recaps" = "報告";
+"Usage recaps" = "用量報告";
 "Shareable cards for a day, a week, a month or a year, from this Mac's records." = "用這台 Mac 的本機記錄，製作可以分享的日、週、月、年卡片。";
 "When a recap is ready" = "月報完成時";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "每月月初提醒上個月的月報已完成。需要先開啟「讀取本機用量記錄」。";

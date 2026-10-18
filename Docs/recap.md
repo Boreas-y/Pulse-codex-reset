@@ -130,7 +130,7 @@ Pinned: `RecapInsightsTests` ([above](#the-four-redesigned-cards)); `RecapVendor
 
 **Entry points** (neither menu has one; the rail's and menu bar's menus stay to the panel, Settings and Quit):
 
-- the Token spend pane's **Recaps** row: one **Open** button, on the month `RecapPeriods.defaultMonth` picks (`TokenSpendPane.recapPeriod`, the window's default rule); the window's own switch reaches day, week and year;
+- the Token spend pane's **Usage recaps** row: one **Open** button, on the month `RecapPeriods.defaultMonth` picks (`TokenSpendPane.recapPeriod`, the window's default rule); the window's own switch reaches day, week and year;
 - a clicked "recap is ready" notification, on its month ([notifications.md](notifications.md#the-monthly-recap)).
 
 Days and weeks have no entry point of their own: they are reached from the window's Day / Week segments. **Nor do they notify.** A daily "your recap is ready" would be a notification every morning about something the reader can open at any time, and a weekly one is the same at a lower rate; the monthly notice exists because a month's end is an occasion. `RecapNoticeRule` stays monthly only.

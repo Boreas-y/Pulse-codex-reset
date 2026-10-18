@@ -700,6 +700,10 @@
 "Show each part of the credits" = "크레딧을 항목별로 표시";
 "Show credit amounts" = "크레딧 수량 표시";
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "카드의 각 줄에 크레딧 수량도 표시합니다(예: 5,843 / 6,000). 레일에는 계속 비율을 표시합니다.";
+"Show the last 7 days" = "최근 7일 표시";
+"Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens." = "에디터와 CLI를 포함한 계정 전체에서 최근 7일 동안 사용한 크레딧과 실제로 차감된 크레딧을 표시합니다. 카드를 열 때 Pulse가 Qoder에서 계정의 사용 기록을 읽어 옵니다.";
+"Credits used, last 7 days" = "최근 7일 사용 크레딧";
+"Credits charged, last 7 days" = "최근 7일 차감 크레딧";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "요금제 크레딧, 충전 팩, 전용 크레딧은 각각 따로 차감됩니다. 합계에는 여유가 있어 보여도 그중 하나는 거의 바닥났을 수 있습니다.";
 "%@: %@ credits expire" = "그중 %2$@ 크레딧 %1$@ 만료";
 "All expire %@" = "%@ 전부 만료";
@@ -1116,7 +1120,7 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "월간 리포트";
 "Yearly Recap" = "연간 리포트";
-"Recaps" = "리포트";
+"Usage recaps" = "사용량 리포트";
 "Shareable cards for a day, a week, a month or a year, from this Mac's records." = "이 Mac의 기록으로 하루, 한 주, 한 달 또는 한 해의 공유용 카드를 만듭니다.";
 "When a recap is ready" = "리포트가 준비되었을 때";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "매월 초에 지난달 리포트가 준비되었음을 알립니다. ‘로컬 사용량 기록 읽기’가 켜져 있어야 합니다.";

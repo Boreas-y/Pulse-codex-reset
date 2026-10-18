@@ -90,6 +90,22 @@ struct AccountPanelGroup: View {
                     .labelsHidden()
                     .toggleStyle(.switch)
                 }
+
+                SettingsRowDivider()
+
+                // Asked of Qoder when the card opens, so the subtitle says
+                // that a request is made, and what for.
+                SettingsRow(
+                    String.localized("Show the last 7 days"),
+                    subtitle: String.localized("Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens.")
+                ) {
+                    Toggle("", isOn: Binding(
+                        get: { settings.qoderShowsWeekSpend },
+                        set: { settings.qoderShowsWeekSpend = $0 }
+                    ))
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+                }
             }
 
             SettingsRowDivider()

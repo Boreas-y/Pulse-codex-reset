@@ -35,7 +35,7 @@ struct TokenSpendPane: View {
                 if settings.readsTokenSpend {
                     SettingsRowDivider()
                     SettingsRow(
-                        String.localized("Recaps"),
+                        String.localized("Usage recaps"),
                         subtitle: String.localized("Shareable cards for a day, a week, a month or a year, from this Mac's records.")
                     ) {
                         // One way in. The window switches between day, week,

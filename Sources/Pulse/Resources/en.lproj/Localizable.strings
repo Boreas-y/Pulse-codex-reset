@@ -700,6 +700,10 @@
 "Show each part of the credits" = "Show each part of the credits";
 "Show credit amounts" = "Show credit amounts";
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages.";
+"Show the last 7 days" = "Show the last 7 days";
+"Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens." = "Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens.";
+"Credits used, last 7 days" = "Credits used, last 7 days";
+"Credits charged, last 7 days" = "Credits charged, last 7 days";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone.";
 "%@: %@ credits expire" = "%@: %@ credits expire";
 "All expire %@" = "All expire %@";
@@ -1116,7 +1120,7 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "Monthly Recap";
 "Yearly Recap" = "Yearly Recap";
-"Recaps" = "Recaps";
+"Usage recaps" = "Usage recaps";
 "Shareable cards for a day, a week, a month or a year, from this Mac's records." = "Shareable cards for a day, a week, a month or a year, from this Mac's records.";
 "When a recap is ready" = "When a recap is ready";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "Last month's recap, at the start of the month. Needs “Read local usage records”.";

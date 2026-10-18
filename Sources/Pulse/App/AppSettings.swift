@@ -723,6 +723,14 @@ final class AppSettings {
         didSet { qoderShowsAmountsChanged(from: oldValue) }
     }
 
+    /// Whether Qoder's card adds the last seven days from the account's own
+    /// usage records: credits used and credits charged (issue #88). Off by
+    /// default: it asks Qoder for those records, once per opening of the card
+    /// and at most every few minutes. Restored through `init`.
+    var qoderShowsWeekSpend = false {
+        didSet { qoderShowsWeekSpendChanged(from: oldValue) }
+    }
+
     /// Which StepFun site the saved session belongs to: `platform.stepfun.com`
     /// or `platform.stepfun.ai`, two sign-ins on two hosts. The same rules as
     /// `qoderSite`: it decides where cookies are read from and where the
@@ -985,6 +993,7 @@ final class AppSettings {
         qoderSite: QoderSite = Default.qoderSite,
         qoderShowsParts: Bool = false,
         qoderShowsAmounts: Bool = false,
+        qoderShowsWeekSpend: Bool = false,
         stepFunSite: StepFunSite = Default.stepFunSite,
         minimaxSite: MiniMaxSite = Default.minimaxSite,
         serverAddresses: [String: String] = [:],
@@ -1049,6 +1058,7 @@ final class AppSettings {
         self.qoderSite = qoderSite
         self.qoderShowsParts = qoderShowsParts
         self.qoderShowsAmounts = qoderShowsAmounts
+        self.qoderShowsWeekSpend = qoderShowsWeekSpend
         self.stepFunSite = stepFunSite
         self.minimaxSite = minimaxSite
         self.serverAddresses = serverAddresses
@@ -1161,6 +1171,7 @@ final class AppSettings {
             qoderSite: defaults.settingsChoice(Key.qoderSite) ?? Default.qoderSite,
             qoderShowsParts: defaults.bool(forKey: Key.qoderShowsParts),
             qoderShowsAmounts: defaults.bool(forKey: Key.qoderShowsAmounts),
+            qoderShowsWeekSpend: defaults.bool(forKey: Key.qoderShowsWeekSpend),
             stepFunSite: defaults.settingsChoice(Key.stepFunSite) ?? Default.stepFunSite,
             minimaxSite: defaults.settingsChoice(Key.minimaxSite) ?? Default.minimaxSite,
             serverAddresses: defaults.dictionary(forKey: Key.serverAddresses) as? [String: String] ?? [:],

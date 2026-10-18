@@ -700,6 +700,10 @@
 "Show each part of the credits" = "クレジットを内訳ごとに表示";
 "Show credit amounts" = "クレジット数を表示";
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "カードの各行にクレジット数も表示します（例：5,843 / 6,000）。レールには引き続き割合を表示します。";
+"Show the last 7 days" = "直近 7 日間を表示";
+"Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens." = "エディタと CLI を含むアカウント全体で、直近 7 日間に使ったクレジットと実際に差し引かれたクレジットを表示します。カードを開いたときに、Pulse が Qoder からアカウントの使用記録を読み取ります。";
+"Credits used, last 7 days" = "直近 7 日間の使用分";
+"Credits charged, last 7 days" = "直近 7 日間の差し引き分";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "プランのクレジット、追加パック、専用クレジットは別々に消費されます。合計に余裕があるように見えても、そのうち一つが残りわずかなことがあります。";
 "%@: %@ credits expire" = "うち %2$@ クレジットが %1$@に失効";
 "All expire %@" = "%@にすべて失効";
@@ -1116,7 +1120,7 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "月間まとめ";
 "Yearly Recap" = "年間まとめ";
-"Recaps" = "まとめ";
+"Usage recaps" = "使用量のまとめ";
 "Shareable cards for a day, a week, a month or a year, from this Mac's records." = "この Mac の記録から、1 日・1 週間・1 か月・1 年分の共有用カードを作ります。";
 "When a recap is ready" = "まとめができたとき";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "月初に、先月のまとめができたことを知らせます。「ローカルの使用量記録を読み取る」がオンのときだけ使えます。";

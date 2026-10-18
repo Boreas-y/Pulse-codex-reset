@@ -700,6 +700,10 @@
 "Show each part of the credits" = "Показывать кредиты по частям";
 "Show credit amounts" = "Показывать число кредитов";
 "Each row on the card also shows the credits, such as 5,843 / 6,000. The rail keeps its percentages." = "В каждой строке карточки также указано число кредитов, например 5 843 / 6 000. На ленте остаются проценты.";
+"Show the last 7 days" = "Показывать последние 7 дней";
+"Credits used and credits charged over the last 7 days, for the whole account, editor and CLI alike. Pulse reads the account's usage records from Qoder when the card opens." = "Израсходованные и списанные кредиты за последние 7 дней по всему аккаунту — и в редакторе, и в CLI. Pulse читает записи об использовании из Qoder, когда открывается карточка.";
+"Credits used, last 7 days" = "Израсходовано за 7 дней";
+"Credits charged, last 7 days" = "Списано за 7 дней";
 "Plan credits, a top-up pack and dedicated credits are spent separately. The total can look ample while one of them is nearly gone." = "Кредиты тарифа, пакет пополнения и целевые кредиты расходуются отдельно. Общий остаток может выглядеть большим, хотя одна из частей почти исчерпана.";
 "%@: %@ credits expire" = "Из них к %1$@ сгорит %2$@";
 "All expire %@" = "Всё сгорит к %@";
@@ -1116,7 +1120,7 @@
 // Recap window, entry points and notification
 "Monthly Recap" = "Итоги месяца";
 "Yearly Recap" = "Итоги года";
-"Recaps" = "Итоги";
+"Usage recaps" = "Итоги использования";
 "Shareable cards for a day, a week, a month or a year, from this Mac's records." = "Карточки за день, неделю, месяц или год по записям этого Mac — ими можно поделиться.";
 "When a recap is ready" = "Когда итоги готовы";
 "Last month's recap, at the start of the month. Needs Token spend reading." = "Итоги прошлого месяца — в начале месяца. Нужно включить «Читать локальные записи о расходе».";

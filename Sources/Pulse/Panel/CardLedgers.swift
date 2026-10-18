@@ -75,6 +75,39 @@ final class CardLedgers {
     /// that "Today" is today's. The menu's tabs keep the same.
     static let lifetime: TimeInterval = 5 * 60
 
+    /// Qoder's last seven days from the account's own records (issue #88), or
+    /// nil: not asked, not answered, or answered with less than the whole week.
+    private(set) var qoderWeek: QoderWeekSpend?
+    @ObservationIgnored private var qoderReadAt: Date?
+    @ObservationIgnored private var qoderReadWith: String?
+    @ObservationIgnored private var readingQoder = false
+
+    /// Asks Qoder for the week when the card opens, at most once a `lifetime`
+    /// for the same session and site — never on the refresh timer, so the
+    /// records are requested only when somebody is looking at them. Another
+    /// session or site drops the figures at once: they were another account's.
+    func readQoderWeek(cookie: String, site: QoderSite) {
+        let with = "\(site.rawValue)|\(cookie.hashValue)"
+        if qoderReadWith != with {
+            qoderWeek = nil
+            qoderReadAt = nil
+        }
+        let fresh = qoderReadAt.map { Date().timeIntervalSince($0) < Self.lifetime } ?? false
+        guard !fresh, !readingQoder else { return }
+        readingQoder = true
+        qoderReadWith = with
+        Task { [weak self] in
+            let week = await QoderClient().fetchWeekSpend(cookie: cookie, site: site)
+            guard let self, self.qoderReadWith == with else {
+                self?.readingQoder = false
+                return
+            }
+            self.qoderWeek = week
+            self.qoderReadAt = Date()
+            self.readingQoder = false
+        }
+    }
+
     /// What the card says for this provider: the last figures while a new read
     /// runs, so the section does not blank out and come back.
     func spend(for provider: Provider) -> UsageDetailCard.Spend {
