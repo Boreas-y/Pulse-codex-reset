@@ -6,6 +6,36 @@
         <description>Updates for Pulse.</description>
         <language>en</language>
         <item>
+            <title>1.12.2</title>
+            <pubDate>Sun, 18 Oct 2026 07:08:08 -0000</pubDate>
+            <sparkle:version>1.12.2</sparkle:version>
+            <sparkle:shortVersionString>1.12.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.12.2</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.2</h2><p><strong>新功能</strong></p><ul><li><strong>日报和周报。</strong> 在「设置 → Token 消耗 → 用量报告」中打开，在窗口顶部切换日、周、月、年，生成可以分享的卡片。</li><li><strong>Token 消耗可以自定义统计区间。</strong> 「统计方式」新增本月、上月、今年和自定义范围，自定义范围可以选择开始和结束日期。</li><li><strong>Qoder 显示积分数值和积分消耗记录。</strong> 在 Qoder 设置页打开「显示积分数值」，卡片每一行同时显示积分数，例如 5,843 / 6,000；Qoder 的详细卡片和设置页显示整个账号今天、7 天和 31 天消耗与扣除的积分，以及按天的柱状图。感谢 <a href="https://github.com/qunqin24/Pulse/issues/88">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Grok 的缓存和推理 token 不再重复计算。</strong> 缓存命中率、token 总数和估算金额改为与 Grok Build 自身的记录一致。感谢 <a href="https://github.com/qunqin24/Pulse/issues/91">@Edfghdrtxxx</a> 报告。</li><li><strong>Antigravity 的金额估算更完整。</strong> Gemini 3.1 Pro 和 Gemini 3.5 Flash (Low) 按公开价格估算；仍有模型没有公开价格时，卡片上的金额后标注 *。感谢 <a href="https://github.com/qunqin24/Pulse/issues/90">@1206-skittle</a> 报告。</li><li><strong>Qoder 圆环固定在「积分额度」上后，重启不再被重置。</strong> 感谢 <a href="https://github.com/qunqin24/Pulse/issues/89">@momusticks</a> 报告。</li><li><strong>设置窗口的侧栏图标改为黑色，设置项中的选项改为弹出菜单。</strong> 深色模式下图标为白色。</li><li><strong>缩短俄文的 Token 活动视图名称。</strong> 切换按钮不再被截断。感谢 <a href="https://github.com/qunqin24/Pulse/pull/92">@winstik13</a> 贡献。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.2</h2><p><strong>新功能</strong></p><ul><li><strong>日报和周报。</strong> 在「设置 → Token 消耗 → 用量报告」中打开，在窗口顶部切换日、周、月、年，生成可以分享的卡片。</li><li><strong>Token 消耗可以自定义统计区间。</strong> 「统计方式」新增本月、上月、今年和自定义范围，自定义范围可以选择开始和结束日期。</li><li><strong>Qoder 显示积分数值和积分消耗记录。</strong> 在 Qoder 设置页打开「显示积分数值」，卡片每一行同时显示积分数，例如 5,843 / 6,000；Qoder 的详细卡片和设置页显示整个账号今天、7 天和 31 天消耗与扣除的积分，以及按天的柱状图。感谢 <a href="https://github.com/qunqin24/Pulse/issues/88">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Grok 的缓存和推理 token 不再重复计算。</strong> 缓存命中率、token 总数和估算金额改为与 Grok Build 自身的记录一致。感谢 <a href="https://github.com/qunqin24/Pulse/issues/91">@Edfghdrtxxx</a> 报告。</li><li><strong>Antigravity 的金额估算更完整。</strong> Gemini 3.1 Pro 和 Gemini 3.5 Flash (Low) 按公开价格估算；仍有模型没有公开价格时，卡片上的金额后标注 *。感谢 <a href="https://github.com/qunqin24/Pulse/issues/90">@1206-skittle</a> 报告。</li><li><strong>Qoder 圆环固定在「积分额度」上后，重启不再被重置。</strong> 感谢 <a href="https://github.com/qunqin24/Pulse/issues/89">@momusticks</a> 报告。</li><li><strong>设置窗口的侧栏图标改为黑色，设置项中的选项改为弹出菜单。</strong> 深色模式下图标为白色。</li><li><strong>缩短俄文的 Token 活动视图名称。</strong> 切换按钮不再被截断。感谢 <a href="https://github.com/qunqin24/Pulse/pull/92">@winstik13</a> 贡献。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.2</h2><p><strong>New</strong></p><ul><li><strong>Daily and weekly recaps.</strong> Open them from Settings › Token spend › Usage recaps and switch between day, week, month and year at the top of the window to make shareable cards.</li><li><strong>Token spend over a span of your own.</strong> Counting adds this month, last month, this year and a custom range with its own first and last day.</li><li><strong>Qoder shows credit amounts and credit history.</strong> Show credit amounts in Qoder&#x27;s settings adds each row&#x27;s credits to the card, such as 5,843 / 6,000, and Qoder&#x27;s detailed card and settings pane show the whole account&#x27;s credits used and charged today, over 7 and 31 days, and day by day. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/88">@momusticks</a> for the suggestion.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Grok&#x27;s cached and reasoning tokens are counted once.</strong> The cache hit rate, token totals and estimated cost now match Grok Build&#x27;s own records. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/91">@Edfghdrtxxx</a> for the report.</li><li><strong>Antigravity&#x27;s cost estimate is more complete.</strong> Gemini 3.1 Pro and Gemini 3.5 Flash (Low) are priced at their published rates, and an amount that still leaves out a model with no published price is marked with *. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/90">@1206-skittle</a> for the report.</li><li><strong>A Qoder ring pinned to Credit allowance stays pinned after a restart.</strong> Thanks to <a href="https://github.com/qunqin24/Pulse/issues/89">@momusticks</a> for the report.</li><li><strong>Settings&#x27; sidebar icons are black, and choices in settings rows are pop-up menus.</strong> The icons are white in dark mode.</li><li><strong>Shorter Russian names for the Token activity views.</strong> The switcher no longer cuts them off. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/92">@winstik13</a> for the contribution.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.2">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.12.2/Pulse-1.12.2.zip"
+                       length="16367148"
+                       type="application/octet-stream"
+                       sparkle:edSignature="FI0lCdsQhW2MomkJFq+8S+wZ0cy8EFB4rjUVyv2BvpcUcLqKwszkkYWcTa3ls3rMGMMK80wTknL6vJs2+PIZCQ==" />
+        </item>
+        <item>
             <title>1.12.1</title>
             <pubDate>Fri, 16 Oct 2026 06:16:19 -0000</pubDate>
             <sparkle:version>1.12.1</sparkle:version>
