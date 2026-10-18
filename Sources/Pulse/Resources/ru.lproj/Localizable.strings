@@ -1135,9 +1135,9 @@
 "Saved" = "Сохранено";
 "Save here" = "Сохранить сюда";
 "Token activity" = "Активность по токенам";
-"Daily" = "По дням";
-"Weekly" = "По неделям";
-"Cumulative" = "Накопительно";
+"Daily" = "Дни";
+"Weekly" = "Недели";
+"Cumulative" = "Итого";
 "%@ tokens in the last 12 months" = "Токенов за последние 12 месяцев: %@";
 "%@ over the last 12 months, %@ active days" = "За последние 12 месяцев: %@, активных дней: %@";
 "Less" = "Меньше";
