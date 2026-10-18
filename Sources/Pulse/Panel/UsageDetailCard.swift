@@ -691,7 +691,9 @@ private struct ActivitySection: View {
                     ? String.localized("Costs as \(provider.displayName) charged them, for the whole account.")
                     : isAccountWide
                         ? String.localized("From \(provider.displayName), for the whole account.")
-                        : String.localized("Costs are estimates at API prices."))
+                        : ledger.total(overLast: Self.span).unpriced > 0
+                            ? String.localized("API-price estimates. * Partly unpriced.")
+                            : String.localized("Costs are estimates at API prices."))
                     .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded))
                     .foregroundStyle(.primary.opacity(0.4))
                     .lineLimit(1)
@@ -717,9 +719,10 @@ private struct ActivitySection: View {
         // the figures. One priced column keeps the line on all three, level.
         let priced = (isCharged || !isAccountWide) && month.cost > 0
         return HStack(alignment: .top, spacing: 8) {
-            figure(String.localized("Today"), tokens: today?.tokens ?? 0, cost: today?.cost ?? 0, priced: priced)
-            figure(String.localized("7 days"), tokens: week.tokens, cost: week.cost, priced: priced)
-            figure(String.localized("31 days"), tokens: month.tokens, cost: month.cost, priced: priced)
+            figure(String.localized("Today"), tokens: today?.tokens ?? 0, cost: today?.cost ?? 0,
+                   unpriced: today?.unpricedTokens ?? 0, priced: priced)
+            figure(String.localized("7 days"), tokens: week.tokens, cost: week.cost, unpriced: week.unpriced, priced: priced)
+            figure(String.localized("31 days"), tokens: month.tokens, cost: month.cost, unpriced: month.unpriced, priced: priced)
         }
         .frame(height: priced ? DetailCardLayout.figuresHeight : DetailCardLayout.unpricedFiguresHeight, alignment: .top)
     }
@@ -727,7 +730,12 @@ private struct ActivitySection: View {
     /// **No money line for work nobody priced.** A day spent entirely on a
     /// model with no published price costs something; "$0.00" would say it
     /// cost nothing.
-    private func figure(_ label: String, tokens: Int, cost: Double, priced: Bool) -> some View {
+    ///
+    /// **A `*` where only part of it was priced** (#90), as the Token spend
+    /// pane marks it: a model with no published price is left out of the
+    /// money, and an unmarked "$0.04" under 740M tokens read as the cost of
+    /// all of them. The footnote then says what the `*` means.
+    private func figure(_ label: String, tokens: Int, cost: Double, unpriced: Int, priced: Bool) -> some View {
         VStack(alignment: .leading, spacing: 2 * PanelMetrics.scale) {
             Text(verbatim: label)
                 .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded))
@@ -740,7 +748,9 @@ private struct ActivitySection: View {
             if priced {
                 // No "≈": the section's footnote says when the money is an
                 // estimate, and when it is what the provider charged.
-                Text(verbatim: cost > 0 ? AccountUsageCard.money(cost, currency: currency, isCharged: isCharged) : " ")
+                Text(verbatim: cost > 0
+                    ? AccountUsageCard.money(cost, currency: currency, isCharged: isCharged) + (unpriced > 0 ? "*" : "")
+                    : " ")
                     .font(.system(size: DetailCardLayout.footnoteFontSize, weight: .regular, design: .rounded).monospacedDigit())
                     .foregroundStyle(.primary.opacity(0.45))
                     .frame(height: DetailCardLayout.figureLabelHeight)
