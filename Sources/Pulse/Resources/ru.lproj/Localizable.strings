@@ -245,6 +245,13 @@
 "Usage history" = "История расхода";
 "Today" = "Сегодня";
 "All time" = "За всё время";
+"This month" = "Этот месяц";
+"Last month" = "Прошлый месяц";
+"This year" = "Этот год";
+"Custom range" = "Свой период";
+"Dates" = "Даты";
+"First day" = "Первый день";
+"Last day" = "Последний день";
 "Limit reset credits" = "Кредиты на сброс лимита";
 "Next expiry" = "Ближайший истекает";
 "1 available" = "Доступен 1";

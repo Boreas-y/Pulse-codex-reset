@@ -62,6 +62,10 @@ struct TokenSpendPane: View {
                         get: { settings.spendSpan },
                         set: { settings.spendSpan = $0 }
                     ),
+                    customDays: Binding(
+                        get: { settings.spendCustomDays },
+                        set: { settings.spendCustomDays = $0 }
+                    ),
                     activity: model.spendActivity,
                     activityView: Binding(
                         get: { settings.spendActivityView },

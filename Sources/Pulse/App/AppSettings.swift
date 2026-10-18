@@ -821,6 +821,13 @@ final class AppSettings {
         didSet { spendSpanChanged(from: oldValue) }
     }
 
+    /// The first and last day the span `custom` counts, both included. The
+    /// last seven days until the reader picks their own, and their pick is
+    /// kept like the span's, so switching back to "Custom range" finds it.
+    var spendCustomDays: ClosedRange<Date> {
+        didSet { spendCustomDaysChanged(from: oldValue) }
+    }
+
     /// Which view of the Token spend pane's year-long "Token activity" chart is
     /// open: the daily grid until the reader picks another, and their pick is
     /// kept like the span's. No `onChange?()` for the same reason.
@@ -1018,6 +1025,7 @@ final class AppSettings {
         animatesRingActivity: Bool = Default.animatesRingActivity,
         splitAccounts: Set<String> = [],
         spendSpan: SpendSpan = .default,
+        spendCustomDays: ClosedRange<Date>? = nil,
         spendActivityView: ActivityView = .default,
         readsTokenSpend: Bool = Default.readsTokenSpend,
         alertThreshold: AlertThreshold = .default,
@@ -1081,6 +1089,7 @@ final class AppSettings {
         self.animatesRingActivity = animatesRingActivity
         self.splitAccounts = splitAccounts
         self.spendSpan = spendSpan
+        self.spendCustomDays = spendCustomDays ?? Self.defaultSpendCustomDays()
         self.spendActivityView = spendActivityView
         self.readsTokenSpend = readsTokenSpend
         self.alertThreshold = alertThreshold
@@ -1200,6 +1209,7 @@ final class AppSettings {
             ),
             splitAccounts: Set(defaults.stringArray(forKey: Key.splitAccounts) ?? []),
             spendSpan: Self.storedSpendSpan(in: defaults),
+            spendCustomDays: Self.storedSpendCustomDays(in: defaults),
             spendActivityView: Self.storedSpendActivityView(in: defaults),
             readsTokenSpend: Self.storedReadsTokenSpend(in: defaults),
             alertThreshold: defaults.settingsIntChoice(Key.alertThreshold) ?? .default,

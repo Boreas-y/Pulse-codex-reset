@@ -245,6 +245,13 @@
 "Usage history" = "Usage history";
 "Today" = "Today";
 "All time" = "All time";
+"This month" = "This month";
+"Last month" = "Last month";
+"This year" = "This year";
+"Custom range" = "Custom range";
+"Dates" = "Dates";
+"First day" = "First day";
+"Last day" = "Last day";
 "Limit reset credits" = "Limit reset credits";
 "Next expiry" = "Next expiry";
 "1 available" = "1 available";

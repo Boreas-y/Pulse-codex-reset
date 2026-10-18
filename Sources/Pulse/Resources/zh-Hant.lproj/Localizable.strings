@@ -245,6 +245,13 @@
 "Usage history" = "用量紀錄";
 "Today" = "今天";
 "All time" = "累計";
+"This month" = "本月";
+"Last month" = "上月";
+"This year" = "今年";
+"Custom range" = "自訂範圍";
+"Dates" = "日期";
+"First day" = "開始日期";
+"Last day" = "結束日期";
 "Limit reset credits" = "額度重設券";
 "Next expiry" = "最近一張到期";
 "1 available" = "可用 1 張";

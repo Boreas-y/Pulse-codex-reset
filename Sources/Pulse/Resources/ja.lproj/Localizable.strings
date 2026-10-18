@@ -245,6 +245,13 @@
 "Usage history" = "使用量の履歴";
 "Today" = "今日";
 "All time" = "累計";
+"This month" = "今月";
+"Last month" = "先月";
+"This year" = "今年";
+"Custom range" = "期間を指定";
+"Dates" = "日付";
+"First day" = "開始日";
+"Last day" = "終了日";
 "Limit reset credits" = "上限リセット券";
 "Next expiry" = "次の期限";
 "1 available" = "残り 1 枚";

@@ -245,6 +245,13 @@
 "Usage history" = "사용 기록";
 "Today" = "오늘";
 "All time" = "전체 누적";
+"This month" = "이번 달";
+"Last month" = "지난달";
+"This year" = "올해";
+"Custom range" = "기간 지정";
+"Dates" = "날짜";
+"First day" = "시작일";
+"Last day" = "종료일";
 "Limit reset credits" = "한도 초기화 쿠폰";
 "Next expiry" = "다음 만료";
 "1 available" = "1장 사용 가능";
