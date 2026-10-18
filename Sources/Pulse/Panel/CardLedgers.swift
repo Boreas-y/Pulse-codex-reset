@@ -89,13 +89,15 @@ final class CardLedgers {
     func readQoderWeek(cookie: String, site: QoderSite) {
         let with = "\(site.rawValue)|\(cookie.hashValue)"
         if qoderReadWith != with {
+            // Recorded now, not when a read starts: a read still out for the
+            // old session must find it changed and drop what it brings back.
             qoderWeek = nil
             qoderReadAt = nil
+            qoderReadWith = with
         }
         let fresh = qoderReadAt.map { Date().timeIntervalSince($0) < Self.lifetime } ?? false
         guard !fresh, !readingQoder else { return }
         readingQoder = true
-        qoderReadWith = with
         Task { [weak self] in
             let week = await QoderClient().fetchWeekSpend(cookie: cookie, site: site)
             guard let self, self.qoderReadWith == with else {
