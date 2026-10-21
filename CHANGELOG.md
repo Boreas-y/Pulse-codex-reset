@@ -7,6 +7,20 @@ shows in the update window — see [Scripts/changelog.py](Scripts/changelog.py).
 Add the entry **before** tagging, in the small grammar the converter knows:
 bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
+## 1.12.3
+
+**中文**
+
+**改进与修复**
+
+- **Antigravity 的 Gemini 3.8 Flash 按公开价格估算。** 记录中的 `-n`、`-control`、`-xpe` 变体与基础型号使用同一价格，不再显示为无公开价格。感谢 [@1206-skittle](https://github.com/qunqin24/Pulse/issues/90) 报告。
+
+**English**
+
+**Changed and fixed**
+
+- **Antigravity's Gemini 3.8 Flash is estimated at its published price.** The `-n`, `-control` and `-xpe` variants in its records use the base model's rate instead of showing as having no public price. Thanks to [@1206-skittle](https://github.com/qunqin24/Pulse/issues/90) for reporting it.
+
 ## 1.12.2
 
 **中文**
