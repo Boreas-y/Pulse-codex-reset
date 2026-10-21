@@ -35,9 +35,11 @@ struct ModelPriceAliasTests {
         #expect(Self.name("gemini-3.5-flash-medium") == "Gemini 3.5 Flash")
     }
 
-    @Test("Antigravity's `-n` Flash is priced as the Flash (#90)")
+    @Test("Antigravity's `-n`, `-control` and `-xpe` Flash is priced as the Flash (#90)")
     func nSuffixIsDropped() {
         #expect(Self.name("gemini-3.8-flash-n") == "Gemini 3.8 Flash")
+        #expect(Self.name("gemini-3.8-flash-control") == "Gemini 3.8 Flash")
+        #expect(Self.name("gemini-3.8-flash-xpe") == "Gemini 3.8 Flash")
         // Only on a Gemini id, and only when the base is priced.
         #expect(Self.name("kimi-k3-n") == nil)
         #expect(Self.name("gemini-9-flash-n") == nil)
