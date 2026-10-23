@@ -4,6 +4,22 @@ There is no Xcode project. `Scripts/bundle.sh` turns the package executable into
 
 Toolchain and local `swift build`: [build-from-source.md](build-from-source.md). Why the bundle exists and how defaults migrate: [decisions/bundle-and-defaults.md](decisions/bundle-and-defaults.md). Changelog vs Sparkle: [decisions/release-notes-in-changelog.md](decisions/release-notes-in-changelog.md).
 
+## Personal fork releases
+
+This repository's fork release path reuses the universal zip already built and tested
+by **Pulse Codex Reset build**. Publish it to `guanbear/Pulse-codex-reset` with an
+explicit source commit (`gh release create --target <sha>`), matching the tag to
+`VERSION`, and name the asset `Pulse-Codex-Reset-<version>.zip`. Verify the archive
+hash, embedded version, both architectures and signature before publication.
+The release notes link the successful build and identify the exact source commit.
+Do not push a same-named local upstream tag: this checkout also fetches upstream tags.
+
+The upstream release workflow below is retained for reference, but is not used to
+publish this fork: it requires upstream Sparkle signing and feed publication.
+Fork bundles omit the upstream Sparkle feed; no upstream signing key is needed for
+manual fork releases. Update the fork download page and README button in the same
+release task. Retain the previous local app in a `.noindex` backup before installation.
+
 ## Version and tag
 
 The version lives in `VERSION` and nowhere else. Tag `v$(cat VERSION)`. The update check reads GitHub’s latest release tag against `CFBundleShortVersionString`.

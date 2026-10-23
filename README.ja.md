@@ -1,4 +1,4 @@
-> **個人用フォーク Pulse Codex Reset。** 公式 Pulse v1.12.3 をベースに、6 言語のリセット通知 UI を追加しています。[変更点と CI ビルド](PULSE-CODEX-RESET.md)。以下の公式リリースには、この追加機能は含まれません。
+> **個人用フォーク Pulse Codex Reset。** 公式 Pulse v1.12.3 をベースに、6 言語のリセット通知 UI を追加しています。[変更点と CI ビルド](PULSE-CODEX-RESET.md)。ダウンロードボタンから、このフォークのリリースを入手できます。
 
 <p align="center">
   <img src="AppIcon/pulse-icon-1024.png" width="112" alt="Pulse">
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/qunqin24/Pulse/releases/latest"><img src="https://img.shields.io/badge/%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS 版 Pulse をダウンロード"></a>
+  <a href="https://github.com/guanbear/Pulse-codex-reset/releases/latest"><img src="https://img.shields.io/badge/%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS 版 Pulse をダウンロード"></a>
 </p>
 
 <p align="center">

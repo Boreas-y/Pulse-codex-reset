@@ -1,4 +1,4 @@
-> **Personal fork: Pulse Codex Reset.** Based on official Pulse v1.12.3, with optional Codex reset news in all six interface languages. [Fork features and CI builds](PULSE-CODEX-RESET.md). Official Pulse releases below do not include this customization.
+> **Personal fork: Pulse Codex Reset.** Based on official Pulse v1.12.3, with optional Codex reset news in all six interface languages. [Downloads and fork features](PULSE-CODEX-RESET.md). Official Pulse links elsewhere refer to the upstream project.
 
 <p align="center">
   <img src="AppIcon/pulse-icon-1024.png" width="112" alt="Pulse">
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/qunqin24/Pulse/releases/latest"><img src="https://img.shields.io/badge/Download-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download Pulse for macOS"></a>
+  <a href="https://github.com/guanbear/Pulse-codex-reset/releases/latest"><img src="https://img.shields.io/badge/Download-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download Pulse for macOS"></a>
 </p>
 
 <p align="center">

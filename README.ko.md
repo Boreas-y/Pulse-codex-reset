@@ -1,4 +1,4 @@
-> **개인 포크 Pulse Codex Reset.** 공식 Pulse v1.12.3을 기반으로 6개 언어의 한도 초기화 알림 UI를 제공합니다. [변경 사항 및 CI 빌드](PULSE-CODEX-RESET.md). 아래 공식 릴리스에는 이 추가 기능이 포함되지 않습니다.
+> **개인 포크 Pulse Codex Reset.** 공식 Pulse v1.12.3을 기반으로 6개 언어의 한도 초기화 알림 UI를 제공합니다. [변경 사항 및 CI 빌드](PULSE-CODEX-RESET.md). 다운로드 버튼은 이 포크의 릴리스로 연결됩니다.
 
 <p align="center">
   <img src="AppIcon/pulse-icon-1024.png" width="112" alt="Pulse">
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/qunqin24/Pulse/releases/latest"><img src="https://img.shields.io/badge/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS용 Pulse 다운로드"></a>
+  <a href="https://github.com/guanbear/Pulse-codex-reset/releases/latest"><img src="https://img.shields.io/badge/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS용 Pulse 다운로드"></a>
 </p>
 
 <p align="center">

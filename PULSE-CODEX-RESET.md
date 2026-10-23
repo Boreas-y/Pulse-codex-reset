@@ -20,6 +20,18 @@ The reset interface follows Pulse's language selection: **English, 简体中文,
 所有语言均保留 AIhot 与原帖（X）两个链接：中文版将 AIhot 放在前面，其他语言将原帖放在前面。
 没有原帖时仅显示 AIhot。链接顺序依据界面语言，不检测所在地。
 
+## Download / 下载
+
+[Download Pulse Codex Reset](https://github.com/guanbear/Pulse-codex-reset/releases/latest)
+
+Latest fork release: **1.12.3**. Download `Pulse-Codex-Reset-1.12.3.zip`, extract
+`Pulse.app`, quit the installed copy and move the new app to Applications.
+The bundle is universal (Apple Silicon and Intel), ad-hoc signed and not notarized.
+
+最新个人版为 **1.12.3**。从上面的发布页下载压缩包，解压后退出旧版，将新的
+`Pulse.app` 放入 Applications。安装包支持 Apple Silicon 和 Intel，采用 ad-hoc
+签名，尚未做 Apple 公证。默认不检查上游自动更新。
+
 ## Build / 构建
 
 Use this repository's **Pulse Codex Reset build** workflow with the desired branch.
@@ -35,13 +47,12 @@ Command Line Tools alone are insufficient. See [build instructions](Docs/build-f
   provider-reported usage and the public report inside one pointed detail card.
 - **Fork-safe updates.** Release bundles do not poll the upstream Sparkle feed,
   because installing an upstream update would silently remove these changes.
-  No public fork release has been published yet; the maintainer builds from
-  this repository's CI workflow.
+  Fork releases reuse the verified universal bundle from this repository's CI workflow.
 
 - **可选 Codex 重置消息。** 有当前公开重置卡消息时，Codex 百分比旁显示圆点：
   预告为橙色、确认为绿色；悬停后，用量和重置消息合并在同一张有明确指向的详情卡中。
 - **适合 fork 的更新边界。** 发行包不轮询上游 Sparkle 更新源，避免安装官方更新后
-  静默丢失定制功能。目前尚无公开的 fork 发行包，维护者通过本仓库 CI 构建。
+  静默丢失定制功能。个人发行版使用本仓库 CI 已验证的通用安装包。
 
 ## Screenshots / 实机截图
 

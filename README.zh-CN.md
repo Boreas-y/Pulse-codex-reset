@@ -1,4 +1,4 @@
-> **个人定制版 Pulse Codex Reset。** 基于官方 Pulse v1.12.3，重置消息界面支持六种语言。[功能差异与 CI 构建](PULSE-CODEX-RESET.md)。下方官方发行版不包含此定制功能。
+> **个人定制版 Pulse Codex Reset。** 基于官方 Pulse v1.12.3，重置消息界面支持六种语言。[功能差异与 CI 构建](PULSE-CODEX-RESET.md)。下载按钮指向本 fork 的发行版。
 
 <p align="center">
   <img src="AppIcon/pulse-icon-1024.png" width="112" alt="Pulse">
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/qunqin24/Pulse/releases/latest"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-000000?style=for-the-badge&logo=apple&logoColor=white" alt="下载 macOS 版 Pulse"></a>
+  <a href="https://github.com/guanbear/Pulse-codex-reset/releases/latest"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-000000?style=for-the-badge&logo=apple&logoColor=white" alt="下载 macOS 版 Pulse"></a>
 </p>
 
 <p align="center">
