@@ -35,6 +35,7 @@ struct CodexResetPresentationTests {
     }
 
     @Test @MainActor func nativeLinkAcceptsFirstClickAndOpensItsOwnDestination() throws {
+        _ = NSApplication.shared
         let button = PanelLinkButton()
         var opened: [URL] = []
         button.open = { opened.append($0) }

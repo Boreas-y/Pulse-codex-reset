@@ -14,7 +14,7 @@ jobs:
       - name: Localization keys
         run: ./Scripts/check-localization.sh
       - name: Build
-        run: swift build -Xswiftc -swift-version -Xswiftc 6
+        run: swift build -Xswiftc -swift-version -Xswiftc 6 -Xswiftc -warnings-as-errors
       - name: Tests
         run: swift test -Xswiftc -swift-version -Xswiftc 6
       - name: Assemble fork-safe app
