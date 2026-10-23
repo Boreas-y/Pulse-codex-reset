@@ -23,7 +23,7 @@ final class FloatingPanelController {
     /// transparent parts of a non-opaque window.
     enum Layout {
         static var maximumFlyoutHeight: CGFloat {
-            DetailCardLayout.maximumHeight + DetailCardLayout.contentSpacing + ResetEventCardLayout.maximumHeight
+            DetailCardLayout.maximumHeight(includingResetAnnouncement: true)
         }
         /// The panel's size for a given dock and display housing. It changes
         /// when the axis or screen geometry changes, never while a card opens

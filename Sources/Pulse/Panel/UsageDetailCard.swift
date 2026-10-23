@@ -82,6 +82,11 @@ enum DetailCardLayout {
     /// than a limit's row and so fit inside the budget of one.
     static var maximumHeight: CGFloat { height(forWindows: 6, footnote: true) }
 
+    static func maximumHeight(includingResetAnnouncement: Bool) -> CGFloat {
+        maximumHeight + (includingResetAnnouncement
+            ? 2 * contentSpacing + 1 + ResetEventCardLayout.maximumHeight : 0)
+    }
+
     static func height(forWindows count: Int, footnote: Bool = false) -> CGFloat {
         let detailed = PanelMetrics.showsDetailedCard
         return padding * 2
@@ -234,7 +239,7 @@ struct UsageDetailCard: View {
     @ViewBuilder
     private var bounded: some View {
         if let limit = maxHeight.map({ $0 - DetailCardLayout.pointerWidth }),
-           limit < DetailCardLayout.maximumHeight {
+           limit < DetailCardLayout.maximumHeight(includingResetAnnouncement: codexResetEvent != nil) {
             let natural = naturalHeight ?? min(DetailCardLayout.estimatedHeight, limit)
             ScrollView(.vertical) {
                 content.background(

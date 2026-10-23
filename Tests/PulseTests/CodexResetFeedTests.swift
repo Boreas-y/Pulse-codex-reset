@@ -38,6 +38,9 @@ struct CodexResetFeedTests {
     @Test @MainActor
     func panelAlwaysBudgetsCombinedCard() {
         let flyoutHeight = FloatingPanelController.Layout.maximumFlyoutHeight
+        #expect(flyoutHeight == DetailCardLayout.maximumHeight(includingResetAnnouncement: true))
+        #expect(flyoutHeight > DetailCardLayout.maximumHeight)
+        #expect(DetailCardLayout.maximumHeight(includingResetAnnouncement: false) == DetailCardLayout.maximumHeight)
         let sideWidth = DetailCardLayout.width + DetailCardLayout.pointerWidth
 
         #expect(FloatingPanelController.Layout.size(for: .left).width >= sideWidth)

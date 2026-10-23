@@ -158,4 +158,4 @@ Hit-testing geometry (sliver ⊂ rail, clicks on the circle): [input.md](input.m
 
 ## Fork: reset section budget
 
-The reset announcement stays inside `UsageDetailCard`. `Layout.maximumFlyoutHeight` reserves the ordinary card budget plus `ResetEventCardLayout.maximumHeight` and content spacing even when no current announcement exists. Revealing an announcement cannot change the panel frame. The fork geometry tests live under `PanelGlobalsSuite` with other tests of process-wide panel metrics.
+The reset announcement stays inside `UsageDetailCard`. `Layout.maximumFlyoutHeight` reserves the ordinary card budget plus `ResetEventCardLayout.maximumHeight`, the divider and both surrounding gaps even when no current announcement exists. Revealing an announcement cannot change the panel frame. The card uses the same combined budget to decide when limited screen room requires scrolling. The fork geometry tests live under `PanelGlobalsSuite` with other tests of process-wide panel metrics.

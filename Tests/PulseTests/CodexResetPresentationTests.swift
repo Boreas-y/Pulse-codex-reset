@@ -50,3 +50,31 @@ struct CodexResetPresentationTests {
         #expect(opened.count == 2)
     }
 }
+
+extension PanelGlobalsSuite {
+    @Suite(.serialized)
+    struct CodexResetLocalizedTitleTests {
+        @Test @MainActor func usesSelectedLanguageInsteadOfFeedTitle() {
+            let previous = LocalizationSource.language
+            defer { LocalizationSource.use(previous) }
+            let cases: [(AppLanguage, String)] = [
+                (.english, "Limit reset announced"),
+                (.chineseSimplified, "额度重置预告"),
+                (.chineseTraditional, "額度重置預告"),
+                (.japanese, "利用上限リセットの予告"),
+                (.korean, "사용 한도 초기화 예고"),
+                (.russian, "Объявлен сброс лимита")
+            ]
+            let event = CodexResetEvent(
+                id: "title", kind: .directReset, status: .announced,
+                title: "Feed title must not leak into other languages", scope: "all",
+                createdAt: .distantPast, updatedAt: .distantPast, confirmedAt: nil,
+                schedule: nil, posts: [], url: URL(string: "https://aihot.news/codex-reset")!
+            )
+            for (language, expected) in cases {
+                LocalizationSource.use(language)
+                #expect(event.localizedTitle == expected)
+            }
+        }
+    }
+}
