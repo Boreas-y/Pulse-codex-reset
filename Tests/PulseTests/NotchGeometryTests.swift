@@ -99,10 +99,10 @@ extension PanelGlobalsSuite {
                     // (`Layout.size`) — under a point of slack, never more.
                     #expect(abs(attached.height - ordinary.height - notch.height) < 1)
                     let cardTop = surface.maxY + DetailCardLayout.horizontalGap
-                    #expect(attached.height == (cardTop + DetailCardLayout.pointerWidth + DetailCardLayout.maximumHeight).rounded(.up))
-                    // The old window budgets remain intact away from a notch.
+                    #expect(attached.height == (cardTop + DetailCardLayout.pointerWidth + FloatingPanelController.Layout.maximumFlyoutHeight).rounded(.up))
+                    // The same combined card budget applies away from a notch.
                     #expect(ordinary.height == (railSize.height + DetailCardLayout.horizontalGap
-                            + DetailCardLayout.pointerWidth + DetailCardLayout.maximumHeight).rounded(.up))
+                            + DetailCardLayout.pointerWidth + FloatingPanelController.Layout.maximumFlyoutHeight).rounded(.up))
                     for edge in [PanelEdge.left, .right] {
                         #expect(FloatingPanelController.Layout.size(for: edge, notchSize: notch.size, capacity: 12)
                                 == FloatingPanelController.Layout.size(for: edge, capacity: 12))
