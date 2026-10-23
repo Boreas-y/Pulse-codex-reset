@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// OpenCodeReview's session logs.
@@ -133,7 +134,7 @@ enum OpenCodeReviewReader {
                     model: model,
                     tally: parts.tally,
                     sessionID: session,
-                    project: cwd.map { URL(fileURLWithPath: $0).lastPathComponent },
+                    project: cwd,
                     deduplicationID: identity,
                     unclassifiedTokens: parts.unclassified
                 )

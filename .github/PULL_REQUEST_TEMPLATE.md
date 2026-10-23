@@ -1,8 +1,8 @@
 ## Related issue
 
-Closes #
+Link an issue if there is one (for example, `Closes #123`), or write “None”. An issue is optional for every type of contribution.
 
-New features and significant changes must be discussed and accepted in an issue before implementation.
+You can submit a PR directly, including new features and major refactors. No prior approval is required. See CONTRIBUTING.md → Pull requests.
 
 ## Problem
 
@@ -22,7 +22,6 @@ List anything not tested, known failures, or environments not covered.
 
 ## Checklist
 
-- [ ] This PR is linked to an accepted issue when required.
 - [ ] I searched existing issues and pull requests for duplicates.
 - [ ] The change is focused and contains no unrelated work.
 - [ ] I updated the relevant documentation.

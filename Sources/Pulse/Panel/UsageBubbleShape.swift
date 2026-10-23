@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 /// The details card's outline: rounded body and pointer as one path.
@@ -18,6 +19,18 @@ struct UsageBubbleShape: Shape {
     let cornerRadius: CGFloat
     let pointerWidth: CGFloat
     let pointerHeight: CGFloat
+    /// Which of the outline to draw. Glass draws the body and the tail as two
+    /// shapes and lets the system fuse them — see `LiquidBubbleSurface`.
+    var part: Part = .whole
+
+    enum Part { case whole, body, tail }
+
+    /// The same outline, one part of it.
+    func only(_ part: Part) -> UsageBubbleShape {
+        var copy = self
+        copy.part = part
+        return copy
+    }
 
     /// Lets the pointer slide as part of the shape rather than as a separate
     /// animation that could run on its own curve.
@@ -43,23 +56,30 @@ struct UsageBubbleShape: Shape {
         return facingSideways(in: rect)
     }
 
+    /// Whether the tail leaves from the leading side of the sideways drawing.
+    /// A card above the rail is that drawing turned the same quarter turn as
+    /// one below it — so its tail, which has to end up underneath, is the
+    /// leading one, as it is for a card right of a left-hand rail.
+    private var tailLeads: Bool { edge == .left || edge == .bottom }
+
     private func facingSideways(in rect: CGRect) -> Path {
         // The pointer lives in a strip along the rail-facing side; the body
         // fills what's left.
         let body = CGRect(
-            x: edge.isLeft ? pointerWidth : 0,
+            x: tailLeads ? pointerWidth : 0,
             y: 0,
             width: max(rect.width - pointerWidth, 0),
             height: rect.height
         )
+
+        if part == .tail { return pointerPath(in: rect, body: body) }
 
         var path = Path(
             roundedRect: body,
             cornerSize: CGSize(width: cornerRadius, height: cornerRadius),
             style: .continuous
         )
-
-        path.addPath(pointerPath(in: rect, body: body))
+        if part == .whole { path.addPath(pointerPath(in: rect, body: body)) }
         return path
     }
 
@@ -74,8 +94,8 @@ struct UsageBubbleShape: Shape {
             max(rect.height - cornerRadius - half, cornerRadius + half)
         )
 
-        let baseX = edge.isLeft ? body.minX : body.maxX
-        let tipX = edge.isLeft ? rect.minX : rect.maxX
+        let baseX = tailLeads ? body.minX : body.maxX
+        let tipX = tailLeads ? rect.minX : rect.maxX
         let reach = tipX - baseX
 
         // Traverse the tail in the direction that winds the same way as the
@@ -84,7 +104,7 @@ struct UsageBubbleShape: Shape {
         // *cancel* where they overlap — which is exactly what happened on the
         // left edge: mirroring the geometry reversed the tail's direction, and
         // the overlap with the body punched a gap between them.
-        let sweep = edge.isLeft ? -half : half
+        let sweep = tailLeads ? -half : half
 
         // Where the two control points of each flank sit, as fractions of
         // `reach` along the tail and of `sweep` across it.

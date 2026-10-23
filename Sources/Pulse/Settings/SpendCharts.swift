@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 /// One agent's or one model's share of the whole, as a bar.
@@ -187,13 +188,16 @@ struct HourProfile: View {
     }
 }
 
-/// Fresh input, cache written, cache read, output — the four kinds of token,
-/// with each one's share of the whole.
+/// Recorded input, cache hits, output and any explicitly unclassified tokens.
 ///
-/// **The split is the point, not the total.** These four are priced an order of
-/// magnitude apart — a cache read costs a tenth of fresh input on most price
-/// lists — so a bill that looks surprising next to a token count is usually
-/// explained here and nowhere else.
+/// **The split is the point, not the total.** A cache hit is priced at a
+/// fraction of new input on most price lists, so a bill that looks surprising
+/// next to a token count is usually explained here and nowhere else.
+///
+/// One vocabulary across agents. Input includes recorded cache writes;
+/// reported cache reads stand separately. A missing write amount makes no
+/// claim about automatic caching. An explicit unclassified remainder keeps
+/// its own row and denominator share, and is never priced or called input.
 ///
 /// The agent and combined panes have no per-model money and pass no `cost`, so
 /// they draw tokens alone; a model's drill-down passes its own `costBreakdown`
@@ -201,40 +205,31 @@ struct HourProfile: View {
 /// a day's or an agent's blended rate spread across it.
 struct TokenKindBreakdown: View {
     let tally: TokenTally
+    var unclassifiedTokens = 0
     /// The priced subset of these kinds, where there is one. Nil leaves the
     /// rows as tokens, which is what the agent and combined panes show.
     var cost: TokenCost? = nil
     /// Tokens behind these amounts that had no price. A positive count puts a
     /// `*` on each kind's amount, tying it to the note under the rows.
     var unpriced: Int = 0
+    /// Every agent behind this tally keeps no cache figure at all
+    /// (`SpendAgent.reportsCacheReads`). Their zero is not "nothing was read
+    /// from the cache", so the row says it was not recorded instead.
+    var readsUnreported = false
 
     var body: some View {
-        let total = max(tally.total, 1)
+        let total = max(Double(tally.total) + Double(unclassifiedTokens), 1)
+        let rows = Self.rows(tally, unclassified: unclassifiedTokens, cost: cost, readsUnreported: readsUnreported)
 
         return VStack(spacing: 0) {
-            ForEach(Array(Self.rows(tally, cost: cost).enumerated()), id: \.offset) { index, row in
-                if index > 0 { SettingsRowDivider() }
-                SettingsRow(row.label, subtitle: row.note) {
-                    HStack(spacing: 10) {
-                        ShareBar(share: Double(row.tokens) / Double(total))
-                            .frame(width: 64, height: 6)
-
-                        Text(String.localized("\(TokenCount.short(row.tokens)) tokens"))
-                            .font(.system(size: 12))
-                            .foregroundStyle(.secondary)
-                            .monospacedDigit()
-                            // One line, always. Grouped by ten thousands
-                            // these read "1246万 tokens", which is wider
-                            // than the English it was measured against and
-                            // was wrapping under its own bar.
-                            .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: false)
-                            .help(SpendFormat.tokens(row.tokens))
-
-                        if row.cost != nil {
-                            CostText(cost: row.cost, unpriced: unpriced)
-                                .font(.system(size: 12))
-                                .frame(width: 76, alignment: .trailing)
+            ForEach(rows) { row in
+                VStack(spacing: 0) {
+                    if row.id != .input { SettingsRowDivider() }
+                    SettingsRow(row.label, subtitle: row.note) {
+                        if row.unreported {
+                            unreported
+                        } else {
+                            figures(row, total: total)
                         }
                     }
                 }
@@ -242,20 +237,84 @@ struct TokenKindBreakdown: View {
         }
     }
 
-    private struct Row {
+    /// Stands where the bar and count would, and keeps the cost column's
+    /// width so the rows above and below stay aligned.
+    private var unreported: some View {
+        HStack(spacing: 10) {
+            Text(String.localized("Not reported"))
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+
+            if cost != nil {
+                Color.clear.frame(width: 76, height: 1)
+            }
+        }
+    }
+
+    private func figures(_ row: Row, total: Double) -> some View {
+        HStack(spacing: 10) {
+            ShareBar(share: Double(row.tokens) / total)
+                .frame(width: 64, height: 6)
+
+            Text(String.localized("\(TokenCount.short(row.tokens)) tokens"))
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
+                // One line, always. Grouped by ten thousands
+                // these read "1246万 tokens", which is wider
+                // than the English it was measured against and
+                // was wrapping under its own bar.
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+                .help(SpendFormat.tokens(row.tokens))
+
+            if cost != nil {
+                CostText(cost: row.cost, unpriced: unpriced)
+                    .font(.system(size: 12))
+                    .frame(width: 76, alignment: .trailing)
+            }
+        }
+    }
+
+    private struct Row: Identifiable {
+        enum ID: Hashable { case input, cacheRead, output, unclassified }
+        let id: ID
         let label: String
         let note: String
         let tokens: Int
         let cost: Double?
+        var unreported = false
     }
 
-    private static func rows(_ tally: TokenTally, cost: TokenCost?) -> [Row] {
-        [
-            Row(label: .localized("Input"), note: .localized("Sent fresh, not served from the cache."), tokens: tally.input, cost: cost?.input),
-            Row(label: .localized("Cache write"), note: .localized("Put into the prompt cache to be re-used."), tokens: tally.cacheWrite, cost: cost?.cacheWrite),
-            Row(label: .localized("Cache read"), note: .localized("Served from the cache, and priced far lower."), tokens: tally.cacheRead, cost: cost?.cacheRead),
-            Row(label: .localized("Output"), note: .localized("Written back by the model."), tokens: tally.output, cost: cost?.output),
+    private static func rows(_ tally: TokenTally, unclassified: Int, cost: TokenCost?, readsUnreported: Bool) -> [Row] {
+        // The write is named only where there was one: a zero here is most
+        // often a service with no such step, and saying "0 written" is the
+        // misreading this layout exists to avoid.
+        // One sentence pair per key, not two keys joined: a space between
+        // them is English punctuation, not Chinese.
+        let input = tally.cacheWrite > 0
+            ? String.localized(
+                "Recorded input, with reported cache hits counted separately. Includes \(TokenCount.short(tally.cacheWrite)) recorded cache writes."
+            )
+            : String.localized("Recorded input, with reported cache hits counted separately.")
+        let unknownOnly = tally.total == 0 && unclassified > 0
+        let missingCategory = String.localized("These records do not report this token category separately.")
+        let inputCost = cost.map { $0.input + $0.cacheWrite }
+        // A hit that did turn up is shown, whatever the agent is said to keep.
+        let hit = (readsUnreported || unknownOnly) && tally.cacheRead == 0
+            ? Row(id: .cacheRead, label: .localized("Cache hit"), note: .localized("These records carry no cache figures."), tokens: 0, cost: nil, unreported: true)
+            : Row(id: .cacheRead, label: .localized("Cache hit"), note: .localized("Recorded cache hits. Unreported cache use is not estimated."), tokens: tally.cacheRead, cost: cost?.cacheRead)
+        var rows = [
+            Row(id: .input, label: .localized("Input"), note: unknownOnly ? missingCategory : input, tokens: tally.fresh, cost: inputCost, unreported: unknownOnly),
+            hit,
+            Row(id: .output, label: .localized("Output"), note: unknownOnly ? missingCategory : .localized("Model output as recorded by each agent."), tokens: tally.output, cost: cost?.output, unreported: unknownOnly),
         ]
+        if unclassified > 0 {
+            rows.append(Row(id: .unclassified, label: .localized("Unclassified"), note: .localized("Reported tokens without a usable category breakdown."), tokens: unclassified, cost: nil))
+        }
+        return rows
     }
 }
 
@@ -373,28 +432,11 @@ enum SpendFormat {
         return String.localized("\(number) tokens unpriced")
     }
 
-    /// A dollar figure, in dollars whatever the reader's currency is, at two
-    /// places — or none once it is over a thousand.
-    ///
-    /// **A positive amount too small to show is still not free.** Rounded to
-    /// cents it would print `$0.00`, which reads as nothing spent; it says
-    /// "less than a cent" instead. A real zero still prints `$0.00`, because
-    /// that one is a measurement.
+    /// An estimate priced in dollars, in the currency chosen in Settings
+    /// (`Money.estimate`): two places, none once it is over a thousand, and
+    /// "< $0.01" for a positive amount that would round to nothing.
     static func money(_ amount: Double, locale: Locale = LocalizationSource.locale) -> String {
-        if amount > 0, amount < 0.01 {
-            let cent = 0.01.formatted(
-                .currency(code: "USD")
-                    .precision(.fractionLength(2))
-                    .locale(locale)
-            )
-            return String.localized("< \(cent)")
-        }
-
-        return amount.formatted(
-            .currency(code: "USD")
-                .precision(.fractionLength(amount >= 1000 ? 0 : 2))
-                .locale(locale)
-        )
+        Money.estimate(amount, locale: locale)
     }
 
     /// The same figure as a help tag, where the visible rounding hides the
@@ -406,14 +448,7 @@ enum SpendFormat {
     /// fraction. Significant digits keep a tiny positive amount visible and a
     /// large one exact.
     static func moneyExact(_ amount: Double, locale: Locale = LocalizationSource.locale) -> String {
-        // A real zero keeps the same two places the page shows it with.
-        guard amount != 0 else { return money(amount, locale: locale) }
-
-        return amount.formatted(
-            .currency(code: "USD")
-                .precision(.significantDigits(1...15))
-                .locale(locale)
-        )
+        Money.exactEstimate(amount, locale: locale)
     }
 }
 

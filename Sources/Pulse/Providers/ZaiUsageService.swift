@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// The GLM Coding Plan's limits, from Zhipu's quota endpoint.
@@ -84,7 +85,7 @@ struct ZaiUsageService: Sendable {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.timeoutInterval = 15
 
-        guard let (data, response) = try? await NetworkSession.shared.data(for: request) else {
+        guard let (data, response) = try? await NetworkSession.shared.recordedData(for: request) else {
             return .unavailable(provider, reason: .unreachable)
         }
 
@@ -223,7 +224,7 @@ struct ZaiUsageService: Sendable {
 
         let perUnit: [Int: Int] = [1: 1440, 3: 60, 5: 1, 6: 10080]
         guard number > 0, let multiplier = perUnit[unit] else { return nil }
-        return number * multiplier
+        return UsageWindow.length(number, unitSeconds: multiplier * 60).map { $0 / 60 }
     }
 
     private static func kind(forMinutes minutes: Int) -> UsageWindow.Kind {
@@ -391,7 +392,7 @@ extension ZaiUsageService {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.timeoutInterval = 20
 
-        guard let (data, response) = try? await NetworkSession.shared.data(for: request),
+        guard let (data, response) = try? await NetworkSession.shared.recordedData(for: request),
               (response as? HTTPURLResponse)?.statusCode == 200,
               let reply = try? JSONDecoder().decode(Statistics.self, from: data),
               reply.success == true, reply.code == 200,

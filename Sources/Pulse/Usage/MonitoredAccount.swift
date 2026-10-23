@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// One thing the rail shows a ring for.
@@ -149,7 +150,8 @@ extension Provider {
     /// login — so a second account of theirs is not something Pulse can be
     /// shown, however the rest of the app is shaped.
     var supportsMultipleAccounts: Bool {
-        switch self {
+        guard let written = handWritten else { return false }
+        return switch written {
         // Grok Bot is signed in to through Cursor's own login page rather
         // than by OAuth — a second allowance is a second Cursor account. See
         // `CursorWebLogin`.
@@ -159,8 +161,12 @@ extension Provider {
         // from the editor's own stored login and a second account has no
         // editor behind it. Grok Bot needs nothing but the token.
         case .kiro, .antigravity, .cursor, .openCodeGo, .kimiCode, .ollamaCloud,
-             .zai, .glmCoding, .minimax, .minimaxCN, .copilot, .volcengine,
-             .commandCode, .deepSeek, .devin, .xiaomiMiMo: false
+             .zai, .glmCoding, .minimax, .copilot, .volcengine,
+             .commandCode, .deepSeek, .devin, .xiaomiMiMo, .sub2api, .newAPI,
+             .v2ex, .qoder, .stepFun: false
+        // One account per extension, and each is its own: a second one of the
+        // same program is a second folder, not a sign-in.
+        case .pulseExtension: false
         }
     }
 }

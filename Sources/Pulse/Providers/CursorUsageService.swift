@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Cursor's limits, read from the account with the login the editor already
@@ -11,6 +12,14 @@ import Foundation
 /// different limits and are reported as three windows, all resetting with the
 /// billing cycle.
 ///
+/// **Unless the plan's included usage is weekly.** Cursor's newer plans,
+/// Premium among them, include usage by the **week**, and the usage summary does not see it: on such an account it
+/// reports both monthly pools at 0% while Cursor's own page says a quarter of
+/// the week is gone (#87). The editor draws that week from two other calls —
+/// the plan's period and reset from `GetPlanInfo`, the figure from
+/// `GetCurrentPeriodUsage` — and so does this, through the dashboard's REST
+/// form of each: one weekly window takes the place of the two pools.
+///
 /// Grok Bot is on this account too and is **not** read here — it is a weekly
 /// included allowance rather than a share of the monthly bill, so it is its
 /// own provider with its own ring. It borrows this file's login: see
@@ -20,6 +29,9 @@ import Foundation
 /// CLI routes, and can change without notice.
 struct CursorUsageService: Sendable {
     private static let endpoint = URL(string: "https://cursor.com/api/usage-summary")!
+    private static let planInfoEndpoint = URL(string: "https://cursor.com/api/dashboard/get-plan-info")!
+    private static let periodUsageEndpoint =
+        URL(string: "https://cursor.com/api/dashboard/get-current-period-usage")!
 
     func fetch() async -> ProviderUsage {
         guard let session = CursorAppLogin.session() else {
@@ -31,11 +43,6 @@ struct CursorUsageService: Sendable {
             )
         }
 
-        var request = URLRequest(url: Self.endpoint)
-        request.setValue(session.cookie, forHTTPHeaderField: "Cookie")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.timeoutInterval = 15
-
         // The session goes out as a `Cookie` header, which `URLSession` will
         // happily carry across a redirect to another host — unlike
         // `Authorization`, which it strips. So redirects are refused outright.
@@ -46,25 +53,33 @@ struct CursorUsageService: Sendable {
         let http = URLSession(configuration: configuration, delegate: NoRedirects(), delegateQueue: nil)
         defer { http.invalidateAndCancel() }
 
-        guard let (data, response) = try? await http.data(for: request) else {
-            return .unavailable(.cursor, reason: .unreachable)
+        let reply: Reply
+        switch await Self.read(Reply.self, from: Self.request(Self.endpoint, session: session), with: http) {
+        case .success(let read): reply = read
+        case .failure(let refusal): return .unavailable(.cursor, reason: refusal.reason)
         }
 
-        switch (response as? HTTPURLResponse)?.statusCode {
-        case 200: break
-        // The token parsed and had months left on it, and the account still
-        // refused it — so it is the login that has gone bad, not the absence
-        // of one, and the remedy is to open Cursor rather than to sign in.
-        case 401, 403: return .unavailable(.cursor, reason: .cursorLoginExpired)
-        case 429: return .unavailable(.cursor, reason: .rateLimited)
-        default: return .unavailable(.cursor, reason: .serverError)
+        var windows = Self.windows(from: reply)
+
+        // A plan whose included usage is weekly: the two monthly pools are not
+        // what it spends, so they give way to the week. A plan-info call that
+        // fails says nothing about the period, and the summary stands as it
+        // always has; once the plan *has* said weekly, though, a week that
+        // cannot be read is a failed read — the pools would be a confident
+        // 0% of the wrong thing.
+        if case .success(let planInfo) = await Self.read(
+            PlanInfoReply.self, from: Self.post(Self.planInfoEndpoint, session: session), with: http
+        ), let plan = planInfo.planInfo, plan.isWeekly {
+            let usage: PeriodUsageReply
+            switch await Self.read(
+                PeriodUsageReply.self, from: Self.post(Self.periodUsageEndpoint, session: session), with: http
+            ) {
+            case .success(let read): usage = read
+            case .failure(let refusal): return .unavailable(.cursor, reason: refusal.reason)
+            }
+            windows = Self.weeklyWindows(plan: plan, usage: usage, summary: windows)
         }
 
-        guard let reply = try? JSONDecoder().decode(Reply.self, from: data) else {
-            return .unavailable(.cursor, reason: .unreadableReply)
-        }
-
-        let windows = Self.windows(from: reply)
         guard !windows.isEmpty else {
             return .unavailable(.cursor, reason: .noLimitsReported)
         }
@@ -79,9 +94,63 @@ struct CursorUsageService: Sendable {
         )
     }
 
+    // MARK: - Requests
+
+    private static func request(_ url: URL, session: CursorAppLogin.Session) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.setValue(session.cookie, forHTTPHeaderField: "Cookie")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = 15
+        return request
+    }
+
+    /// The dashboard's calls, which are `POST {}` with the dashboard's own
+    /// origin — the same shape Grok Bot's status is read with.
+    private static func post(_ url: URL, session: CursorAppLogin.Session) -> URLRequest {
+        var request = request(url, session: session)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("https://cursor.com", forHTTPHeaderField: "Origin")
+        request.httpBody = Data("{}".utf8)
+        return request
+    }
+
+    private struct Refusal: Error {
+        let reason: ProviderUsage.Unavailability
+    }
+
+    private static func read<Value: Decodable>(
+        _ type: Value.Type,
+        from request: URLRequest,
+        with http: URLSession
+    ) async -> Result<Value, Refusal> {
+        guard let (data, response) = try? await http.recordedData(for: request) else {
+            return .failure(Refusal(reason: .unreachable))
+        }
+
+        switch (response as? HTTPURLResponse)?.statusCode {
+        case 200: break
+        // The token parsed and had months left on it, and the account still
+        // refused it — so it is the login that has gone bad, not the absence
+        // of one, and the remedy is to open Cursor rather than to sign in.
+        case 401, 403: return .failure(Refusal(reason: .cursorLoginExpired))
+        case 429: return .failure(Refusal(reason: .rateLimited))
+        default: return .failure(Refusal(reason: .serverError))
+        }
+
+        guard let value = try? JSONDecoder().decode(Value.self, from: data) else {
+            return .failure(Refusal(reason: .unreadableReply))
+        }
+        return .success(value)
+    }
+
     // MARK: - Reading the reply
 
-    private struct Reply: Decodable {
+    /// Internal rather than private, and deliberately: this and the mapping
+    /// functions below are what a fixture test holds a reconstructed reply
+    /// against. Nothing outside the module can see them either way. Do not
+    /// tidy these back to `private` — that takes the fixture test with it.
+    struct Reply: Decodable {
         /// One pot of money. `used`, `limit` and `remaining` are **cents**;
         /// the lane percentages are percentages.
         struct Allowance: Decodable {
@@ -113,7 +182,97 @@ struct CursorUsageService: Sendable {
         let teamUsage: Team?
     }
 
-    private static func windows(from reply: Reply) -> [UsageWindow] {
+    /// `get-plan-info`: what the plan includes and over what period.
+    ///
+    /// The dashboard's REST form of `aiserver.v1.DashboardService/GetPlanInfo`.
+    /// Its 64-bit stamps are milliseconds and may come as strings, which is
+    /// how protobuf's JSON writes them; the period is an enum that may come as
+    /// its name or its number.
+    struct PlanInfoReply: Decodable {
+        struct PlanInfo: Decodable {
+            let includedUsagePeriod: Period?
+            let includedUsageResetsAt: Stamp?
+
+            var isWeekly: Bool { includedUsagePeriod?.isWeekly == true }
+        }
+
+        let planInfo: PlanInfo?
+    }
+
+    /// `INCLUDED_USAGE_PERIOD_WEEKLY`, or `2`, its number in the editor's
+    /// schema. Anything else — monthly, unspecified, a name not seen yet — is
+    /// not weekly, and the summary's pools stand.
+    struct Period: Decodable {
+        let isWeekly: Bool
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            if let number = try? container.decode(Int.self) {
+                isWeekly = number == 2
+            } else {
+                let name = try container.decode(String.self).uppercased()
+                isWeekly = name == "INCLUDED_USAGE_PERIOD_WEEKLY" || name == "WEEKLY"
+            }
+        }
+    }
+
+    /// A moment in **milliseconds**, written as a number or as a string.
+    /// Absent or unreadable is nil, never the epoch.
+    struct Stamp: Decodable {
+        let date: Date?
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            let milliseconds: Double? = if let number = try? container.decode(Double.self) {
+                number
+            } else if let text = try? container.decode(String.self) {
+                Double(text.trimmingCharacters(in: .whitespaces))
+            } else {
+                nil
+            }
+            date = milliseconds.flatMap { $0.isFinite && $0 > 0 ? Date(timeIntervalSince1970: $0 / 1000) : nil }
+        }
+    }
+
+    /// `get-current-period-usage`, the REST form of `GetCurrentPeriodUsage`.
+    /// Only the one figure the editor draws as the week is read.
+    struct PeriodUsageReply: Decodable {
+        struct PlanUsage: Decodable {
+            /// A percentage, like the pools' — 25 means 25%.
+            let totalPercentUsed: Double?
+        }
+
+        let planUsage: PlanUsage?
+    }
+
+    /// The week, in place of the two monthly pools; extra spend, when the
+    /// account has it, stays as it was.
+    ///
+    /// The figure is `totalPercentUsed`, because that is what the editor draws
+    /// under "Weekly usage limit" on such a plan, with `includedUsageResetsAt`
+    /// as its reset. The period is the plan's own word, so the seven days are
+    /// a stated length. **No figure is no window** — not a week at 0%.
+    static func weeklyWindows(
+        plan: PlanInfoReply.PlanInfo,
+        usage: PeriodUsageReply,
+        summary: [UsageWindow]
+    ) -> [UsageWindow] {
+        var found: [UsageWindow] = []
+        if let percent = usage.planUsage?.totalPercentUsed, percent.isFinite {
+            found.append(UsageWindow(
+                id: "weekly",
+                kind: .weekly,
+                scope: nil,
+                usedFraction: min(max(percent / 100, 0), 1),
+                windowSeconds: 7 * 86_400,
+                resetsAt: plan.includedUsageResetsAt?.date,
+                isExhausted: percent >= 100
+            ))
+        }
+        return found + summary.filter { $0.kind == .spend }
+    }
+
+    static func windows(from reply: Reply) -> [UsageWindow] {
         let resets = reply.billingCycleEnd.flatMap(Self.date(from:))
         // A team account reports the same shape under another name.
         let plan = reply.individualUsage?.plan ?? reply.teamUsage?.pooled
@@ -232,7 +391,7 @@ struct CursorUsageService: Sendable {
     /// A real balance rather than an allowance, which is why it is reported
     /// here and not for Antigravity: the account says how much of the money is
     /// still there, not merely how much it started with.
-    private static func remaining(_ reply: Reply) -> String? {
+    static func remaining(_ reply: Reply) -> String? {
         guard
             let allowance = reply.individualUsage?.plan ?? reply.teamUsage?.pooled,
             let remaining = allowance.remaining
@@ -240,17 +399,13 @@ struct CursorUsageService: Sendable {
 
         // Cents, and Cursor prices in dollars whatever the reader's own
         // currency is — hence a fixed code rather than the locale's.
-        return (remaining / 100).formatted(
-            .currency(code: "USD")
-                .precision(.fractionLength(2))
-                .locale(LocalizationSource.locale)
-        )
+        return (remaining / 100).formatted(Money.reportedStyle("USD"))
     }
 
     /// "pro_plus" → "Pro+". An unfamiliar tier is tidied and passed through
     /// rather than blanked: an unknown name still beats none, and it is the
     /// only clue left when a new one appears.
-    private static func planName(_ membership: String?) -> String? {
+    static func planName(_ membership: String?) -> String? {
         guard let membership, !membership.isEmpty else { return nil }
 
         return membership

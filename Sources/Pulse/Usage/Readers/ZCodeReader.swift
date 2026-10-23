@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 import SQLite3
 
@@ -180,7 +181,7 @@ enum ZCodeReader {
                             output: rawOutput
                         ),
                         sessionID: sessionID,
-                        project: directory.map { URL(fileURLWithPath: $0).lastPathComponent },
+                        project: directory,
                         deduplicationID: "zcode:\(file.path):\(identifier)",
                         unclassifiedTokens: unclassified
                     )

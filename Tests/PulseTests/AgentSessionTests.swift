@@ -40,6 +40,7 @@ struct AgentSessionTests {
 
     private static func expectBucketsMatch(_ session: UsageLedger.Session) {
         #expect(session.slots.count == 2)
+        #expect(session.slots.reduce(0) { $0 + $1.unpricedTokens } == session.unpricedTokens)
         let sums = Self.slotSums(session)
         #expect(sums.tokens == session.tokens)
         #expect(abs(sums.cost - session.cost) < 1e-9)
@@ -72,6 +73,13 @@ struct AgentSessionTests {
         ] {
             #expect(sqlite3_exec(handle, sql, nil, nil, nil) == SQLITE_OK)
         }
+
+        let unpriced = OpenCodeStore.ledger(at: file, prices: [:])
+        Self.expectBucketsMatch(try #require(unpriced.sessions.first))
+        let unknownToday = SpendSummary.of([.openCode: unpriced], overLast: 1, now: Self.now)
+        #expect(unknownToday.sessions.first?.session.unpricedTokens == 100)
+        #expect(unknownToday.sessions.first?.session.estimatedCost == nil)
+        #expect(unknownToday.projects.first?.unpricedTokens == 100)
 
         let ledger = OpenCodeStore.ledger(at: file, prices: Self.prices)
         let session = try #require(ledger.sessions.first)
@@ -107,6 +115,13 @@ struct AgentSessionTests {
             to: run.appending(path: "updates.jsonl"), atomically: true, encoding: .utf8
         )
 
+        let unpriced = GrokStore.ledger(at: root, prices: [:])
+        Self.expectBucketsMatch(try #require(unpriced.sessions.first))
+        let unknownToday = SpendSummary.of([.grok: unpriced], overLast: 1, now: Self.now)
+        #expect(unknownToday.sessions.first?.session.unpricedTokens == 100)
+        #expect(unknownToday.sessions.first?.session.estimatedCost == nil)
+        #expect(unknownToday.projects.first?.unpricedTokens == 100)
+
         let ledger = GrokStore.ledger(at: root, prices: Self.prices)
         let session = try #require(ledger.sessions.first)
         Self.expectBucketsMatch(session)
@@ -122,6 +137,33 @@ struct AgentSessionTests {
     }
 
     // MARK: - Devin CLI
+
+    @Test("Devin's CLI keeps a message as two sibling nodes; it is counted once")
+    func devinSiblingNodesCountOnce() throws {
+        let directory = Self.temporary("devin-siblings")
+        let file = directory.appending(path: "sessions.db")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        var handle: OpaquePointer?
+        #expect(sqlite3_open(file.path, &handle) == SQLITE_OK)
+        defer { sqlite3_close(handle) }
+
+        let at = Int(Self.at(daysAgo: 0).timeIntervalSince1970)
+        let reply = #"{"role":"assistant","message_id":"m1","metadata":{"generation_model":"priced","metrics":{"input_tokens":100,"output_tokens":10}}}"#
+        let other = #"{"role":"assistant","message_id":"m2","metadata":{"generation_model":"priced","metrics":{"input_tokens":50,"output_tokens":5}}}"#
+        for sql in [
+            "CREATE TABLE sessions (id TEXT, working_directory TEXT, title TEXT)",
+            "CREATE TABLE message_nodes (session_id TEXT, chat_message TEXT, created_at INTEGER)",
+            "INSERT INTO sessions VALUES ('s1','/Users/me/Code/Pulse','Fix the ring')",
+            "INSERT INTO message_nodes VALUES ('s1','\(reply)',\(at))",
+            "INSERT INTO message_nodes VALUES ('s1','\(reply)',\(at))",
+            "INSERT INTO message_nodes VALUES ('s1','\(other)',\(at))",
+        ] {
+            #expect(sqlite3_exec(handle, sql, nil, nil, nil) == SQLITE_OK)
+        }
+        #expect(DevinCLIStore.ledger(at: file, prices: [:]).allTime.tokens == 110 + 55)
+    }
 
     @Test("Devin's reader fills a session's buckets and Today counts only today")
     func devinSessionSlotsReachToday() throws {
@@ -148,6 +190,13 @@ struct AgentSessionTests {
         ] {
             #expect(sqlite3_exec(handle, sql, nil, nil, nil) == SQLITE_OK)
         }
+
+        let unpriced = DevinCLIStore.ledger(at: file, prices: [:])
+        Self.expectBucketsMatch(try #require(unpriced.sessions.first))
+        let unknownToday = SpendSummary.of([.devinCLI: unpriced], overLast: 1, now: Self.now)
+        #expect(unknownToday.sessions.first?.session.unpricedTokens == 100)
+        #expect(unknownToday.sessions.first?.session.estimatedCost == nil)
+        #expect(unknownToday.projects.first?.unpricedTokens == 100)
 
         let ledger = DevinCLIStore.ledger(at: file, prices: Self.prices)
         let session = try #require(ledger.sessions.first)
@@ -192,6 +241,8 @@ struct AgentSessionTests {
         // Kimi names no model, so nothing is priceable and the cost is exactly
         // zero rather than a guessed rate.
         #expect(session.cost == 0)
+        #expect(session.unpricedTokens == 1_000)
+        #expect(session.estimatedCost == nil)
         #expect(Self.slotSums(session).cost == 0)
         #expect(ledger.days.reduce(0) { $0 + $1.tokens } == session.tokens)
 
@@ -200,6 +251,8 @@ struct AgentSessionTests {
         // No working directory is stated, so it is in the total and not on the
         // project list.
         #expect(summary.projects.isEmpty)
+        #expect(summary.sessions.first?.session.unpricedTokens == 100)
+        #expect(summary.sessions.first?.session.estimatedCost == nil)
         #expect(summary.sessions.first?.session.tokens == 100)
     }
 }

@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// One ledger per agent, however that agent keeps its records.
@@ -42,6 +43,15 @@ actor AgentLedgers {
         var notes: [SpendAgent: [String]] = [:]
     }
 
+    /// The last finished scan, kept while Token spend is on so the pane opens
+    /// on figures instead of a spinner (`SpendWarmer` keeps it current).
+    ///
+    /// **One snapshot, replaced, never a second copy.** The memory work on the
+    /// readers was about peaks during a read; a finished snapshot is ledgers,
+    /// not transcripts, and the floating panel's cards already hold the same
+    /// kind of thing. Dropped the moment Token spend is switched off.
+    private var kept: (snapshot: Snapshot, at: Date)?
+
     private let home: URL
     private let environment: [String: String]
     private let cacheDirectory: URL?
@@ -64,9 +74,16 @@ actor AgentLedgers {
             ? .shared : UsageLedgerReader(home: home, cacheDirectory: cacheDirectory)
     }
 
+    /// The last finished scan and when it finished, if Token spend is on and
+    /// one has.
+    func keptSnapshot() -> (snapshot: Snapshot, at: Date)? { kept }
+
+    /// Lets the kept scan go — Token spend was switched off.
+    func forget() { kept = nil }
+
     /// Runs in the caller's task: cancelling the pane propagates into the
     /// synchronous file/row loops. No detached worker can outlive that task.
-    /// The actor keeps no second copy of a finished scan after the pane closes.
+    /// A scan that finishes replaces the kept one (`keptSnapshot()`).
     func scan(
         refresh: Bool = false,
         progress: @MainActor @Sendable (Progress) -> Void = { _ in }
@@ -94,26 +111,69 @@ actor AgentLedgers {
             }
             try Task.checkCancellation()
         }
+        kept = (result, Date())
         return result
+    }
+
+    /// One agent's ledger, for the detailed hover card of the provider whose
+    /// mark it borrows. The same readers and the same cache as `scan`, so the
+    /// card and the Token spend pane cannot count one store two ways.
+    func ledger(for agent: SpendAgent) async -> UsageLedger {
+        let prices = await prices()
+        guard !Task.isCancelled else { return .empty }
+        if let provider = agent.provider {
+            return await transcriptReader.ledger(for: provider, refresh: true, prices: prices)
+        }
+        let read = try? autoreleasepool {
+            try readCached(agent, prices: prices, refresh: false)
+        }
+        return read?.ledger ?? .empty
     }
 
     private func readCached(_ agent: SpendAgent, prices: [String: ModelPrice], refresh: Bool) throws -> ReadResult {
         let before = Self.stamp(agent, home: home, environment: environment, prices: prices)
         try Task.checkCancellation()
         let file = cacheDirectory.map { AgentCache.file(for: agent, directory: $0) }
-        if !refresh, let before, let saved = AgentCache.load(agent, at: file), saved.stamp == before {
+        let saved = AgentCache.load(agent, at: file)
+        if !refresh, let before, let saved, saved.stamp == before {
             try Task.checkCancellation()
-            return ReadResult(ledger: saved.ledger, notes: [])
+            return ReadResult(ledger: kept(saved.ledger, stable: true, agent: agent, prices: prices), notes: [])
         }
 
         let outcome = Self.read(agent, prices: prices, home: home, environment: environment)
         try Task.checkCancellation()
         let after = Self.stamp(agent, home: home, environment: environment, prices: prices)
         try Task.checkCancellation()
-        if Self.canPersist(notes: outcome.notes, before: before, after: after), let before {
+        let stable = Self.canPersist(notes: outcome.notes, before: before, after: after)
+        if stable, let before {
             AgentCache.save(outcome.ledger, stamp: before, for: agent, at: file)
         }
-        return outcome
+        // The cache this read replaces was itself a stable read: what it held
+        // and this one does not is what the store has deleted since.
+        let ledger = kept(outcome.ledger, previous: saved?.ledger, stable: stable, agent: agent, prices: prices)
+        return ReadResult(ledger: ledger, notes: outcome.notes)
+    }
+
+    /// Where an agent's kept history lives (`AgentArchive`): the cache folder
+    /// handed in, or Pulse's own when this reads the real home. **Nowhere
+    /// otherwise** — a reader pointed at another home must not mark its
+    /// records into this Mac's history.
+    private var archiveDirectory: URL? {
+        cacheDirectory ?? (home.standardizedFileURL == URL(fileURLWithPath: NSHomeDirectory()).standardizedFileURL
+            ? PulseStorage.directory : nil)
+    }
+
+    /// A live ledger with the agent's kept history added in, after a stable
+    /// read has raised the marks (`AgentArchive`). An archive that cannot be
+    /// read leaves the ledger as read and is not written over.
+    private func kept(
+        _ live: UsageLedger, previous: UsageLedger? = nil, stable: Bool,
+        agent: SpendAgent, prices: [String: ModelPrice]
+    ) -> UsageLedger {
+        guard !Task.isCancelled, AgentArchive.keeps(agent), let directory = archiveDirectory,
+              var archive = AgentArchive.load(for: agent, directory: directory) else { return live }
+        if stable, archive.absorb(live, previous: previous) { archive.save(for: agent, directory: directory) }
+        return archive.merged(into: live, prices: prices, vendor: agent.priceVendor)
     }
 
     /// Whether a read may be written to the disk cache.
@@ -195,23 +255,24 @@ actor AgentLedgers {
         // Every catalog client, from its family's normalized records.
         default:
             guard !stores.isEmpty else { return ReadResult(ledger: .empty, notes: []) }
-            let records = AgentRecordReaders.records(client: agent.sourceID, roots: stores)
+            let read = AgentRecordReaders.read(client: agent.sourceID, roots: stores)
             let ledger = AgentUsageLedger.build(
-                records,
+                read.records,
                 prices: prices,
                 namespace: agent.rawValue,
                 vendor: agent.priceVendor,
                 // An export or capture is the account's movement, not
                 // necessarily this Mac's own transcript; it can still be
                 // priced, but it is not claimed as a local transcript.
-                origin: agent.requiresUsageExport ? .importedRecords : .localTranscripts
+                origin: agent.requiresUsageExport && !read.readsOwnLog
+                    ? .importedRecords : .localTranscripts
             )
             // A source that reports no token counters has nothing to be a
             // *partial* read of; its note is a permanent "no counters" string
             // and is left to the zero-record list instead. Only a source that
             // does report counts can have a decode limit worth stating.
             let notes = agent.reportsTokenCounts
-                ? AgentRecordReaders.notes(client: agent.sourceID, roots: stores)
+                ? read.notes
                 : []
             return ReadResult(ledger: ledger, notes: notes)
         }

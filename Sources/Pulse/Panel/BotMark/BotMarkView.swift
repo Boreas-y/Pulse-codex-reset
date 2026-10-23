@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 /// Draws one frame of the mark.
@@ -114,13 +115,13 @@ enum BotMarkGaze: Sendable {
     var mirrored: Bool { self == .left }
 
     /// The rail's own edge decides it: docked right, look left; docked left,
-    /// look right. A top rail runs horizontally and has screen on both sides,
-    /// so it looks straight ahead.
+    /// look right. A rail lying across has screen on both sides, so it looks
+    /// straight ahead.
     init(edge: PanelEdge) {
         switch edge {
         case .right: self = .left
         case .left: self = .right
-        case .top: self = .ahead
+        case .top, .bottom: self = .ahead
         }
     }
 }
@@ -165,6 +166,8 @@ struct BotMarkView: View {
     /// to settle into the mood, so a reduced-motion rail still shows *which*
     /// mood it is.
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Set while the mark cannot be seen (`botMarksPaused`).
+    @Environment(\.botMarksPaused) private var paused
 
     @State private var engine = BotMarkEngine()
     /// This mark's own frame in the panel's space, so it can tell where the
@@ -209,7 +212,17 @@ struct BotMarkView: View {
                 // that is meant to cost nothing. Measured settled on a docked
                 // rail of seven rings: ~19% of a core at display rate against
                 // ~15% here, over a ~10% baseline with marks off.
-                TimelineView(.periodic(from: .now, by: 1.0 / 30)) { timeline in
+                //
+                // **Paused while it cannot be seen.** A collapsed rail keeps
+                // its rings in the tree at opacity 0, and the timeline went on
+                // ticking behind the sliver: five marks redrawn thirty times a
+                // second, and the whole panel laid out with them, for nobody.
+                // Measured on an M5 with five marks and the rail shut: 6–10%
+                // of a core before, under 2% paused.
+                // Paused, the last frame stays drawn, so the fade out is of
+                // the frame that was there. The engine clamps a frame to
+                // 100ms as the upstream does, so it picks up where it was.
+                TimelineView(.animation(minimumInterval: 1.0 / 30, paused: paused)) { timeline in
                     let step = advance(timeline.date)
                     Canvas(rendersAsynchronously: false) { context, canvasSize in
                         drawBotMark(step.frame, config: step.config,
@@ -346,4 +359,17 @@ struct BotMarkView: View {
     }
     .padding()
     .background(.black)
+}
+
+private struct BotMarksPausedKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+extension EnvironmentValues {
+    /// Stops every animated mark below from advancing, for a rail that is
+    /// drawn but not shown (`UsageDockView`, collapsed).
+    var botMarksPaused: Bool {
+        get { self[BotMarksPausedKey.self] }
+        set { self[BotMarksPausedKey.self] = newValue }
+    }
 }

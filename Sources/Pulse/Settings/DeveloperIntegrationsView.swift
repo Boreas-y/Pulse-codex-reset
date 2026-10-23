@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import AppKit
 import SwiftUI
 
@@ -15,7 +16,7 @@ struct DeveloperIntegrationsView: View {
             SettingsGroup(String.localized("Read cached usage")) {
                 SettingsRow(
                     "Pulse --json",
-                    subtitle: String.localized("Reads saved figures without fetching or opening credentials.")
+                    subtitle: String.localized("Prints Pulse's saved readings, not the provider's original reply, without fetching or opening credentials.")
                 ) {
                     Button(String.localized("Copy command")) { copy(Self.quote(executable) + " --json") }
                 }

@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Zed's thread database, `threads.db`, under its XDG, macOS or Windows data
@@ -38,7 +39,15 @@ enum ZedReader {
     }
 
     static func records(roots: [URL]) -> [AgentUsageRecord] {
-        AgentLogIO.files(in: roots, names: ["threads.db"]).flatMap(read)
+        readWithNotes(roots: roots).records
+    }
+
+    static func readWithNotes(roots: [URL]) -> AgentRecordReaders.Read {
+        var diagnostics: Set<String> = []
+        let records = AgentLogIO.files(in: roots, names: ["threads.db"]).flatMap {
+            read($0, diagnostics: &diagnostics)
+        }
+        return .init(records: records, notes: diagnostics.sorted().first.map { [$0] } ?? [])
     }
 
     /// The bound on either side of a compressed decode, and on a plain JSON
@@ -47,19 +56,19 @@ enum ZedReader {
 
     // MARK: - One database
 
-    private static func read(_ file: URL) -> [AgentUsageRecord] {
+    private static func read(_ file: URL, diagnostics: inout Set<String>) -> [AgentUsageRecord] {
         AgentSQLite.read(at: file) { database -> [AgentUsageRecord] in
             guard !DatabaseReaderSupport.columns(database, of: "threads").isEmpty else { return [] }
 
             var records: [AgentUsageRecord] = []
             let sql = select(database)
             AgentSQLite.each(database, sql: sql) { statement in
+                guard let blob = AgentSQLite.data(statement, column: 3) else { return }
+                let payload = Self.payload(dataType: AgentSQLite.text(statement, column: 2) ?? "", blob: blob)
+                if case let .unreadableZstd(reason) = payload { diagnostics.insert(reason) }
                 guard
                     let id = AgentSQLite.text(statement, column: 0),
-                    let blob = AgentSQLite.data(statement, column: 3),
-                    case let .json(value) = Self.payload(
-                        dataType: AgentSQLite.text(statement, column: 2) ?? "", blob: blob
-                    ),
+                    case let .json(value) = payload,
                     let thread = value as? [String: Any]
                 else { return }
 
@@ -149,9 +158,9 @@ enum ZedReader {
         return tally.total > 0 ? tally : TokenTally()
     }
 
-    /// The workspace's label: `folder_paths` is newline-separated and
+    /// The workspace's directory: `folder_paths` is newline-separated and
     /// `folder_paths_order` names the original index of the first one. The
-    /// final path component is the label, never the whole path.
+    /// full path is retained for project identity.
     private static func project(paths: String?, order: String?) -> String? {
         guard let paths else { return nil }
         let list = paths
@@ -167,7 +176,7 @@ enum ZedReader {
            list.indices.contains(index) {
             chosen = list[index]
         }
-        return URL(fileURLWithPath: chosen).lastPathComponent
+        return chosen
     }
 
     // MARK: - Payloads

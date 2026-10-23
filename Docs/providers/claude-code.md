@@ -1,6 +1,6 @@
 # Claude Code
 
-Primary service: [`ClaudeCodeUsageService.swift`](../../Sources/Pulse/Providers/ClaudeCodeUsageService.swift). Desktop route: [`ClaudeDesktopSession.swift`](../../Sources/Pulse/Providers/ClaudeDesktopSession.swift). Status line: [`StatusLineHook.swift`](../../Sources/Pulse/App/StatusLineHook.swift). Identity compare: [`ClaudeAccountIdentity.swift`](../../Sources/Pulse/Providers/ClaudeAccountIdentity.swift). Extra accounts: [authentication.md](authentication.md). Compact fallback diagram: [`../plan.md`](../plan.md).
+Primary service: [`ClaudeCodeUsageService.swift`](../../Sources/Pulse/Providers/ClaudeCodeUsageService.swift). Desktop route: [`ClaudeDesktopSession.swift`](../../Sources/Pulse/Providers/ClaudeDesktopSession.swift). Status line: [`StatusLineHook.swift`](../../Sources/Pulse/App/StatusLineHook.swift). Identity compare: [`ClaudeAccountIdentity.swift`](../../Sources/Pulse/Providers/ClaudeAccountIdentity.swift). Extra accounts: [authentication.md](authentication.md).
 
 `keepsLocalTranscripts` is true. Extra accounts are supported. Source choice applies to the **primary** account only.
 
@@ -8,7 +8,7 @@ Primary service: [`ClaudeCodeUsageService.swift`](../../Sources/Pulse/Providers/
 
 Default `.automatic`, in this order:
 
-1. **Usage endpoint** — `GET https://api.anthropic.com/api/oauth/usage` with the OAuth access token Claude Code already stored (Keychain service `Claude Code-credentials`, falling back to `~/.claude/.credentials.json`).
+1. **Usage endpoint** — `GET https://api.anthropic.com/api/oauth/usage` with the OAuth access token Claude Code already stored (Keychain service `Claude Code-credentials`, falling back to `~/.claude/.credentials.json`). The Keychain read is `security find-generic-password` through `BoundedProcess`, ended after 60 seconds (`keychainDeadline`): an access prompt nobody answers falls through to the file and the status line instead of holding every provider's pass behind it, and the Keychain is then left alone for 30 minutes (`keychainPause`) so the unanswered prompt is not put up again at every pass.
 2. **Desktop session** — only if the Keychain grant for `Claude Safe Storage` has already happened, the session returns a **live** reading, and account identity is compatible (or there is nothing to compare). See [authentication.md](authentication.md).
 3. **Status line capture** — Claude Code’s documented status-line hook. Pulse registers as `Pulse --statusline`, banks the blob, prints a status line back.
 4. **Cache**, then an actionable unavailable reason.
@@ -74,6 +74,16 @@ Route-check diagnostics preserve fallback outcomes without changing which accoun
 ## Spent
 
 Claude Code reports `severity` and `locked_reason` per limit. A `locked_reason` is spent; so is any severity Pulse does not recognise. `normal`/`ok`/`none`/`healthy` and **`warning`/`warn`** are not — Claude Code raises a limit to `warning` while it still has room (seen at 76% used on a scoped weekly limit), and treating that as spent drew a full exhausted-red ring and a red figure for a limit with a quarter left. Spent is what the provider actually reports, not what it is worried about.
+
+## Service status
+
+Settings › Claude Code › **Service status** (`ServiceStatus`, `ServiceStatusGroup`, `StatusPage.of(.claudeCode)`): **every component status.claude.com shows** — claude.ai, Claude Console, Claude API, Claude Code, Claude Cowork, Claude for Government as of 2026-10-04 — each with the state now, a bar a day for 90 days and the page's 90-day uptime, then a row that opens the page. Requested 2026-10-04 with a screenshot of that page; the layout copies it. It first showed only Claude Code and the API; the request was for all of them. Codex's twin, and the rules both share (read on opening and every five minutes while open; no reading is not all clear): [codex.md](codex.md#service-status).
+
+**Components as the page shows them.** `/api/v2/summary.json` → `components[]`, in `position` order, a group's own row (`group: true`) left out and one marked `only_show_if_degraded` left out while operational. The outage notification is narrower: Claude Code and Claude API only, by id (`yyzkbfz2thpt`, `k8w3r06qmzrp`) — [../notifications.md](../notifications.md).
+
+**History: `/uptime_showcase?components=<ids>`**, the request the page makes to fill its bars lazily (found in its script, 2026-10-04), asked after the summary because it says which ids there are; the page batches up to 60. Per component: `timelines[id].days[]` (`date` as `yyyy-MM-dd` in the page's time zone, `outages.p` / `outages.m` in seconds of partial and major outage), `timelines[id].component.startDate`, `values[]` (`ninety` is the figure the page prints — 99.44 and 99.52 that day, matching it), and `components[id]`, the SVG of the bars. **Each bar takes the colour the page drew** (`fill` of each `uptime-day` rect), because the page grades a day green → yellow → red by how long it was out, which no state carries; only when there is a colour for every day, otherwise the state's colour. The state of a day is `m > 0` full outage, `p > 0` partial, else operational; before `startDate` none. On the captured days, green fell exactly on the days with no outage (`ServiceStatusTests`).
+
+**Colours are the page's theme**: operational `#76AD2A`, degraded `#FAA72A`, partial `#E86235`, major `#E04343`, maintenance `#2C84DB`; square bars.
 
 ## First run
 

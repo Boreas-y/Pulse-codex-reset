@@ -33,7 +33,7 @@ struct CodexResetEventSection: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4 * PanelMetrics.scale) {
-                    Text(event.title)
+                    Text(event.localizedTitle)
                         .font(.system(size: 13 * PanelMetrics.scale, weight: .semibold, design: .rounded))
                         .fixedSize(horizontal: false, vertical: true)
                     Text(timing(at: context.date))
@@ -42,27 +42,42 @@ struct CodexResetEventSection: View {
                         .monospacedDigit()
                 }
 
-                if let post = event.posts.first {
-                    Text(postText(post))
+                if let content = event.posts.first?.content(for: LocalizationSource.locale) {
+                    Text(content.isOriginal
+                         ? String.localized("Original post")
+                         : String.localized("AI Hot News Chinese translation"))
+                        .font(.system(size: DetailCardLayout.footnoteFontSize))
+                        .foregroundStyle(.secondary)
+                    Text(content.text)
                         .font(.system(size: 11 * PanelMetrics.scale, design: .rounded))
                         .foregroundStyle(.secondary)
                         .lineLimit(4)
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                Link(destination: event.posts.first?.url ?? event.url) {
-                    HStack(spacing: 5 * PanelMetrics.scale) {
-                        Image(systemName: "link")
-                        Text(localized: "AI Hot News · original post")
+                HStack(spacing: 12 * PanelMetrics.scale) {
+                    if LocalizationSource.locale.prefersAIhotResetLink {
+                        aihotLink
+                        originalLink
+                    } else {
+                        originalLink
+                        aihotLink
                     }
-                    .contentShape(Rectangle())
                 }
-                .buttonStyle(.plain)
-                .font(.system(size: 10.5 * PanelMetrics.scale, weight: .medium))
-                .foregroundStyle(.secondary)
             }
             .accessibilityElement(children: .contain)
             .accessibilityLabel(String.localized("Codex reset announcement"))
+        }
+    }
+
+    private var aihotLink: some View {
+        PanelLink(title: "AI Hot News", destination: event.url).fixedSize()
+    }
+
+    @ViewBuilder private var originalLink: some View {
+        if let post = event.posts.first {
+            PanelLink(title: String.localized("Open original post") + " (X)", destination: post.url)
+                .fixedSize()
         }
     }
 
@@ -86,11 +101,6 @@ struct CodexResetEventSection: View {
                 : String.localized("Expected window is open")
         }
         return String.localized("Awaiting confirmation")
-    }
-
-    private func postText(_ post: CodexResetEvent.Post) -> String {
-        let language = LocalizationSource.locale.language.languageCode?.identifier ?? "en"
-        return language.hasPrefix("zh") ? post.text : (post.originalText ?? post.text)
     }
 
     private static func relative(from start: Date, to end: Date) -> String {

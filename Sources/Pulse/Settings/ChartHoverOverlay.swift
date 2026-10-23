@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 /// Immediate inspection for the Settings charts. The whole plot is a target,
@@ -10,7 +11,18 @@ struct ChartHoverOverlay: View {
     struct Sample: Equatable {
         let x: CGFloat
         let title: String
-        let tokens: Int
+        /// The figure, already worded: "1.2M tokens", "320 ms".
+        let value: String
+
+        init(x: CGFloat, title: String, value: String) {
+            self.x = x
+            self.title = title
+            self.value = value
+        }
+
+        init(x: CGFloat, title: String, tokens: Int) {
+            self.init(x: x, title: title, value: ChartTooltipCard.tokensText(tokens))
+        }
     }
 
     let samples: [Sample]
@@ -36,23 +48,7 @@ struct ChartHoverOverlay: View {
                             .position(x: sample.x, y: max(proxy.size.height - 2, 2))
 
                         TooltipPlacement(anchorX: sample.x) {
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(sample.title)
-                                    .font(.system(size: 10))
-                                    .foregroundStyle(.secondary)
-                                Text(String.localized("\(TokenCount.short(sample.tokens)) tokens"))
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .monospacedDigit()
-                            }
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 7)
-                            .background(.regularMaterial, in: .rect(cornerRadius: 6))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(.separator.opacity(0.6), lineWidth: 0.5)
-                            }
-                            .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
+                            ChartTooltipCard(title: sample.title, value: sample.value)
                         }
                     }
                     // A tooltip must not become a new hover target under the
@@ -113,5 +109,47 @@ struct ChartHoverOverlay: View {
                 proposal: ProposedViewSize(size)
             )
         }
+    }
+}
+
+/// The read-out card every Settings chart shows: a caption (the date, hour or
+/// week) over a figure — a token count, or an extension's metric. Shared so
+/// the activity grid, which positions its own card beside a cell, reads
+/// exactly like the bar charts' hover.
+struct ChartTooltipCard: View {
+    let title: String
+    let value: String
+
+    init(title: String, value: String) {
+        self.title = title
+        self.value = value
+    }
+
+    init(title: String, tokens: Int) {
+        self.init(title: title, value: Self.tokensText(tokens))
+    }
+
+    nonisolated static func tokensText(_ tokens: Int) -> String {
+        String.localized("\(TokenCount.short(tokens)) tokens")
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(title)
+                .font(.system(size: 10))
+                .foregroundStyle(.secondary)
+            Text(verbatim: value)
+                .font(.system(size: 12, weight: .semibold))
+                .monospacedDigit()
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 7)
+        .background(.regularMaterial, in: .rect(cornerRadius: 6))
+        .overlay {
+            RoundedRectangle(cornerRadius: 6)
+                .strokeBorder(.separator.opacity(0.6), lineWidth: 0.5)
+        }
+        .shadow(color: .black.opacity(0.12), radius: 3, y: 1)
     }
 }

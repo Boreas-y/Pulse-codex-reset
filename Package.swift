@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 // swift-tools-version: 6.0
 
 import PackageDescription
@@ -56,9 +57,9 @@ let package = Package(
         ),
         // Tests the executable target directly rather than through a library
         // split. Pulse is one app, not a framework with an app on top, and
-        // carving sixty-nine files into two targets to make them reachable would be a
-        // refactor in service of the test runner. SwiftPM has been able to
-        // `@testable import` an executable target since Swift 5.5.
+        // carving the app's files into two targets to make them reachable
+        // would be a refactor in service of the test runner. SwiftPM has been
+        // able to `@testable import` an executable target since Swift 5.5.
         .testTarget(
             name: "PulseTests",
             dependencies: ["Pulse"],

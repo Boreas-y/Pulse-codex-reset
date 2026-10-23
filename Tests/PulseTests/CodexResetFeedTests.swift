@@ -3,6 +3,8 @@ import SwiftUI
 import Testing
 @testable import Pulse
 
+extension PanelGlobalsSuite {
+@Suite(.serialized)
 struct CodexResetFeedTests {
     @Test @MainActor
     func railDotMatchesAnnouncementStatus() {
@@ -189,4 +191,6 @@ struct CodexResetFeedTests {
       ]
     }
     """#
+}
+
 }

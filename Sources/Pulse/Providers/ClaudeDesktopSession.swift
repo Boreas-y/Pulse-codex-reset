@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// The Claude desktop app as a third route to the account's limits.
@@ -400,7 +401,7 @@ enum ClaudeDesktopSession {
 
         for attempt in 0...retryLimit {
             do {
-                let (data, response) = try await session.data(for: request)
+                let (data, response) = try await session.recordedData(for: request)
                 guard let http = response as? HTTPURLResponse else { return .failure(.unreachable) }
 
                 switch http.statusCode {

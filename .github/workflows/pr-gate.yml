@@ -1,0 +1,51 @@
+name: PR guidance
+
+# Advisory only: all contributions may be submitted directly.
+# A busy review queue receives a reminder, never an automatic closure.
+# pull_request_target supplies a token for commenting on fork PRs. Read metadata
+# only: never check out or execute the contributor's code in this workflow.
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+  issues: read
+
+concurrency:
+  group: pr-guidance-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  guidance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const exempt = ['OWNER', 'MEMBER', 'COLLABORATOR'];
+            if (exempt.includes(pr.author_association) || pr.user.type === 'Bot') return;
+
+            const { owner, repo } = context.repo;
+            const chinese = /\p{Script=Han}/u.test(pr.body || '');
+            const reminders = [];
+            const open = await github.paginate(github.rest.pulls.list, { owner, repo, state: 'open', per_page: 100 });
+            if (open.filter(p => p.user.login === pr.user.login).length > 2) {
+              reminders.push(chinese
+                ? '你已有超过两个待审 PR，建议等现有 PR 审完再提交更多，方便维护者逐个处理。这个 PR 会保持开放。'
+                : 'You have more than two PRs awaiting review. Please consider waiting for existing reviews before submitting more, so the maintainer can work through them. This PR will stay open.');
+            }
+
+            if (!reminders.length) return;
+
+            // Reopening a PR must not post the same guidance again.
+            const marker = '<!-- pulse-pr-guidance -->';
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number: pr.number, per_page: 100 });
+            if (comments.some(comment => comment.user.type === 'Bot' && (comment.body || '').includes(marker))) return;
+
+            const guide = 'https://github.com/' + owner + '/' + repo + '/blob/main/CONTRIBUTING.md#pull-requests';
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: pr.number,
+              body: [marker, ...reminders, guide].join('\n\n'),
+            });

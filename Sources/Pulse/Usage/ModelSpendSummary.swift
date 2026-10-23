@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// One model's usage, answered from the same ledgers the combined page adds up.
@@ -27,10 +28,8 @@ struct ModelSpendSummary: Equatable, Sendable {
     struct Day: Identifiable, Equatable, Sendable {
         let date: Date
         let tokens: Int
-        /// The day's tokens by kind, where every raw model behind them kept
-        /// its own tally. Nil rather than the day's total read as one kind: a
-        /// model whose category detail was never saved must not look like a
-        /// model that only ever sent fresh input.
+        /// Classified tokens where the recorded kinds plus the explicit
+        /// unclassified remainder reconcile. Nil for missing or broken detail.
         let tally: TokenTally?
         /// The day's money for the **priced subset** of its tokens. Nil where
         /// nothing that day could be priced; a real zero from a zero rate is a
@@ -42,6 +41,13 @@ struct ModelSpendSummary: Equatable, Sendable {
         /// Tokens that day with no price behind them, counted here and never
         /// added to `costBreakdown`.
         var unpricedTokens: Int = 0
+
+        /// The source's explicit count without usable category detail.
+        var unclassifiedTokens: Int = 0
+
+        var classifiedTally: TokenTally? {
+            tokens > 0 && unclassifiedTokens == tokens ? nil : tally
+        }
 
         var id: Date { date }
     }
@@ -60,9 +66,11 @@ struct ModelSpendSummary: Equatable, Sendable {
 
     var name: String = ""
     var tokens: Int = 0
-    /// The span split by kind of token. Nil where any contributing raw model's
-    /// categories were missing or did not add up to its own total — see `of`.
+    /// The classified subset. Together with `unclassifiedTokens` it accounts
+    /// for the span; nil where contributing detail was missing or broken.
     var tally: TokenTally? = nil
+    /// Explicitly unclassified tokens, shown beside a reconciled tally.
+    var unclassifiedTokens = 0
     /// Every day in the span, quiet ones included, so the drill-down is the
     /// same calendar shape as the row it came from.
     var days: [Day] = []
@@ -130,12 +138,32 @@ struct ModelSpendSummary: Equatable, Sendable {
     ) -> ModelSpendSummary {
         let today = calendar.startOfDay(for: now)
         let cutoff = span.flatMap { calendar.date(byAdding: .day, value: -($0 - 1), to: today) }
+        return of(ledgers, named: name, from: cutoff, until: nil, now: now, calendar: calendar)
+    }
+
+    /// The same, over the calendar days from `cutoff` up to, **not
+    /// including**, `upper` — local midnights, either open — as
+    /// `SpendSummary.of(_:from:until:)` counts them, so a model opened from a
+    /// row of "last month" is the same month.
+    static func of(
+        _ ledgers: [SpendAgent: UsageLedger],
+        named name: String,
+        from cutoff: Date?,
+        until upper: Date?,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> ModelSpendSummary {
+        let today = calendar.startOfDay(for: now)
+        func inside(_ date: Date) -> Bool {
+            (cutoff.map { date >= $0 } ?? true) && (upper.map { date < $0 } ?? true)
+        }
 
         var dayTokens: [Date: Int] = [:]
         var dayTally: [Date: TokenTally] = [:]
         var dayTallyComplete: [Date: Bool] = [:]
         var dayCost: [Date: TokenCost] = [:]
         var dayUnpriced: [Date: Int] = [:]
+        var dayUnclassified: [Date: Int] = [:]
         var agentTokens: [SpendAgent: Int] = [:]
         var agentCost: [SpendAgent: TokenCost] = [:]
         var agentUnpriced: [SpendAgent: Int] = [:]
@@ -143,6 +171,7 @@ struct ModelSpendSummary: Equatable, Sendable {
         var totalTally = TokenTally()
         var totalCost = TokenCost()
         var totalUnpriced = 0
+        var totalUnclassified = 0
         var tallyComplete = true
         var hoursComplete = true
         var pricedAny = false
@@ -151,6 +180,7 @@ struct ModelSpendSummary: Equatable, Sendable {
         var partial = false
 
         for (agent, ledger) in ledgers {
+            guard !Task.isCancelled else { return ModelSpendSummary(name: name) }
             // A ledger that cannot be priced has no place here: a provider's
             // own statistics report one total per model and no categories.
             guard ledger.origin.supportsTokenSpend else { continue }
@@ -165,7 +195,8 @@ struct ModelSpendSummary: Equatable, Sendable {
             var ledgerSlotTokens: [Date: [String: Int]] = [:]
 
             for day in ledger.days {
-                if let cutoff, day.date < cutoff { continue }
+                guard !Task.isCancelled else { return ModelSpendSummary(name: name) }
+                if !inside(day.date) { continue }
                 for (rawID, tokens) in day.models
                 where tokens > 0 && (ledger.modelNames[rawID] ?? rawID) == name {
                     found = true
@@ -189,21 +220,16 @@ struct ModelSpendSummary: Equatable, Sendable {
                     )
                     let unclassified = rawUnclassified ?? 0
 
-                    if accountsForAll, let modelTally,
-                       let daySum = Self.adding(dayTally[day.date] ?? TokenTally(), modelTally),
-                       let totalSum = Self.adding(totalTally, modelTally),
+                    if accountsForAll,
+                       let daySum = Self.adding(dayTally[day.date] ?? TokenTally(), modelTally ?? TokenTally()),
+                       let totalSum = Self.adding(totalTally, modelTally ?? TokenTally()),
                        Self.checkedTotal(daySum) != nil,
                        Self.checkedTotal(totalSum) != nil {
                         dayTally[day.date] = daySum
                         totalTally = totalSum
+                        dayUnclassified[day.date, default: 0] += unclassified
+                        totalUnclassified += unclassified
                     } else {
-                        tallyComplete = false
-                        dayTallyComplete[day.date] = false
-                    }
-
-                    if unclassified > 0 {
-                        // Some of this model's tokens have no kind, so its
-                        // category split cannot stand for the whole.
                         tallyComplete = false
                         dayTallyComplete[day.date] = false
                     }
@@ -234,7 +260,8 @@ struct ModelSpendSummary: Equatable, Sendable {
             // detail contributes nothing here — and then the reconciliation
             // below fails, which is the point.
             for slot in ledger.slots {
-                if let cutoff, slot.start < cutoff { continue }
+                guard !Task.isCancelled else { return ModelSpendSummary(name: name) }
+                if !inside(slot.start) { continue }
                 for (rawID, modelTally) in slot.models
                 where (ledger.modelNames[rawID] ?? rawID) == name {
                     // A slot whose model tally is broken contributes no hours:
@@ -265,8 +292,9 @@ struct ModelSpendSummary: Equatable, Sendable {
         // daily total, and the pieces add up to the total on screen. The sum
         // is checked so an aggregate whose kinds no longer fit an `Int` is
         // withheld rather than crashed on.
-        if tallyComplete, Self.checkedTotal(totalTally) == summary.tokens {
+        if tallyComplete, totalTally.accountsFor(tokens: summary.tokens, unclassified: totalUnclassified) {
             summary.tally = totalTally
+            summary.unclassifiedTokens = totalUnclassified
         }
 
         // The hour series is the model's own only where every ledger's buckets
@@ -301,9 +329,12 @@ struct ModelSpendSummary: Equatable, Sendable {
         // Every day in the window, quiet ones included: a drill-down should be
         // the same calendar as the row it was opened from.
         let first = cutoff ?? dayTokens.keys.min() ?? today
-        let last = max(today, dayTokens.keys.max() ?? today)
-        var cursor = min(first, last)
+        let last = upper.flatMap { calendar.date(byAdding: .day, value: -1, to: $0) }
+            ?? max(today, dayTokens.keys.max() ?? today)
+        // As `SpendSummary`'s: a bounded span starts where it was asked to.
+        var cursor = upper == nil ? min(first, last) : first
         while cursor <= last {
+            guard !Task.isCancelled else { return ModelSpendSummary(name: name) }
             let tokens = dayTokens[cursor] ?? 0
             let tally: TokenTally?
             if tokens == 0 {
@@ -319,7 +350,8 @@ struct ModelSpendSummary: Equatable, Sendable {
                 tokens: tokens,
                 tally: tally,
                 costBreakdown: dayCost[cursor],
-                unpricedTokens: dayUnpriced[cursor] ?? 0
+                unpricedTokens: dayUnpriced[cursor] ?? 0,
+                unclassifiedTokens: tally == nil ? 0 : dayUnclassified[cursor] ?? 0
             ))
 
             guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { break }
@@ -344,20 +376,7 @@ struct ModelSpendSummary: Equatable, Sendable {
         unclassified: Int?,
         tokens: Int
     ) -> Bool {
-        // This dictionary contains only models with an unclassified remainder.
-        // An absent entry is zero; the classified tally must still reconcile
-        // with the full reported total below.
-        let unclassified = unclassified ?? 0
-        guard unclassified >= 0 else { return false }
-
-        var known = 0
-        if let tally {
-            guard let total = Self.checkedTotal(tally) else { return false }
-            known = total
-        }
-
-        guard let total = Self.adding(known, unclassified) else { return false }
-        return total == tokens
+        (tally ?? TokenTally()).accountsFor(tokens: tokens, unclassified: unclassified ?? 0)
     }
 
     /// A tally's own total, or nil when any kind is negative or the sum does
@@ -379,9 +398,14 @@ struct ModelSpendSummary: Equatable, Sendable {
             let input = Self.adding(lhs.input, rhs.input),
             let cacheWrite = Self.adding(lhs.cacheWrite, rhs.cacheWrite),
             let cacheRead = Self.adding(lhs.cacheRead, rhs.cacheRead),
-            let output = Self.adding(lhs.output, rhs.output)
+            let output = Self.adding(lhs.output, rhs.output),
+            let hourWrites = Self.adding(lhs.cacheWrite1h, rhs.cacheWrite1h),
+            let silent = Self.adding(lhs.repliesWithoutCacheFields, rhs.repliesWithoutCacheFields)
         else { return nil }
-        return TokenTally(input: input, cacheWrite: cacheWrite, cacheRead: cacheRead, output: output)
+        return TokenTally(
+            input: input, cacheWrite: cacheWrite, cacheRead: cacheRead, output: output,
+            cacheWrite1h: hourWrites, repliesWithoutCacheFields: silent
+        )
     }
 
     private static func adding(_ lhs: Int, _ rhs: Int) -> Int? {
@@ -396,10 +420,11 @@ struct ModelSpendSummary: Equatable, Sendable {
     /// asked of the same rows whoever asks it.
     enum DayColumn: String, CaseIterable, Identifiable, Sendable {
         case date
-        case input
-        case output
+        /// New input, cache writes included (`TokenTally.fresh`).
+        case fresh
         case cacheRead
-        case cacheWrite
+        case output
+        case unclassified
         case total
         case cost
 
@@ -420,7 +445,7 @@ struct ModelSpendSummary: Equatable, Sendable {
     /// adjacent values above 2^53 compare equal and fall back to the date,
     /// which is a wrong order rather than a rounding. The generic ranker below
     /// is shared only for the nil-last and tie rules.
-    static func sorted(_ days: [Day], by column: DayColumn, ascending: Bool) -> [Day] {
+    static func sorted(_ days: [Day], by column: DayColumn, ascending: Bool, cacheUnreported: Bool = false) -> [Day] {
         /// Equal values keep their place by date, so two runs over one table
         /// agree rather than shuffling.
         func byDate(_ lhs: Day, _ rhs: Day) -> Bool {
@@ -449,14 +474,18 @@ struct ModelSpendSummary: Equatable, Sendable {
         // this column.
         case .date:
             return days.sorted(by: byDate)
-        case .input:
-            return days.sorted { rank($0.tally?.input, $1.tally?.input, $0, $1) }
-        case .output:
-            return days.sorted { rank($0.tally?.output, $1.tally?.output, $0, $1) }
+        case .fresh:
+            return days.sorted { rank($0.classifiedTally?.fresh, $1.classifiedTally?.fresh, $0, $1) }
         case .cacheRead:
-            return days.sorted { rank($0.tally?.cacheRead, $1.tally?.cacheRead, $0, $1) }
-        case .cacheWrite:
-            return days.sorted { rank($0.tally?.cacheWrite, $1.tally?.cacheWrite, $0, $1) }
+            // A store with no cache column has hits that were never recorded.
+            func hits(_ day: Day) -> Int? { cacheUnreported && day.classifiedTally?.cacheRead == 0 ? nil : day.classifiedTally?.cacheRead }
+            return days.sorted { rank(hits($0), hits($1), $0, $1) }
+        case .output:
+            return days.sorted { rank($0.classifiedTally?.output, $1.classifiedTally?.output, $0, $1) }
+        case .unclassified:
+            return days.sorted {
+                rank($0.tally == nil ? nil : $0.unclassifiedTokens, $1.tally == nil ? nil : $1.unclassifiedTokens, $0, $1)
+            }
         case .total:
             return days.sorted { rank($0.tokens, $1.tokens, $0, $1) }
         case .cost:

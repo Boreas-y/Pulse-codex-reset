@@ -48,6 +48,25 @@ struct SpendSummaryTests {
 
     // MARK: - The span
 
+    @Test("A month over a midnight DST start keeps every day on its own key")
+    func midnightDaylightSaving() throws {
+        // Santiago springs forward at 00:00 on Sunday 6 September 2026: that day
+        // starts at 01:00, and the padded series used to stay at 01:00 after it.
+        var santiago = Calendar(identifier: .gregorian)
+        santiago.timeZone = try #require(TimeZone(identifier: "America/Santiago"))
+        func date(_ month: Int, _ day: Int) throws -> Date {
+            try #require(santiago.date(from: DateComponents(year: 2026, month: month, day: day)))
+        }
+        let worked = try date(9, 20)
+        let ledger = Self.ledger([LedgerDay(date: worked, tokens: 50, cost: 1, unpricedTokens: 0, models: ["m": 50])])
+        let summary = SpendSummary.of(
+            [.claudeCode: ledger], from: try date(9, 1), until: try date(10, 1), now: try date(10, 5), calendar: santiago
+        )
+        #expect(summary.days.count == 30)
+        #expect(summary.days.allSatisfy { $0.date == santiago.startOfDay(for: $0.date) })
+        #expect(summary.days.first { $0.date == worked }?.tokens == 50)
+    }
+
     @Test("A span is a window on the calendar, not each ledger's last few rows")
     func spanIsADateWindow() {
         // Codex was used today; Claude Code was last used a fortnight ago.
@@ -189,11 +208,17 @@ struct SpendSummaryTests {
         )
 
         let summary = Self.summary([.codex: known, .claudeCode: unknown], overLast: 7)
+        #expect(summary.tokens == 1_500)
+        #expect(summary.tally == TokenTally(input: 1_000))
+        #expect(summary.unclassifiedTokens == 500)
+        #expect(summary.hasTokenBreakdown)
         #expect(summary.models.map(\.name) == ["GPT-5"])
         #expect(summary.models.first?.tokens == 1_500)
         #expect(summary.models.first?.agents == [.claudeCode, .codex])
         // The day carries the unknown-price tokens beside the priced ones.
         #expect(summary.days.last?.unpricedTokens == 500)
+        #expect(summary.days.last?.unclassifiedTokens == 500)
+        #expect(summary.days.last?.classifiedTally == TokenTally(input: 1_000))
 
         let model = ModelSpendSummary.of(
             [.codex: known, .claudeCode: unknown], named: "GPT-5",
@@ -203,7 +228,60 @@ struct SpendSummaryTests {
         // 1,000 input at $1,000/M for the classified copy.
         #expect(model.cost == 1)
         #expect(model.unpricedTokens == 500)
+        #expect(model.tally == TokenTally(input: 1_000))
+        #expect(model.unclassifiedTokens == 500)
         #expect(model.agents.count == 2)
+    }
+
+    @Test("Broken category details cannot cancel across two agents")
+    func invalidDetailsCannotCancelAcrossSources() {
+        let missing = LedgerDay(
+            date: Self.today, tokens: 500, cost: 0, unpricedTokens: 500,
+            models: ["m": 500], tally: TokenTally(input: 100)
+        )
+        let excess = LedgerDay(
+            date: Self.today, tokens: 500, cost: 0, unpricedTokens: 500,
+            models: ["m": 500], tally: TokenTally(input: 900)
+        )
+        let result = Self.summary([.codex: Self.ledger([missing]), .openCode: Self.ledger([excess])], overLast: 7)
+        #expect(result.tokens == 1_000)
+        #expect(result.tally.total == 1_000)
+        #expect(result.unclassifiedTokens == 0)
+        #expect(!result.hasTokenBreakdown)
+        #expect(result.days.last?.hasTokenBreakdown == false)
+        #expect(result.days.last?.classifiedTally == nil)
+    }
+
+    @Test("Unknown-only work sorts after measured input, while its unclassified count remains sortable")
+    func unknownOnlyIsNotAZeroInputDay() {
+        let unknown = SpendSummary.Day(
+            date: Self.today, tokens: 500, cost: 0, tally: TokenTally(), unclassifiedTokens: 500
+        )
+        let zero = SpendSummary.Day(
+            date: Self.calendar.date(byAdding: .day, value: -1, to: Self.today)!,
+            tokens: 10, cost: 0, tally: TokenTally(output: 10)
+        )
+        let mixed = SpendSummary.Day(
+            date: Self.calendar.date(byAdding: .day, value: -2, to: Self.today)!,
+            tokens: 150, cost: 0, tally: TokenTally(input: 100), unclassifiedTokens: 50
+        )
+        let days = [unknown, zero, mixed]
+        #expect(unknown.hasTokenBreakdown)
+        #expect(unknown.classifiedTally == nil)
+        #expect(SpendSummary.sorted(days, by: .fresh, ascending: true).map(\.date) == [zero.date, mixed.date, unknown.date])
+        #expect(SpendSummary.sorted(days, by: .fresh, ascending: false).map(\.date) == [mixed.date, zero.date, unknown.date])
+        #expect(SpendSummary.sorted(days, by: .unclassified, ascending: true).map(\.date) == [zero.date, mixed.date, unknown.date])
+    }
+
+    @Test("Adjacent large unclassified counts retain their exact order")
+    func largeUnclassifiedCountsSortExactly() {
+        let lower = 9_007_199_254_740_992
+        let newer = SpendSummary.Day(date: Self.today, tokens: lower, cost: 0, unclassifiedTokens: lower)
+        let older = SpendSummary.Day(
+            date: Self.calendar.date(byAdding: .day, value: -1, to: Self.today)!,
+            tokens: lower + 1, cost: 0, unclassifiedTokens: lower + 1
+        )
+        #expect(SpendSummary.sorted([older, newer], by: .unclassified, ascending: true).map(\.tokens) == [lower, lower + 1])
     }
 
     @Test("The busiest day is the busiest across agents, not any one of them")
@@ -280,8 +358,20 @@ struct SpendSummaryTests {
         // in a table like this is the biggest row.
         #expect(SpendSummary.sorted(days, by: .cost, ascending: false).first?.cost == 9)
         #expect(SpendSummary.sorted(days, by: .total, ascending: false).first?.tokens == 900)
-        #expect(SpendSummary.sorted(days, by: .input, ascending: true).first?.tally.input == 1)
+        #expect(SpendSummary.sorted(days, by: .fresh, ascending: true).first?.tally.fresh == 1)
         #expect(SpendSummary.sorted(days, by: .date, ascending: false).first?.date == Self.today)
+    }
+
+    @Test("A day the table shows blank sorts last, whichever way")
+    func blanksSortLast() {
+        let whole = SpendSummary.Day(date: Self.today, tokens: 10, cost: 1,
+                                     tally: TokenTally(input: 10))
+        // 500 tokens, of which only 5 have a kind: its kind cells are blank.
+        let partial = SpendSummary.Day(date: Self.calendar.date(byAdding: .day, value: -1, to: Self.today)!,
+                                       tokens: 500, cost: 2, tally: TokenTally(input: 5))
+        for ascending in [true, false] {
+            #expect(SpendSummary.sorted([partial, whole], by: .fresh, ascending: ascending).last?.tokens == 500)
+        }
     }
 
     // MARK: - Sessions and projects
@@ -295,7 +385,7 @@ struct SpendSummaryTests {
     ) -> UsageLedger.Session {
         let end = calendar.date(byAdding: .day, value: -endedDaysAgo, to: today)!
         return UsageLedger.Session(
-            id: "/tmp/\(name).jsonl", name: name, title: nil, project: project,
+            id: "/tmp/\(name).jsonl", name: name, title: nil, project: UsageProject(project),
             start: end, end: end, tokens: tokens, cost: cost
         )
     }
@@ -351,15 +441,30 @@ struct SpendSummaryTests {
         #expect(summary.activeDays == 7)
     }
 
-    @Test("A streak that ended yesterday is not current")
-    func aBrokenStreakIsZero() {
-        let summary = Self.summary([
+    @Test("Today is not over: a run that reached yesterday is still current; a whole day off ends it")
+    func todayIsNotOver() {
+        let yesterday = Self.summary([
             .codex: Self.ledger((1..<5).map { Self.day($0, tokens: 10, cost: 1) }),
         ], overLast: 10)
+        #expect(yesterday.currentStreak == 4)
+        #expect(yesterday.longestStreak == 4)
 
-        // The series runs to today, and nothing was done today.
-        #expect(summary.currentStreak == 0)
-        #expect(summary.longestStreak == 4)
+        let broken = Self.summary([
+            .codex: Self.ledger((2..<6).map { Self.day($0, tokens: 10, cost: 1) }),
+        ], overLast: 10)
+        #expect(broken.currentStreak == 0)
+        #expect(broken.longestStreak == 4)
+    }
+
+    @Test("Streaks count the whole history, whatever the span")
+    func streaksIgnoreTheSpan() {
+        let summary = Self.summary([
+            .codex: Self.ledger((0..<20).map { Self.day($0, tokens: 10, cost: 1) }),
+        ], overLast: 1)
+        #expect(summary.currentStreak == 20)
+        #expect(summary.longestStreak == 20)
+        // What is added up is still the span's.
+        #expect(summary.tokens == 10)
     }
 
     @Test("The peak hour comes from the quarter-hour buckets, not the days")
@@ -409,7 +514,7 @@ struct SpendSummaryTests {
         var ledger = Self.ledger([Self.day(1, tokens: 900, cost: 9), Self.day(0, tokens: 100, cost: 1)])
         ledger.sessions = [
             UsageLedger.Session(
-                id: "/tmp/long.jsonl", name: "long", title: "Long", project: "Pulse",
+                id: "/tmp/long.jsonl", name: "long", title: "Long", project: UsageProject("Pulse"),
                 start: lateYesterday, end: noonToday, tokens: 1000, cost: 10,
                 slots: [
                     .init(start: lateYesterday, tokens: 900, cost: 9),
@@ -443,7 +548,7 @@ struct SpendSummaryTests {
         var ledger = Self.ledger((0..<3).map { Self.day($0, tokens: 100, cost: 1) })
         ledger.sessions = [
             UsageLedger.Session(
-                id: "/tmp/resumed.jsonl", name: "resumed", title: nil, project: "Pulse",
+                id: "/tmp/resumed.jsonl", name: "resumed", title: nil, project: UsageProject("Pulse"),
                 start: slots[2].start, end: slots[0].start, tokens: 300, cost: 3, slots: slots
             ),
         ]
@@ -474,7 +579,7 @@ struct SpendSummaryTests {
         var ledger = Self.ledger([Self.day(1, tokens: 500, cost: 5), Self.day(0, tokens: 300, cost: 3)])
         ledger.sessions = [
             UsageLedger.Session(
-                id: "a", name: "a", title: nil, project: "Pulse",
+                id: "a", name: "a", title: nil, project: UsageProject("Pulse"),
                 start: yesterdayLate, end: afternoon, tokens: 600, cost: 6,
                 slots: [
                     .init(start: yesterdayLate, tokens: 500, cost: 5),
@@ -482,7 +587,7 @@ struct SpendSummaryTests {
                 ]
             ),
             UsageLedger.Session(
-                id: "b", name: "b", title: nil, project: "Pulse",
+                id: "b", name: "b", title: nil, project: UsageProject("Pulse"),
                 start: morning, end: morning, tokens: 200, cost: 2,
                 slots: [.init(start: morning, tokens: 200, cost: 2)]
             ),

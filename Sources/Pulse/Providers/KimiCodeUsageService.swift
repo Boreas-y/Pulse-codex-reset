@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Kimi Code's limits, from its own documented usage endpoint.
@@ -32,7 +33,7 @@ struct KimiCodeUsageService: Sendable {
         request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 15
 
-        guard let (data, response) = try? await NetworkSession.shared.data(for: request) else {
+        guard let (data, response) = try? await NetworkSession.shared.recordedData(for: request) else {
             return .unavailable(.kimiCode, reason: .unreachable)
         }
 
@@ -66,7 +67,11 @@ struct KimiCodeUsageService: Sendable {
 
     // MARK: - Reading the reply
 
-    private struct Reply: Decodable {
+    /// Internal rather than private, and deliberately: this and `windows(from:)`
+    /// / `planName(_:)` below are what a fixture test holds a reconstructed
+    /// reply against. Nothing outside the module can see them either way. Do
+    /// not tidy these back to `private` — that takes the fixture test with it.
+    struct Reply: Decodable {
         struct Detail: Decodable {
             let limit: String?
             let used: String?
@@ -92,7 +97,7 @@ struct KimiCodeUsageService: Sendable {
         let limits: [Limit]?
     }
 
-    private static func windows(from reply: Reply) -> [UsageWindow] {
+    static func windows(from reply: Reply) -> [UsageWindow] {
         var found: [UsageWindow] = []
 
         // The timed windows first, named by the length the service states.
@@ -165,13 +170,14 @@ struct KimiCodeUsageService: Sendable {
     private static func duration(of window: Reply.Window?) -> Int? {
         guard let window, let duration = window.duration, duration > 0 else { return nil }
 
-        return switch window.timeUnit {
-        case "TIME_UNIT_SECOND": duration
-        case "TIME_UNIT_MINUTE": duration * 60
-        case "TIME_UNIT_HOUR": duration * 3_600
-        case "TIME_UNIT_DAY": duration * 86_400
+        let unit: Int? = switch window.timeUnit {
+        case "TIME_UNIT_SECOND": 1
+        case "TIME_UNIT_MINUTE": 60
+        case "TIME_UNIT_HOUR": 3_600
+        case "TIME_UNIT_DAY": 86_400
         default: nil
         }
+        return unit.flatMap { UsageWindow.length(duration, unitSeconds: $0) }
     }
 
     private static func kind(forSeconds seconds: Int) -> UsageWindow.Kind {
@@ -186,7 +192,7 @@ struct KimiCodeUsageService: Sendable {
     /// "LEVEL_INTERMEDIATE" → "Intermediate". An unfamiliar tier is passed
     /// through tidied rather than blanked: an unknown name still beats none,
     /// and it is the only clue left when a new tier appears.
-    private static func planName(_ level: String?) -> String? {
+    static func planName(_ level: String?) -> String? {
         guard let level, !level.isEmpty else { return nil }
 
         let bare = level.hasPrefix("LEVEL_") ? String(level.dropFirst("LEVEL_".count)) : level

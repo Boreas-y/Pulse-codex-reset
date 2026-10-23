@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 /// A provider's history: what has been spent, and what it would have cost.
@@ -15,44 +16,83 @@ struct AccountUsageCard: View {
     let ledger: UsageLedger
     /// Codex only, and only when its app server answered.
     var credits: CodexAccountUsage?
+    var isReading = false
 
     /// Roughly a month, which is the span most of the figures cover.
     private static let span = 31
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(localized: "Usage history")
-                .font(.system(size: 13, weight: .semibold))
+        VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Text(localized: "Usage history")
+                        .font(.system(size: 13, weight: .semibold))
+                    if isReading {
+                        ProgressView().controlSize(.small)
+                        Text(localized: "Reading…")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.secondary)
+                    }
+                }
                 .padding(.leading, 4)
 
-            VStack(alignment: .leading, spacing: 0) {
-                if let credits, credits.availableResetCredits > 0 || credits.nextExpiringCredit != nil {
-                    resetCredits(credits)
-                    Divider()
-                }
+                VStack(alignment: .leading, spacing: 0) {
+                    if let credits, credits.availableResetCredits > 0 || credits.nextExpiringCredit != nil {
+                        resetCredits(credits)
+                        Divider()
+                    }
 
-                figures
+                    figures
 
-                if ledger.days.count > 1 {
-                    DailyTokensChart(days: ledger.recent(Self.span))
-                        .frame(height: 58)
+                    if ledger.days.count > 1 {
+                        DailyTokensChart(days: ledger.recent(Self.span), slots: Self.span)
+                            .frame(height: 58)
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 10)
+                    }
+
+                    if let credits, credits.lifetimeTokens > ledger.allTime.tokens {
+                        Divider()
+                        line(
+                            String.localized("Account total"),
+                            String.localized("\(TokenCount.short(credits.lifetimeTokens)) tokens")
+                        )
+                        .font(.system(size: 11))
                         .padding(.horizontal, 16)
-                        .padding(.bottom, 10)
+                        .padding(.vertical, 12)
+                    }
                 }
+                .usageCard()
 
-                Divider()
-
-                summary
-            }
-            .background(.background)
-            .clipShape(.rect(cornerRadius: 10, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .strokeBorder(.separator.opacity(0.5), lineWidth: 1)
-                    .allowsHitTesting(false)
+                if ledger.hasPartialCounts {
+                    Text(localized: "Counts may be incomplete.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 4)
+                }
+                footnote
             }
 
-            footnote
+            // **A card of its own.** The table is about models, not days, and
+            // under the chart it read as more of the same history.
+            if !modelRows.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(localized: "Models")
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.leading, 4)
+
+                    modelTable
+                        .usageCard()
+
+                    if let tableNote {
+                        Text(tableNote)
+                            .font(.system(size: 11))
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.horizontal, 4)
+                    }
+                }
+            }
         }
     }
 
@@ -114,22 +154,30 @@ struct AccountUsageCard: View {
         return Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 16) {
             GridRow {
                 figure(String.localized("Today"),
-                       cost: ledger.today?.cost ?? 0, tokens: ledger.today?.tokens ?? 0)
-                figure(String.localized("Last 31 days"), cost: recent.cost, tokens: recent.tokens)
+                       cost: ledger.today.map { UsageLedger.shownCost($0.cost, tokens: $0.tokens, unpriced: $0.unpricedTokens) } ?? 0,
+                       tokens: ledger.today?.tokens ?? 0)
+                figure(String.localized("Last 31 days"),
+                       cost: UsageLedger.shownCost(recent.cost, tokens: recent.tokens, unpriced: recent.unpriced),
+                       tokens: recent.tokens)
             }
             GridRow {
                 figure(String.localized("Busiest day"),
-                       cost: busiest?.cost ?? 0, tokens: busiest?.tokens ?? 0)
+                       cost: busiest.map { UsageLedger.shownCost($0.cost, tokens: $0.tokens, unpriced: $0.unpricedTokens) } ?? 0,
+                       tokens: busiest?.tokens ?? 0)
                 // **"All time" is only true of a ledger that goes back.** A
                 // provider's statistics are asked for a fixed window, so all
                 // time and the last month are the same sum — one figure
                 // printed twice, under a label claiming a lifetime Pulse does
                 // not have. A shorter span is something the window can answer.
                 if ledger.origin == .localTranscripts {
-                    figure(String.localized("All time"), cost: all.cost, tokens: all.tokens)
+                    figure(String.localized("All time"),
+                           cost: UsageLedger.shownCost(all.cost, tokens: all.tokens, unpriced: all.unpriced),
+                           tokens: all.tokens)
                 } else {
                     let week = ledger.total(overLast: 7)
-                    figure(String.localized("Last 7 days"), cost: week.cost, tokens: week.tokens)
+                    figure(String.localized("Last 7 days"),
+                           cost: UsageLedger.shownCost(week.cost, tokens: week.tokens, unpriced: week.unpriced),
+                           tokens: week.tokens)
                 }
             }
         }
@@ -143,14 +191,17 @@ struct AccountUsageCard: View {
     /// model, which no price list can turn into a cost — and `Self.money(0)`
     /// renders a confident "$0.00" for work that certainly cost something.
     /// The figure that is actually known takes the top line instead.
-    private func figure(_ label: String, cost: Double, tokens: Int) -> some View {
+    private func figure(_ label: String, cost: Double?, tokens: Int) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
 
-            if ledger.origin == .localTranscripts {
-                Text(Self.money(cost))
+            // Money where there is money: this Mac's logs priced at API rates,
+            // or a provider's own log of what it charged.
+            if ledger.origin == .localTranscripts || ledger.origin == .providerLogs {
+                // None of it priced: a dash, as the Token spend pane draws it.
+                Text(verbatim: cost.map { Self.money($0, currency: ledger.currency, isCharged: ledger.origin == .providerLogs) } ?? "—")
                     .font(.system(size: 17, weight: .semibold))
                     .monospacedDigit()
 
@@ -167,33 +218,143 @@ struct AccountUsageCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Summary
+    // MARK: - Models
 
-    /// The two things that don't fit the grid: which model did the work, and —
-    /// for Codex, which knows — what the account has done across every
-    /// machine, not just this one.
-    private var summary: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if let top = ledger.topModel(overLast: Self.span) {
-                // The percent sign is baked into the value rather than left in
-                // the key: a bare `%` next to a placeholder is a malformed
-                // printf conversion, and Foundation formats these values.
-                line(
-                    String.localized("Top model"),
-                    String.localized("\(top.name) · \("\(Int((top.share * 100).rounded()))%") of tokens")
-                )
+    /// One model's line in the table: its share of the month's tokens, its
+    /// cache hit rate over the same month, and its speed and first-token wait
+    /// over the last day. A figure the records cannot give is nil.
+    private struct ModelRow: Identifiable {
+        let name: String
+        let share: Double?
+        let cacheRate: Double?
+        let speed: Double?
+        let firstToken: TimeInterval?
+        var id: String { name }
+    }
+
+    private var speeds: [UsageLedger.ModelSpeed] {
+        ledger.outputSpeedsByModel(since: Date().addingTimeInterval(-UsageLedger.speedSpan))
+    }
+
+    /// Every model with tokens this month, most first, and any timed in the
+    /// last day that somehow has none.
+    private var modelRows: [ModelRow] {
+        let rates = Dictionary(ledger.cacheHitRatesByModel(overLast: Self.span).map { ($0.name, $0.rate) }) { first, _ in first }
+        let timed = Dictionary(speeds.map { ($0.name, $0) }) { first, _ in first }
+        let shares = ledger.modelShares(overLast: Self.span)
+        var rows = shares.map {
+            ModelRow(name: $0.name, share: $0.share, cacheRate: rates[$0.name],
+                     speed: timed[$0.name]?.tokensPerSecond, firstToken: timed[$0.name]?.firstToken)
+        }
+        let listed = Set(shares.map(\.name))
+        rows += speeds.filter { !listed.contains($0.name) }.map {
+            ModelRow(name: $0.name, share: nil, cacheRate: rates[$0.name], speed: $0.tokensPerSecond, firstToken: $0.firstToken)
+        }
+        return rows
+    }
+
+    /// The readers that time replies (`ReplyTiming`).
+    private static func timesReplies(_ provider: Provider) -> Bool {
+        provider == .claudeCode || provider == .codex
+    }
+
+    /// **One table, not a section per measure.** Share, cache hit rate and
+    /// speed are all facts about a model; stacked as three lists they named
+    /// every model three times, each list under its own paragraph. A column
+    /// with nothing in it for any model is left out rather than filled with
+    /// dashes, and the explanations sit under the card with the others.
+    private var modelTable: some View {
+        let rows = modelRows
+        let showsCache = rows.contains { $0.cacheRate != nil }
+        let showsSpeed = rows.contains { $0.speed != nil }
+        let showsWait = rows.contains { $0.firstToken != nil }
+        let columns = 2 + (showsCache ? 1 : 0) + (showsSpeed ? 1 : 0) + (showsWait ? 1 : 0)
+
+        return Grid(alignment: .trailing, horizontalSpacing: 18, verticalSpacing: 7) {
+            GridRow {
+                // The card is titled for it; the names need no heading.
+                Text(verbatim: "")
+                    .gridColumnAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(localized: "Share")
+                if showsCache { Text(localized: "Cache hit") }
+                if showsSpeed { Text(localized: "Tokens/s") }
+                if showsWait { Text(localized: "First token") }
+            }
+            .font(.system(size: 11))
+            .foregroundStyle(.secondary)
+
+            Divider().gridCellColumns(columns)
+
+            ForEach(rows) { row in
+                GridRow {
+                    Text(verbatim: row.name)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                    cell(row.share.map(Self.percent))
+                    if showsCache { cell(row.cacheRate.map(Self.percent)) }
+                    if showsSpeed { cell(row.speed.map(Self.speed)) }
+                    if showsWait { cell(row.firstToken.map(Self.seconds)) }
+                }
+                .font(.system(size: 12))
             }
 
-            if let credits, credits.lifetimeTokens > ledger.allTime.tokens {
-                line(
-                    String.localized("Account total"),
-                    String.localized("\(TokenCount.short(credits.lifetimeTokens)) tokens")
-                )
+            // The account's own rate, which is not the average of the lines
+            // above: each model weighs what it read.
+            if showsCache, rows.count > 1, let overall = ledger.cacheHitRate(overLast: Self.span) {
+                Divider().gridCellColumns(columns)
+                GridRow {
+                    Text(localized: "All models")
+                    Text(verbatim: "")
+                    cell(Self.percent(overall))
+                    if showsSpeed { Text(verbatim: "") }
+                    if showsWait { Text(verbatim: "") }
+                }
+                .font(.system(size: 12, weight: .semibold))
             }
         }
-        .font(.system(size: 11))
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+    }
+
+    /// A figure, or a faint dash where this model has none.
+    private func cell(_ text: String?) -> some View {
+        Text(verbatim: text ?? "–")
+            .monospacedDigit()
+            .foregroundStyle(text == nil ? .tertiary : .primary)
+    }
+
+    private static func speed(_ tokensPerSecond: Double) -> String {
+        tokensPerSecond.formatted(.number.precision(.fractionLength(0)))
+    }
+
+    private static func seconds(_ value: TimeInterval) -> String {
+        String.localized("\(value.formatted(.number.precision(.fractionLength(1)))) s")
+    }
+
+    /// What the table's columns measure and over what span — said once, under
+    /// the card, in place of a paragraph under each list.
+    private var tableNote: String? {
+        guard !modelRows.isEmpty else { return nil }
+        guard Self.timesReplies(provider) else {
+            return String.localized("Share and cache hit cover the last 31 days.")
+        }
+        var sentences = [String.localized("Share and cache hit cover the last 31 days; tokens per second only the last 24 hours, from sending a request to the end of its reply.")]
+        if speeds.isEmpty {
+            sentences.append(String.localized("Too few replies in the last 24 hours to time."))
+        } else if provider == .codex {
+            sentences.append(String.localized("First token is Codex's own measure of how long a turn waited for it."))
+        } else {
+            sentences.append(String.localized("Claude Code doesn't record when the first token arrived, so its wait isn't shown."))
+        }
+        // Chinese and Japanese run sentences together; the rest put a space.
+        let language = LocalizationSource.locale.language.languageCode?.identifier
+        let note = sentences.joined(separator: language == "zh" || language == "ja" ? "" : " ")
+        return note
+    }
+
+    private static func percent(_ rate: Double) -> String {
+        "\(Int((rate * 100).rounded()))%"
     }
 
     private func line(_ label: String, _ value: String) -> some View {
@@ -218,6 +379,14 @@ struct AccountUsageCard: View {
                 // A different provenance needs different words: this one is
                 // the account's, not this Mac's, and it carries no money.
                 Text(localized: "Reported by \(provider.displayName) for the whole account, so it covers every machine you use it on. It counts tokens only — the figures behind it cannot be turned into a cost.")
+            } else if ledger.origin == .providerLogs, provider == .deepSeek {
+                // Day by day, not request by request, and Pulse asks for the
+                // console's own "last 30 days".
+                Text(localized: "From \(provider.displayName)'s console for the whole account — every key and every machine — with what was charged, day by day. Pulse reads the last 30 days.")
+            } else if ledger.origin == .providerLogs {
+                // The account's own log, and the money is what was charged —
+                // the one history here that is a bill rather than an estimate.
+                Text(localized: "From \(provider.displayName)'s request log for the whole account — every machine and every app that uses it — with what each request was charged. The log keeps 30 days.")
             } else {
                 Text(localized: "Counted from this Mac's \(provider.displayName) logs and priced at the published API rates from models.dev. Your plan is a subscription, so this is what the same work would cost through the API — not what you were charged.")
             }
@@ -234,15 +403,14 @@ struct AccountUsageCard: View {
 
     // MARK: - Formatting
 
-    private static func money(_ amount: Double) -> String {
-        // Both providers publish their rates in dollars, so the figure is in
-        // dollars whatever the reader's own currency is — hence a fixed code
-        // rather than the locale's.
-        amount.formatted(
-            .currency(code: "USD")
-                .precision(.fractionLength(amount >= 1000 ? 0 : 2))
-                .locale(LocalizationSource.locale)
-        )
+    /// A day's or a period's money. **An estimate is converted** — no
+    /// `currency`, or dollars from the price lists — into the currency chosen
+    /// in Settings (`Money.estimate`). **What a console charged is not**: a
+    /// ledger whose origin is the provider's own logs passes `isCharged`, and
+    /// its figure is drawn in the currency the console gave (DeepSeek's yuan).
+    static func money(_ amount: Double, currency: String? = nil, isCharged: Bool = false) -> String {
+        guard isCharged || (currency != nil && currency != "USD") else { return Money.estimate(amount) }
+        return Money.format(amount, code: currency ?? "USD")
     }
 
     /// Built per call rather than kept around: it has to follow the language
@@ -261,16 +429,37 @@ struct AccountUsageCard: View {
     }
 }
 
+private extension View {
+    /// The settings cards' own surface: the window's background, rounded,
+    /// with a hairline.
+    func usageCard() -> some View {
+        background(.background)
+            .clipShape(.rect(cornerRadius: 10, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .strokeBorder(.separator.opacity(0.5), lineWidth: 1)
+                    .allowsHitTesting(false)
+            }
+    }
+}
+
 /// Daily totals as bars, oldest on the left.
-private struct DailyTokensChart: View {
+///
+/// **Sized for the whole span, not for the days on record** — the same rule
+/// as the panel card's chart. A history two days old, divided across the
+/// width, drew two blocks each half the card wide; it now draws two bars at
+/// the left that the following days join.
+struct DailyTokensChart: View {
     let days: [LedgerDay]
+    let slots: Int
 
     var body: some View {
         GeometryReader { proxy in
             let peak = max(days.map(\.tokens).max() ?? 1, 1)
-            let spacing = max(proxy.size.width / CGFloat(max(days.count, 1)) * 0.22, 2)
+            let count = max(days.count, slots, 1)
+            let spacing = max(proxy.size.width / CGFloat(count) * 0.22, 2)
             let width = max(
-                (proxy.size.width - spacing * CGFloat(max(days.count - 1, 0))) / CGFloat(max(days.count, 1)),
+                (proxy.size.width - spacing * CGFloat(count - 1)) / CGFloat(count),
                 1
             )
 
@@ -291,7 +480,7 @@ private struct DailyTokensChart: View {
                         .accessibilityValue(SpendFormat.tokens(day.tokens))
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             .overlay {
                 ChartHoverOverlay(samples: days.enumerated().map { index, day in
                     .init(
@@ -318,14 +507,26 @@ enum TokenCount {
     /// `MyriadUnitsTests` can drive it without setting the app's language; do
     /// not tidy it back.
     static func short(_ tokens: Int, units: (tenThousand: String, hundredMillion: String)?) -> String {
+        let (number, unit) = parts(tokens, units: units)
+        return number + unit
+    }
+
+    /// The same figure as `short`, split at the unit: ("4.19", "亿"), ("5.9", "B"),
+    /// ("812", ""). The recap cards draw the number large and the unit small,
+    /// so they need the two apart — and take them from here so there is one
+    /// rule for where 万 and 亿 begin, not two.
+    static func parts(
+        _ tokens: Int,
+        units: (tenThousand: String, hundredMillion: String)?
+    ) -> (number: String, unit: String) {
         if let units { return grouped(tokens, units) }
 
         let value = Double(tokens)
         switch value {
-        case 1_000_000_000...: return format(value / 1_000_000_000, decimals: value < 1e10 ? 1 : 0) + "B"
-        case 1_000_000...: return format(value / 1_000_000, decimals: value < 1e7 ? 1 : 0) + "M"
-        case 1_000...: return format(value / 1_000, decimals: value < 1e4 ? 1 : 0) + "K"
-        default: return "\(tokens)"
+        case 1_000_000_000...: return (format(value / 1_000_000_000, decimals: value < 1e10 ? 1 : 0), "B")
+        case 1_000_000...: return (format(value / 1_000_000, decimals: value < 1e7 ? 1 : 0), "M")
+        case 1_000...: return (format(value / 1_000, decimals: value < 1e4 ? 1 : 0), "K")
+        default: return ("\(tokens)", "")
         }
     }
 
@@ -338,18 +539,18 @@ enum TokenCount {
     private static func grouped(
         _ tokens: Int,
         _ units: (tenThousand: String, hundredMillion: String)
-    ) -> String {
+    ) -> (number: String, unit: String) {
         let value = Double(tokens)
         switch value {
         case 100_000_000...:
             let scaled = value / 100_000_000
             // Three significant figures, which is what "419M" carried.
-            return format(scaled, decimals: scaled < 10 ? 2 : (scaled < 100 ? 1 : 0)) + units.hundredMillion
+            return (format(scaled, decimals: scaled < 10 ? 2 : (scaled < 100 ? 1 : 0)), units.hundredMillion)
         case 10_000...:
             let scaled = value / 10_000
-            return format(scaled, decimals: scaled < 10 ? 1 : 0) + units.tenThousand
+            return (format(scaled, decimals: scaled < 10 ? 1 : 0), units.tenThousand)
         default:
-            return "\(tokens)"
+            return ("\(tokens)", "")
         }
     }
 

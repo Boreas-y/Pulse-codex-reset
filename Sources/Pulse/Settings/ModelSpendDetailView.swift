@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 /// One model's usage, opened from the model list.
@@ -130,8 +131,10 @@ struct ModelSpendDetailView: View {
                 if let tally = model.tally {
                     TokenKindBreakdown(
                         tally: tally,
+                        unclassifiedTokens: model.unclassifiedTokens,
                         cost: model.costBreakdown,
-                        unpriced: model.unpricedTokens
+                        unpriced: model.unpricedTokens,
+                        readsUnreported: readsUnreported
                     )
                 } else {
                     SettingsRow(String.localized("Token breakdown unavailable.")) {
@@ -208,8 +211,9 @@ struct ModelSpendDetailView: View {
     /// cell sorts last and a real zero sorts as a zero.
     private var daily: some View {
         let rows = ModelSpendSummary.sorted(
-            model.days.filter { $0.tokens > 0 }, by: sort, ascending: ascending
+            model.days.filter { $0.tokens > 0 }, by: sort, ascending: ascending, cacheUnreported: readsUnreported
         )
+        let columns = ModelSpendSummary.DayColumn.allCases.filter { $0 != .unclassified || model.unclassifiedTokens > 0 || sort == .unclassified }
         let pages = max((rows.count + pageSize - 1) / pageSize, 1)
         let current = min(max(page, 0), pages - 1)
         let shown = Array(rows.dropFirst(current * pageSize).prefix(pageSize))
@@ -218,7 +222,7 @@ struct ModelSpendDetailView: View {
             VStack(spacing: 0) {
                 Grid(alignment: .trailing, horizontalSpacing: 10, verticalSpacing: 0) {
                     GridRow {
-                        ForEach(ModelSpendSummary.DayColumn.allCases) { column in
+                        ForEach(columns) { column in
                             header(column)
                         }
                     }
@@ -227,7 +231,7 @@ struct ModelSpendDetailView: View {
                     ForEach(shown) { day in
                         Divider().gridCellUnsizedAxes(.horizontal)
                         GridRow {
-                            ForEach(ModelSpendSummary.DayColumn.allCases) { column in
+                            ForEach(columns) { column in
                                 cell(day, column: column)
                             }
                         }
@@ -262,6 +266,8 @@ struct ModelSpendDetailView: View {
         } label: {
             HStack(spacing: 2) {
                 Text(column.title)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
                 if sort == column {
                     Image(systemName: ascending ? "chevron.up" : "chevron.down")
                         .font(.system(size: 7, weight: .bold))
@@ -276,20 +282,28 @@ struct ModelSpendDetailView: View {
     }
 
     /// One cell, by column, so the row and the header cannot get out of step.
+    /// Every agent that sent work to this model keeps no cache figure
+    /// (`SpendAgent.reportsCacheReads`).
+    private var readsUnreported: Bool {
+        model.tally?.reportsNoCache == true
+            || !model.agents.isEmpty && model.agents.allSatisfy { !$0.agent.reportsCacheReads }
+    }
+
     @ViewBuilder
     private func cell(_ day: ModelSpendSummary.Day, column: ModelSpendSummary.DayColumn) -> some View {
         switch column {
         case .date:
             Text(Self.shortDate(day.date))
                 .frame(maxWidth: .infinity, alignment: .leading)
-        case .input:
-            tokenCell(day.tally?.input)
-        case .output:
-            tokenCell(day.tally?.output)
+        case .fresh:
+            tokenCell(day.classifiedTally?.fresh)
         case .cacheRead:
-            tokenCell(day.tally?.cacheRead)
-        case .cacheWrite:
-            tokenCell(day.tally?.cacheWrite)
+            // A store with no cache column has no hits to show, not zero.
+            tokenCell(readsUnreported && day.classifiedTally?.cacheRead == 0 ? nil : day.classifiedTally?.cacheRead)
+        case .output:
+            tokenCell(day.classifiedTally?.output)
+        case .unclassified:
+            tokenCell(day.tally == nil ? nil : day.unclassifiedTokens)
         case .total:
             tokenCell(day.tokens)
         case .cost:
@@ -356,12 +370,12 @@ extension ModelSpendSummary.DayColumn {
     var title: String {
         switch self {
         case .date: .localized("Date")
-        case .input: .localized("Input")
-        case .output: .localized("Output")
         // Short, because columns of Chinese headings in a settings pane are a
         // table that wraps.
-        case .cacheRead: .localized("C. read")
-        case .cacheWrite: .localized("C. write")
+        case .fresh: .localized("Input")
+        case .cacheRead: .localized("Cached")
+        case .output: .localized("Output")
+        case .unclassified: .localized("Unclassified")
         case .total: .localized("Total")
         case .cost: .localized("Cost")
         }

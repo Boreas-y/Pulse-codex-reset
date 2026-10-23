@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import AppKit
 import SwiftUI
 
@@ -35,6 +36,12 @@ enum PulseMain {
             exit(UsageReport.run())
         }
 
+        // The recap probe: read-only like `--json`, so it is settled before
+        // the migration for the same reason.
+        if CommandLine.arguments.contains(RecapReport.modeArgument) {
+            RecapReport.run(arguments: CommandLine.arguments)
+        }
+
         // Before anything reads a setting: running from a bundle changes
         // which `UserDefaults` domain that means.
         LegacyDefaults.migrateIfNeeded()
@@ -52,6 +59,16 @@ struct PulseApp: App {
         // opening a second settings window; AppDelegate owns the real one.
         Settings {
             EmptyView()
+        }
+        // The delegate owns the real settings window. Replacing the standard
+        // command keeps Command-, from opening this required but empty scene.
+        .commands {
+            CommandGroup(replacing: .appSettings) {
+                Button(String.localized("Settings…")) {
+                    appDelegate.showSettings()
+                }
+                .keyboardShortcut(",", modifiers: .command)
+            }
         }
     }
 }

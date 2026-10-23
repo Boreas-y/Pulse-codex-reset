@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Every agent's spending added up, which is a different question from any one
@@ -63,6 +64,18 @@ struct SpendSummary: Equatable, Sendable {
         /// could not price, and so the figure is never silently priced at zero.
         var unpricedTokens: Int = 0
 
+        /// Reported tokens whose source supplied no usable category.
+        var unclassifiedTokens: Int = 0
+        var hasInvalidCategories = false
+
+        var hasTokenBreakdown: Bool {
+            !hasInvalidCategories && tally.accountsFor(tokens: tokens, unclassified: unclassifiedTokens)
+        }
+
+        var classifiedTally: TokenTally? {
+            hasTokenBreakdown && !(tokens > 0 && unclassifiedTokens == tokens) ? tally : nil
+        }
+
         var id: Date { date }
     }
 
@@ -74,20 +87,34 @@ struct SpendSummary: Equatable, Sendable {
         var id: String { session.id }
     }
 
-    /// One working directory, across every session in it.
-    ///
-    /// **Claude Code only, for now.** It keeps a directory per project; Codex
-    /// files sit under a date and say nothing about where the work happened.
-    /// Sessions with no project are not put in an "other" row — a bucket that
-    /// large says nothing and would outrank every real project on the list.
+    /// One identified project, across every session in the selected span.
     struct Project: Identifiable, Equatable, Sendable {
+        struct ID: Hashable, Sendable {
+            let identity: UsageProject.Identity
+            // A label alone cannot prove that two agents mean the same project.
+            let agent: SpendAgent?
+
+            init(_ project: UsageProject, agent: SpendAgent) {
+                identity = project.identity
+                if case .label = project.identity { self.agent = agent }
+                else { self.agent = nil }
+            }
+        }
+
+        let id: ID
         let name: String
         let tokens: Int
         let cost: Double
+        var unpricedTokens: Int = 0
+        var estimatedCost: Double? { tokens > 0 && unpricedTokens == tokens ? nil : cost }
         let sessions: Int
         let lastUsed: Date
+    }
 
-        var id: String { name }
+    func projectName(for row: Session) -> String? {
+        guard let project = row.session.project else { return nil }
+        let id = Project.ID(project, agent: row.agent)
+        return projects.first { $0.id == id }?.name ?? project.name
     }
 
     var tokens = 0
@@ -96,6 +123,9 @@ struct SpendSummary: Equatable, Sendable {
     /// cache read and output are priced an order of magnitude apart, so "four
     /// billion tokens" says much less than this does.
     var tally = TokenTally()
+    var unclassifiedTokens = 0
+    /// Every contributing day's categories and explicit remainder reconcile.
+    var hasTokenBreakdown = false
     var unpricedTokens = 0
     var agents: [Agent] = []
     var models: [Model] = []
@@ -145,30 +175,39 @@ struct SpendSummary: Equatable, Sendable {
         hours.max { $0.value < $1.value }.map(\.key)
     }
 
-    /// The run of days with work on them ending at the most recent day, and
-    /// the longest such run anywhere in the span.
+    /// The run of days with work on them that is still going, and the longest
+    /// run there has ever been.
     ///
-    /// **Counted back from the end of the series, not from today.** The series
-    /// runs to today, so a streak that ended yesterday is correctly zero — but
-    /// the same code over a ledger that stops earlier would otherwise report a
-    /// streak that ended weeks ago as current.
-    var currentStreak: Int {
-        var run = 0
-        for day in days.reversed() {
-            guard day.tokens > 0 else { break }
-            run += 1
-        }
-        return run
-    }
+    /// **Over the whole history, not the span.** Picking "last 7 days" capped
+    /// both at seven, and "today" at one, so a month-long habit read as a
+    /// week's. The span decides what is added up; a streak is a fact about
+    /// every day there are records for.
+    ///
+    /// **Today is not over.** A run that reached yesterday is still current
+    /// before anything has been done today — read first thing in the morning,
+    /// a thirty-day streak used to show zero. It ends only once a whole day
+    /// passes without work.
+    var currentStreak = 0
+    var longestStreak = 0
 
-    var longestStreak: Int {
-        var best = 0
-        var run = 0
-        for day in days {
-            run = day.tokens > 0 ? run + 1 : 0
-            best = max(best, run)
+    static func streaks(of worked: Set<Date>, today: Date, calendar: Calendar) -> (current: Int, longest: Int) {
+        var current = 0
+        var cursor = worked.contains(today) ? today : calendar.date(byAdding: .day, value: -1, to: today) ?? today
+        while worked.contains(cursor) {
+            current += 1
+            guard let previous = calendar.date(byAdding: .day, value: -1, to: cursor) else { break }
+            cursor = previous
         }
-        return best
+        var longest = 0
+        var run = 0
+        var last: Date?
+        for day in worked.sorted() {
+            let follows = last.flatMap { calendar.date(byAdding: .day, value: 1, to: $0) } == day
+            run = follows ? run + 1 : 1
+            longest = max(longest, run)
+            last = day
+        }
+        return (current, longest)
     }
 
     /// The day rows, in the order a column asks for.
@@ -180,20 +219,40 @@ struct SpendSummary: Equatable, Sendable {
     static func sorted(
         _ days: [Day],
         by column: DayColumn,
-        ascending: Bool
+        ascending: Bool,
+        cacheUnreported: Bool = false
     ) -> [Day] {
-        let ordered = days.sorted { lhs, rhs in
-            switch column {
-            case .date: lhs.date < rhs.date
-            case .input: lhs.tally.input < rhs.tally.input
-            case .output: lhs.tally.output < rhs.tally.output
-            case .cacheRead: lhs.tally.cacheRead < rhs.tally.cacheRead
-            case .cacheWrite: lhs.tally.cacheWrite < rhs.tally.cacheWrite
-            case .total: lhs.tokens < rhs.tokens
-            case .cost: lhs.cost < rhs.cost
+        // **What the table shows blank sorts last, either way.** A day whose
+        // kinds do not add up to its total shows no kinds, and a day nothing
+        // in which had a price shows no money; ranked by the numbers behind
+        // the blanks, a "—" landed among real figures as if it were one.
+        func kind(_ day: Day, _ value: (TokenTally) -> Int) -> Int? {
+            day.classifiedTally.map(value)
+        }
+        // Counts remain Int: adjacent large totals must not compare equal
+        // after conversion to Double. Money keeps its fractional amount.
+        func ranked<T: Comparable>(_ value: (Day) -> T?) -> [Day] {
+            days.sorted { lhs, rhs in
+                switch (value(lhs), value(rhs)) {
+                case (nil, nil): return ascending ? lhs.date < rhs.date : lhs.date > rhs.date
+                case (nil, _): return false
+                case (_, nil): return true
+                case let (left?, right?):
+                    guard left == right else { return ascending ? left < right : left > right }
+                    return ascending ? lhs.date < rhs.date : lhs.date > rhs.date
+                }
             }
         }
-        return ascending ? ordered : ordered.reversed()
+        switch column {
+        case .date: return ranked { $0.date }
+        case .fresh: return ranked { kind($0, \.fresh) }
+        case .cacheRead:
+            return ranked { kind($0, \.cacheRead).flatMap { cacheUnreported && $0 == 0 ? nil : $0 } }
+        case .output: return ranked { kind($0, \.output) }
+        case .unclassified: return ranked { $0.hasTokenBreakdown ? $0.unclassifiedTokens : nil }
+        case .total: return ranked { $0.tokens }
+        case .cost: return ranked { $0.tokens > 0 && $0.unpricedTokens == $0.tokens ? nil : $0.cost }
+        }
     }
 
     /// The part of a session that falls inside the span, or nil where none
@@ -212,30 +271,37 @@ struct SpendSummary: Equatable, Sendable {
     /// which is the old rule and never a silent zero.
     private static func window(
         _ session: UsageLedger.Session,
-        cutoff: Date?
-    ) -> (tokens: Int, cost: Double, last: Date)? {
-        guard let cutoff else { return (session.tokens, session.cost, session.end) }
+        from lower: Date?,
+        until upper: Date?
+    ) -> (tokens: Int, cost: Double, unpriced: Int, last: Date)? {
+        guard lower != nil || upper != nil else { return (session.tokens, session.cost, session.unpricedTokens, session.end) }
+
+        func inside(_ date: Date) -> Bool {
+            (lower.map { date >= $0 } ?? true) && (upper.map { date < $0 } ?? true)
+        }
 
         guard !session.slots.isEmpty else {
             if !session.days.isEmpty {
-                let days = session.days.filter { $0.date >= cutoff }
+                let days = session.days.filter { inside($0.date) }
                 guard let last = days.map(\.date).max() else { return nil }
-                return (days.reduce(0) { $0 + $1.tokens }, days.reduce(0.0) { $0 + $1.cost }, last)
+                return (days.reduce(0) { $0 + $1.tokens }, days.reduce(0.0) { $0 + $1.cost }, days.reduce(0) { $0 + $1.unpricedTokens }, last)
             }
-            return session.end >= cutoff ? (session.tokens, session.cost, session.end) : nil
+            return inside(session.end) ? (session.tokens, session.cost, session.unpricedTokens, session.end) : nil
         }
 
         var tokens = 0
         var cost = 0.0
-        var last = cutoff
+        var unpriced = 0
+        var last = lower ?? .distantPast
         var found = false
-        for slot in session.slots where slot.start >= cutoff {
+        for slot in session.slots where inside(slot.start) {
             found = true
             tokens += slot.tokens
             cost += slot.cost
+            unpriced += slot.unpricedTokens
             last = max(last, slot.start)
         }
-        return found ? (tokens, cost, last) : nil
+        return found ? (tokens, cost, unpriced, last) : nil
     }
 
     /// Adds the ledgers up over the last `span` days, or over everything when
@@ -257,34 +323,89 @@ struct SpendSummary: Equatable, Sendable {
         now: Date = Date(),
         calendar: Calendar = .current
     ) -> SpendSummary {
-        var summary = SpendSummary()
-
         let today = calendar.startOfDay(for: now)
         let cutoff = span.flatMap { calendar.date(byAdding: .day, value: -($0 - 1), to: today) }
+        return summarize(ledgers, from: cutoff, until: nil, today: today, calendar: calendar)
+    }
+
+    /// Adds the ledgers up over the calendar days from `start` up to, **not
+    /// including**, `end` — both local midnights — instead of "the last N days
+    /// ending today". A month's or a year's recap is such a span.
+    ///
+    /// Everything `of(_:overLast:)` says holds, with the far edge added: days,
+    /// quarter-hours and a session's own buckets outside `[start, end)` are not
+    /// in it, and the padded series runs from `start` to the day before `end`
+    /// (so an `end` that is not after `start` is an empty series). **Streaks are
+    /// still the whole history, as of `now`'s day**: a span decides what is added
+    /// up, not what a habit is.
+    static func of(
+        _ ledgers: [SpendAgent: UsageLedger],
+        from start: Date,
+        until end: Date,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> SpendSummary {
+        summarize(ledgers, from: start, until: end, today: calendar.startOfDay(for: now), calendar: calendar)
+    }
+
+    /// Either edge open: from the first record when `start` is nil, through
+    /// today when `end` is. What the Token spend pane's span picker asks for,
+    /// a preset or the reader's own dates.
+    static func of(
+        _ ledgers: [SpendAgent: UsageLedger],
+        starting start: Date?,
+        before end: Date?,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) -> SpendSummary {
+        summarize(ledgers, from: start, until: end, today: calendar.startOfDay(for: now), calendar: calendar)
+    }
+
+    private static func summarize(
+        _ ledgers: [SpendAgent: UsageLedger],
+        from cutoff: Date?,
+        until upper: Date?,
+        today: Date,
+        calendar: Calendar
+    ) -> SpendSummary {
+        var summary = SpendSummary()
+
+        func inside(_ date: Date) -> Bool {
+            (cutoff.map { date >= $0 } ?? true) && (upper.map { date < $0 } ?? true)
+        }
 
         var dayTokens: [Date: Int] = [:]
         var dayCost: [Date: Double] = [:]
         var dayTally: [Date: TokenTally] = [:]
         var dayUnpriced: [Date: Int] = [:]
+        var dayUnclassified: [Date: Int] = [:]
+        var invalidCategoryDays: Set<Date> = []
+        var categoriesComplete = true
         var hourTokens: [Int: Int] = [:]
         var tally = TokenTally()
         var modelTokens: [String: Int] = [:]
         var modelAgents: [String: Set<SpendAgent>] = [:]
         var unpriced: Set<String> = []
-        var projectTokens: [String: Int] = [:]
-        var projectCost: [String: Double] = [:]
-        var projectSessions: [String: Int] = [:]
-        var projectLastUsed: [String: Date] = [:]
+        var projectTokens: [Project.ID: Int] = [:]
+        var projectCost: [Project.ID: Double] = [:]
+        var projectUnpriced: [Project.ID: Int] = [:]
+        var projectSessions: [Project.ID: Int] = [:]
+        var projectLastUsed: [Project.ID: Date] = [:]
+        var projectMetadata: [Project.ID: UsageProject] = [:]
         var hasAggregate = false
         var hasPartial = false
+        var worked: Set<Date> = []
 
         for (agent, ledger) in ledgers {
+            guard !Task.isCancelled else { return SpendSummary() }
             // A ledger that cannot be priced has no place in a combined cost.
             // Local records and imported ones can be; a provider's own
             // statistics carry one total per model and no money.
             guard ledger.origin.supportsTokenSpend else { continue }
 
-            let window = cutoff.map { start in ledger.days.filter { $0.date >= start } } ?? ledger.days
+            for day in ledger.days where day.tokens > 0 { worked.insert(calendar.startOfDay(for: day.date)) }
+
+            let window = cutoff == nil && upper == nil ? ledger.days : ledger.days.filter { inside($0.date) }
             guard !window.isEmpty else { continue }
 
             var agentTokens = 0
@@ -292,10 +413,30 @@ struct SpendSummary: Equatable, Sendable {
             var agentUnpriced = 0
 
             for day in window {
+                guard !Task.isCancelled else { return SpendSummary() }
                 agentTokens += day.tokens
                 agentCost += day.cost
                 agentUnpriced += day.unpricedTokens
                 tally = tally + day.tally
+
+                // Only the source's explicit remainder, never total minus
+                // known kinds. Check each day before combining different agents.
+                let unknown = day.modelUnclassifiedTokens.values.reduce(Int?.some(0)) { total, value in
+                    guard let total, value >= 0 else { return nil }
+                    let (sum, overflow) = total.addingReportingOverflow(value)
+                    return overflow ? nil : sum
+                }
+                if let unknown {
+                    if !day.tally.accountsFor(tokens: day.tokens, unclassified: unknown) {
+                        categoriesComplete = false
+                        invalidCategoryDays.insert(day.date)
+                    }
+                    dayUnclassified[day.date, default: 0] += unknown
+                    summary.unclassifiedTokens += unknown
+                } else {
+                    categoriesComplete = false
+                    invalidCategoryDays.insert(day.date)
+                }
 
                 dayTokens[day.date, default: 0] += day.tokens
                 dayCost[day.date, default: 0] += day.cost
@@ -312,7 +453,8 @@ struct SpendSummary: Equatable, Sendable {
             // The time of day, which only the quarter-hour buckets carry.
             // Bucketed by the hour their start falls in: a bucket never
             // straddles one.
-            for slot in ledger.slots where cutoff.map({ slot.start >= $0 }) ?? true {
+            for slot in ledger.slots where inside(slot.start) {
+                guard !Task.isCancelled else { return SpendSummary() }
                 guard slot.tokens > 0 else { continue }
                 hourTokens[calendar.component(.hour, from: slot.start), default: 0] += slot.tokens
             }
@@ -325,7 +467,8 @@ struct SpendSummary: Equatable, Sendable {
             // are what make the window exact, and they are priced, so the
             // money is a sum rather than a proportion guessed from the total.
             for session in ledger.sessions {
-                guard let windowed = Self.window(session, cutoff: cutoff) else { continue }
+                guard !Task.isCancelled else { return SpendSummary() }
+                guard let windowed = Self.window(session, from: cutoff, until: upper) else { continue }
 
                 // The row carries the span's portion, so the list and the
                 // totals above it are the same arithmetic. Its `start` and
@@ -334,16 +477,19 @@ struct SpendSummary: Equatable, Sendable {
                     Session(
                         agent: agent,
                         session: UsageLedger.Session(
-                            id: session.id, name: session.name, title: session.title,
+                            id: session.id, name: session.name, title: session.title, isReview: session.isReview,
                             project: session.project, start: session.start, end: session.end,
-                            tokens: windowed.tokens, cost: windowed.cost, slots: session.slots, days: session.days
+                            tokens: windowed.tokens, cost: windowed.cost, unpricedTokens: windowed.unpriced, slots: session.slots, days: session.days
                         )
                     )
                 )
 
-                guard let project = session.project else { continue }
+                guard let metadata = session.project else { continue }
+                let project = Project.ID(metadata, agent: agent)
+                projectMetadata[project] = metadata
                 projectTokens[project, default: 0] += windowed.tokens
                 projectCost[project, default: 0] += windowed.cost
+                projectUnpriced[project, default: 0] += windowed.unpriced
                 projectSessions[project, default: 0] += 1
                 projectLastUsed[project] = max(projectLastUsed[project] ?? windowed.last, windowed.last)
             }
@@ -382,12 +528,17 @@ struct SpendSummary: Equatable, Sendable {
             }
             .sorted { $0.tokens > $1.tokens }
 
+        (summary.currentStreak, summary.longestStreak) = Self.streaks(of: worked, today: today, calendar: calendar)
+
         // Every day in the window, including the empty ones: a chart whose
         // bars are only the days with work on them compresses a quiet
         // fortnight into nothing and reads as a busy one.
         let first = cutoff ?? dayTokens.keys.min() ?? today
-        let last = max(today, dayTokens.keys.max() ?? today)
-        var cursor = min(first, last)
+        let last = upper.flatMap { calendar.date(byAdding: .day, value: -1, to: $0) }
+            ?? max(today, dayTokens.keys.max() ?? today)
+        // A bounded span starts where it was asked to; an `end` not after
+        // `start` leaves no days rather than one before it.
+        var cursor = upper == nil ? min(first, last) : first
         while cursor <= last {
             summary.days.append(
                 Day(
@@ -395,11 +546,16 @@ struct SpendSummary: Equatable, Sendable {
                     tokens: dayTokens[cursor] ?? 0,
                     cost: dayCost[cursor] ?? 0,
                     tally: dayTally[cursor] ?? TokenTally(),
-                    unpricedTokens: dayUnpriced[cursor] ?? 0
+                    unpricedTokens: dayUnpriced[cursor] ?? 0,
+                    unclassifiedTokens: dayUnclassified[cursor] ?? 0,
+                    hasInvalidCategories: invalidCategoryDays.contains(cursor)
                 )
             )
+            // `startOfDay` again: where DST begins at midnight (Santiago,
+            // Asunción) adding a day lands on 01:00 and every later day would
+            // miss its key.
             guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { break }
-            cursor = next
+            cursor = calendar.startOfDay(for: next)
         }
 
         // Months are rolled up from the padded day series, so a month with no
@@ -424,19 +580,30 @@ struct SpendSummary: Equatable, Sendable {
             .sorted { $0.date < $1.date }
 
         summary.sessions.sort { $0.session.end > $1.session.end }
+        let knownProjects = Set(projectMetadata.values)
+        let projectNames = UsageProject.displayNames(for: knownProjects)
+        let nameCounts = projectMetadata.values.reduce(into: [String: Int]()) { $0[$1.name, default: 0] += 1 }
         summary.projects = projectTokens
-            .map { name, tokens in
-                Project(
-                    name: name,
+            .map { id, tokens in
+                let metadata = projectMetadata[id]!
+                var name = projectNames[metadata] ?? metadata.name
+                if let agent = id.agent, (nameCounts[name] ?? 0) > (metadata.name == name ? 1 : 0) {
+                    name += " · " + agent.displayName
+                }
+                return Project(
+                    id: id, name: name,
                     tokens: tokens,
-                    cost: projectCost[name] ?? 0,
-                    sessions: projectSessions[name] ?? 0,
-                    lastUsed: projectLastUsed[name] ?? .distantPast
+                    cost: projectCost[id] ?? 0,
+                    unpricedTokens: projectUnpriced[id] ?? 0,
+                    sessions: projectSessions[id] ?? 0,
+                    lastUsed: projectLastUsed[id] ?? .distantPast
                 )
             }
             .sorted { $0.tokens > $1.tokens }
 
         summary.tally = tally
+        summary.hasTokenBreakdown = categoriesComplete
+            && tally.accountsFor(tokens: summary.tokens, unclassified: summary.unclassifiedTokens)
         summary.hours = hourTokens
         summary.unpricedModels = unpriced.sorted()
         summary.hasAggregateTiming = hasAggregate

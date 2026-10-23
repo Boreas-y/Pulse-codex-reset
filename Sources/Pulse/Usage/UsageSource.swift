@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Which route a provider's figures are read by.
@@ -22,7 +23,10 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
     case tooling
     /// Only the session the provider's own desktop app is signed in with.
     ///
-    /// Claude Code alone, and the **primary** account's only. `.automatic`
+    /// For Antigravity, its desktop app's language server (Settings: *Desktop
+    /// app*); it has no endpoint of its own to offer.
+    ///
+    /// For Claude Code, the **primary** account's only. `.automatic`
     /// does fall back to it — but only once the keychain has already been
     /// granted, which is what keeps a default from going looking for a prompt
     /// of its own. Pinning it here means the other two routes are not tried at
@@ -39,8 +43,13 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
     /// whichever account that is — not to a second account Pulse signed in to
     /// itself. Offered on an added account it would be a choice `fetchAdded`
     /// silently ignores, which is a control that lies about what it did.
+    ///
+    /// **Antigravity's are automatic, the CLI and the desktop app** — the
+    /// `agy` CLI as the tooling route and the editor's language server as
+    /// the desktop one. It has no endpoint, so none is offered.
     static func options(for account: AccountKey) -> [UsageSource] {
-        allCases.filter { $0 != .desktopApp || (account.provider == .claudeCode && account.isPrimary) }
+        if account.provider == .antigravity { return [.automatic, .tooling, .desktopApp] }
+        return allCases.filter { $0 != .desktopApp || (account.provider == .claudeCode && account.isPrimary) }
     }
 
     /// Whether *this route on this account* only produces a reading while the
@@ -76,9 +85,25 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    /// The name in a provider's picker, where its tooling is one program.
+    func title(for provider: Provider) -> String {
+        provider == .antigravity && self == .tooling ? .localized("CLI") : title
+    }
+
     /// What the tooling route actually is, which differs per provider.
     func detail(for provider: Provider) -> String {
-        switch (self, provider) {
+        // Every profiled provider has one route and it needs a key, same as
+        // the merged hand-written case below — except `.automatic`, which
+        // matches first regardless of provider, exactly as it does below.
+        guard let written = provider.handWritten else {
+            return self == .automatic
+                ? .localized("Use the endpoint when possible, the other route when not.")
+                : .localized("Uses the key you entered.")
+        }
+        if self == .automatic, written == .antigravity {
+            return .localized("Reads Antigravity while it is open, and the agy CLI when it is not.")
+        }
+        return switch (self, written) {
         case (.automatic, _):
             .localized("Use the endpoint when possible, the other route when not.")
         case (.endpoint, .claudeCode):
@@ -105,7 +130,8 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
             // Never shown: `options(for:)` offers it to Claude Code alone.
             .localized("Use the endpoint when possible, the other route when not.")
         case (_, .openCodeGo), (_, .kimiCode), (_, .zai), (_, .glmCoding),
-             (_, .minimax), (_, .minimaxCN), (_, .copilot), (_, .commandCode), (_, .deepSeek):
+             (_, .minimax), (_, .copilot), (_, .commandCode), (_, .deepSeek),
+             (_, .sub2api), (_, .newAPI), (_, .v2ex), (_, .pulseExtension):
             // Never shown either — one route, and it needs a key.
             .localized("Uses the key you entered.")
         case (.endpoint, .devin):
@@ -127,12 +153,21 @@ enum UsageSource: String, CaseIterable, Identifiable, Sendable {
             // Never shown: one route, and it reads the console with the
             // browser session rather than with a key.
             .localized("Reads the console with your signed-in browser session.")
+        case (_, .qoder):
+            // Never shown: one route, the account page's own request, made
+            // with the browser session for the site that was chosen.
+            .localized("Reads your credits with your signed-in browser session.")
+        case (_, .stepFun):
+            // Never shown: one route, the console's own request, made with the
+            // browser session for the site that was chosen.
+            .localized("Reads your Step Plan with your signed-in browser session.")
         case (_, .ollamaCloud):
             // Never shown: one route, and it reads a page rather than an API.
             .localized("Reads your quota from Ollama's own settings page.")
-        case (_, .antigravity):
-            // Never shown — Antigravity has one route, so settings states it
-            // rather than offering a choice. See `Provider.hasSourceChoice`.
+        case (.tooling, .antigravity):
+            .localized("Asks the agy CLI, using the login it already saved.")
+        case (.desktopApp, .antigravity), (.endpoint, .antigravity):
+            // `.endpoint` is never offered (`options(for:)`).
             .localized("Asks the language server Antigravity runs while it is open.")
         case (_, .cursor):
             // Never shown, for the same reason: one route.
@@ -224,6 +259,29 @@ enum PanelSize: String, CaseIterable, Identifiable, Sendable {
 /// the gap, so the rings stay the size they were and the rail gets shorter or
 /// longer around them. Someone watching seven accounts wants it tighter than
 /// someone watching two, and that is not the same wish as wanting bigger rings.
+/// How a limit's bar is drawn on the card and in the menu.
+///
+/// Continuous is the bar Pulse has always drawn. Segmented draws the same
+/// fraction as a row of thin ticks, lit up to it — taller, so the ticks read
+/// as ticks, which is why it is a `PanelMetrics` entry: the card's frame is
+/// worked out from `DetailCardLayout.progressBarHeight` before SwiftUI lays
+/// anything out.
+enum UsageBarStyle: String, CaseIterable, Identifiable, Sendable {
+    case continuous
+    case segmented
+
+    static let `default` = UsageBarStyle.continuous
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .continuous: .localized("Continuous")
+        case .segmented: .localized("Segmented")
+        }
+    }
+}
+
 enum RailSpacing: String, CaseIterable, Identifiable, Sendable {
     case compact
     case standard
@@ -248,6 +306,28 @@ enum RailSpacing: String, CaseIterable, Identifiable, Sendable {
         case .compact: .localized("Tight")
         case .standard: .localized("Standard")
         case .roomy: .localized("Loose")
+        }
+    }
+}
+
+/// Which end of an allowance window the neutral outer clock arc measures.
+///
+/// Elapsed keeps the behaviour Pulse shipped with. Remaining turns the same
+/// provider-reported reset and duration into a countdown: full when the window
+/// opens, empty when it resets. Neither direction invents a duration where the
+/// provider did not state one.
+enum WindowClockDirection: String, CaseIterable, Identifiable, Sendable {
+    case elapsed
+    case remaining
+
+    static let `default` = WindowClockDirection.elapsed
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .elapsed: .localized("Elapsed")
+        case .remaining: .localized("Remaining")
         }
     }
 }
@@ -288,6 +368,8 @@ enum PanelMetrics {
     /// inside its item, and the hit testing has to agree with the drawing to
     /// within a point or a click lands beside the ring it appears to be on.
     nonisolated(unsafe) private static var storedLabelAboveRing = false
+    /// `AppSettings.freeAcrossFiguresBeside`, for `DockLayout.labelsBeside`.
+    nonisolated(unsafe) private static var storedFreeAcrossBeside = false
     nonisolated(unsafe) private static var storedForecast = false
 
     /// Whether the rail's ends are half circles rather than softened corners.
@@ -306,7 +388,10 @@ enum PanelMetrics {
     /// is worked out from it before SwiftUI lays anything out — and getting it
     /// wrong slices the end off the rail, which is exactly what happened the
     /// first time a seventh account existed.
-    nonisolated(unsafe) private static var storedCapacity = Provider.allCases.count
+    /// Replaced at launch by `AppSettings.restored()`; this is only what a
+    /// preview or a test starts from, and it is long enough for the longest
+    /// rail either of them draws.
+    nonisolated(unsafe) private static var storedCapacity = 25
 
     static var scale: CGFloat { lock.withLock { stored } }
     static var spacing: CGFloat { lock.withLock { storedSpacing } }
@@ -336,6 +421,32 @@ enum PanelMetrics {
         lock.withLock { storedLabelAboveRing = above }
     }
 
+    /// `AppSettings.showsWindowClock`: the arc outside the ring pushes the
+    /// figures further off (`DockLayout.ringToTextSpacing`).
+    nonisolated(unsafe) private static var storedWindowClock = false
+
+    static func showWindowClock(_ shows: Bool) {
+        lock.withLock { storedWindowClock = shows }
+    }
+
+    static var showsWindowClock: Bool { lock.withLock { storedWindowClock } }
+
+    static func putFreeAcrossFiguresBeside(_ beside: Bool) {
+        lock.withLock { storedFreeAcrossBeside = beside }
+    }
+
+    static var freeAcrossFiguresBeside: Bool { lock.withLock { storedFreeAcrossBeside } }
+
+    /// `AppSettings.usageBarStyle`: a segmented bar is taller
+    /// (`DetailCardLayout.progressBarHeight`).
+    nonisolated(unsafe) private static var storedBarStyle = UsageBarStyle.default
+
+    static func use(_ style: UsageBarStyle) {
+        lock.withLock { storedBarStyle = style }
+    }
+
+    static var usageBarStyle: UsageBarStyle { lock.withLock { storedBarStyle } }
+
     static func useRoundEnds(_ uses: Bool) {
         lock.withLock { storedRoundEnds = uses }
     }
@@ -351,6 +462,17 @@ enum PanelMetrics {
         lock.withLock { storedForecast = shows }
     }
     static var showsForecast: Bool { lock.withLock { storedForecast } }
+
+    /// Whether any account's card is the detailed one. Here for the
+    /// forecast's reason: the detailed card is taller, and the panel's frame
+    /// is worked out from `DetailCardLayout` before SwiftUI lays anything out.
+    /// One frame serves every ring, so one detailed account sizes it for all.
+    nonisolated(unsafe) private static var storedDetailedCard = false
+
+    static func showDetailedCard(_ shows: Bool) {
+        lock.withLock { storedDetailedCard = shows }
+    }
+    static var showsDetailedCard: Bool { lock.withLock { storedDetailedCard } }
 
 
     static func makeRoom(for accounts: Int) {

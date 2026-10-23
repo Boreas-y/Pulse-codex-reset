@@ -6,18 +6,690 @@
         <description>Updates for Pulse.</description>
         <language>en</language>
         <item>
+            <title>1.12.2</title>
+            <pubDate>Sun, 18 Oct 2026 07:08:08 -0000</pubDate>
+            <sparkle:version>1.12.2</sparkle:version>
+            <sparkle:shortVersionString>1.12.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.12.2</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.2</h2><p><strong>新功能</strong></p><ul><li><strong>日报和周报。</strong> 在「设置 → Token 消耗 → 用量报告」中打开，在窗口顶部切换日、周、月、年，生成可以分享的卡片。</li><li><strong>Token 消耗可以自定义统计区间。</strong> 「统计方式」新增本月、上月、今年和自定义范围，自定义范围可以选择开始和结束日期。</li><li><strong>Qoder 显示积分数值和积分消耗记录。</strong> 在 Qoder 设置页打开「显示积分数值」，卡片每一行同时显示积分数，例如 5,843 / 6,000；Qoder 的详细卡片和设置页显示整个账号今天、7 天和 31 天消耗与扣除的积分，以及按天的柱状图。感谢 <a href="https://github.com/qunqin24/Pulse/issues/88">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Grok 的缓存和推理 token 不再重复计算。</strong> 缓存命中率、token 总数和估算金额改为与 Grok Build 自身的记录一致。感谢 <a href="https://github.com/qunqin24/Pulse/issues/91">@Edfghdrtxxx</a> 报告。</li><li><strong>Antigravity 的金额估算更完整。</strong> Gemini 3.1 Pro 和 Gemini 3.5 Flash (Low) 按公开价格估算；仍有模型没有公开价格时，卡片上的金额后标注 *。感谢 <a href="https://github.com/qunqin24/Pulse/issues/90">@1206-skittle</a> 报告。</li><li><strong>Qoder 圆环固定在「积分额度」上后，重启不再被重置。</strong> 感谢 <a href="https://github.com/qunqin24/Pulse/issues/89">@momusticks</a> 报告。</li><li><strong>设置窗口的侧栏图标改为黑色，设置项中的选项改为弹出菜单。</strong> 深色模式下图标为白色。</li><li><strong>缩短俄文的 Token 活动视图名称。</strong> 切换按钮不再被截断。感谢 <a href="https://github.com/qunqin24/Pulse/pull/92">@winstik13</a> 贡献。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.2</h2><p><strong>新功能</strong></p><ul><li><strong>日报和周报。</strong> 在「设置 → Token 消耗 → 用量报告」中打开，在窗口顶部切换日、周、月、年，生成可以分享的卡片。</li><li><strong>Token 消耗可以自定义统计区间。</strong> 「统计方式」新增本月、上月、今年和自定义范围，自定义范围可以选择开始和结束日期。</li><li><strong>Qoder 显示积分数值和积分消耗记录。</strong> 在 Qoder 设置页打开「显示积分数值」，卡片每一行同时显示积分数，例如 5,843 / 6,000；Qoder 的详细卡片和设置页显示整个账号今天、7 天和 31 天消耗与扣除的积分，以及按天的柱状图。感谢 <a href="https://github.com/qunqin24/Pulse/issues/88">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Grok 的缓存和推理 token 不再重复计算。</strong> 缓存命中率、token 总数和估算金额改为与 Grok Build 自身的记录一致。感谢 <a href="https://github.com/qunqin24/Pulse/issues/91">@Edfghdrtxxx</a> 报告。</li><li><strong>Antigravity 的金额估算更完整。</strong> Gemini 3.1 Pro 和 Gemini 3.5 Flash (Low) 按公开价格估算；仍有模型没有公开价格时，卡片上的金额后标注 *。感谢 <a href="https://github.com/qunqin24/Pulse/issues/90">@1206-skittle</a> 报告。</li><li><strong>Qoder 圆环固定在「积分额度」上后，重启不再被重置。</strong> 感谢 <a href="https://github.com/qunqin24/Pulse/issues/89">@momusticks</a> 报告。</li><li><strong>设置窗口的侧栏图标改为黑色，设置项中的选项改为弹出菜单。</strong> 深色模式下图标为白色。</li><li><strong>缩短俄文的 Token 活动视图名称。</strong> 切换按钮不再被截断。感谢 <a href="https://github.com/qunqin24/Pulse/pull/92">@winstik13</a> 贡献。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.2</h2><p><strong>New</strong></p><ul><li><strong>Daily and weekly recaps.</strong> Open them from Settings › Token spend › Usage recaps and switch between day, week, month and year at the top of the window to make shareable cards.</li><li><strong>Token spend over a span of your own.</strong> Counting adds this month, last month, this year and a custom range with its own first and last day.</li><li><strong>Qoder shows credit amounts and credit history.</strong> Show credit amounts in Qoder&#x27;s settings adds each row&#x27;s credits to the card, such as 5,843 / 6,000, and Qoder&#x27;s detailed card and settings pane show the whole account&#x27;s credits used and charged today, over 7 and 31 days, and day by day. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/88">@momusticks</a> for the suggestion.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Grok&#x27;s cached and reasoning tokens are counted once.</strong> The cache hit rate, token totals and estimated cost now match Grok Build&#x27;s own records. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/91">@Edfghdrtxxx</a> for the report.</li><li><strong>Antigravity&#x27;s cost estimate is more complete.</strong> Gemini 3.1 Pro and Gemini 3.5 Flash (Low) are priced at their published rates, and an amount that still leaves out a model with no published price is marked with *. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/90">@1206-skittle</a> for the report.</li><li><strong>A Qoder ring pinned to Credit allowance stays pinned after a restart.</strong> Thanks to <a href="https://github.com/qunqin24/Pulse/issues/89">@momusticks</a> for the report.</li><li><strong>Settings&#x27; sidebar icons are black, and choices in settings rows are pop-up menus.</strong> The icons are white in dark mode.</li><li><strong>Shorter Russian names for the Token activity views.</strong> The switcher no longer cuts them off. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/92">@winstik13</a> for the contribution.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.2">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.12.2/Pulse-1.12.2.zip"
+                       length="16367148"
+                       type="application/octet-stream"
+                       sparkle:edSignature="FI0lCdsQhW2MomkJFq+8S+wZ0cy8EFB4rjUVyv2BvpcUcLqKwszkkYWcTa3ls3rMGMMK80wTknL6vJs2+PIZCQ==" />
+        </item>
+        <item>
+            <title>1.12.1</title>
+            <pubDate>Fri, 16 Oct 2026 06:16:19 -0000</pubDate>
+            <sparkle:version>1.12.1</sparkle:version>
+            <sparkle:shortVersionString>1.12.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.12.1</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.1</h2><p><strong>改进与修复</strong></p><ul><li><strong>Cursor 显示每周用量上限。</strong> 在 Premium 等按周计算额度的套餐上，Cursor 的圆环显示每周用量和重置时间，取代一直显示 0% 的两个月度用量池。感谢 <a href="https://github.com/qunqin24/Pulse/issues/87">@HesionBlack</a> 报告。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.1</h2><p><strong>改进与修复</strong></p><ul><li><strong>Cursor 显示每周用量上限。</strong> 在 Premium 等按周计算额度的套餐上，Cursor 的圆环显示每周用量和重置时间，取代一直显示 0% 的两个月度用量池。感谢 <a href="https://github.com/qunqin24/Pulse/issues/87">@HesionBlack</a> 报告。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.1</h2><p><strong>Changed and fixed</strong></p><ul><li><strong>Cursor shows the weekly usage limit.</strong> On Premium and other plans with weekly included usage, Cursor&#x27;s ring shows the week&#x27;s usage and reset in place of the two monthly pools that always read 0%. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/87">@HesionBlack</a> for the report.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.12.1/Pulse-1.12.1.zip"
+                       length="16076583"
+                       type="application/octet-stream"
+                       sparkle:edSignature="BSjiw9itRM9bKtd5E0VvzRCIQ1CGU0ZJoKI1Wtn6MDkrIPo7mI3sdqh0Hzu7XpGm3w3k2Dm3jQGmYPA/QfvXCw==" />
+        </item>
+        <item>
+            <title>1.12.0</title>
+            <pubDate>Fri, 16 Oct 2026 00:53:30 -0000</pubDate>
+            <sparkle:version>1.12.0</sparkle:version>
+            <sparkle:shortVersionString>1.12.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.12.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.0</h2><p><strong>新功能</strong></p><ul><li><strong>44 个服务商的服务状态。</strong> Copilot、Devin、Windsurf、Hugging Face、Gemini 等服务商的设置页显示官方状态页公布的状态和历史，可以随时刷新，在「设置 → 通知 → 服务出故障时」打开故障提醒，<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/providers/README.md#service-status">对照表</a>见文档。</li><li><strong>估算金额可以换成你用的货币。</strong> 在「设置 → 通用 → 货币」中选择人民币、港元、新台币、日元、韩元或卢布，按当日汇率或你填写的汇率换算，服务商自己报告的余额不换算。</li><li><strong>连接诊断显示服务器的原始回应。</strong> 在服务商设置页的「连接诊断」中展开「服务器原始回应」，查看每个请求的状态码和返回内容，凭证会被隐藏。</li><li><strong>Antigravity 支持 agy CLI。</strong> 编辑器没有运行时改用 <code>agy</code> CLI 读取额度，在 Antigravity 设置页的「用量来源」中选择自动、CLI 或桌面端。</li><li><strong>MiniMax Code 的用量记录。</strong> 打开 Token 消耗后，MiniMax 的卡片和设置页显示本机 MiniMax Code 的用量记录。感谢 <a href="https://github.com/qunqin24/Pulse/issues/86">@Eileenes</a> 提议。</li><li><strong>可以关闭自动吸附到屏幕边缘。</strong> 在「设置 → 位置与行为」中关闭后，拖动只移动面板，可以放在屏幕任何位置，包括菜单栏和程序坞上方。感谢 <a href="https://github.com/qunqin24/Pulse/issues/85">@GinWU05</a> 提议。</li><li><strong>进度条样式。</strong> 在「设置 → 外观 → 进度条」中选择连续或分段。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>MiniMax 与 MiniMax CN 合并为一个服务商。</strong> 在 MiniMax 设置页选择国际站或国内站，两个站点各自保存 key，原 MiniMax CN 的 key 和设置会在启动时自动迁移。</li><li><strong>设置窗口改为系统设置的样式。</strong> 侧栏延伸到窗口顶部，标题栏显示当前页面名称，并有后退和前进按钮（⌘[ 和 ⌘]）。</li><li><strong>程序坞菜单里的「退出」只关闭窗口。</strong> Pulse 继续留在菜单栏，⌘Q 和菜单栏图标中的「退出 Pulse」仍会退出整个 app。</li><li><strong>金额不再显示「US$」。</strong> 美元统一写作「$」，估算金额前也不再加「≈」。</li><li><strong>OpenCode Go 订阅到期时提示没有套餐。</strong> 不再误报「key 被拒绝」。</li><li><strong>改进 Codex 的「较弱模型迹象」。</strong> max 和 ultra 推理强度纳入比较，上下文窗口不再算作降级，推理在固定位置停下的比例只显示数字、不下结论。感谢 <a href="https://github.com/qunqin24/Pulse/pull/83">@frankliness</a> 贡献。<a href="https://github.com/qunqin24/Pulse/pull/84">#84</a></li><li><strong>刘海处的面板不会被路过的指针展开。</strong> 指针停留片刻才展开，展开后立即按下的点击也不会误刷新圆环。</li><li><strong>指针离开后，详情卡可靠收起。</strong> 修复了偶尔要把指针移回去再移开才收起的问题。</li><li><strong>液态玻璃调得更透明时，文字仍然清晰。</strong> 透明度滑块越过默认值后，文字从白色逐渐变为黑色。</li><li><strong>更省电，读取更快。</strong> 面板收起时小机器人停止动画，读取本机用量记录更快、占用内存更少。</li><li><strong>「读取途径检查」整行都可以点击展开。</strong> 不必再点右侧的箭头。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.0</h2><p><strong>新功能</strong></p><ul><li><strong>44 个服务商的服务状态。</strong> Copilot、Devin、Windsurf、Hugging Face、Gemini 等服务商的设置页显示官方状态页公布的状态和历史，可以随时刷新，在「设置 → 通知 → 服务出故障时」打开故障提醒，<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/providers/README.md#service-status">对照表</a>见文档。</li><li><strong>估算金额可以换成你用的货币。</strong> 在「设置 → 通用 → 货币」中选择人民币、港元、新台币、日元、韩元或卢布，按当日汇率或你填写的汇率换算，服务商自己报告的余额不换算。</li><li><strong>连接诊断显示服务器的原始回应。</strong> 在服务商设置页的「连接诊断」中展开「服务器原始回应」，查看每个请求的状态码和返回内容，凭证会被隐藏。</li><li><strong>Antigravity 支持 agy CLI。</strong> 编辑器没有运行时改用 <code>agy</code> CLI 读取额度，在 Antigravity 设置页的「用量来源」中选择自动、CLI 或桌面端。</li><li><strong>MiniMax Code 的用量记录。</strong> 打开 Token 消耗后，MiniMax 的卡片和设置页显示本机 MiniMax Code 的用量记录。感谢 <a href="https://github.com/qunqin24/Pulse/issues/86">@Eileenes</a> 提议。</li><li><strong>可以关闭自动吸附到屏幕边缘。</strong> 在「设置 → 位置与行为」中关闭后，拖动只移动面板，可以放在屏幕任何位置，包括菜单栏和程序坞上方。感谢 <a href="https://github.com/qunqin24/Pulse/issues/85">@GinWU05</a> 提议。</li><li><strong>进度条样式。</strong> 在「设置 → 外观 → 进度条」中选择连续或分段。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>MiniMax 与 MiniMax CN 合并为一个服务商。</strong> 在 MiniMax 设置页选择国际站或国内站，两个站点各自保存 key，原 MiniMax CN 的 key 和设置会在启动时自动迁移。</li><li><strong>设置窗口改为系统设置的样式。</strong> 侧栏延伸到窗口顶部，标题栏显示当前页面名称，并有后退和前进按钮（⌘[ 和 ⌘]）。</li><li><strong>程序坞菜单里的「退出」只关闭窗口。</strong> Pulse 继续留在菜单栏，⌘Q 和菜单栏图标中的「退出 Pulse」仍会退出整个 app。</li><li><strong>金额不再显示「US$」。</strong> 美元统一写作「$」，估算金额前也不再加「≈」。</li><li><strong>OpenCode Go 订阅到期时提示没有套餐。</strong> 不再误报「key 被拒绝」。</li><li><strong>改进 Codex 的「较弱模型迹象」。</strong> max 和 ultra 推理强度纳入比较，上下文窗口不再算作降级，推理在固定位置停下的比例只显示数字、不下结论。感谢 <a href="https://github.com/qunqin24/Pulse/pull/83">@frankliness</a> 贡献。<a href="https://github.com/qunqin24/Pulse/pull/84">#84</a></li><li><strong>刘海处的面板不会被路过的指针展开。</strong> 指针停留片刻才展开，展开后立即按下的点击也不会误刷新圆环。</li><li><strong>指针离开后，详情卡可靠收起。</strong> 修复了偶尔要把指针移回去再移开才收起的问题。</li><li><strong>液态玻璃调得更透明时，文字仍然清晰。</strong> 透明度滑块越过默认值后，文字从白色逐渐变为黑色。</li><li><strong>更省电，读取更快。</strong> 面板收起时小机器人停止动画，读取本机用量记录更快、占用内存更少。</li><li><strong>「读取途径检查」整行都可以点击展开。</strong> 不必再点右侧的箭头。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.12.0</h2><p><strong>New</strong></p><ul><li><strong>Service status for 44 providers.</strong> Copilot, Devin, Windsurf, Hugging Face, Gemini and others show their own status page&#x27;s state and history in their settings, with Refresh; turn on outage alerts under Settings → Notifications → When a service is down, and see <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/providers/README.md#service-status">which pages</a>.</li><li><strong>Estimates in your own currency.</strong> Choose yuan, Hong Kong or New Taiwan dollars, yen, won or roubles under Settings → General → Currency, converted at the day&#x27;s rate or one you type; balances a provider reports are not converted.</li><li><strong>Connection diagnostics show the servers&#x27; own replies.</strong> Expand Server replies under Connection diagnostics in a provider&#x27;s settings to see each request&#x27;s status and what came back, with credentials hidden.</li><li><strong>Antigravity through the agy CLI.</strong> With the editor closed, Pulse reads the quota through the <code>agy</code> CLI; choose Automatic, CLI or Desktop app under Read usage from in Antigravity&#x27;s settings.</li><li><strong>MiniMax Code usage history.</strong> With Token spend on, MiniMax&#x27;s card and settings show this Mac&#x27;s MiniMax Code usage. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/86">@Eileenes</a> for the suggestion.</li><li><strong>Snap to screen edges can be turned off.</strong> Turn it off under Settings → Position and behavior and a drag only moves the panel, anywhere on screen, over the menu bar and the Dock included. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/85">@GinWU05</a> for the suggestion.</li><li><strong>Progress bar styles.</strong> Choose Continuous or Segmented under Settings → Appearance → Progress bars.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>MiniMax and MiniMax CN are one provider.</strong> Choose the international or mainland site in MiniMax&#x27;s settings, each keeping its own key; MiniMax CN&#x27;s key and settings move over at launch.</li><li><strong>Settings looks like System Settings.</strong> The sidebar runs to the top of the window, and the title bar shows the current pane with back and forward buttons (⌘[ and ⌘]).</li><li><strong>Quit in the Dock icon&#x27;s menu closes the windows only.</strong> Pulse stays in the menu bar; ⌘Q and Quit Pulse in the menu bar icon still quit the app.</li><li><strong>No more &quot;US$&quot;.</strong> Dollars are written &quot;$&quot; everywhere, and estimated amounts no longer carry &quot;≈&quot;.</li><li><strong>An expired OpenCode Go subscription says there is no plan.</strong> It is no longer reported as a refused key.</li><li><strong>Better Codex weaker-model signs.</strong> Max and ultra reasoning effort are ranked, the context window no longer counts as a downgrade, and the share of reasoning stopped at fixed points is shown as a figure with no verdict. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/83">@frankliness</a> for the contribution. <a href="https://github.com/qunqin24/Pulse/pull/84">#84</a></li><li><strong>The panel at the notch no longer opens for a passing pointer.</strong> It opens once the pointer rests there, and a click right after it opens no longer refreshes a ring by accident.</li><li><strong>The detailed card closes reliably once the pointer leaves.</strong> It no longer sometimes waits for the pointer to come back and leave again.</li><li><strong>Text stays readable on clearer Liquid Glass.</strong> Past the default transparency, the text turns gradually from white to black.</li><li><strong>Less power, faster reading.</strong> The animated marks stop while the panel is collapsed, and this Mac&#x27;s usage records are read faster with less memory.</li><li><strong>The whole Route checks row opens the list.</strong> The arrow on the right is no longer the only target.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.12.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.12.0/Pulse-1.12.0.zip"
+                       length="16050863"
+                       type="application/octet-stream"
+                       sparkle:edSignature="Vxjedpv1+DMoC2jlSe6iJmMLD8qOW8TCLKd1BOUduTX0i080loHOwidmhGcAFcHoXUPX2nrt6tcqTd+qJEh+BA==" />
+        </item>
+        <item>
+            <title>1.11.0</title>
+            <pubDate>Mon, 12 Oct 2026 08:29:34 -0000</pubDate>
+            <sparkle:version>1.11.0</sparkle:version>
+            <sparkle:shortVersionString>1.11.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.11.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.11.0</h2><p><strong>新功能</strong></p><ul><li><strong>俄语界面。</strong> 在「设置 → 通用 → 语言」中选择。感谢 <a href="https://github.com/qunqin24/Pulse/pull/77">@winstik13</a> 贡献翻译。</li><li><strong>扩展可以上报自定义指标。</strong> 例如首字时间和输出速率，显示在卡片上并画出趋势线，<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md#metrics">写法</a>见文档。感谢 <a href="https://github.com/qunqin24/Pulse/issues/80">@xkaaaaaa</a> 提议。</li><li><strong>新增「不使用代理」和「使用代理」。</strong> 在「设置 → 网络与刷新 → 代理」中选择，「使用代理」在系统代理未开启时不联网，默认仍为「跟随系统」。</li><li><strong>截图时隐藏悬浮面板。</strong> 在「设置 → 位置与行为」中打开「截图时隐藏」，支持此设置的截图工具不会再截到悬浮面板。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>服务商确认没有套餐后，不再显示旧额度。</strong> 适用于 z.ai、Xiaomi Coding Plan、Grok Bot 等。</li><li><strong>清除 Xiaomi Coding Plan 的登录后，卡片提示重新登录。</strong> 不再显示过期的旧额度。</li><li><strong>重新登录的账号不会被旧登录的续期覆盖。</strong> 适用于在 Pulse 中添加的 Claude Code 和 Grok 账号。</li><li><strong>Qoder 分项显示时，到期说明不再重复。</strong> 合计行不再显示到期，整行一起到期时写作「11月7日全部到期」。感谢 <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> 反馈。</li><li><strong>Qoder 积分分多天到期时，卡片说明全部批次。</strong> 例如「11月8日起分 4 批全部到期」。<a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li><li><strong>打开「分项显示积分」后，圆环跟随最接近用完的一项。</strong> 原来固定在合计上的圆环会改回自动。<a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.11.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.11.0</h2><p><strong>新功能</strong></p><ul><li><strong>俄语界面。</strong> 在「设置 → 通用 → 语言」中选择。感谢 <a href="https://github.com/qunqin24/Pulse/pull/77">@winstik13</a> 贡献翻译。</li><li><strong>扩展可以上报自定义指标。</strong> 例如首字时间和输出速率，显示在卡片上并画出趋势线，<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md#metrics">写法</a>见文档。感谢 <a href="https://github.com/qunqin24/Pulse/issues/80">@xkaaaaaa</a> 提议。</li><li><strong>新增「不使用代理」和「使用代理」。</strong> 在「设置 → 网络与刷新 → 代理」中选择，「使用代理」在系统代理未开启时不联网，默认仍为「跟随系统」。</li><li><strong>截图时隐藏悬浮面板。</strong> 在「设置 → 位置与行为」中打开「截图时隐藏」，支持此设置的截图工具不会再截到悬浮面板。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>服务商确认没有套餐后，不再显示旧额度。</strong> 适用于 z.ai、Xiaomi Coding Plan、Grok Bot 等。</li><li><strong>清除 Xiaomi Coding Plan 的登录后，卡片提示重新登录。</strong> 不再显示过期的旧额度。</li><li><strong>重新登录的账号不会被旧登录的续期覆盖。</strong> 适用于在 Pulse 中添加的 Claude Code 和 Grok 账号。</li><li><strong>Qoder 分项显示时，到期说明不再重复。</strong> 合计行不再显示到期，整行一起到期时写作「11月7日全部到期」。感谢 <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> 反馈。</li><li><strong>Qoder 积分分多天到期时，卡片说明全部批次。</strong> 例如「11月8日起分 4 批全部到期」。<a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li><li><strong>打开「分项显示积分」后，圆环跟随最接近用完的一项。</strong> 原来固定在合计上的圆环会改回自动。<a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.11.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.11.0</h2><p><strong>New</strong></p><ul><li><strong>Russian interface.</strong> Choose it under Settings → General → Language. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/77">@winstik13</a> for the translation.</li><li><strong>Extensions can report metrics of their own.</strong> Figures such as time to first token and output rate appear on the card with a trend line; see <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md#metrics">how to report them</a>. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/80">@xkaaaaaa</a> for the suggestion.</li><li><strong>No Proxy and System Proxy Only.</strong> Choose them under Settings → Network and refresh → Proxy; System Proxy Only connects nowhere while macOS has no proxy switched on, and Follow System stays the default.</li><li><strong>Hide the floating panel from screenshots.</strong> Turn on Hide from screenshots under Settings → Position and behavior, and screenshot tools that support it leave the panel out.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Old figures are no longer shown once a provider confirms there is no plan.</strong> This covers z.ai, Xiaomi Coding Plan, Grok Bot and others.</li><li><strong>Clearing Xiaomi Coding Plan&#x27;s sign-in asks you to sign in again.</strong> The card no longer shows the old figures instead.</li><li><strong>An account signed in to again is no longer replaced by the old login&#x27;s renewal.</strong> This covers Claude Code and Grok accounts added in Pulse.</li><li><strong>Qoder&#x27;s expiry lines no longer repeat when its credits are shown part by part.</strong> The total no longer shows one, and a row whose credits all lapse together reads &quot;All expire Nov 7&quot;. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> for the report.</li><li><strong>Qoder credits lapsing over several days are described in full.</strong> For example, &quot;All expire from Nov 8, in 4 lots&quot;. <a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li><li><strong>Turning on Show each part of the credits lets the ring follow the part closest to spent.</strong> A ring pinned to the total returns to automatic. <a href="https://github.com/qunqin24/Pulse/issues/76">#76</a></li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.11.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.11.0/Pulse-1.11.0.zip"
+                       length="15433552"
+                       type="application/octet-stream"
+                       sparkle:edSignature="ZPbq5hSqlDMI6n6DrmOTeNQ6TRAoc8SOzg+nCbN6ep2/4DwvyUBCkut6T4iiR9mx567iz4RMDOw8miQYcm1rCA==" />
+        </item>
+        <item>
+            <title>1.10.0</title>
+            <pubDate>Sun, 11 Oct 2026 15:33:53 -0000</pubDate>
+            <sparkle:version>1.10.0</sparkle:version>
+            <sparkle:shortVersionString>1.10.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.10.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.10.0</h2><p><strong>新功能</strong></p><ul><li><strong>Qoder 积分可以分项显示。</strong> 在 Qoder 设置的「面板」中打开「分项显示积分」，卡片会分别列出套餐积分、加油包和专属积分。感谢 <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>开启剩余时间弧后，圆环不再贴着面板下边。</strong> 停靠在屏幕顶部时，圆环一侧多留 10pt。感谢 <a href="https://github.com/qunqin24/Pulse/issues/78">@cybershape</a> 反馈。</li><li><strong>积分到期的说明不再被误读为剩余总量。</strong> 卡片改为「其中 1,989 积分 11月7日 到期」。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.10.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.10.0</h2><p><strong>新功能</strong></p><ul><li><strong>Qoder 积分可以分项显示。</strong> 在 Qoder 设置的「面板」中打开「分项显示积分」，卡片会分别列出套餐积分、加油包和专属积分。感谢 <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>开启剩余时间弧后，圆环不再贴着面板下边。</strong> 停靠在屏幕顶部时，圆环一侧多留 10pt。感谢 <a href="https://github.com/qunqin24/Pulse/issues/78">@cybershape</a> 反馈。</li><li><strong>积分到期的说明不再被误读为剩余总量。</strong> 卡片改为「其中 1,989 积分 11月7日 到期」。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.10.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.10.0</h2><p><strong>New</strong></p><ul><li><strong>Qoder&#x27;s credits can be shown part by part.</strong> Turn on Show each part of the credits in the Panel group of Qoder&#x27;s settings to list plan credits, the top-up pack and dedicated credits on the card. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/76">@momusticks</a> for the suggestion.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>The rings no longer sit against the panel&#x27;s bottom edge with the time-until-reset arc on.</strong> Docked at the top of the screen, the ring&#x27;s side now has 10pt more room. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/78">@cybershape</a> for the report.</li><li><strong>Expiring credits are no longer read as everything that is left.</strong> In Chinese, Japanese and Korean, the card now says the expiring credits are part of the total.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.10.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.10.0/Pulse-1.10.0.zip"
+                       length="15268854"
+                       type="application/octet-stream"
+                       sparkle:edSignature="c3wm3aw8+Tj8tFFG6NHOrDYsvbXinRLNoxzmmAA53ZoQhOjqbeUY4fwX0KcXbWveBgxBu4cs/+5ESYDOeHA5CQ==" />
+        </item>
+        <item>
+            <title>1.9.0</title>
+            <pubDate>Fri, 09 Oct 2026 05:31:02 -0000</pubDate>
+            <sparkle:version>1.9.0</sparkle:version>
+            <sparkle:shortVersionString>1.9.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.9.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.9.0</h2><p><strong>新功能</strong></p><ul><li><strong>浅色面板。</strong> 在「设置 → 外观 → 面板颜色」中选择「浅色」，面板改为浅灰底色和深色文字，停靠在刘海处时同样适用。感谢 <a href="https://github.com/qunqin24/Pulse/issues/74">@brianzheng2024</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>工具删除旧记录后，过去的用量不再减少。</strong> Pulse 会保存已经读到的用量，Claude Code 等工具清理旧会话记录后，过去的 token、金额和回顾保持不变。</li><li><strong>刘海处的面板与刘海更贴合。</strong> 停靠在刘海处时，面板宽度与自由放置时一致，与屏幕顶边相接处的圆角也与刘海一致。</li><li><strong>「一天的节奏」按实际用量说明时段。</strong> 月度和年度回顾中的这张卡片改为显示用量最集中的连续 4 小时。</li><li><strong>部分用量没有公开价格时也生成「订阅回本」卡片。</strong> 卡片照常生成，并注明部分用量没有公开价格。</li><li><strong>回顾从这台 Mac 最早有记录的那天算起。</strong> 活跃天数、日均用量等统计不再计入记录开始之前的月份，卡片底部注明记录开始的日期。</li><li><strong>回顾中的几处说明更准确。</strong> 「通常开工」改为「最早开工」，月历中没有用量的日子统一显示为虚线框，开头改为「有 N 个 AI 工具和你一起写代码」。</li><li><strong>回顾里的数字更准确。</strong> 金额、缓存、同期对比、「最晚收工」和「一周七天」的计算均已修正，某一天或某个工具缺少数据时只留空该部分，不再整张卡片消失。</li><li><strong>回顾的每张卡片都带上说明。</strong> 月份未结束或记录从中途开始时，日历、开头、作息和月份卡片会注明。</li><li><strong>菜单中用量面板的颜色随菜单外观调整。</strong> 菜单显示为浅色时，用量条改用与浅色面板相同的较深颜色。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.9.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.9.0</h2><p><strong>新功能</strong></p><ul><li><strong>浅色面板。</strong> 在「设置 → 外观 → 面板颜色」中选择「浅色」，面板改为浅灰底色和深色文字，停靠在刘海处时同样适用。感谢 <a href="https://github.com/qunqin24/Pulse/issues/74">@brianzheng2024</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>工具删除旧记录后，过去的用量不再减少。</strong> Pulse 会保存已经读到的用量，Claude Code 等工具清理旧会话记录后，过去的 token、金额和回顾保持不变。</li><li><strong>刘海处的面板与刘海更贴合。</strong> 停靠在刘海处时，面板宽度与自由放置时一致，与屏幕顶边相接处的圆角也与刘海一致。</li><li><strong>「一天的节奏」按实际用量说明时段。</strong> 月度和年度回顾中的这张卡片改为显示用量最集中的连续 4 小时。</li><li><strong>部分用量没有公开价格时也生成「订阅回本」卡片。</strong> 卡片照常生成，并注明部分用量没有公开价格。</li><li><strong>回顾从这台 Mac 最早有记录的那天算起。</strong> 活跃天数、日均用量等统计不再计入记录开始之前的月份，卡片底部注明记录开始的日期。</li><li><strong>回顾中的几处说明更准确。</strong> 「通常开工」改为「最早开工」，月历中没有用量的日子统一显示为虚线框，开头改为「有 N 个 AI 工具和你一起写代码」。</li><li><strong>回顾里的数字更准确。</strong> 金额、缓存、同期对比、「最晚收工」和「一周七天」的计算均已修正，某一天或某个工具缺少数据时只留空该部分，不再整张卡片消失。</li><li><strong>回顾的每张卡片都带上说明。</strong> 月份未结束或记录从中途开始时，日历、开头、作息和月份卡片会注明。</li><li><strong>菜单中用量面板的颜色随菜单外观调整。</strong> 菜单显示为浅色时，用量条改用与浅色面板相同的较深颜色。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.9.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.9.0</h2><p><strong>New</strong></p><ul><li><strong>A light panel.</strong> Choose Light under Settings → Appearance → Panel colour for a light grey panel with dark text, including when it is docked at the camera notch. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/74">@brianzheng2024</a> for the suggestion.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Past usage no longer shrinks when a tool deletes its old records.</strong> Pulse now keeps the usage it has already read, so past days&#x27; tokens, money and recaps stay the same after Claude Code or another tool clears old sessions.</li><li><strong>The panel fits the camera notch more closely.</strong> Docked at the notch, the panel is as wide as it is when placed freely, and the curve where it meets the top of the screen matches the notch&#x27;s own.</li><li><strong>Rhythm of the day names your own busiest hours.</strong> The card in the monthly and yearly recaps now shows the four hours in a row with the most usage.</li><li><strong>The payback card appears when some usage has no published price.</strong> The card is now generated and notes that some usage had no published price.</li><li><strong>Recaps count from this Mac&#x27;s first record.</strong> Active days, the daily average and the other totals no longer count the months before records began, and the card footer gives the date records begin.</li><li><strong>Clearer wording in the recaps.</strong> &quot;Usually starts&quot; is now &quot;Earliest start&quot;, days without usage in the month calendar are drawn as dashed outlines, and the opener counts &quot;AI tools&quot;.</li><li><strong>More accurate figures in the recaps.</strong> Money, cache, period comparisons, Finishes latest and the days of the week are now calculated correctly, and a day or tool with missing data is left blank instead of removing the whole card.</li><li><strong>Every recap card carries its notes.</strong> The calendar, opener, timetable and months cards note when the period is still running or when records begin partway through.</li><li><strong>Usage colours in the menu&#x27;s usage panel follow the menu&#x27;s appearance.</strong> When the menu is drawn light, the usage bars use the same deeper colours as the light panel.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.9.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.9.0/Pulse-1.9.0.zip"
+                       length="15253899"
+                       type="application/octet-stream"
+                       sparkle:edSignature="V+cd+Sqq/SMJkEh04zVCOVwAKBSHlPNoSTJSnkrSuE5LvCWPL1wkeH/0MSQKzTtOKWAc/XUegOZXtJoBgluRDg==" />
+        </item>
+        <item>
+            <title>1.8.3</title>
+            <pubDate>Thu, 08 Oct 2026 07:55:04 -0000</pubDate>
+            <sparkle:version>1.8.3</sparkle:version>
+            <sparkle:shortVersionString>1.8.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.8.3</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.3</h2><p><strong>改进与修复</strong></p><ul><li><strong>修复每日用量图表遮挡详情卡片的问题。</strong> 本机记录只有一天时，每日图表不再显示为覆盖卡片的大圆，设置和菜单栏中的每日图表也不再显示为宽色块。</li><li><strong>Codex 额度余额按数字显示。</strong> 设置中的「额度余额」按当前语言的数字格式显示，最多保留两位小数。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.3">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.3</h2><p><strong>改进与修复</strong></p><ul><li><strong>修复每日用量图表遮挡详情卡片的问题。</strong> 本机记录只有一天时，每日图表不再显示为覆盖卡片的大圆，设置和菜单栏中的每日图表也不再显示为宽色块。</li><li><strong>Codex 额度余额按数字显示。</strong> 设置中的「额度余额」按当前语言的数字格式显示，最多保留两位小数。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.3">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.3</h2><p><strong>Changed and fixed</strong></p><ul><li><strong>Fix the daily usage chart covering the detail card.</strong> With only one day of local records, the daily chart on the hover card is no longer drawn as a large circle over the rows below, and the charts in Settings and the menu bar no longer draw wide blocks.</li><li><strong>Show Codex&#x27;s credit balance as a number.</strong> The Credit balance row in Settings uses the number format of the current language, with at most two decimal places.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.3">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.8.3/Pulse-1.8.3.zip"
+                       length="15012401"
+                       type="application/octet-stream"
+                       sparkle:edSignature="oPBGA+EwhhCGsT2GpXeWjR8VY1CXme31E597E6O2QOO3nMdrMR5lyiw+nUKu5m3kHRcKTMcWf4LQCQZ6zU14Dg==" />
+        </item>
+        <item>
+            <title>1.8.2</title>
+            <pubDate>Wed, 07 Oct 2026 06:35:02 -0000</pubDate>
+            <sparkle:version>1.8.2</sparkle:version>
+            <sparkle:shortVersionString>1.8.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.8.2</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.2</h2><p><strong>改进与修复</strong></p><ul><li><strong>保留不完整记录中的已知 Token 分类。</strong> 只记录了总量或部分分类的来源，已记录的输入、缓存命中和输出照常显示，其余部分列为「未分类」。</li><li><strong>每日明细支持查看未分类用量。</strong> Token 消耗与模型详情的每日明细新增可排序的「未分类」列，没有未分类用量时自动隐藏。</li><li><strong>统一 Token 分类展示。</strong> 「新内容」改为「输入」，缓存命中单独统计，未记录的分类标注为「未记录」。</li><li><strong>修复明细表的排序与表头显示。</strong> 超大 Token 数量可以正确排序，表头保持单行显示。</li><li><strong>优化界面与更新说明文案。</strong> 简体中文、繁体中文、日文和韩文的界面文案统一了术语，历史版本的中文更新说明也已同步更新。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.2</h2><p><strong>改进与修复</strong></p><ul><li><strong>保留不完整记录中的已知 Token 分类。</strong> 只记录了总量或部分分类的来源，已记录的输入、缓存命中和输出照常显示，其余部分列为「未分类」。</li><li><strong>每日明细支持查看未分类用量。</strong> Token 消耗与模型详情的每日明细新增可排序的「未分类」列，没有未分类用量时自动隐藏。</li><li><strong>统一 Token 分类展示。</strong> 「新内容」改为「输入」，缓存命中单独统计，未记录的分类标注为「未记录」。</li><li><strong>修复明细表的排序与表头显示。</strong> 超大 Token 数量可以正确排序，表头保持单行显示。</li><li><strong>优化界面与更新说明文案。</strong> 简体中文、繁体中文、日文和韩文的界面文案统一了术语，历史版本的中文更新说明也已同步更新。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.2</h2><p><strong>Changed and fixed</strong></p><ul><li><strong>Keep known token categories when records are incomplete.</strong> For sources that report only a total or some of the categories, recorded input, cache hits and output are shown, and the rest is listed as Unclassified.</li><li><strong>Show unclassified usage in daily tables.</strong> Daily tables in Token spend and model details gain a sortable Unclassified column, hidden when there is no unclassified usage.</li><li><strong>Use consistent token categories.</strong> Fresh input is now labelled Input, cache hits are counted separately, and missing categories are labelled Not reported.</li><li><strong>Fix table sorting and headers.</strong> Very large token counts now sort correctly, and column headers stay on one line.</li><li><strong>Improve interface copy and release notes.</strong> Simplified Chinese, Traditional Chinese, Japanese and Korean interface text now uses consistent terminology, and earlier Chinese release notes have been updated to match.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.2">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.8.2/Pulse-1.8.2.zip"
+                       length="15008280"
+                       type="application/octet-stream"
+                       sparkle:edSignature="vc1VzANoWimnA5JjIORbLSFYnnM5dUt4sDq37Vf9kdgo6y5MjlKIg0+DAFw03W4tX6CI9pHOV8debWZ9InYkBA==" />
+        </item>
+        <item>
+            <title>1.8.1</title>
+            <pubDate>Tue, 06 Oct 2026 06:14:31 -0000</pubDate>
+            <sparkle:version>1.8.1</sparkle:version>
+            <sparkle:shortVersionString>1.8.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.8.1</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.1</h2><p><strong>改进与修复</strong></p><ul><li><strong>自动更新支持备用下载通道。</strong> GitHub 无法连接时，检查和下载更新会自动改用 update.qunqin.org，Pulse 只安装签名校验通过的更新。</li><li><strong>更新说明只显示一种语言。</strong> 中文界面显示中文更新说明，其他语言显示英文。</li><li><strong>调整面板外观时不再重新拉取用量。</strong> 修改大小、间距、玻璃效果等外观设置时，只重新排版面板。</li><li><strong>修复保存的密钥可能被覆盖的问题。</strong> 在设置中保存密钥与 DeepSeek 控制台登录的后台续期同时发生时，两者不再互相覆盖，已删除的 DeepSeek 登录也不会被重新写回。</li><li><strong>修复钥匙串授权弹窗阻塞刷新的问题。</strong> 读取 Claude Code 登录信息最多等待 60 秒，超时后改用其他方式读取。</li><li><strong>修复月报大数字显示不完整的问题。</strong> 9、5 等数字的右侧不再被裁切。</li><li><strong>设置页布局优化。</strong> 窗口较窄时，「位置」一行的选项自动换行，月报窗口的订阅价格输入框也改为与价格长度相称的宽度。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.1</h2><p><strong>改进与修复</strong></p><ul><li><strong>自动更新支持备用下载通道。</strong> GitHub 无法连接时，检查和下载更新会自动改用 update.qunqin.org，Pulse 只安装签名校验通过的更新。</li><li><strong>更新说明只显示一种语言。</strong> 中文界面显示中文更新说明，其他语言显示英文。</li><li><strong>调整面板外观时不再重新拉取用量。</strong> 修改大小、间距、玻璃效果等外观设置时，只重新排版面板。</li><li><strong>修复保存的密钥可能被覆盖的问题。</strong> 在设置中保存密钥与 DeepSeek 控制台登录的后台续期同时发生时，两者不再互相覆盖，已删除的 DeepSeek 登录也不会被重新写回。</li><li><strong>修复钥匙串授权弹窗阻塞刷新的问题。</strong> 读取 Claude Code 登录信息最多等待 60 秒，超时后改用其他方式读取。</li><li><strong>修复月报大数字显示不完整的问题。</strong> 9、5 等数字的右侧不再被裁切。</li><li><strong>设置页布局优化。</strong> 窗口较窄时，「位置」一行的选项自动换行，月报窗口的订阅价格输入框也改为与价格长度相称的宽度。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.1</h2><p><strong>Changed and fixed</strong></p><ul><li><strong>Updates arrive even where GitHub is out of reach.</strong> When GitHub does not answer, checks and downloads go through update.qunqin.org, and Pulse installs only updates that carry its signature.</li><li><strong>Update notes in one language.</strong> They are shown in Chinese when Pulse&#x27;s language is Chinese, and in English for every other language.</li><li><strong>Changing how the panel looks no longer refetches usage.</strong> Size, spacing, glass and the other appearance settings now only lay the panel out again.</li><li><strong>Saved keys no longer overwrite each other.</strong> Saving a key in Settings while DeepSeek&#x27;s console sign-in is renewed in the background no longer loses either one, and a removed DeepSeek sign-in is no longer written back.</li><li><strong>A Keychain prompt no longer holds up refreshing.</strong> Reading Claude Code&#x27;s sign-in waits at most 60 seconds before falling back to the other routes.</li><li><strong>The recap&#x27;s big numbers are no longer clipped.</strong> The right side of a 9 or a 5 is no longer cut off.</li><li><strong>Settings layout.</strong> The Position row wraps its choices when the window is narrow, and the recap window&#x27;s price field is now the width of a price.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.8.1/Pulse-1.8.1.zip"
+                       length="14974632"
+                       type="application/octet-stream"
+                       sparkle:edSignature="a1hGmDSvnmGYCfBoHLjgbWdqh7vCPh27yuqGEyG3SE8rIxz04arQpIHonNf/YmVvOTl3P+YBDDaNilFlQNCgBg==" />
+        </item>
+        <item>
+            <title>1.8.0</title>
+            <pubDate>Mon, 05 Oct 2026 11:15:48 -0000</pubDate>
+            <sparkle:version>1.8.0</sparkle:version>
+            <sparkle:shortVersionString>1.8.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.8.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.0</h2><p><strong>新功能</strong></p><ul><li><strong>月报与年报。</strong> 在「设置 › Token 消耗」中点击「查看九月的月报」或「查看 2026 年报」，即可把一个月或一年的 AI 编程记录生成为一组可保存、拷贝和分享的卡片。</li><li><strong>回本卡支持自定义订阅价格。</strong> 在月报窗口中填写每月订阅价格，即可查看订阅的用出倍数，不填写则不显示该卡片。</li><li><strong>月报生成提醒。</strong> 在「设置 › 通知」中开启「月报生成时」，每月初会提醒一次上个月的月报。</li><li><strong>Token 活动图。</strong> Token 消耗面板新增最近十二个月的用量图，可按天、按周或按累计总量查看。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>会话列表更整洁。</strong> Claude Code 的子代理记录并入所属会话，Codex 会话改用首条实际输入作为标题。</li><li><strong>项目名更准确。</strong> 在仓库工作树中进行的工作计入仓库名下，Codex 桌面版与 DeepSeek 的临时目录不再被识别为项目。</li><li><strong>修复 Gemini CLI 等十个图标的显示问题。</strong> 这些图标现在可以完整显示。</li><li><strong>月报窗口打开时也显示 Dock 图标。</strong> 与设置窗口一致，月报窗口可从 Dock 或 ⌘-Tab 找回。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.0</h2><p><strong>新功能</strong></p><ul><li><strong>月报与年报。</strong> 在「设置 › Token 消耗」中点击「查看九月的月报」或「查看 2026 年报」，即可把一个月或一年的 AI 编程记录生成为一组可保存、拷贝和分享的卡片。</li><li><strong>回本卡支持自定义订阅价格。</strong> 在月报窗口中填写每月订阅价格，即可查看订阅的用出倍数，不填写则不显示该卡片。</li><li><strong>月报生成提醒。</strong> 在「设置 › 通知」中开启「月报生成时」，每月初会提醒一次上个月的月报。</li><li><strong>Token 活动图。</strong> Token 消耗面板新增最近十二个月的用量图，可按天、按周或按累计总量查看。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>会话列表更整洁。</strong> Claude Code 的子代理记录并入所属会话，Codex 会话改用首条实际输入作为标题。</li><li><strong>项目名更准确。</strong> 在仓库工作树中进行的工作计入仓库名下，Codex 桌面版与 DeepSeek 的临时目录不再被识别为项目。</li><li><strong>修复 Gemini CLI 等十个图标的显示问题。</strong> 这些图标现在可以完整显示。</li><li><strong>月报窗口打开时也显示 Dock 图标。</strong> 与设置窗口一致，月报窗口可从 Dock 或 ⌘-Tab 找回。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.8.0</h2><p><strong>New</strong></p><ul><li><strong>Monthly and yearly recaps.</strong> Open View September recap or View 2026 recap in Settings › Token spend to turn a month or a year of AI coding into a set of cards you can save, copy or share.</li><li><strong>A payback card at your price.</strong> Type your monthly plan price in the recap window to see how many times over you used it, or leave it empty to leave the card out.</li><li><strong>A note when the recap is ready.</strong> Turn on When a recap is ready in Settings › Notifications to be reminded of last month&#x27;s recap early each month.</li><li><strong>Token activity.</strong> The Token spend pane charts the last twelve months by day, by week or as a running total.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Cleaner session lists.</strong> Claude Code&#x27;s subagent transcripts join the session they belong to, and Codex sessions are titled from the first thing you actually said.</li><li><strong>Better project names.</strong> Work in a repository&#x27;s worktree counts under the repository, and Codex Desktop&#x27;s and DeepSeek&#x27;s scratch folders are no longer taken for projects.</li><li><strong>Gemini CLI and nine other icons draw properly.</strong> These icons are now drawn in full.</li><li><strong>The Dock icon also shows while the recap window is open.</strong> As with Settings, the recap window can be found again from the Dock or with ⌘-Tab.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.8.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.8.0/Pulse-1.8.0.zip"
+                       length="15242568"
+                       type="application/octet-stream"
+                       sparkle:edSignature="dHn56+KX6GtLurUUI1diVDFukhQsFEvGdEXN7Bx33cth1xxOqbSYNVW8XFHIKswI9nWqG4YaUCrJMu9EW1X4Bw==" />
+        </item>
+        <item>
+            <title>1.7.3</title>
+            <pubDate>Mon, 05 Oct 2026 06:52:15 -0000</pubDate>
+            <sparkle:version>1.7.3</sparkle:version>
+            <sparkle:shortVersionString>1.7.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.7.3</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.3</h2><p><strong>新功能</strong></p><ul><li><strong>设置打开时显示 Dock 图标。</strong> 被其他窗口遮挡的设置窗口可通过 Dock 或 ⌘-Tab 找回，该选项位于「设置 › 通用」的「应用」分组，默认开启。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Token 消耗统计更准确。</strong> Codex 子任务不再重复计入主任务的历史，Claude Code 的一小时缓存写入和 OpenAI 的长上下文请求按官方价格计算，Devin CLI、OpenCode、Codebuff 和 Copilot 的重复计算也已修正。</li><li><strong>Token 分类更清晰。</strong> 用量分为「新内容」「缓存命中」「输出」三类，工具未记录缓存信息时显示「未记录」。</li><li><strong>卡片统计按自然日计算。</strong> 「最近 7 天」「最近 31 天」严格对应日历日期，无价格信息的模型显示「—」。</li><li><strong>其他修复。</strong> 修正了登录续期、OpenCode 控制台账号切换、登录失效提示、额外账号的刷新间隔、窗口启动器频繁唤醒、OpenCode Go 的月度区间，以及服务商返回异常数据导致崩溃的问题。</li><li><strong>中文文案优化。</strong> 简体和繁体中文统一使用「服务商」「账号」，诊断、集成和刷新设置中的语句也已修订。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.3">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.3</h2><p><strong>新功能</strong></p><ul><li><strong>设置打开时显示 Dock 图标。</strong> 被其他窗口遮挡的设置窗口可通过 Dock 或 ⌘-Tab 找回，该选项位于「设置 › 通用」的「应用」分组，默认开启。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Token 消耗统计更准确。</strong> Codex 子任务不再重复计入主任务的历史，Claude Code 的一小时缓存写入和 OpenAI 的长上下文请求按官方价格计算，Devin CLI、OpenCode、Codebuff 和 Copilot 的重复计算也已修正。</li><li><strong>Token 分类更清晰。</strong> 用量分为「新内容」「缓存命中」「输出」三类，工具未记录缓存信息时显示「未记录」。</li><li><strong>卡片统计按自然日计算。</strong> 「最近 7 天」「最近 31 天」严格对应日历日期，无价格信息的模型显示「—」。</li><li><strong>其他修复。</strong> 修正了登录续期、OpenCode 控制台账号切换、登录失效提示、额外账号的刷新间隔、窗口启动器频繁唤醒、OpenCode Go 的月度区间，以及服务商返回异常数据导致崩溃的问题。</li><li><strong>中文文案优化。</strong> 简体和繁体中文统一使用「服务商」「账号」，诊断、集成和刷新设置中的语句也已修订。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.3">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.3</h2><p><strong>New</strong></p><ul><li><strong>A Dock icon while Settings is open.</strong> A covered settings window can be found again from the Dock or with ⌘-Tab, set in Settings › General under Application and on by default.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>More accurate token spend.</strong> Codex sub-agents no longer count their parent&#x27;s history again, Claude Code&#x27;s one-hour cache writes and OpenAI&#x27;s long-context requests are priced at the published rates, and double counting in Devin CLI, OpenCode, Codebuff and Copilot is fixed.</li><li><strong>Token kinds that read plainly.</strong> Usage is split into Fresh input, Cache hits and Output, and a tool that records no cache shows Not reported.</li><li><strong>Card figures follow the calendar.</strong> Last 7 days and Last 31 days now cover those calendar days, and a model with no price shows a dash rather than $0.00.</li><li><strong>Other fixes.</strong> Fixes cover sign-in renewal, switching OpenCode console accounts, lost sign-ins, the refresh interval for added accounts, the window starter&#x27;s wake-ups, OpenCode Go&#x27;s monthly window and crashes on malformed provider replies.</li><li><strong>More natural Chinese.</strong> Simplified and Traditional Chinese use one word each for provider and account, with plainer sentences across diagnostics, integrations and refresh settings.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.3">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.7.3/Pulse-1.7.3.zip"
+                       length="13534197"
+                       type="application/octet-stream"
+                       sparkle:edSignature="4owBqvVbrISxvwMtuRW3usIrYI/pMCMIix4BUtcXFEElbyY0PkPc3H07E+KSEVlm65jkq7tAKbTMeypCKDZeBg==" />
+        </item>
+        <item>
+            <title>1.7.2</title>
+            <pubDate>Sun, 04 Oct 2026 12:08:20 -0000</pubDate>
+            <sparkle:version>1.7.2</sparkle:version>
+            <sparkle:shortVersionString>1.7.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.7.2</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.2</h2><p><strong>新功能</strong></p><ul><li><strong>服务状态。</strong> Codex、Claude Code 和 DeepSeek 的设置页新增「服务状态」，按官方状态页的样式显示各项当前状态、过去 90 天的记录和可用率。</li><li><strong>服务故障通知。</strong> 在「设置 › 通知」中开启「服务出故障时」，已启用的 Codex、Claude Code 和 DeepSeek 出现故障或恢复时会通知一次。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>打开「关于」页时立即检查更新。</strong> 版本行显示的是本次检查的结果。</li><li><strong>降低资源占用。</strong> 读取用量记录、汇总 Token 消耗和面板跟随鼠标时的重复计算大幅减少。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.2</h2><p><strong>新功能</strong></p><ul><li><strong>服务状态。</strong> Codex、Claude Code 和 DeepSeek 的设置页新增「服务状态」，按官方状态页的样式显示各项当前状态、过去 90 天的记录和可用率。</li><li><strong>服务故障通知。</strong> 在「设置 › 通知」中开启「服务出故障时」，已启用的 Codex、Claude Code 和 DeepSeek 出现故障或恢复时会通知一次。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>打开「关于」页时立即检查更新。</strong> 版本行显示的是本次检查的结果。</li><li><strong>降低资源占用。</strong> 读取用量记录、汇总 Token 消耗和面板跟随鼠标时的重复计算大幅减少。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.2</h2><p><strong>New</strong></p><ul><li><strong>Service status.</strong> Codex&#x27;s, Claude Code&#x27;s and DeepSeek&#x27;s settings gain a Service status section showing each part&#x27;s current state, the last 90 days and the uptime, as on each provider&#x27;s status page.</li><li><strong>Notifications when a service is down.</strong> Turn on When a service is down in Settings › Notifications to be notified once when the Codex, Claude Code or DeepSeek you have switched on goes down or comes back.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Opening About checks for an update right away.</strong> The version row shows the result of that check.</li><li><strong>Lighter on your Mac.</strong> Reading usage records, adding up token spend and following the pointer on the panel do much less repeated work.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.2">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.7.2/Pulse-1.7.2.zip"
+                       length="13378656"
+                       type="application/octet-stream"
+                       sparkle:edSignature="HW8RrqeKOC6pPhQAG/p0Dr5cpzomIhEYKhgSaNr+B+m67amZ932TMuDFLl7+geLW5rp2md0wht996g+Clww+DA==" />
+        </item>
+        <item>
+            <title>1.7.1</title>
+            <pubDate>Sat, 03 Oct 2026 08:27:15 -0000</pubDate>
+            <sparkle:version>1.7.1</sparkle:version>
+            <sparkle:shortVersionString>1.7.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.7.1</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.1</h2><p><strong>新功能</strong></p><ul><li><strong>Codex 降智迹象检测。</strong> 「设置 › Codex」底部新增「降智迹象」，根据本机的 Codex 记录统计推理被截断，以及模型、推理强度或上下文被更换的迹象。</li><li><strong>DeepSeek 控制台用量读取。</strong> 在 DeepSeek 设置的「DeepSeek 控制台」中点击「读取」，Pulse 会通过浏览器的登录状态读取整个账号最近 30 天的用量。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复横放面板时百分比和数字的位置问题。</strong> 同时开启「百分比放在圆环右边」和「数字显示在圆环上方」时，百分比不再显示到圆环左侧，数字也不再紧贴「距离重置的时间」的外圈。感谢 <a href="https://github.com/qunqin24/Pulse/issues/73">@tyrival</a> 反馈。</li><li><strong>卡片在屏幕空间不足时可滚动。</strong> 面板横放在屏幕中部附近时，展开的卡片不再被屏幕边缘截断。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.1</h2><p><strong>新功能</strong></p><ul><li><strong>Codex 降智迹象检测。</strong> 「设置 › Codex」底部新增「降智迹象」，根据本机的 Codex 记录统计推理被截断，以及模型、推理强度或上下文被更换的迹象。</li><li><strong>DeepSeek 控制台用量读取。</strong> 在 DeepSeek 设置的「DeepSeek 控制台」中点击「读取」，Pulse 会通过浏览器的登录状态读取整个账号最近 30 天的用量。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复横放面板时百分比和数字的位置问题。</strong> 同时开启「百分比放在圆环右边」和「数字显示在圆环上方」时，百分比不再显示到圆环左侧，数字也不再紧贴「距离重置的时间」的外圈。感谢 <a href="https://github.com/qunqin24/Pulse/issues/73">@tyrival</a> 反馈。</li><li><strong>卡片在屏幕空间不足时可滚动。</strong> 面板横放在屏幕中部附近时，展开的卡片不再被屏幕边缘截断。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.1</h2><p><strong>New</strong></p><ul><li><strong>Signs of a weaker Codex model.</strong> A new Signs of a weaker model section at the bottom of Codex&#x27;s settings reads this Mac&#x27;s Codex records for reasoning that was cut short and for turns that ran on a different model, lower reasoning or a smaller context.</li><li><strong>DeepSeek usage from its console.</strong> Press Read under DeepSeek console in DeepSeek&#x27;s settings and Pulse uses your browser&#x27;s sign-in to read the whole account&#x27;s last 30 days.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>The percentage and figures sit correctly on a panel lying across.</strong> With Figures beside the rings and Figure above the ring both on, the percentage no longer jumps to the left of the ring, and figures no longer crowd the Time until reset arc. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/73">@tyrival</a> for the report.</li><li><strong>A card scrolls when the screen cannot hold it.</strong> With the panel lying across near the middle of the screen, an open card is no longer cut off at the screen&#x27;s edge.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.7.1/Pulse-1.7.1.zip"
+                       length="12951393"
+                       type="application/octet-stream"
+                       sparkle:edSignature="bCRDBBYr6jbeAUgSLrs6XU70aQU3Pz4ZqanQSqSGFtnWVKBZQEVYJh1XD2lUPuYT/JcT8I9Tmqm6LCbOOOFGCw==" />
+        </item>
+        <item>
+            <title>1.7.0</title>
+            <pubDate>Fri, 02 Oct 2026 16:40:12 -0000</pubDate>
+            <sparkle:version>1.7.0</sparkle:version>
+            <sparkle:shortVersionString>1.7.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.7.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.0</h2><p><strong>新功能</strong></p><ul><li><strong>详细卡片。</strong> 在账号设置中开启「详细卡片」后，悬停卡片会额外显示套餐、更新时间、近期用量、缓存命中率和额度对应的大致金额。</li><li><strong>按模型查看用量。</strong> 「设置 › Claude Code / Codex」的「用量记录」下新增「模型」卡片，显示各模型的用量占比、缓存命中率和输出速度。</li><li><strong>提示缓存列表。</strong> Claude Code 和 Codex 的设置页列出所有仍持有缓存的对话及缓存的剩余时间。</li><li><strong>OpenCode Go 读取官网记录。</strong> 在 OpenCode Go 的设置中读取浏览器登录状态后，Pulse 会直接从官网控制台读取额度和每次请求的记录。</li><li><strong>面板支持横向自由摆放，也可吸附屏幕底部。</strong> 在「位置」中选择「自由（横向）」或吸附屏幕底部，面板可放在程序坞两侧的空白区域。感谢 <a href="https://github.com/qunqin24/Pulse/issues/70">@GinWU05</a> 提议并参与实现横向自由摆放。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复 Claude Code 用量重复计算的问题。</strong> 继续或分叉对话时携带的历史副本不再计入用量。</li><li><strong>修复 Claude Code 输出 token 少算的问题。</strong> 分多行写入的回复现在完整计入输出量。</li><li><strong>额度价值估算更稳定、更准确。</strong> 估算只统计到读取额度的时刻，用量不足 5% 或账号在其他设备上同时使用时不显示估算。</li><li><strong>支持 OpenCode 2 的记录。</strong> 升级到 OpenCode 2 后的用量会计入 Token 消耗。</li><li><strong>Token 消耗改为后台读取。</strong> 开启后，Pulse 在后台保持数据更新，打开页面时直接显示。</li><li><strong>菜单栏图标更换为 Pulse 标志。</strong> 菜单中的用量面板改为开关，默认关闭。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.0</h2><p><strong>新功能</strong></p><ul><li><strong>详细卡片。</strong> 在账号设置中开启「详细卡片」后，悬停卡片会额外显示套餐、更新时间、近期用量、缓存命中率和额度对应的大致金额。</li><li><strong>按模型查看用量。</strong> 「设置 › Claude Code / Codex」的「用量记录」下新增「模型」卡片，显示各模型的用量占比、缓存命中率和输出速度。</li><li><strong>提示缓存列表。</strong> Claude Code 和 Codex 的设置页列出所有仍持有缓存的对话及缓存的剩余时间。</li><li><strong>OpenCode Go 读取官网记录。</strong> 在 OpenCode Go 的设置中读取浏览器登录状态后，Pulse 会直接从官网控制台读取额度和每次请求的记录。</li><li><strong>面板支持横向自由摆放，也可吸附屏幕底部。</strong> 在「位置」中选择「自由（横向）」或吸附屏幕底部，面板可放在程序坞两侧的空白区域。感谢 <a href="https://github.com/qunqin24/Pulse/issues/70">@GinWU05</a> 提议并参与实现横向自由摆放。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复 Claude Code 用量重复计算的问题。</strong> 继续或分叉对话时携带的历史副本不再计入用量。</li><li><strong>修复 Claude Code 输出 token 少算的问题。</strong> 分多行写入的回复现在完整计入输出量。</li><li><strong>额度价值估算更稳定、更准确。</strong> 估算只统计到读取额度的时刻，用量不足 5% 或账号在其他设备上同时使用时不显示估算。</li><li><strong>支持 OpenCode 2 的记录。</strong> 升级到 OpenCode 2 后的用量会计入 Token 消耗。</li><li><strong>Token 消耗改为后台读取。</strong> 开启后，Pulse 在后台保持数据更新，打开页面时直接显示。</li><li><strong>菜单栏图标更换为 Pulse 标志。</strong> 菜单中的用量面板改为开关，默认关闭。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.7.0</h2><p><strong>New</strong></p><ul><li><strong>A detailed card.</strong> Turn on Detailed card in an account&#x27;s settings and its hover card adds the plan, when it was updated, recent usage, the cache hit rate and roughly what each limit is worth.</li><li><strong>Usage by model.</strong> Under Usage history in Claude Code&#x27;s and Codex&#x27;s settings, a new Models card shows each model&#x27;s share, cache hit rate and output speed.</li><li><strong>Prompt cache list.</strong> Claude Code&#x27;s and Codex&#x27;s settings list every conversation still holding a cache, and how long it has left.</li><li><strong>OpenCode Go from its own console.</strong> Read the browser sign-in in OpenCode Go&#x27;s settings and Pulse reads the limits and every request straight from the console.</li><li><strong>Float the panel lying across, or dock it to the bottom of the screen.</strong> Choose Free across or the bottom edge under Position to place the panel in the empty space either side of the Dock. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/70">@GinWU05</a> for proposing and building the lying-across placement.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Claude Code&#x27;s usage is no longer counted twice.</strong> The copy of the old history that a resumed or forked conversation carries is no longer counted.</li><li><strong>Claude Code&#x27;s output tokens are no longer undercounted.</strong> Replies written over several lines are now counted in full.</li><li><strong>Steadier, more accurate value estimates.</strong> Estimates count only up to when the limit was read, and none is shown under 5% used or while the account is in use on another device.</li><li><strong>OpenCode 2&#x27;s usage is read.</strong> Usage after upgrading to OpenCode 2 now appears in Token spend.</li><li><strong>Token spend reads in the background.</strong> With it on, Pulse keeps the figures up to date, so the page opens on them.</li><li><strong>The menu bar shows Pulse&#x27;s own mark.</strong> The usage panel in its menu is now a switch, off by default.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.7.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.7.0/Pulse-1.7.0.zip"
+                       length="12658820"
+                       type="application/octet-stream"
+                       sparkle:edSignature="TqFSn/fQOq24M9u/B7KXA/R30I/857r7onZX1KjjAGcqyn1Q/aGKZUxDoQOy2KqLQADSHj19tNT01Q8DhCopDA==" />
+        </item>
+        <item>
+            <title>1.6.1</title>
+            <pubDate>Mon, 28 Sep 2026 03:52:13 -0000</pubDate>
+            <sparkle:version>1.6.1</sparkle:version>
+            <sparkle:shortVersionString>1.6.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.6.1</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.6.1</h2><p><strong>新功能</strong></p><ul><li><strong>额度重置后自动开始新窗口（可选）。</strong> 在 Claude Code 或 Codex 的账号设置中开启「自动开始新窗口」，Pulse 会在每次重置后、你设定的时间段内，通过服务商自带的命令行工具发送一条「hi」，此功能默认关闭，开启前需要确认。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>全新应用图标。</strong> 一笔画成的 P，在 macOS 26 上支持液态玻璃效果，并跟随深色、透明和着色图标样式。</li><li><strong>开启液态玻璃且面板吸附屏幕边缘时，圆环之间的空白区域也可拖动。</strong> 设置中「开启后只能按住圆环拖动」的提示也已移除。感谢 <a href="https://github.com/qunqin24/Pulse/issues/68">@annsyun</a> 反馈。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.6.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.6.1</h2><p><strong>新功能</strong></p><ul><li><strong>额度重置后自动开始新窗口（可选）。</strong> 在 Claude Code 或 Codex 的账号设置中开启「自动开始新窗口」，Pulse 会在每次重置后、你设定的时间段内，通过服务商自带的命令行工具发送一条「hi」，此功能默认关闭，开启前需要确认。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>全新应用图标。</strong> 一笔画成的 P，在 macOS 26 上支持液态玻璃效果，并跟随深色、透明和着色图标样式。</li><li><strong>开启液态玻璃且面板吸附屏幕边缘时，圆环之间的空白区域也可拖动。</strong> 设置中「开启后只能按住圆环拖动」的提示也已移除。感谢 <a href="https://github.com/qunqin24/Pulse/issues/68">@annsyun</a> 反馈。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.6.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.6.1</h2><p><strong>New</strong></p><ul><li><strong>Start usage windows after a reset (optional).</strong> Turn on Start windows automatically in a Claude Code or Codex account&#x27;s settings and Pulse sends a single &quot;hi&quot; through the provider&#x27;s own command-line tool after each reset, within the hours you choose; it is off by default and asks you to confirm first.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>A new icon.</strong> A P drawn in one stroke, in Liquid Glass on macOS 26 and following the dark, clear and tinted icon styles.</li><li><strong>A docked Liquid Glass panel can be dragged from between its rings.</strong> The settings caption saying only the rings can be dragged is gone. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/68">@annsyun</a> for reporting it.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.6.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.6.1/Pulse-1.6.1.zip"
+                       length="11902043"
+                       type="application/octet-stream"
+                       sparkle:edSignature="N9qzAy1gJKM55A56L+t/y4lLeNI5P7mhWdlnaQDXfwzKAc1+R989LpvGSPN8vriz5fWgQJR+Fo3D+KEz/JmzBw==" />
+        </item>
+        <item>
+            <title>1.6.0</title>
+            <pubDate>Sun, 27 Sep 2026 08:46:20 -0000</pubDate>
+            <sparkle:version>1.6.0</sparkle:version>
+            <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.6.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.6.0</h2><p><strong>新功能</strong></p><ul><li><strong>菜单栏用量显示。</strong> 在「设置 › 通用」开启「在菜单栏显示用量」，菜单栏图标旁会以数字、迷你圆环或「分项」样式显示用量最高的圆环或指定账号。</li><li><strong>菜单栏用量面板。</strong> 点击菜单栏图标即可查看「概览」和各账号的额度、套餐、重置时间与 Token 消耗，并可按 ⌘R 立即刷新。</li><li><strong>仅用菜单栏。</strong> 关闭菜单中的「显示悬浮面板」，即可隐藏屏幕边缘的悬浮面板。</li><li><strong>再次打开 Pulse 时弹出设置。</strong> Pulse 在后台运行时，从「应用程序」或聚焦搜索再次打开会直接弹出设置窗口。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>液态玻璃模式下，卡片尾部与卡片融为一体。</strong> 复杂背景上的卡片尾部不再显示为独立的一块。</li><li><strong>Grok 额度达到 100% 时视为已用完。</strong> 与其他服务商一致，此时会发出「额度用完」通知。</li><li><strong>删除额外账号时清除其全部设置。</strong> 小机器人外观、余额提醒等设置不再残留。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.6.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.6.0</h2><p><strong>新功能</strong></p><ul><li><strong>菜单栏用量显示。</strong> 在「设置 › 通用」开启「在菜单栏显示用量」，菜单栏图标旁会以数字、迷你圆环或「分项」样式显示用量最高的圆环或指定账号。</li><li><strong>菜单栏用量面板。</strong> 点击菜单栏图标即可查看「概览」和各账号的额度、套餐、重置时间与 Token 消耗，并可按 ⌘R 立即刷新。</li><li><strong>仅用菜单栏。</strong> 关闭菜单中的「显示悬浮面板」，即可隐藏屏幕边缘的悬浮面板。</li><li><strong>再次打开 Pulse 时弹出设置。</strong> Pulse 在后台运行时，从「应用程序」或聚焦搜索再次打开会直接弹出设置窗口。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>液态玻璃模式下，卡片尾部与卡片融为一体。</strong> 复杂背景上的卡片尾部不再显示为独立的一块。</li><li><strong>Grok 额度达到 100% 时视为已用完。</strong> 与其他服务商一致，此时会发出「额度用完」通知。</li><li><strong>删除额外账号时清除其全部设置。</strong> 小机器人外观、余额提醒等设置不再残留。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.6.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.6.0</h2><p><strong>New</strong></p><ul><li><strong>Usage in the menu bar.</strong> Turn on Show usage in the menu bar in Settings › General to show the fullest ring, or an account you pick, beside the menu bar icon as a figure, a small ring or Split.</li><li><strong>A dashboard in the menu bar menu.</strong> Click the menu bar icon for an Overview and a tab per account with each limit, the plan, resets and token spend, and press ⌘R to refresh.</li><li><strong>Menu bar only.</strong> Turn off Show floating panel in the menu to hide the floating panel at the screen edge.</li><li><strong>Opening Pulse again opens Settings.</strong> Opening Pulse from Applications or Spotlight while it runs brings up the settings window.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>With Liquid Glass, the card&#x27;s tail is part of the card.</strong> Over a busy backdrop the tail no longer reads as a separate piece.</li><li><strong>Grok&#x27;s pool counts as spent at 100%.</strong> As with every other provider, the spent notification is sent.</li><li><strong>Removing an added account clears all of its settings.</strong> Its animated mark, low-balance alert and other settings are no longer left behind.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.6.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.6.0/Pulse-1.6.0.zip"
+                       length="10694367"
+                       type="application/octet-stream"
+                       sparkle:edSignature="ZuJYKZ+QBLmTIkqXSblo3J5M5+Ro1wGqYF5CViCMdD+gMI/2j2d3b39i5SAMG2qw0Tt4QNuCsCUZB+5QJ/NNDA==" />
+        </item>
+        <item>
+            <title>1.5.2</title>
+            <pubDate>Sat, 26 Sep 2026 10:59:00 -0000</pubDate>
+            <sparkle:version>1.5.2</sparkle:version>
+            <sparkle:shortVersionString>1.5.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.5.2</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.2</h2><p><strong>改进与修复</strong></p><ul><li><strong>支持通过新版 ChatGPT 桌面应用读取 Codex 额度重置券。</strong> Pulse 会同时在 ChatGPT 26.924 前后两个版本存放内置 codex 的位置查找。感谢 <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> 定位问题。</li><li><strong>卡片显示最近一张重置券的到期时间。</strong> 到期时间精确到分钟，显示在券数量的下方。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.2</h2><p><strong>改进与修复</strong></p><ul><li><strong>支持通过新版 ChatGPT 桌面应用读取 Codex 额度重置券。</strong> Pulse 会同时在 ChatGPT 26.924 前后两个版本存放内置 codex 的位置查找。感谢 <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> 定位问题。</li><li><strong>卡片显示最近一张重置券的到期时间。</strong> 到期时间精确到分钟，显示在券数量的下方。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.2</h2><p><strong>Changed and fixed</strong></p><ul><li><strong>Codex&#x27;s limit reset credits are read with the newer ChatGPT desktop app too.</strong> Pulse looks for the bundled codex where ChatGPT 26.924 puts it as well as where earlier versions did. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> for tracking it down.</li><li><strong>The card shows when the next reset credit expires.</strong> The time is shown to the minute, under the count.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.2">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.5.2/Pulse-1.5.2.zip"
+                       length="10454594"
+                       type="application/octet-stream"
+                       sparkle:edSignature="79/6Oybk5gznxyvC9BgJ44Gu+LDPufnbCVpbmdYD+qzHPbKFhWaFNDJ5uDcVTN89Z2OW3QuguI2wT0vDy4HDCw==" />
+        </item>
+        <item>
+            <title>1.5.1</title>
+            <pubDate>Sat, 26 Sep 2026 10:14:55 -0000</pubDate>
+            <sparkle:version>1.5.1</sparkle:version>
+            <sparkle:shortVersionString>1.5.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.5.1</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.1</h2><p><strong>新功能</strong></p><ul><li><strong>扩展支持上报余额。</strong> 扩展可上报账号余额和币种，圆环可选「自上次充值」「只看余额」或「我的预算」并设置低余额提醒，中转站示例见 <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md">Docs/extensions.md</a>。感谢 <a href="https://github.com/qunqin24/Pulse/issues/40">@Zoltan-code</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>密钥输入框旁新增显示按钮。</strong> 点击眼睛图标可查看输入的内容，切换到其他服务商时自动重新隐藏。</li><li><strong>修复 API 服务设置页「圆环计算方式」遮挡说明文字的问题。</strong> 该项原名「环上显示」，现已更名，避免与面板组中的同名设置混淆。</li><li><strong>仅安装 ChatGPT 桌面应用时也能读取 Codex 额度重置券。</strong> Pulse 会在 ChatGPT 应用内查找内置的 codex，完全找不到时显示「找不到 codex」。感谢 <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> 反馈。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.1</h2><p><strong>新功能</strong></p><ul><li><strong>扩展支持上报余额。</strong> 扩展可上报账号余额和币种，圆环可选「自上次充值」「只看余额」或「我的预算」并设置低余额提醒，中转站示例见 <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md">Docs/extensions.md</a>。感谢 <a href="https://github.com/qunqin24/Pulse/issues/40">@Zoltan-code</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>密钥输入框旁新增显示按钮。</strong> 点击眼睛图标可查看输入的内容，切换到其他服务商时自动重新隐藏。</li><li><strong>修复 API 服务设置页「圆环计算方式」遮挡说明文字的问题。</strong> 该项原名「环上显示」，现已更名，避免与面板组中的同名设置混淆。</li><li><strong>仅安装 ChatGPT 桌面应用时也能读取 Codex 额度重置券。</strong> Pulse 会在 ChatGPT 应用内查找内置的 codex，完全找不到时显示「找不到 codex」。感谢 <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> 反馈。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.1</h2><p><strong>New</strong></p><ul><li><strong>Extensions can report a balance.</strong> An extension can report an account&#x27;s balance and currency, with the same Since top-up, Balance only and My budget ring choices as an API account and a low-balance alert; a relay example is in <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md">Docs/extensions.md</a>. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/40">@Zoltan-code</a> for asking.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>The key field has a show button.</strong> Click the eye to see what you typed, and the key hides again when you open another provider.</li><li><strong>Ring measures no longer covers its own description.</strong> On an API account&#x27;s settings page, the setting formerly called Ring shows has been renamed so it is no longer confused with the Panel group&#x27;s row of the same name.</li><li><strong>Codex&#x27;s limit reset credits are read when only the ChatGPT desktop app is installed.</strong> Pulse looks for the codex the app ships, and says so when no codex can be found at all. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> for the report.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.5.1/Pulse-1.5.1.zip"
+                       length="10451108"
+                       type="application/octet-stream"
+                       sparkle:edSignature="zbyHEfazK+gpaSRfh1+TwfGhUTluHH7aVOuW6hvOb2o1cQ6gJIqnLaPp0Npcmwj0QiGpq2RUvSlLPf+WsNfCDw==" />
+        </item>
+        <item>
+            <title>1.5.0</title>
+            <pubDate>Fri, 25 Sep 2026 08:55:05 -0000</pubDate>
+            <sparkle:version>1.5.0</sparkle:version>
+            <sparkle:shortVersionString>1.5.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.5.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.0</h2><p><strong>新功能</strong></p><ul><li><strong>新增 53 个服务商，共 77 个。</strong> 新增阶跃星辰的 Step Plan，以及参考 <a href="https://github.com/steipete/CodexBar">CodexBar</a> 移植、尚未用真实账号验证的 ClinePass、阿里云百炼、Gemini 等 52 个服务商，完整列表见 README。</li><li><strong>扩展系统。</strong> 将自编的小程序放入扩展文件夹，即可让 Pulse 显示某个账号的用量，编写方法见 <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md">Docs/extensions.md</a>。感谢 <a href="https://github.com/qunqin24/Pulse/issues/51">@guanbear</a> 提议。</li><li><strong>订阅与 API 分组显示。</strong> 设置侧边栏和首次启动的服务商选择窗口分为「订阅」和「API 与按量付费」两组，「已启用」的服务商排在顶部。</li><li><strong>每个 API 服务均可选择圆环计算方式。</strong> OpenAI API、Moonshot、New API 等上报余额的服务商均可分别选择「自上次充值」「只看余额」或「我的预算」。</li><li><strong>Codex 卡片可显示额度重置券。</strong> 在「设置 → Codex」开启「在卡片上显示额度重置券」，悬浮卡片会显示剩余数量。感谢 <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>支持读取通过 npm 或 nvm 安装的 Codex 的 app server。</strong> 从 Finder 启动的 Pulse 现在也能找到 <code>node</code>，Kiro、arkcli 等命令行工具同样适用。</li><li><strong>未选择服务商时，菜单栏菜单第一项会给出提示。</strong> 关闭首次启动的选择窗口后，菜单会提示选择服务商。感谢 <a href="https://github.com/qunqin24/Pulse/issues/66">@Drswith</a> 反馈。</li><li><strong>面板窗口仅按已启用的服务商预留大小。</strong> 服务商较多时，透明窗口不再远高于屏幕。</li><li><strong>「顺序」列表仅显示已启用的服务商。</strong> 未启用的服务商不再出现在列表中。</li><li><strong>设置侧边栏加宽。</strong> 较长的服务商名称不再被截断。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.0</h2><p><strong>新功能</strong></p><ul><li><strong>新增 53 个服务商，共 77 个。</strong> 新增阶跃星辰的 Step Plan，以及参考 <a href="https://github.com/steipete/CodexBar">CodexBar</a> 移植、尚未用真实账号验证的 ClinePass、阿里云百炼、Gemini 等 52 个服务商，完整列表见 README。</li><li><strong>扩展系统。</strong> 将自编的小程序放入扩展文件夹，即可让 Pulse 显示某个账号的用量，编写方法见 <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md">Docs/extensions.md</a>。感谢 <a href="https://github.com/qunqin24/Pulse/issues/51">@guanbear</a> 提议。</li><li><strong>订阅与 API 分组显示。</strong> 设置侧边栏和首次启动的服务商选择窗口分为「订阅」和「API 与按量付费」两组，「已启用」的服务商排在顶部。</li><li><strong>每个 API 服务均可选择圆环计算方式。</strong> OpenAI API、Moonshot、New API 等上报余额的服务商均可分别选择「自上次充值」「只看余额」或「我的预算」。</li><li><strong>Codex 卡片可显示额度重置券。</strong> 在「设置 → Codex」开启「在卡片上显示额度重置券」，悬浮卡片会显示剩余数量。感谢 <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>支持读取通过 npm 或 nvm 安装的 Codex 的 app server。</strong> 从 Finder 启动的 Pulse 现在也能找到 <code>node</code>，Kiro、arkcli 等命令行工具同样适用。</li><li><strong>未选择服务商时，菜单栏菜单第一项会给出提示。</strong> 关闭首次启动的选择窗口后，菜单会提示选择服务商。感谢 <a href="https://github.com/qunqin24/Pulse/issues/66">@Drswith</a> 反馈。</li><li><strong>面板窗口仅按已启用的服务商预留大小。</strong> 服务商较多时，透明窗口不再远高于屏幕。</li><li><strong>「顺序」列表仅显示已启用的服务商。</strong> 未启用的服务商不再出现在列表中。</li><li><strong>设置侧边栏加宽。</strong> 较长的服务商名称不再被截断。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.5.0</h2><p><strong>New</strong></p><ul><li><strong>53 new providers, 77 in all.</strong> StepFun&#x27;s Step Plan joins 52 more ported from <a href="https://github.com/steipete/CodexBar">CodexBar</a>&#x27;s providers and not yet checked against a live account, including ClinePass, Alibaba Cloud Model Studio and Gemini; the full list is in the README.</li><li><strong>Extensions.</strong> A small program of your own, put in the extensions folder, can report one account&#x27;s usage for Pulse to draw as a ring; how to write one is in <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/extensions.md">Docs/extensions.md</a>. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/51">@guanbear</a> for proposing it.</li><li><strong>Subscriptions and API accounts are listed apart.</strong> The Settings sidebar and the first-run chooser group providers under Subscriptions and API and pay-as-you-go, with Enabled at the top.</li><li><strong>Every API account chooses what its ring measures.</strong> OpenAI API, Moonshot, New API and every other account that reports a balance can each choose Since top-up, Balance only or My budget.</li><li><strong>Codex&#x27;s card can show limit reset credits.</strong> Turn on Reset credits on the card in Settings → Codex, and the hover card shows how many are left. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/67">@sanziliu</a> for asking.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>A Codex installed with npm or nvm now reaches its app server.</strong> Pulse launched from Finder now finds <code>node</code>, and Kiro, arkcli and the other command-line tools are started the same way.</li><li><strong>The menu bar menu says to choose providers when none are chosen.</strong> After the first-run chooser is dismissed, the menu&#x27;s first item asks you to choose providers. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/66">@Drswith</a> for reporting it.</li><li><strong>The panel window is sized for the rings switched on.</strong> With many providers, the transparent window is no longer far taller than the screen.</li><li><strong>Order lists only the accounts switched on.</strong> Accounts that are switched off no longer appear in the list.</li><li><strong>A wider Settings sidebar.</strong> Long provider names are no longer cut short.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.5.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.5.0/Pulse-1.5.0.zip"
+                       length="10423164"
+                       type="application/octet-stream"
+                       sparkle:edSignature="ksGOrNT9J5zyCJp3PjHrk2QlW0DV1Lw6PJYZaDaV6qIScWAK3uZAPXD2M7rT+jrYhKtS1+DQ8sNY47GF5zenCg==" />
+        </item>
+        <item>
+            <title>1.4.1</title>
+            <pubDate>Thu, 24 Sep 2026 04:03:03 -0000</pubDate>
+            <sparkle:version>1.4.1</sparkle:version>
+            <sparkle:shortVersionString>1.4.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.4.1</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.4.1</h2><p><strong>新功能</strong></p><ul><li><strong>Qoder 显示积分包到期日。</strong> 卡片显示最早到期的一批积分，例如「10月18日 86 积分到期」，<code>--json</code> 新增 <code>expiresAt</code> 和 <code>expiringAmount</code> 字段。感谢 <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复 Qoder 体验版账号显示「未返回任何限额」的问题。</strong> 大陆站体验版账号现在会正常显示剩余积分。感谢 <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> 查明原因。</li><li><strong>购买 Qoder 积分包不再被误判为额度重置。</strong> 只有 Qoder 的重置时间后移时，Pulse 才视为额度重置。</li><li><strong>修复 Qoder 确认账号无积分时仍显示旧百分比的问题。</strong> 缓存不再把上一次的读数带回面板和 <code>--json</code> 输出。感谢 <a href="https://github.com/qunqin24/Pulse/pull/61">@tech-zjf</a>。</li><li><strong>模型价格无需重启即可更新。</strong> 价格表过期后会在下次读取时重新下载，下载失败时继续使用旧表。感谢 <a href="https://github.com/qunqin24/Pulse/pull/60">@tech-zjf</a>。</li><li><strong>小机器人的眼神和动作恢复原版幅度。</strong> 眼神、手势和大幅动作按原版动画播放，不再额外压缩。</li><li><strong>鼠标悬停胶囊时，小机器人依次转向。</strong> 各圆环依次响应，约 0.4 秒内平滑转向指针。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.4.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.4.1</h2><p><strong>新功能</strong></p><ul><li><strong>Qoder 显示积分包到期日。</strong> 卡片显示最早到期的一批积分，例如「10月18日 86 积分到期」，<code>--json</code> 新增 <code>expiresAt</code> 和 <code>expiringAmount</code> 字段。感谢 <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> 提议。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复 Qoder 体验版账号显示「未返回任何限额」的问题。</strong> 大陆站体验版账号现在会正常显示剩余积分。感谢 <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> 查明原因。</li><li><strong>购买 Qoder 积分包不再被误判为额度重置。</strong> 只有 Qoder 的重置时间后移时，Pulse 才视为额度重置。</li><li><strong>修复 Qoder 确认账号无积分时仍显示旧百分比的问题。</strong> 缓存不再把上一次的读数带回面板和 <code>--json</code> 输出。感谢 <a href="https://github.com/qunqin24/Pulse/pull/61">@tech-zjf</a>。</li><li><strong>模型价格无需重启即可更新。</strong> 价格表过期后会在下次读取时重新下载，下载失败时继续使用旧表。感谢 <a href="https://github.com/qunqin24/Pulse/pull/60">@tech-zjf</a>。</li><li><strong>小机器人的眼神和动作恢复原版幅度。</strong> 眼神、手势和大幅动作按原版动画播放，不再额外压缩。</li><li><strong>鼠标悬停胶囊时，小机器人依次转向。</strong> 各圆环依次响应，约 0.4 秒内平滑转向指针。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.4.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.4.1</h2><p><strong>New</strong></p><ul><li><strong>Qoder shows when your credit packs lapse.</strong> The card shows the soonest batch to expire, such as &quot;Oct 18: 86 credits expire&quot;, and <code>--json</code> gains <code>expiresAt</code> and <code>expiringAmount</code>. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> for asking.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>A Qoder trial no longer shows &quot;no limits reported&quot;.</strong> Trial accounts on the mainland site now show their remaining credits. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> for tracking down the cause.</li><li><strong>Buying a Qoder pack is no longer read as a reset.</strong> Only Qoder&#x27;s reset date moving forward counts as a reset.</li><li><strong>An old percentage no longer covers Qoder saying an account has no credits.</strong> The cache no longer brings the previous reading back on the panel or in <code>--json</code>. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/61">@tech-zjf</a>.</li><li><strong>Model prices refresh without restarting Pulse.</strong> An expired price table is downloaded again on the next read, and a failed download keeps the old one. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/60">@tech-zjf</a>.</li><li><strong>The bot moves as the original animation does.</strong> Glances, gestures and larger moves play at full size, without extra damping.</li><li><strong>The bots turn to an arriving pointer one after another.</strong> Each ring responds in turn and faces the pointer over about 0.4 seconds.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.4.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.4.1/Pulse-1.4.1.zip"
+                       length="8730253"
+                       type="application/octet-stream"
+                       sparkle:edSignature="BmVkOjTVE02LDzBTBuKlvLd4Upw3BMJqLN0uVM5C9+wVQ/KNoCoAyEPFnl9BwqY8vOu1wdoojxOCrAlVVQjlAg==" />
+        </item>
+        <item>
+            <title>1.4.0</title>
+            <pubDate>Wed, 23 Sep 2026 07:03:18 -0000</pubDate>
+            <sparkle:version>1.4.0</sparkle:version>
+            <sparkle:shortVersionString>1.4.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.4.0</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.4.0</h2><p><strong>新功能</strong></p><ul><li><strong>新增 Sub2API、New API、V2EX 和 Qoder，服务商增至二十四个。</strong> 两个自建网关填入服务器地址和密钥即可读取余额或额度，V2EX 使用个人访问令牌读取 AI Chat 额度，Qoder 通过浏览器的登录状态显示积分额度。感谢 <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> 提议。</li><li><strong>真实液态玻璃。</strong> 开启「液态玻璃」后，面板为透明、带折射效果的 macOS 26 液态玻璃，并可用「透明度」滑块调节明暗。</li><li><strong>时间圆环支持倒数。</strong> 「距离重置的时间」的外圈可选「已过去」或「剩余」。感谢 <a href="https://github.com/qunqin24/Pulse/pull/44">@Steven-oyjb</a>。</li><li><strong>Kiro 与 ZCode 显示工作动画。</strong> Pulse 读取这两个工具在本机写入的会话记录，判断任务是否正在进行。感谢 <a href="https://github.com/qunqin24/Pulse/pull/56">@guanbear</a>。</li><li><strong>设置按主题拆分为多个页面。</strong> 外观、圆环与数字、位置与行为、通用、通知、网络与刷新各自独立，侧边栏搜索可按设置项名称定位页面。</li><li><strong>每个服务商均提供配置指南。</strong> 设置中的「配置帮助」会打开对应的页面，说明密钥或登录信息的获取位置、填写位置和常见错误。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复贴边时鼠标推至屏幕最边缘被误判为离开的问题。</strong> 开启自动收起时，胶囊不再反复展开和收起。</li><li><strong>卡片切换更流畅。</strong> 高度不同的卡片切换时，新增的行不再出现在卡片外部，快速扫过圆环时也不再显示空卡片。</li><li><strong>修复小机器人偶发瞬移的问题。</strong> 动作被中途打断时，身体会平滑过渡到下一状态。</li><li><strong>Token 消耗：同名项目分开统计，无定价用量不再显示 $0.00。</strong> 不同路径下的同名目录不再合并，无法定价的会话和项目显示「—」或带 <code>*</code> 的小计。感谢 <a href="https://github.com/qunqin24/Pulse/pull/57">@tech-zjf</a>（<a href="https://github.com/qunqin24/Pulse/pull/58">#58</a>）。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.4.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.4.0</h2><p><strong>新功能</strong></p><ul><li><strong>新增 Sub2API、New API、V2EX 和 Qoder，服务商增至二十四个。</strong> 两个自建网关填入服务器地址和密钥即可读取余额或额度，V2EX 使用个人访问令牌读取 AI Chat 额度，Qoder 通过浏览器的登录状态显示积分额度。感谢 <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> 提议。</li><li><strong>真实液态玻璃。</strong> 开启「液态玻璃」后，面板为透明、带折射效果的 macOS 26 液态玻璃，并可用「透明度」滑块调节明暗。</li><li><strong>时间圆环支持倒数。</strong> 「距离重置的时间」的外圈可选「已过去」或「剩余」。感谢 <a href="https://github.com/qunqin24/Pulse/pull/44">@Steven-oyjb</a>。</li><li><strong>Kiro 与 ZCode 显示工作动画。</strong> Pulse 读取这两个工具在本机写入的会话记录，判断任务是否正在进行。感谢 <a href="https://github.com/qunqin24/Pulse/pull/56">@guanbear</a>。</li><li><strong>设置按主题拆分为多个页面。</strong> 外观、圆环与数字、位置与行为、通用、通知、网络与刷新各自独立，侧边栏搜索可按设置项名称定位页面。</li><li><strong>每个服务商均提供配置指南。</strong> 设置中的「配置帮助」会打开对应的页面，说明密钥或登录信息的获取位置、填写位置和常见错误。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复贴边时鼠标推至屏幕最边缘被误判为离开的问题。</strong> 开启自动收起时，胶囊不再反复展开和收起。</li><li><strong>卡片切换更流畅。</strong> 高度不同的卡片切换时，新增的行不再出现在卡片外部，快速扫过圆环时也不再显示空卡片。</li><li><strong>修复小机器人偶发瞬移的问题。</strong> 动作被中途打断时，身体会平滑过渡到下一状态。</li><li><strong>Token 消耗：同名项目分开统计，无定价用量不再显示 $0.00。</strong> 不同路径下的同名目录不再合并，无法定价的会话和项目显示「—」或带 <code>*</code> 的小计。感谢 <a href="https://github.com/qunqin24/Pulse/pull/57">@tech-zjf</a>（<a href="https://github.com/qunqin24/Pulse/pull/58">#58</a>）。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.4.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.4.0</h2><p><strong>New</strong></p><ul><li><strong>Sub2API, New API, V2EX and Qoder bring the count to twenty-four providers.</strong> The two self-hosted gateways read a balance or allowance from a server address and key, V2EX reads its AI Chat allowance with a Personal Access Token, and Qoder reads your credits through your browser&#x27;s sign-in. Thanks to <a href="https://github.com/qunqin24/Pulse/issues/59">@momusticks</a> for asking.</li><li><strong>Real Liquid Glass.</strong> With Liquid Glass on, the panel is clear, refracting macOS 26 Liquid Glass, and a new Transparency slider sets how much it is dimmed.</li><li><strong>The window clock can count down.</strong> The outer arc of Time until reset can show time elapsed or time remaining. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/44">@Steven-oyjb</a>.</li><li><strong>Kiro and ZCode show activity too.</strong> Pulse reads the session records these tools leave on this Mac to tell whether a turn is in flight. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/56">@guanbear</a>.</li><li><strong>Settings are split by subject.</strong> Appearance, Rings and figures, Position and behavior, General, Notifications, and Network and refresh each have their own pane, and the sidebar search finds a pane by the names of its settings.</li><li><strong>Every provider has a setup guide.</strong> Setup help opens a page that explains where the key or login comes from, where it goes in Pulse and what each error means.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>A pointer pushed against the screen edge no longer counts as leaving a docked rail.</strong> With auto-collapse on, the rail no longer opens and closes over and over.</li><li><strong>Switching cards is smoother.</strong> An added row no longer appears outside the card, and sweeping across the rings no longer shows an empty card.</li><li><strong>The animated mark no longer jumps.</strong> An interrupted motion now eases into the next state.</li><li><strong>Token spend keeps same-name projects apart and stops showing unpriced use as $0.00.</strong> Directories with the same name at different paths are no longer merged, and usage that cannot be priced shows <code>—</code> or a subtotal marked <code>*</code>. Thanks to <a href="https://github.com/qunqin24/Pulse/pull/57">@tech-zjf</a> (<a href="https://github.com/qunqin24/Pulse/pull/58">#58</a>).</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.4.0">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.4.0/Pulse-1.4.0.zip"
+                       length="8690853"
+                       type="application/octet-stream"
+                       sparkle:edSignature="w51DvmlQf8wQszgOOvOphQCMrQ0bXglJ8N+6DZHYlrhmXkYSW2X97I/uwvKRFZlnJQ9fiKL816Yqmn/DwfqdAw==" />
+        </item>
+        <item>
+            <title>1.3.1</title>
+            <pubDate>Tue, 22 Sep 2026 03:30:46 -0000</pubDate>
+            <sparkle:version>1.3.1</sparkle:version>
+            <sparkle:shortVersionString>1.3.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <link>https://github.com/qunqin24/Pulse/releases/tag/v1.3.1</link>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.3.1</h2><p><strong>新功能</strong></p><ul><li><strong>Kiro 成为第二十个服务商。</strong> Pulse 通过 Kiro CLI 内置的 ACP 接口读取当前账号的方案与额度，无需额外登录。</li><li><strong>面板支持贴合刘海。</strong> 停靠在屏幕顶部时，面板围绕刘海并延伸至屏幕边缘。</li><li><strong>菜单栏图标可隐藏。</strong> 隐藏后可通过面板或全局快捷键使用 Pulse，按 <code>Command-,</code> 也可直接打开设置。</li><li><strong>更多外观与动画开关。</strong> 面板警报颜色、CLI 活动动画和刷新动画均可关闭，面板两端也可保持与圆环一致的柔和曲线。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>未选择显示的服务商不再被读取。</strong> Pulse 仅扫描已监控服务商的本机 CLI 活动，未显示的服务商在设置中标注为「未显示」。</li><li><strong>修复 Kiro 额度顺序变化打乱账号的问题。</strong> 额度改按 Kiro 返回的资源类型识别，顺序变化后仍保留各自的显示设置和历史。</li><li><strong>修复辅助进程重启后的错误超时。</strong> Codex 和 Kiro 的旧请求计时器不再终止新的请求或报告延迟错误。</li><li><strong>修复隐藏菜单栏图标导致无法进入应用的问题。</strong> 面板不可用且快捷键注册失败时，Pulse 会自动恢复菜单栏图标。</li><li><strong>修正 GLM 服务商图标与发布构建检查。</strong> 两个 GLM 区域使用一致的服务商标识，发布构建不再因多余的警告而失败。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.3.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.3.1</h2><p><strong>新功能</strong></p><ul><li><strong>Kiro 成为第二十个服务商。</strong> Pulse 通过 Kiro CLI 内置的 ACP 接口读取当前账号的方案与额度，无需额外登录。</li><li><strong>面板支持贴合刘海。</strong> 停靠在屏幕顶部时，面板围绕刘海并延伸至屏幕边缘。</li><li><strong>菜单栏图标可隐藏。</strong> 隐藏后可通过面板或全局快捷键使用 Pulse，按 <code>Command-,</code> 也可直接打开设置。</li><li><strong>更多外观与动画开关。</strong> 面板警报颜色、CLI 活动动画和刷新动画均可关闭，面板两端也可保持与圆环一致的柔和曲线。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>未选择显示的服务商不再被读取。</strong> Pulse 仅扫描已监控服务商的本机 CLI 活动，未显示的服务商在设置中标注为「未显示」。</li><li><strong>修复 Kiro 额度顺序变化打乱账号的问题。</strong> 额度改按 Kiro 返回的资源类型识别，顺序变化后仍保留各自的显示设置和历史。</li><li><strong>修复辅助进程重启后的错误超时。</strong> Codex 和 Kiro 的旧请求计时器不再终止新的请求或报告延迟错误。</li><li><strong>修复隐藏菜单栏图标导致无法进入应用的问题。</strong> 面板不可用且快捷键注册失败时，Pulse 会自动恢复菜单栏图标。</li><li><strong>修正 GLM 服务商图标与发布构建检查。</strong> 两个 GLM 区域使用一致的服务商标识，发布构建不再因多余的警告而失败。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.3.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.3.1</h2><p><strong>New</strong></p><ul><li><strong>Kiro is the twentieth provider.</strong> Pulse reads the current plan and allowances through the ACP service built into Kiro CLI, with no extra sign-in.</li><li><strong>The rail can berth around the notch.</strong> Docked at the top, the rail wraps the notch and reaches the screen edge.</li><li><strong>The menu bar icon can be hidden.</strong> Pulse can then be reached through the floating rail or global shortcuts, and <code>Command-,</code> opens Settings directly.</li><li><strong>More appearance and motion controls.</strong> The docked alert colour, CLI activity animation and refresh animation can each be turned off, and the rail&#x27;s ends can follow the rings&#x27; own curve.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Providers that are not selected are no longer read.</strong> Pulse scans local CLI activity only for watched providers, and a hidden provider is labelled “Not shown” in Settings.</li><li><strong>Kiro allowance ordering no longer changes account identity.</strong> Allowances are identified by the resource type Kiro returns, so display choices and history survive a reordered response.</li><li><strong>Fixed false timeouts after helper restarts.</strong> Old Codex and Kiro request timers no longer end a newer request or report a late failure.</li><li><strong>Hiding the menu bar icon cannot lock the user out.</strong> Pulse restores the menu bar icon if the rail is unavailable and no shortcut is registered.</li><li><strong>Corrected the GLM provider marks and the release build check.</strong> Both GLM regions use a consistent provider identity, and release builds no longer fail on a redundant warning.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.3.1">Release notes on GitHub</a></p>]]></description>
+            <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.3.1/Pulse-1.3.1.zip"
+                       length="8304279"
+                       type="application/octet-stream"
+                       sparkle:edSignature="w9Iv9XrhTYI3bBALmcsWS+hRpH0mU77B5YJRH67u5QPo1NOz2wYPSFW5xva5SwPvn8U4gLtCnRvFJKpE5fAnAQ==" />
+        </item>
+        <item>
             <title>1.3.0</title>
             <pubDate>Sat, 19 Sep 2026 13:34:38 -0000</pubDate>
             <sparkle:version>1.3.0</sparkle:version>
             <sparkle:shortVersionString>1.3.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.3.0</link>
-            <description><![CDATA[<style>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
   h2 { font-size: 1.05em; margin: 0 0 .5em; }
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.3.0</h2><p><strong>中文</strong></p><p><strong>新功能</strong></p><ul><li><strong>首次启动先由你选择要监控的服务。</strong> Pulse 在选择完成前不会读取任何凭据，也不会开始监控。以后升级发现新的本机服务时只会提示，不会擅自开启；已有选择保持不变。</li><li><strong>代理设置。</strong> 网络可以继续跟随 macOS，也可以在设置中指定 HTTP、HTTPS 或 SOCKS5 代理。供应商请求、登录流程以及 Codex、arkcli 等辅助进程使用同一项选择。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Token 消耗改为明确选择后才读取。</strong> 新安装默认关闭；开启后也只在查看该页面时扫描本机会话，离开页面或关闭设置会取消仍在进行的读取并释放结果。大型 JSONL 日志改为流式解析，避免为一次统计把整份文件载入内存；回到页面时会复用已经完成的结果，手动重新扫描除外。</li><li><strong>八种小机器人有了各自完整的动作编排。</strong> 日常、工作、刷新、鼠标响应和完成反馈按顺序播放，不再随机跳过招牌动作。所有日常动作与工作动作明确分开，空闲转圈不再冒出代表工作的彩带；只有「迟缓」会在深夜打瞌睡。</li><li><strong>小机器人的眼睛在连续工作动画中仍保持完整。</strong> 最终轮廓约束留出适合圆环尺寸的微小内边距，旋转和随机瞥视叠加时不会把半只眼睛裁掉。Kimi 的机器人蓝色也调亮，在小尺寸下更清楚。</li></ul><p><strong>English</strong></p><p><strong>New</strong></p><ul><li><strong>Choose what Pulse may monitor before it starts.</strong> A first-run picker makes the choice explicit. Pulse reads no credentials and starts no monitoring until it is saved. Later upgrades only suggest newly detected services; they never enable one on their own or disturb an existing choice.</li><li><strong>Proxy settings.</strong> Network traffic can keep following macOS or use a manually configured HTTP, HTTPS or SOCKS5 proxy. Provider requests, sign-in flows and helper processes such as Codex and arkcli all use the same selection.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Token spend is read only after an explicit opt-in.</strong> It is off on new installs and scans local sessions only while its Settings pane is open. Leaving the pane or closing Settings cancels an unfinished read and releases its result. Large JSONL logs are streamed instead of loaded whole, while a completed result is reused when returning to the pane unless Rescan is requested.</li><li><strong>Each of the eight bots now has a complete authored choreography.</strong> Everyday, working, fetching, pointer-attention and completion scenes play every beat in order rather than randomly skipping signatures. Everyday and work vocabularies are separate across the whole cast, an idle spin no longer throws work ribbons, and only Sleepy may doze at night.</li><li><strong>Eyes remain whole through sustained work animation.</strong> The final silhouette bound reserves a small ring-sized inset, so stacked turns and glances no longer clip half an eye. Kimi&#x27;s bot blue is lighter as well, keeping its face readable at this size.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.3.0">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.3.0</h2><p><strong>新功能</strong></p><ul><li><strong>首次启动时先选择要监控的服务商。</strong> 选择完成前，Pulse 不读取任何凭据，也不开始监控。</li><li><strong>代理设置。</strong> 网络可继续跟随 macOS，也可在设置中指定 HTTP、HTTPS 或 SOCKS5 代理，服务商请求、登录和辅助进程都使用同一配置。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Token 消耗改为明确开启后才读取。</strong> 新安装默认关闭，开启后仅在查看该页面时扫描本机会话。</li><li><strong>八种小机器人配备完整的动作编排。</strong> 日常、工作、刷新、鼠标响应和完成反馈按顺序完整播放。</li><li><strong>修复连续工作动画中小机器人眼睛被裁切的问题。</strong> 眼睛不再在旋转和瞥视时被裁掉一半，Kimi 机器人的蓝色也已调亮。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.3.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.3.0</h2><p><strong>新功能</strong></p><ul><li><strong>首次启动时先选择要监控的服务商。</strong> 选择完成前，Pulse 不读取任何凭据，也不开始监控。</li><li><strong>代理设置。</strong> 网络可继续跟随 macOS，也可在设置中指定 HTTP、HTTPS 或 SOCKS5 代理，服务商请求、登录和辅助进程都使用同一配置。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>Token 消耗改为明确开启后才读取。</strong> 新安装默认关闭，开启后仅在查看该页面时扫描本机会话。</li><li><strong>八种小机器人配备完整的动作编排。</strong> 日常、工作、刷新、鼠标响应和完成反馈按顺序完整播放。</li><li><strong>修复连续工作动画中小机器人眼睛被裁切的问题。</strong> 眼睛不再在旋转和瞥视时被裁掉一半，Kimi 机器人的蓝色也已调亮。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.3.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.3.0</h2><p><strong>New</strong></p><ul><li><strong>Choose what Pulse may monitor before it starts.</strong> Pulse reads no credentials and starts no monitoring until the first-run choice is saved.</li><li><strong>Proxy settings.</strong> Network traffic can follow macOS or use an HTTP, HTTPS or SOCKS5 proxy set in Settings, for provider requests, sign-ins and helper processes alike.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Token spend is read only after an explicit opt-in.</strong> It is off on new installs, and once on it scans local sessions only while its Settings pane is open.</li><li><strong>Each of the eight bots now has a complete authored choreography.</strong> Everyday, working, fetching, pointer-attention and completion scenes play every beat in order.</li><li><strong>Eyes remain whole through sustained work animation.</strong> Turns and glances no longer clip half an eye, and Kimi&#x27;s bot blue is lighter.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.3.0">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.3.0/Pulse-1.3.0.zip"
                        length="8171124"
                        type="application/octet-stream"
@@ -30,12 +702,24 @@
             <sparkle:shortVersionString>1.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.2.1</link>
-            <description><![CDATA[<style>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
   h2 { font-size: 1.05em; margin: 0 0 .5em; }
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.2.1</h2><p><strong>中文</strong></p><p><strong>修复</strong></p><ul><li><strong>修复 Codex 会让 CPU 空转的问题。</strong> <code>codex app-server</code> 退出后，Pulse 还在读它那根已经关掉的管道。这种管道永远&quot;可读&quot;，所以读取回调会被不停地重复调用——一个核跑满，直到退出 Pulse 为止。而且 helper 每重启一次就多留下一条空转线程。感谢 <a href="https://github.com/qunqin24/Pulse/issues/25">@ethan-ji</a> 把原因、堆栈和条件都查清楚了。</li></ul><p><strong>新功能</strong></p><ul><li><strong>小米 Coding Plan 成为第十九个服务商。</strong> 读取小米 MiMo 控制台上按月购买的 token 额度，有周期结束时间就一并显示，预付余额作为一行金额附在卡片上。凭据是浏览器里已登录的会话，不是 API key——平台发的 key 是买推理用的，控制台的账户接口一个都不认。账号上没有 Coding Plan 时会直说，而不是画一个 0%。</li><li><strong>更新检查改为每两小时一次</strong>，原本是一天一次。仍然只提示，不会自己安装。</li></ul><p><strong>改进</strong></p><ul><li><strong>小机器人现在会看向屏幕里侧。</strong> 胶囊贴在右边时看左边，贴在左边时看右边，拖到另一边会把视线挪过去而不是瞬间跳过去。之前那个偏移量比表情自带的朝向小得多，所以大部分时候还是在盯着屏幕边框。鼠标在面板上时，它优先看鼠标。</li><li><strong>小机器人的眼睛不会再跑出脸外。</strong> 表情自带的朝向、贴边偏移和随机瞥视叠加起来会把眼睛推出轮廓，被裁掉之后看上去像少了一只眼。</li><li><strong>重写设置里小机器人相关的中文文案。</strong> 之前是照着英文直译的。</li></ul><p><strong>English</strong></p><p><strong>Fixed</strong></p><ul><li><strong>Codex no longer spins the CPU.</strong> After <code>codex app-server</code> exits, Pulse went on reading its closed pipe. A pipe in that state is readable for ever, so the read callback was called again and again — one core, flat out, until Pulse was quit — and every restart of the helper left another spinning thread behind. Reported by <a href="https://github.com/qunqin24/Pulse/issues/25">@ethan-ji</a>, with the cause, the stack and the conditions already worked out.</li></ul><p><strong>New</strong></p><ul><li><strong>Xiaomi Coding Plan is the nineteenth provider.</strong> Reads the monthly token allowance bought on Xiaomi&#x27;s MiMo console, with the period&#x27;s end where it reports one, and the prepaid balance as a line on the card. The credential is your signed-in browser session rather than an API key — the platform&#x27;s keys buy inference and answer none of the console&#x27;s account routes. An account with no plan says so instead of drawing 0%.</li><li><strong>Updates are checked every two hours</strong> rather than once a day. Still offered, never installed on their own.</li></ul><p><strong>Changed</strong></p><ul><li><strong>The bot now faces into the screen.</strong> A rail docked right looks left, docked left looks right, and dragging it across sends the eyes over rather than snapping them. The old lean was far smaller than the glance drawn into each expression, so a mark spent much of its time staring at the screen edge. A pointer on the panel outranks all of it.</li><li><strong>The bot&#x27;s eyes stay inside its face.</strong> The expression&#x27;s own glance, the edge lean and the random glances stacked up and pushed an eye past the silhouette, where it was clipped — which read as a mark with one eye.</li><li><strong>Rewrote the Chinese copy for the bot settings</strong>, which had been translated word by word from the English.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.1">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.2.1</h2><p><strong>修复</strong></p><ul><li><strong>修复 Codex 导致 CPU 空转的问题。</strong> <code>codex app-server</code> 退出后，Pulse 不再持续读取已关闭的管道而占满一个 CPU 核心。感谢 <a href="https://github.com/qunqin24/Pulse/issues/25">@ethan-ji</a> 查明了原因、堆栈和触发条件。</li></ul><p><strong>新功能</strong></p><ul><li><strong>小米 Coding Plan 成为第十九个服务商。</strong> Pulse 通过浏览器中已登录的会话，读取小米 MiMo 控制台上按月购买的 token 额度和预付余额。</li><li><strong>更新检查频率改为每两小时一次。</strong> 仍仅提示更新，不会自动安装。</li></ul><p><strong>改进</strong></p><ul><li><strong>小机器人现在朝向屏幕内侧。</strong> 胶囊贴在右侧时看向左侧，贴在左侧时看向右侧，鼠标位于面板上时优先看向鼠标。</li><li><strong>修复小机器人眼睛超出面部轮廓的问题。</strong> 眼睛不再被推出轮廓而被裁切。</li><li><strong>重写设置中小机器人相关的中文文案。</strong> 新文案按中文表达撰写，不再逐字翻译英文。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.2.1</h2><p><strong>修复</strong></p><ul><li><strong>修复 Codex 导致 CPU 空转的问题。</strong> <code>codex app-server</code> 退出后，Pulse 不再持续读取已关闭的管道而占满一个 CPU 核心。感谢 <a href="https://github.com/qunqin24/Pulse/issues/25">@ethan-ji</a> 查明了原因、堆栈和触发条件。</li></ul><p><strong>新功能</strong></p><ul><li><strong>小米 Coding Plan 成为第十九个服务商。</strong> Pulse 通过浏览器中已登录的会话，读取小米 MiMo 控制台上按月购买的 token 额度和预付余额。</li><li><strong>更新检查频率改为每两小时一次。</strong> 仍仅提示更新，不会自动安装。</li></ul><p><strong>改进</strong></p><ul><li><strong>小机器人现在朝向屏幕内侧。</strong> 胶囊贴在右侧时看向左侧，贴在左侧时看向右侧，鼠标位于面板上时优先看向鼠标。</li><li><strong>修复小机器人眼睛超出面部轮廓的问题。</strong> 眼睛不再被推出轮廓而被裁切。</li><li><strong>重写设置中小机器人相关的中文文案。</strong> 新文案按中文表达撰写，不再逐字翻译英文。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.2.1</h2><p><strong>Fixed</strong></p><ul><li><strong>Codex no longer spins the CPU.</strong> After <code>codex app-server</code> exits, Pulse no longer keeps reading its closed pipe and holding one core at full load. Reported by <a href="https://github.com/qunqin24/Pulse/issues/25">@ethan-ji</a>, with the cause, the stack and the conditions already worked out.</li></ul><p><strong>New</strong></p><ul><li><strong>Xiaomi Coding Plan is the nineteenth provider.</strong> Pulse reads the monthly token allowance and prepaid balance on Xiaomi&#x27;s MiMo console through your signed-in browser session.</li><li><strong>Updates are checked every two hours.</strong> They are still offered, never installed on their own.</li></ul><p><strong>Changed</strong></p><ul><li><strong>The bot now faces into the screen.</strong> A rail docked right looks left, docked left looks right, and a pointer on the panel takes precedence.</li><li><strong>The bot&#x27;s eyes stay inside its face.</strong> An eye is no longer pushed past the silhouette and clipped.</li><li><strong>Rewrote the Chinese copy for the bot settings.</strong> The new copy is written in Chinese rather than translated word by word.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.1">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.2.1/Pulse-1.2.1.zip"
                        length="7884036"
                        type="application/octet-stream"
@@ -48,12 +732,24 @@
             <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.2.0</link>
-            <description><![CDATA[<style>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
   h2 { font-size: 1.05em; margin: 0 0 .5em; }
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.2.0</h2><p><strong>中文</strong></p><p><strong>新功能</strong></p><ul><li><strong>动画标记。</strong> 可以把某个账号环里的供应商图标换成一个会动的小机器人，默认关闭，在该账号的设置页里逐个开启。它只说面板已经知道的事：该供应商的 CLI 正在跑、Pulse 正在取新读数、额度已用满、还没有读数、或者什么都没发生。开启动画标记的环不再画白色活动弧——转动的白弧和一个明显在干活的小机器人是同一件事画了两遍。</li><li><strong>人格、形状与颜色。</strong> 八种人格决定它播放哪些动作和节奏，默认自动分配，保证相邻的环是不同的角色；十八种身体形状可选，默认都是圆形；颜色默认取供应商品牌色，没有品牌色的会自动分配一个与邻居区分开的色相，也可以自己指定。三项都按账号设置。</li><li><strong>它会对正在发生的事做出反应。</strong> 眼睛跟随面板上的鼠标，被指着的那个会停下来倾听；干活时在&quot;工作、生成、书写&quot;之间切换，非工作时间干活会一边生气一边干；长时间没有任何 CLI 写入会无聊，深夜则犯困；额度重置时庆祝，一轮活干完时兴奋。重置的判定用的是通知系统同一条规则，与通知是否开启无关。</li><li><strong>关于页加入项目地址。</strong> 同时注明动画标记的移植出处。</li></ul><p><strong>English</strong></p><p><strong>New</strong></p><ul><li><strong>Animated marks.</strong> A ring&#x27;s provider logo can be replaced by a small animated bot. Off by default, switched on per account in that account&#x27;s settings pane. It says only what the panel already knows: that provider&#x27;s CLI is running, Pulse is fetching a reading, the limit is spent, there is no reading yet, or nothing is happening. A ring drawing a mark no longer draws the white activity arc — a travelling arc and a bot that visibly gets to work are one fact drawn twice.</li><li><strong>Personality, shape and colour.</strong> Eight personalities decide which motions a mark plays and at what pace, dealt automatically so the ring beside it is a different character. Eighteen body shapes, round by default. Colour is the provider&#x27;s brand where it has one, otherwise dealt to stand apart from its neighbours&#x27; hues, or chosen outright. All three are per account.</li><li><strong>It reacts to what is happening.</strong> The eyes follow the pointer across the panel, and the ring being pointed at stops to listen. Work alternates between working, generating and writing, with anger added out of hours. A machine that has been quiet for twenty minutes gets bored, and sleepy about it at night. A limit that resets is celebrated; a finished turn gets a cheer. The reset is recognised by the same rule the reset notification uses, whether or not notifications are on.</li><li><strong>The project&#x27;s address in About</strong>, alongside credit for the animated marks&#x27; origin.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.0">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.2.0</h2><p><strong>新功能</strong></p><ul><li><strong>圆环可显示小机器人。</strong> 在账号设置中可将圆环中的服务商图标替换为一个动态小机器人，反映 CLI 运行、读取和额度状态，默认关闭。</li><li><strong>人格、形状与颜色。</strong> 每个账号可分别选择小机器人的人格、身体形状和颜色，共有八种人格和十八种形状。</li><li><strong>小机器人会对状态变化作出反应。</strong> 眼睛跟随鼠标，工作时切换动作，额度重置和一轮工作完成时会庆祝。</li><li><strong>关于页新增项目地址。</strong> 关于页同时注明小机器人动画的移植来源。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.2.0</h2><p><strong>新功能</strong></p><ul><li><strong>圆环可显示小机器人。</strong> 在账号设置中可将圆环中的服务商图标替换为一个动态小机器人，反映 CLI 运行、读取和额度状态，默认关闭。</li><li><strong>人格、形状与颜色。</strong> 每个账号可分别选择小机器人的人格、身体形状和颜色，共有八种人格和十八种形状。</li><li><strong>小机器人会对状态变化作出反应。</strong> 眼睛跟随鼠标，工作时切换动作，额度重置和一轮工作完成时会庆祝。</li><li><strong>关于页新增项目地址。</strong> 关于页同时注明小机器人动画的移植来源。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.0">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.2.0</h2><p><strong>New</strong></p><ul><li><strong>Animated marks.</strong> A ring&#x27;s provider logo can be replaced, per account in its settings, by a small animated bot that shows whether the CLI is running, Pulse is fetching or the limit is spent; off by default.</li><li><strong>Personality, shape and colour.</strong> Each account can choose its mark&#x27;s personality, body shape and colour, from eight personalities and eighteen shapes.</li><li><strong>The bot reacts to what is happening.</strong> The eyes follow the pointer, motions change while work is under way, and resets and finished turns are celebrated.</li><li><strong>The project&#x27;s address in About.</strong> The About pane also credits the project the animated marks were ported from.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.2.0">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.2.0/Pulse-1.2.0.zip"
                        length="7807664"
                        type="application/octet-stream"
@@ -66,12 +762,24 @@
             <sparkle:shortVersionString>1.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.1.2</link>
-            <description><![CDATA[<style>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
   h2 { font-size: 1.05em; margin: 0 0 .5em; }
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.1.2</h2><p><strong>中文</strong></p><p><strong>新功能</strong></p><ul><li><strong>更多 Token 消耗来源。</strong> 新增 Gemini CLI、Cline、Roo Code、OpenClaw、GitHub Copilot 等本地记录读取，并支持 Cursor、Trae 等导出数据。部分来源需要先导出或捕获记录；可读格式及验证范围见<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/token-spend-sources.md">来源说明</a>。</li><li><strong>模型用量详情。</strong> 点击模型可查看输入、输出、缓存读写、每日与每小时消耗，以及各 Agent 的贡献；明细表支持排序和分页。费用按公开 API 价格折算，不是订阅账单。</li><li><strong>图表悬停读数。</strong> 指向历史图表即可查看对应日期或小时的 token 数量，较短的柱形和零用量时段也能选中。</li><li><strong>浮动栏菜单与全局快捷键。</strong> 右键浮动栏即可打开设置；可自行设置快捷键，用于打开设置或显示、隐藏浮动栏。默认不绑定按键。</li><li><strong>繁体中文、日语和韩语。</strong> 界面与 README 新增三种语言，大数缩写使用各语言对应的单位。</li></ul><p><strong>改进与修复</strong></p><ul><li>补全仅由套餐商公布价格的模型计价，修复 Kilo CLI 的价格来源；日汇总、模型详情和会话金额保持一致。</li><li>Antigravity IDE 读取自身的会话存储；Devin 记录不再误标为仅来自 CLI，已匹配的数据库与 Desktop 捕获只统计一次。</li><li>跨天汇总记录只计入所选区间；Command Code 回退对话后仍保留已经发生的消耗，重复记录不会重复计数。</li><li>Token 消耗默认显示最近一周，并记住所选区间；缺失价格、不完整计数和不可用的小时明细会明确标注，旧缓存自动重读。</li><li>修复切换语言后设置侧栏变窄的问题，补充 Agent 图标并更新界面截图。</li></ul><p><strong>English</strong></p><p><strong>New</strong></p><ul><li><strong>More token-spend sources.</strong> Added local-record readers for Gemini CLI, Cline, Roo Code, OpenClaw, GitHub Copilot and more, plus exports from Cursor, Trae and others. Some sources require a prior export or capture. See <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/token-spend-sources.md">sources and validation coverage</a> for supported formats.</li><li><strong>Model usage details.</strong> Open a model to inspect input, output, cache reads and writes, daily and hourly usage, and contributions by agent. Detail tables support sorting and paging. Costs use published API rates and are not a subscription bill.</li><li><strong>Chart hover values.</strong> Point at a history chart to see the token count for a date or hour, including short bars and periods with no usage.</li><li><strong>Rail menu and global shortcuts.</strong> Right-click the floating rail to open Settings. Optional shortcuts open Settings or show and hide the rail; both are unassigned by default.</li><li><strong>Traditional Chinese, Japanese and Korean.</strong> Added three interface and README translations, with large-number abbreviations using each language&#x27;s own units.</li></ul><p><strong>Changed and fixed</strong></p><ul><li>Added pricing for models listed only by their plan vendor and corrected Kilo CLI&#x27;s price source. Day, model and session amounts agree.</li><li>Antigravity IDE reads its own conversation store. Devin records are no longer labelled CLI-only, and matched database sessions and Desktop captures count once.</li><li>Cross-day aggregate records contribute only their in-range usage. Command Code rewinds retain consumption that already occurred, and replayed records are not counted twice.</li><li>Token spend defaults to the last week and remembers the selected span. Missing prices, incomplete counts and unavailable hourly detail are identified; older caches are reread automatically.</li><li>Fixed the Settings sidebar narrowing after a language change, added agent icons and updated screenshots.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.2">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.1.2</h2><p><strong>新功能</strong></p><ul><li><strong>更多 Token 消耗来源。</strong> 新增 Gemini CLI、Cline、Roo Code、OpenClaw、GitHub Copilot 等本地记录，以及 Cursor、Trae 等导出数据，支持的格式见<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/token-spend-sources.md">来源说明</a>。</li><li><strong>模型用量详情。</strong> 点击模型可查看输入、输出、缓存读写、每日与每小时用量，以及各 Agent 的贡献。</li><li><strong>图表悬停读数。</strong> 悬停在历史图表上即可查看对应日期或小时的 token 数量。</li><li><strong>面板右键菜单与全局快捷键。</strong> 右键面板即可打开设置，也可自定义打开设置或显示、隐藏面板的快捷键。</li><li><strong>繁体中文、日语和韩语。</strong> 界面与 README 新增三种语言。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>补全计价。</strong> 仅由套餐商公布价格的模型已补全计价，Kilo CLI 的价格来源也已修正。</li><li><strong>修复来源读取。</strong> Antigravity IDE 读取自身的会话存储，Devin 记录不再误标为仅来自 CLI，已匹配的会话只统计一次。</li><li><strong>修正区间统计。</strong> 跨天汇总记录仅计入所选区间，Command Code 回退对话后仍保留已发生的消耗。</li><li><strong>优化默认区间。</strong> Token 消耗默认显示最近一周，并记住所选区间。</li><li><strong>修复切换语言后设置侧栏变窄的问题。</strong> 同时补充了 Agent 图标并更新了界面截图。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.1.2</h2><p><strong>新功能</strong></p><ul><li><strong>更多 Token 消耗来源。</strong> 新增 Gemini CLI、Cline、Roo Code、OpenClaw、GitHub Copilot 等本地记录，以及 Cursor、Trae 等导出数据，支持的格式见<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/token-spend-sources.md">来源说明</a>。</li><li><strong>模型用量详情。</strong> 点击模型可查看输入、输出、缓存读写、每日与每小时用量，以及各 Agent 的贡献。</li><li><strong>图表悬停读数。</strong> 悬停在历史图表上即可查看对应日期或小时的 token 数量。</li><li><strong>面板右键菜单与全局快捷键。</strong> 右键面板即可打开设置，也可自定义打开设置或显示、隐藏面板的快捷键。</li><li><strong>繁体中文、日语和韩语。</strong> 界面与 README 新增三种语言。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>补全计价。</strong> 仅由套餐商公布价格的模型已补全计价，Kilo CLI 的价格来源也已修正。</li><li><strong>修复来源读取。</strong> Antigravity IDE 读取自身的会话存储，Devin 记录不再误标为仅来自 CLI，已匹配的会话只统计一次。</li><li><strong>修正区间统计。</strong> 跨天汇总记录仅计入所选区间，Command Code 回退对话后仍保留已发生的消耗。</li><li><strong>优化默认区间。</strong> Token 消耗默认显示最近一周，并记住所选区间。</li><li><strong>修复切换语言后设置侧栏变窄的问题。</strong> 同时补充了 Agent 图标并更新了界面截图。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.2">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.1.2</h2><p><strong>New</strong></p><ul><li><strong>More token-spend sources.</strong> Local records from Gemini CLI, Cline, Roo Code, OpenClaw, GitHub Copilot and more, plus exports from Cursor, Trae and others, are now read; see <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/token-spend-sources.md">sources and validation coverage</a> for supported formats.</li><li><strong>Model usage details.</strong> Open a model to see input, output, cache reads and writes, daily and hourly usage, and each agent&#x27;s contribution.</li><li><strong>Chart hover values.</strong> Point at a history chart to see the token count for a date or hour.</li><li><strong>Rail menu and global shortcuts.</strong> Right-click the floating rail to open Settings, or set shortcuts that open Settings or show and hide the rail.</li><li><strong>Traditional Chinese, Japanese and Korean.</strong> The interface and README are now available in three more languages.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>More complete pricing.</strong> Models priced only by their plan vendor now have prices, and Kilo CLI&#x27;s price source is corrected.</li><li><strong>Source reading fixes.</strong> Antigravity IDE reads its own conversation store, Devin records are no longer labelled CLI-only, and matched sessions count once.</li><li><strong>Correct span totals.</strong> Cross-day aggregate records count only their in-range usage, and Command Code rewinds keep consumption that already occurred.</li><li><strong>A better default span.</strong> Token spend defaults to the last week and remembers the span you choose.</li><li><strong>The Settings sidebar no longer narrows after a language change.</strong> Agent icons were also added and screenshots updated.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.2">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.1.2/Pulse-1.1.2.zip"
                        length="7405119"
                        type="application/octet-stream"
@@ -84,42 +792,24 @@
             <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.1.1</link>
-            <description><![CDATA[<style>
+            <description xml:lang="zh-Hans"><![CDATA[<style>
   h2 { font-size: 1.05em; margin: 0 0 .5em; }
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style>
-<h2>Pulse 1.1.1</h2>
-<p><strong>中文</strong></p>
-<p><strong>新功能</strong></p>
-<ul><li><strong>Devin 成为第十八个服务商。</strong> 从 Chromium 浏览器会话读取每日、每周额度，无需钥匙串授权；无登录凭据时读取应用保存的带日期套餐。不同账户和组织的读数保持隔离。</li>
-<li><strong>Token 消耗统计。</strong> 汇总 Claude Code、Codex、OpenCode、Kilo CLI、Grok Build、Kimi CLI 和 Devin CLI 的本机会话，按区间、Agent、模型、项目、会话和 token 类型查看。费用按公开 API 价格折算，不是订阅账单。</li>
-<li><strong>开发者集成。</strong> 在设置中导出 Raycast 扩展及 tmux、sketchybar、终端脚本；<code>Pulse --json</code> 增加读数来源和账户设置链接。集成仅读取缓存。<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/integrations.md">配置指南</a>。</li>
-<li><strong>连接诊断。</strong> 查看最近检查、读数来源、缓存和回退结果，按原因修复连接；额外账户可原位重新登录。可复制不含账户详情或凭据的诊断信息。</li>
-<li><strong>变红阈值可调。</strong> 可选 60%–90%，默认 75%；圆环、详情条和收起的胶囊保持一致，已耗尽状态仍优先。</li>
-</ul>
-<p><strong>改进与修复</strong></p>
-<ul><li>Claude Code 的 warning 不再被误判为额度耗尽；登录码、取消按钮和错误信息归属正确的服务商页面，切换页面不再串写凭据。</li>
-<li>修复详情卡片展开、收起时沿胶囊漂移的问题。</li>
-<li>跨天会话只计入所选区间；修正日志与数据库缓存更新、模型别名计价和自定义会话标题读取。</li>
-<li>Devin 旧快照按实际时间标注，过期窗口和超龄快照不再显示；额度变化纳入自适应刷新，异常浏览器存储长度不再导致崩溃。</li>
-</ul>
-<p><strong>English</strong></p>
-<p><strong>New</strong></p>
-<ul><li><strong>Devin is the eighteenth provider.</strong> Read daily and weekly quota from your Chromium browser session without a keychain prompt. With no credential, Pulse reads the app&#x27;s dated saved plan. Account and organization boundaries are preserved.</li>
-<li><strong>Token spend.</strong> Bring together local sessions from Claude Code, Codex, OpenCode, Kilo CLI, Grok Build, Kimi CLI and Devin CLI, grouped by span, agent, model, project, session and token kind. Costs use published API rates and are not a subscription bill.</li>
-<li><strong>Developer integrations.</strong> Export a Raycast extension and tmux, sketchybar and shell scripts from Settings. <code>Pulse --json</code> now includes reading sources and account links; integrations only read the cache. <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/integrations.md">Setup guide</a>.</li>
-<li><strong>Connection diagnostics.</strong> Inspect checks, sources, cache use and fallback outcomes, with relevant repair actions and in-place reauthentication for added accounts. Copied diagnostics omit account details and credentials.</li>
-<li><strong>Configurable warning colour.</strong> Choose where rings turn red, from 60% to 90% (default 75%). Rings, detail bars and the collapsed rail agree; exhausted limits still take precedence.</li>
-</ul>
-<p><strong>Changed and fixed</strong></p>
-<ul><li>Claude Code warnings no longer mean exhausted. Device codes, Cancel and errors stay with their provider; switching panes no longer lets login completion overwrite another provider&#x27;s credential field.</li>
-<li>Fixed detail cards drifting along the rail as they open and close.</li>
-<li>Cross-midnight sessions count only their in-range work. Corrected log and database cache updates, model aliases and custom session titles.</li>
-<li>Devin snapshots retain their actual age; expired windows and over-age snapshots disappear. Quota changes participate in adaptive refresh, and malformed browser-storage lengths no longer crash Pulse.</li>
-</ul>
-<p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.1">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.1.1</h2><p><strong>新功能</strong></p><ul><li><strong>Devin 成为第十八个服务商。</strong> Pulse 从 Chromium 浏览器会话读取每日和每周额度，无需钥匙串授权。</li><li><strong>Token 消耗统计。</strong> 汇总 Claude Code、Codex、OpenCode、Kilo CLI、Grok Build、Kimi CLI 和 Devin CLI 的本机会话，可按区间、Agent、模型、项目、会话和 token 类型查看。</li><li><strong>开发者集成。</strong> 在设置中可导出 Raycast 扩展及 tmux、sketchybar、终端脚本，详见<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/integrations.md">配置指南</a>。</li><li><strong>连接诊断。</strong> 在设置中可查看最近的检查、读数来源和缓存，并复制不含账号详情或凭据的诊断信息。</li><li><strong>变红阈值可调。</strong> 在「变红阈值」中可选 60%–90%，默认 75%。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复额度误报与凭据串写。</strong> Claude Code 的 warning 不再被误判为额度耗尽，切换页面也不再覆盖另一服务商的凭据。</li><li><strong>修复详情卡片展开、收起时沿胶囊漂移的问题。</strong> 详情卡片在展开和收起时保持在原位。</li><li><strong>修正区间与缓存。</strong> 跨天会话仅计入所选区间，日志与数据库缓存更新、模型别名计价和自定义会话标题的读取也已修正。</li><li><strong>修复 Devin 快照问题。</strong> 旧快照按实际时间标注，过期窗口和超龄快照不再显示。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="zh-Hant"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.1.1</h2><p><strong>新功能</strong></p><ul><li><strong>Devin 成为第十八个服务商。</strong> Pulse 从 Chromium 浏览器会话读取每日和每周额度，无需钥匙串授权。</li><li><strong>Token 消耗统计。</strong> 汇总 Claude Code、Codex、OpenCode、Kilo CLI、Grok Build、Kimi CLI 和 Devin CLI 的本机会话，可按区间、Agent、模型、项目、会话和 token 类型查看。</li><li><strong>开发者集成。</strong> 在设置中可导出 Raycast 扩展及 tmux、sketchybar、终端脚本，详见<a href="https://github.com/qunqin24/Pulse/blob/main/Docs/integrations.md">配置指南</a>。</li><li><strong>连接诊断。</strong> 在设置中可查看最近的检查、读数来源和缓存，并复制不含账号详情或凭据的诊断信息。</li><li><strong>变红阈值可调。</strong> 在「变红阈值」中可选 60%–90%，默认 75%。</li></ul><p><strong>改进与修复</strong></p><ul><li><strong>修复额度误报与凭据串写。</strong> Claude Code 的 warning 不再被误判为额度耗尽，切换页面也不再覆盖另一服务商的凭据。</li><li><strong>修复详情卡片展开、收起时沿胶囊漂移的问题。</strong> 详情卡片在展开和收起时保持在原位。</li><li><strong>修正区间与缓存。</strong> 跨天会话仅计入所选区间，日志与数据库缓存更新、模型别名计价和自定义会话标题的读取也已修正。</li><li><strong>修复 Devin 快照问题。</strong> 旧快照按实际时间标注，过期窗口和超龄快照不再显示。</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.1">在 GitHub 上查看更新说明</a></p>]]></description>
+            <description xml:lang="en"><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.1.1</h2><p><strong>New</strong></p><ul><li><strong>Devin is the eighteenth provider.</strong> Pulse reads daily and weekly quota from your Chromium browser session without a keychain prompt.</li><li><strong>Token spend.</strong> Local sessions from Claude Code, Codex, OpenCode, Kilo CLI, Grok Build, Kimi CLI and Devin CLI are brought together by span, agent, model, project, session and token kind.</li><li><strong>Developer integrations.</strong> Export a Raycast extension and tmux, sketchybar and shell scripts from Settings; see the <a href="https://github.com/qunqin24/Pulse/blob/main/Docs/integrations.md">setup guide</a>.</li><li><strong>Connection diagnostics.</strong> Settings shows recent checks, sources and cache use, and copies diagnostics without account details or credentials.</li><li><strong>Configurable warning colour.</strong> Choose where rings turn red under Turn red at, from 60% to 90%, with 75% as the default.</li></ul><p><strong>Changed and fixed</strong></p><ul><li><strong>Fewer false alarms and crossed credentials.</strong> Claude Code warnings no longer read as exhausted, and switching panes no longer overwrites another provider&#x27;s credential.</li><li><strong>Detail cards stay in place.</strong> Detail cards no longer drift along the rail as they open and close.</li><li><strong>Correct spans and caches.</strong> Cross-midnight sessions count only their in-range work, and log and database cache updates, model aliases and custom session titles are corrected.</li><li><strong>Devin snapshot fixes.</strong> Snapshots show their actual age, and expired windows and over-age snapshots are no longer shown.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.1">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.1.1/Pulse-1.1.1.zip"
                        length="6030495"
                        type="application/octet-stream"
@@ -137,7 +827,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.1.0</h2><ul><li><strong>A large balance no longer overflows the ring.</strong> The rail shows ¥5k, ¥123k, $1.2M rather than the full figure, which did not fit and was being cut off — the exact balance is on the card and in Settings. It is always rounded <strong>down</strong>, so the ring never claims you have more than you do.</li><li><strong>The rail no longer sits slightly too low until you touch something.</strong> On most displays the panel is taller than the space macOS will grant it, and Pulse works out where to draw the rail from the position the window actually got. It was asking that question a moment too early — before the window was on screen, when the answer was still the position it had <strong>requested</strong> — so the rail was drawn about 76pt below where it belonged, and then jumped into place the first time any setting changed.</li><li><strong>API balances are checked more often.</strong> Pulse paces itself by watching this Mac — an agent writing to its transcripts, a figure that moved, you glancing at the rail — which is why it can be quick when you are working and quiet when you are not. But money spent through an API leaves no trace here, so DeepSeek and Command Code were always being left the full half hour: it waited because nothing had changed, and nothing appeared to change because it waited. Those two are now checked at least every five minutes. Everything else is unaffected, a Mac in low power or with the panel hidden still goes quiet, and a fixed interval you chose yourself still means what it says.</li><li><strong>The provider list starts in alphabetical order.</strong> It was in the order providers had been added over the months, which meant nothing to anyone reading it. If you have arranged the rail yourself, your arrangement is untouched.</li><li><strong>Tell me when the credit runs low.</strong> Providers that sell prepaid credit — DeepSeek and Command Code — get a <strong>Warn below</strong> figure in their own settings, and Pulse says so once when the balance falls under it. Money rather than a percentage, because these two report no allowance to take a percentage of; per provider rather than one figure, because ¥20 and $20 are not the same line. Off until you set one, like every other notification here. It is said once and not again until you top up — or until you move the line, which is a new question and gets a new answer.</li><li><strong>Notifications about a prepaid balance say less, and say it correctly.</strong> Credit that is bought does not reset and cannot be declared spent by arithmetic, so changing what the ring measures against no longer announces a reset, and a balance reaching 100% of a figure <strong>you</strong> set no longer claims the provider says you are out. Only the provider saying so does that.</li><li><strong>DeepSeek is the seventeenth provider</strong>, and the first one Pulse carries that reports no allowance at all — <code>GET /user/balance</code> says how much prepaid credit is left and nothing else. There is no quota, no window and no spend history to read, so the ring needs a denominator from somewhere and you choose which in DeepSeek&#x27;s settings. <strong>Since top-up</strong> is the default and needs nothing from you: Pulse remembers the highest balance it has watched, and a balance that goes up can only be a top-up, so the ring starts again from full when you add credit. <strong>Balance only</strong> draws no ring at all and puts the money itself on the rail. <strong>My budget</strong> measures against a figure you type. The first two days on &quot;since top-up&quot; will read low — Pulse can only measure from the moment it started watching, and the card says which date that is.</li><li><strong>智谱&#x27;s row is now called &quot;Zhipu&quot;.</strong> The rail and the settings list are otherwise all Latin script, and one row in Chinese characters read as a different kind of thing rather than as another shop. The company, the storefront and the key it takes are unchanged — this is the name on the row, nothing else. Its sibling stays <strong>z.ai</strong>, which is that company&#x27;s own spelling.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.0">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.1.0</h2><ul><li><strong>A large balance no longer overflows the ring.</strong> The rail shows ¥5k, ¥123k or $1.2M, always rounded down, with the exact balance on the card and in Settings.</li><li><strong>The rail no longer sits slightly too low until you touch something.</strong> The rail is drawn in the right place from launch instead of about 76pt too low.</li><li><strong>API balances are checked more often.</strong> DeepSeek and Command Code are now checked at least every five minutes.</li><li><strong>The provider list starts in alphabetical order.</strong> A rail you have arranged yourself keeps your order.</li><li><strong>Tell me when the credit runs low.</strong> Set Warn below in DeepSeek&#x27;s or Command Code&#x27;s settings, and Pulse notifies you once when the balance falls under it.</li><li><strong>Notifications about a prepaid balance say less, and say it correctly.</strong> Changing what the ring measures no longer announces a reset, and only the provider can declare a balance spent.</li><li><strong>DeepSeek is the seventeenth provider.</strong> Its ring measures the balance Since top-up, shows the Balance only, or measures against My budget, chosen in DeepSeek&#x27;s settings.</li><li><strong>智谱&#x27;s row is now called &quot;Zhipu&quot;.</strong> Only the row&#x27;s name has changed; the company, the storefront and the key it takes are the same.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.1.0">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.1.0/Pulse-1.1.0.zip"
                        length="4906055"
                        type="application/octet-stream"
@@ -155,7 +845,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.0.9</h2><ul><li><strong>Command Code is the sixteenth provider.</strong> It bills a credit balance in dollars rather than a token allowance, so the rings are money: the rolling 5-hour and weekly limits, your organisation&#x27;s spend limits, and how much of this month&#x27;s plan is gone. That last one is marked <strong>estimated</strong> on the card, and it is the one thing here Pulse has to infer — Command Code reports what is <strong>left</strong> of a plan&#x27;s monthly credit but never what the plan grants, which is published on its pricing page instead. A plan Pulse cannot size shows no monthly row at all rather than a reassuring zero. Sign in by pasting a key, or let Pulse borrow the one <code>cmd auth login</code> already saved.</li><li><strong>The panel can follow you between displays.</strong> Switch on &quot;Follow the active display&quot; and the rail moves to whichever screen your pointer is on, keeping the same corner and the same distance down it. There is still only one rail — it is carried across, not copied onto every monitor — and it stays where you last dragged it if you leave the setting off, which is how it ships. &quot;Active&quot; means the display the pointer is on and nothing else: it does not chase other apps&#x27; windows around, and it asks for no extra permission to work out where you are.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.9">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.0.9</h2><ul><li><strong>Command Code is the sixteenth provider.</strong> Its rings show the five-hour and weekly limits, your organisation&#x27;s spend limits and an estimate of this month&#x27;s plan, signed in with a pasted key or the one <code>cmd auth login</code> saved.</li><li><strong>The panel can follow you between displays.</strong> Turn on Follow the active display and the rail moves to the screen your pointer is on, keeping the same corner and distance.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.9">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.9/Pulse-1.0.9.zip"
                        length="4761279"
                        type="application/octet-stream"
@@ -173,7 +863,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.0.8</h2><ul><li><strong>The interface follows your Mac&#x27;s language.</strong> Pulse now declares that it speaks Chinese, which it always did — the translations shipped, macOS just was not told they existed, so a Mac set to 简体中文 got an English app. If that was you, this update switches over on its own; if you preferred it in English, Settings › Language still overrides. The Chinese copy has been rewritten throughout while we were in there.</li><li><strong>Antigravity can show its two allowances as two rings.</strong> The plan carries one budget for Gemini and a separate one for Claude and GPT, and until now a single ring could only follow whichever was busier — the other went unmentioned unless you hovered. Switch on &quot;A ring for each model group&quot; in Antigravity&#x27;s settings and each gets its own ring, both under the Antigravity icon, both refreshing the one login. Off by default: an extra ring takes room on the rail, and most people want the one number.</li><li><strong>智谱 and z.ai get a usage history</strong>, read from the same statistics the console draws its own charts from. Unlike the history Pulse builds for Claude Code and Codex — which it works out by reading session files on this Mac — this one comes from the account, so it covers every machine you use it on. It counts tokens only: the figures behind it cannot be turned into money, and the card says so rather than printing a confident zero.</li><li><strong>A second limit on the ring.</strong> A thinner ring inside the first shows the next-fullest limit *of the same kind* — the 5-hour beside the weekly it belongs with — so both are readable without hovering. Where a provider splits its allowance by model, the two arcs come from the same allowance wherever it has a second limit to show: pairing one model&#x27;s weekly with another&#x27;s 5-hour would put two unrelated budgets on one mark. Off by default and switched on in Settings; the ring is the thing you read without stopping, and two arcs is twice as much to take in. Where a provider reports only one limit nothing is added.</li><li><strong>The panel no longer slides out from under you as you pick it up.</strong> On a display where the panel is taller than the space under the menu bar — which is most laptops — macOS quietly refuses the position Pulse asks for, and Pulse was then drawing the rail relative to a position the window never had. It jumped about one ring&#x27;s worth on the first frame of a drag. It tracks the pointer exactly now.</li><li><strong>The two GLM Coding Plan rows are now named for the shops</strong> — <strong>z.ai</strong> and <strong>智谱</strong>. They were &quot;Z.ai&quot; and &quot;GLM Coding Plan&quot;, which was a trap: both shops sell the plan under that same name, so anyone on the international plan picked the row named after their product and had their key sent to the mainland service, which of course refused it.</li><li><strong>A refused key now says the key was refused.</strong> These services answer with an ordinary HTTP 200 and put the verdict inside, and Pulse only recognised the English wording and two of the numbers — so the most common mistake of all, a key from the other one of the two shops, came out as &quot;the service returned an error&quot; and sent people looking for an outage that was not happening.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.8">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.0.8</h2><ul><li><strong>The interface follows your Mac&#x27;s language.</strong> A Mac set to Chinese now gets Pulse in Chinese, and Settings › Language still overrides it.</li><li><strong>Antigravity can show its two allowances as two rings.</strong> Turn on A ring for each model group in Antigravity&#x27;s settings to give the Gemini and the Claude-and-GPT allowances a ring each.</li><li><strong>智谱 and z.ai get a usage history.</strong> The token history comes from the account&#x27;s own statistics, so it covers every machine you use.</li><li><strong>A second limit on the ring.</strong> Turn on Second limit inside the ring in Settings to show the next-fullest limit of the same kind as a thinner inner ring.</li><li><strong>The panel no longer slides out from under you as you pick it up.</strong> The rail now tracks the pointer exactly from the first frame of a drag.</li><li><strong>The two GLM Coding Plan rows are now named for the shops.</strong> They are called <strong>z.ai</strong> and <strong>智谱</strong>, so each key goes to the service that issued it.</li><li><strong>A refused key now says the key was refused.</strong> A key from the other one of the two shops is reported as refused rather than as a service error.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.8">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.8/Pulse-1.0.8.zip"
                        length="4627397"
                        type="application/octet-stream"
@@ -191,7 +881,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.0.7</h2><ul><li><strong>Pulse can tell you, instead of waiting to be looked at.</strong> Three switches in Settings, all off until you turn them on. <strong>Warn at</strong> posts a notification when a limit passes 75, 80, 90 or 95% — whichever you pick — and again when the provider says it is spent. <strong>When a limit comes back</strong> says so once the window you were warned about has turned over, which is the moment you can start again. <strong>When a reading stops arriving</strong> is the one that is about Pulse rather than about usage: a failed check falls back to the last good figures, which is the right thing to show and also the reason the fault is invisible — the panel goes on displaying perfectly plausible numbers with only a &quot;last read&quot; time to give it away. It waits for three failures in a row and then says it once, with the same sentence the card would have shown you.</li><li><strong>It says each thing once.</strong> A limit already past the line when you switch this on is mentioned straight away — silence followed by a wall is not restraint — and then never again until it resets or gets worse. &quot;Spent&quot; is the provider&#x27;s own word, never a rounding of ours. A reset is announced only on unambiguous evidence, so a rolling weekly allowance sliding down a few points is not mistaken for a window turning over. And a provider you have never set up, or an app that simply is not running, is not a failure to be reminded of on a timer.</li><li><strong>Antigravity reads from the IDE too</strong>, not only the desktop app. If Antigravity IDE is the one you have open, its ring said “Open Antigravity to see its usage” while the figures were sitting there for the asking. Both report the same thing — the Gemini and the Claude-and-GPT group, weekly and five-hour each.</li><li><strong>Antigravity could pick the wrong helper and give up.</strong> It runs more than one of these, only one of them answers, and Pulse asked the first it found and stopped.</li><li><strong>Reorder the rail by dragging.</strong> The arrows are still there — they are the precise way to move one place, and the only way that works from the keyboard — but with fifteen providers, moving the bottom one to the top was fourteen clicks. There is a Reset order button under the list for when a drag goes somewhere you didn&#x27;t mean.</li><li><strong>Volcengine</strong>, bringing it to fifteen. The Ark Coding Plan and Agent Plan, personal and team, each with its five-hour, weekly and monthly windows. Two ways in: <code>arkcli</code>, using the login it already saved so there is nothing to paste, or a Volcengine access key pair for anyone who has keys but doesn&#x27;t run the CLI here. With both set up it prefers the keys — the CLI carries a sign-in that can belong to a different account, and quietly showing the wrong account&#x27;s limits is worse than either answer.</li><li><strong><code>Pulse --json</code></strong>, so the figures can go somewhere other than the panel — a tmux status line, sketchybar, Raycast, a shell prompt. It prints what the app last read rather than fetching, so polling it every second costs nothing and asks no provider anything; every account says when its figures were taken and how old they are. Nothing in the output is translated, so a script parsing it does not break when you change the interface language.</li><li><strong>Settings has a search field</strong>, since the sidebar now lists fifteen providers plus whatever accounts you have added. It matches the provider&#x27;s name as well as your own label, so a second Claude subscription you called &quot;work&quot; is still found by typing Claude.</li><li><strong>The Settings window opens bigger.</strong> It was sized when the sidebar held four rows and had got to the point of appearing already scrolled in both columns.</li><li>Notifications come with the standard notification sound. Silence them, or change anything else about how they arrive, in System Settings › Notifications › Pulse — the same place as every other app.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.7">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.0.7</h2><ul><li><strong>Pulse can tell you, instead of waiting to be looked at.</strong> Three notifications in Settings, Warn at, When a limit comes back and When a reading stops arriving, stay off until you turn them on.</li><li><strong>Each thing is said once.</strong> A limit already past the line is announced once when the setting goes on, and again only after it resets or gets worse.</li><li><strong>Antigravity reads from the IDE too.</strong> Antigravity IDE now shows the same Gemini and Claude-and-GPT limits as the desktop app.</li><li><strong>Antigravity no longer stops at the wrong helper.</strong> Pulse asks each of Antigravity&#x27;s helpers until one answers.</li><li><strong>Reorder the rail by dragging.</strong> Drag providers in Settings to reorder them, with Reset order under the list.</li><li><strong>Volcengine is the fifteenth provider.</strong> Its Ark Coding Plan and Agent Plan are read through <code>arkcli</code> or a Volcengine access key pair.</li><li><strong>Usage as JSON with <code>Pulse --json</code>.</strong> The command prints the figures the app last read, without fetching, for a tmux status line, sketchybar, Raycast or a shell prompt.</li><li><strong>Settings has a search field.</strong> The field matches provider names and your own account labels.</li><li><strong>The Settings window opens bigger.</strong> The window now fits its sidebar without opening already scrolled.</li><li><strong>Notifications use the standard sound.</strong> Change how they arrive in System Settings › Notifications › Pulse.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.7">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.7/Pulse-1.0.7.zip"
                        length="4529714"
                        type="application/octet-stream"
@@ -209,7 +899,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.0.6</h2><ul><li><strong>Grok</strong>, read from the login Grok Build&#x27;s CLI already stores — nothing to paste. One thing worth knowing before the ring confuses you: since June 2026 a paid Grok plan spends <strong>one weekly pool across every Grok product</strong> — the web chat, Imagine, voice, the API and the CLI alike — so this is what the account has spent this week, not what the CLI has. That is why it is called Grok rather than Grok Build.</li><li><strong>Grok Bot</strong>, which is a different limit despite the name. It comes with a Cursor plan rather than a SuperGrok one, so it is read with the login the Cursor editor already stores and carries the xAI mark to tell the two apart on the rail. It appears by itself only if the standalone app is installed; otherwise switch it on in Settings.</li><li><strong>A second account of either.</strong> Grok signs in with a device code, Grok Bot through Cursor&#x27;s own sign-in page. Both ask for the narrowest access that can read a limit — never for permission to read or write your conversations.</li><li>A card could print a window length the provider never reported. Some limits carry a length that only exists to sort the rows — a rolling week, a billing cycle — and when there was no reset time to show, that length was printed as though it were one.</li><li>A provider with a single route named the wrong one in Settings. Every such provider but Cursor was described as &quot;Antigravity&#x27;s language server&quot;, about an app it had nothing to do with.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.6">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.0.6</h2><ul><li><strong>Grok joins the providers.</strong> Pulse reads the weekly pool shared by every Grok product from the login Grok Build&#x27;s CLI already stores.</li><li><strong>Grok Bot joins the providers.</strong> Its limit comes with a Cursor plan and is read with the login the Cursor editor already stores.</li><li><strong>A second Grok or Grok Bot account.</strong> Grok signs in with a device code and Grok Bot through Cursor&#x27;s sign-in page, each asking only for access to read a limit.</li><li><strong>Cards no longer show a window length the provider never reported.</strong> A length used only to sort the rows is no longer printed when there is no reset time.</li><li><strong>Single-route providers name the right route in Settings.</strong> They are no longer described as &quot;Antigravity&#x27;s language server&quot;.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.6">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.6/Pulse-1.0.6.zip"
                        length="4201483"
                        type="application/octet-stream"
@@ -227,7 +917,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.0.5</h2><ul><li><strong>Claude Code read through the Claude desktop app.</strong> If you work in the desktop app rather than a terminal, Pulse had no way to see your limits: the desktop app hands the CLI a token through its own environment and renews it itself, so the login Pulse was reading went stale and never came back, and it never renders a status line either. Pulse can now read the session the desktop app is signed in with — a new &quot;Desktop app&quot; choice under Read usage from, and the route <code>Automatic</code> falls back to once you have allowed it. It asks for the keychain once, at launch, so there is nothing to go and find in Settings.</li><li><strong>The new route says why it can&#x27;t answer</strong>, rather than leaving the last reading in place with nothing but its &quot;Last read&quot; time to give it away — which is what makes a refresh look as though it did nothing. It says whether the desktop app is signed out, or whether it was the keychain that was refused.</li><li><strong>A reading could go backwards.</strong> A newer figure already on file could be replaced on screen by an older one that had just arrived, and a refresh that had been given up on could still overwrite the one that replaced it — including, for an added account, the renewed login itself.</li><li><strong>GitHub Copilot no longer shows a red ring for paid overage.</strong> Going past the included allowance with overage permitted is not being blocked, and it was being drawn as though it were.</li><li><strong>Codex no longer marks the wrong model group as spent.</strong> A group reporting &quot;limit reached&quot; could put the mark on another group&#x27;s window entirely.</li><li>Removing your only added account no longer leaves the rail empty.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.5">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.0.5</h2><ul><li><strong>Claude Code read through the Claude desktop app.</strong> Choose Desktop app under Read usage from, or let <code>Automatic</code> fall back to it, to read your limits from the session the desktop app is signed in with.</li><li><strong>The new route says why it can&#x27;t answer.</strong> The card says whether the desktop app is signed out or the keychain was refused.</li><li><strong>A reading no longer goes backwards.</strong> A newer figure is no longer replaced by an older one that arrives late.</li><li><strong>GitHub Copilot no longer shows a red ring for paid overage.</strong> Going past the included allowance with overage permitted is no longer drawn as blocked.</li><li><strong>Codex no longer marks the wrong model group as spent.</strong> A group reporting &quot;limit reached&quot; marks only its own window.</li><li><strong>Removing your only added account no longer empties the rail.</strong> The rail goes on showing the providers that remain.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.5">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.5/Pulse-1.0.5.zip"
                        length="4096991"
                        type="application/octet-stream"
@@ -245,7 +935,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.0.4</h2><ul><li><strong>GitHub Copilot</strong>, bringing it to twelve. Signs in with a device code, so there is no token to paste — Pulse asks GitHub for permission to read your profile and nothing else, and never for access to your repositories. Shows the completions, chat and premium-request allowances your plan actually has.</li><li><strong>Whether a limit will last.</strong> A switch in Settings puts one line under each limit on the card: whether it is on course to outlast its window, and roughly when it runs out if it isn&#x27;t. Off by default, and it stays quiet when the figures can&#x27;t carry it — the time only appears when it falls before the reset, and it is rounded, because usage comes in bursts and a figure to the minute would be made up.</li><li><strong>Show what&#x27;s left instead of what&#x27;s spent.</strong> Another switch, which turns the figure and the ring over together so a limit reads &quot;88% left&quot; rather than &quot;12% used&quot;. The colour still means how close you are, so a nearly empty ring is still red.</li><li><strong>Claude Code&#x27;s card names the plan</strong> — &quot;Max 5x&quot;, &quot;Pro&quot;, &quot;Team&quot; — as every other provider&#x27;s already did. The multiplier is part of it, since a Max 5x and a Max 20x are different products.</li><li><strong>The panel could quietly stop refreshing</strong> after running a long time, and only come back when you next started Claude Code in a terminal. It notices when its own readings have gone stale and asks again, recovers from a fetch that never returned, and refreshes when the Mac wakes as well as when the display does.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.4">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.0.4</h2><ul><li><strong>GitHub Copilot is the twelfth provider.</strong> It signs in with a device code that asks only to read your profile, and shows your plan&#x27;s completions, chat and premium-request allowances.</li><li><strong>Whether a limit will last.</strong> A switch in Settings adds a line under each limit on the card saying whether it will outlast its window.</li><li><strong>Show what&#x27;s left instead of what&#x27;s spent.</strong> Turn on Show what&#x27;s left to read a limit as &quot;88% left&quot; rather than &quot;12% used&quot;.</li><li><strong>Claude Code&#x27;s card names the plan.</strong> The card shows &quot;Max 5x&quot;, &quot;Pro&quot; or &quot;Team&quot;, as other providers&#x27; cards already did.</li><li><strong>The panel no longer stops refreshing after running a long time.</strong> Pulse notices stale readings, recovers from a fetch that never returned, and refreshes when the Mac wakes.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.4">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.4/Pulse-1.0.4.zip"
                        length="4034080"
                        type="application/octet-stream"
@@ -263,7 +953,7 @@
   ul { margin: 0; padding-left: 1.2em; }
   li { margin: .3em 0; }
   p { margin: .8em 0 0; }
-</style><h2>Pulse 1.0.3</h2><ul><li><strong>The panel can go on a second display.</strong> Drag it across; it remembers which screen you left it on, and comes home if that screen is unplugged.</li><li><strong>Four more providers</strong>: the GLM Coding Plan and MiniMax, each with a separate entry for the international and the mainland service, since they are separate accounts with separate keys.</li><li><strong>A second arc can show how far through the window the clock is</strong>, so &quot;80% used&quot; can be read against how much of the window is left. Off by default, in Settings.</li><li><strong>The figure can sit above the ring</strong> instead of below it. Also in Settings.</li><li>A provider that needs an API key is no longer switched on by itself — it waits in Settings rather than taking a place on the rail to ask for a key.</li><li>One that has no key says so, instead of saying &quot;Reading…&quot; for ever.</li><li>Claude Code no longer shows a limit that has already reset. If its saved login has expired and no session has run for a while, the stale window is dropped rather than shown with an old reset time.</li><li>The update window now shows the release notes itself, rather than loading the GitHub page inside it.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.3">Release notes on GitHub</a></p>]]></description>
+</style><h2>Pulse 1.0.3</h2><ul><li><strong>The panel can go on a second display.</strong> Drag the panel across, and Pulse remembers the screen and brings the panel home if that screen is unplugged.</li><li><strong>Four more providers.</strong> The GLM Coding Plan and MiniMax are added, each with separate international and mainland entries.</li><li><strong>A second arc can show how far through the window the clock is.</strong> Turn it on in Settings to read &quot;80% used&quot; against how much of the window is left.</li><li><strong>The figure can sit above the ring.</strong> Turn on Figure above the ring in Settings.</li><li><strong>Providers that need an API key wait in Settings.</strong> They are no longer switched on by themselves to ask for a key on the rail.</li><li><strong>A provider without a key says so.</strong> It no longer shows &quot;Reading…&quot; for ever.</li><li><strong>Claude Code no longer shows a limit that has already reset.</strong> A stale window from an expired login is dropped rather than shown with an old reset time.</li><li><strong>The update window shows the release notes itself.</strong> It no longer loads the GitHub page inside the window.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.3">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.3/Pulse-1.0.3.zip"
                        length="3925162"
                        type="application/octet-stream"
@@ -277,6 +967,12 @@
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.0.2</link>
             <sparkle:releaseNotesLink>https://github.com/qunqin24/Pulse/releases/tag/v1.0.2</sparkle:releaseNotesLink>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.0.2</h2><ul><li><strong>Multiple accounts.</strong> Sign in to a second Claude Code or Codex subscription to watch both, each with its own ring.</li><li><strong>Cursor joins the providers.</strong> It is reported as the two pools its own account page shows.</li><li><strong>Ollama Cloud joins the providers.</strong> Its session is read from your browser rather than copied by hand, from PcOffeeP&#x27;s pull request.</li><li><strong>The rail can dock along the top of the screen.</strong> It sits above the menu bar.</li><li><strong>A colour of your own for any ring.</strong> The gap between rings can be adjusted as well.</li><li><strong>Percentages can be switched off.</strong> They can be hidden on either rail.</li><li><strong>The rail opens with the last reading.</strong> It no longer sits blank at launch.</li><li><strong>The activity mark stops when a turn ends.</strong> It no longer keeps turning for a minute afterwards.</li><li><strong>The API-key field lets go when you click away.</strong> Clicking elsewhere in Settings ends editing of the field.</li><li><strong>A used limit no longer reads as 0%.</strong> A limit with any usage on it now shows a figure above zero.</li><li><strong>Quitting Codex no longer quits Pulse.</strong> Pulse keeps running when Codex exits.</li><li><strong>A new app icon.</strong> The icon is drawn on Apple&#x27;s icon grid.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.2">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.2/Pulse-1.0.2.zip"
                        length="3815430"
                        type="application/octet-stream"
@@ -290,6 +986,12 @@
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.0.1</link>
             <sparkle:releaseNotesLink>https://github.com/qunqin24/Pulse/releases/tag/v1.0.1</sparkle:releaseNotesLink>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.0.1</h2><ul><li><strong>OpenCode Go and Kimi Code join the providers.</strong> That brings the count to five agents.</li><li><strong>Put the rings in your own order.</strong> Set the order in Settings.</li><li><strong>A refresh button on every provider&#x27;s pane.</strong> The age of the reading is shown beside it.</li><li><strong>A new install starts with the agents you actually have.</strong> It no longer shows five rings that say &quot;not configured&quot;.</li><li><strong>Drag the panel by any part of the capsule.</strong> Dragging is no longer limited to the rings.</li><li><strong>Clicking a ring refreshes that ring.</strong> The provider you clicked is refreshed whatever order the rail is in.</li><li><strong>The detail card fits at every size.</strong> It no longer truncates itself at Small or sits half empty at Large.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.1">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.1/Pulse-1.0.1.zip"
                        length="3342447"
                        type="application/octet-stream"
@@ -303,6 +1005,12 @@
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <link>https://github.com/qunqin24/Pulse/releases/tag/v1.0.0</link>
             <sparkle:releaseNotesLink>https://github.com/qunqin24/Pulse/releases/tag/v1.0.0</sparkle:releaseNotesLink>
+            <description><![CDATA[<style>
+  h2 { font-size: 1.05em; margin: 0 0 .5em; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  p { margin: .8em 0 0; }
+</style><h2>Pulse 1.0.0</h2><ul><li><strong>The first release.</strong> A floating rail of rings against the edge of the screen shows how much of each coding agent&#x27;s limit is left.</li></ul><p><a href="https://github.com/qunqin24/Pulse/releases/tag/v1.0.0">Release notes on GitHub</a></p>]]></description>
             <enclosure url="https://github.com/qunqin24/Pulse/releases/download/v1.0.0/Pulse-1.0.0.zip"
                        length="3145248"
                        type="application/octet-stream"

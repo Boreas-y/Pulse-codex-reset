@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 /// What every coding agent on this Mac has cost, added up.
@@ -48,7 +49,14 @@ struct TokenSpendView: View {
     /// diagnostics never reach the view.
     let hasReadLimitations: Bool
     @Binding var span: SpendSpan
+    /// The first and last day `SpendSpan.custom` counts.
+    @Binding var customDays: ClosedRange<Date>
+    /// The last twelve months to today, over the agent on screen where there is
+    /// one. Independent of `span`: the "Token activity" chart is the long view.
+    var activity = TokenActivity()
+    @Binding var activityView: ActivityView
     let isLoading: Bool
+    var isSummarizing = false
     let refresh: () -> Void
 
     /// Which column the day table is sorted by. Its own state rather than a
@@ -87,9 +95,13 @@ struct TokenSpendView: View {
                 ) {
                     HStack(spacing: 8) {
                         Picker("", selection: $span) {
-                            ForEach(SpendSpan.allCases) { span in
-                                Text(span.title).tag(span)
-                            }
+                            // Rolling, then calendar, then the open-ended and
+                            // the reader's own: three kinds of question.
+                            ForEach([SpendSpan.today, .week, .month, .quarter]) { Text($0.title).tag($0) }
+                            Divider()
+                            ForEach([SpendSpan.thisMonth, .lastMonth, .thisYear]) { Text($0.title).tag($0) }
+                            Divider()
+                            ForEach([SpendSpan.all, .custom]) { Text($0.title).tag($0) }
                         }
                         .labelsHidden()
                         // The picker's own title is empty and the row's label is
@@ -99,6 +111,13 @@ struct TokenSpendView: View {
 
                         Button(String.localized("Rescan")) { refresh() }
                             .disabled(isLoading)
+                    }
+                }
+
+                if span == .custom {
+                    SettingsRowDivider()
+                    SettingsRow(String.localized("Dates")) {
+                        customDatePickers
                     }
                 }
             }
@@ -119,7 +138,11 @@ struct TokenSpendView: View {
             // The span picker stays in every view, so narrowing the window
             // while looking at one agent or one model does not throw the reader
             // back out.
-            if let modelFocus {
+            if isSummarizing {
+                ProgressView()
+                    .controlSize(.small)
+                    .frame(maxWidth: .infinity)
+            } else if let modelFocus {
                 if modelSummary.isEmpty {
                     nothingForModel(modelFocus)
                 } else {
@@ -130,10 +153,11 @@ struct TokenSpendView: View {
                     nothingForAgent(focus)
                 } else {
                     total(focused)
+                    activitySection
                     kinds(focused)
                     streaks(focused)
-                    if span != .today { hourly(focused) }
-                    if span != .today { daily(focused) }
+                    if !isOneDay { hourly(focused) }
+                    if !isOneDay { daily(focused) }
                     if focused.months.count > 1 { monthly(focused) }
                     if !focused.models.isEmpty { models(focused).id("models") }
                     if !focused.projects.isEmpty { projects(focused) }
@@ -144,10 +168,11 @@ struct TokenSpendView: View {
                 empty
             } else {
                 total(summary)
+                activitySection
                 kinds(summary)
                 streaks(summary)
-                if span != .today { hourly(summary) }
-                if span != .today { daily(summary) }
+                if !isOneDay { hourly(summary) }
+                if !isOneDay { daily(summary) }
                 if summary.months.count > 1 { monthly(summary) }
                 agents
                 // Even one model is an entry point now: tapping it opens that
@@ -323,7 +348,7 @@ struct TokenSpendView: View {
                 // **A day is not one bar.** Over any other span the bars are
                 // days; over today there is only one of those, and the shape
                 // worth seeing is the hours it was spread across.
-                if span == .today {
+                if isOneDay {
                     if hoursComplete {
                         HourProfile(hours: summary.hours)
                             .frame(height: 78)
@@ -340,7 +365,7 @@ struct TokenSpendView: View {
                 }
 
                 HStack(spacing: 16) {
-                    if span == .today {
+                    if isOneDay {
                         // Both captions read the hour series, so both are
                         // withheld when it does not cover the day rather than
                         // report a partial figure as the whole.
@@ -386,9 +411,21 @@ struct TokenSpendView: View {
         }
     }
 
+    // MARK: - The year
+
+    /// Not drawn for a Mac with no record at all: an empty grid would say
+    /// "quiet" about days nothing was read for. A history that ends more than
+    /// twelve months ago is drawn as a quiet year, because those days were
+    /// read and nothing was in them.
+    @ViewBuilder private var activitySection: some View {
+        if !activity.isEmpty {
+            TokenActivitySection(activity: activity, view: $activityView)
+        }
+    }
+
     // MARK: - What kind of token
 
-    /// Fresh input, cache written, cache read, output.
+    /// Recorded input, cache hits, output and an explicit unclassified remainder.
     ///
     /// **The split is the point, not the total.** These four are priced an
     /// order of magnitude apart — a cache read costs a tenth of fresh input on
@@ -397,13 +434,17 @@ struct TokenSpendView: View {
     /// are shared with the model detail, which is why they take a bare tally.
     private func kinds(_ summary: SpendSummary) -> some View {
         SettingsGroup(String.localized("By kind")) {
-            // **A partial split is not four zeroes.** Where some tokens belong
-            // to no kind — a bare or session total records the source never
-            // broke down — the four kinds do not add up to the total, and
-            // drawing the shortfall as a zero would read as a measurement of
-            // "none". The existing unavailable line says what is true instead.
-            if summary.tally.total == summary.tokens {
-                TokenKindBreakdown(tally: summary.tally)
+            // Explicit unclassified tokens keep their own row. A broken split
+            // without a recorded remainder stays unavailable, never guessed.
+            if summary.hasTokenBreakdown {
+                TokenKindBreakdown(
+                    tally: summary.tally,
+                    unclassifiedTokens: summary.unclassifiedTokens,
+                    // No cache column in any store behind it, or replies
+                    // that never named the cache (a compatible endpoint).
+                    readsUnreported: summary.tally.reportsNoCache || !summary.agents.isEmpty
+                        && summary.agents.allSatisfy { !$0.agent.reportsCacheReads }
+                )
             } else {
                 SettingsRow(String.localized("Token breakdown unavailable.")) {
                     EmptyView()
@@ -414,13 +455,55 @@ struct TokenSpendView: View {
 
     // MARK: - Day by day
 
+    /// Whether the span on screen is one calendar day, drawn by the hour.
+    private var isOneDay: Bool { span.isOneDay(custom: customDays) }
+
+    /// The first and last day, both counted, neither after today, and the
+    /// first never after the last: each picker's range is held by the other.
+    private var customDatePickers: some View {
+        let today = Calendar.current.startOfDay(for: Date())
+        return HStack(spacing: 6) {
+            DatePicker("", selection: Binding(
+                get: { customDays.lowerBound },
+                set: {
+                    let first = Calendar.current.startOfDay(for: $0)
+                    customDays = first...max(customDays.upperBound, first)
+                }
+            ), in: ...today, displayedComponents: .date)
+            .labelsHidden()
+            .datePickerStyle(.field)
+            .accessibilityLabel(String.localized("First day"))
+
+            Text(verbatim: "–")
+                .foregroundStyle(.secondary)
+
+            DatePicker("", selection: Binding(
+                get: { customDays.upperBound },
+                set: {
+                    let last = Calendar.current.startOfDay(for: $0)
+                    customDays = min(customDays.lowerBound, last)...last
+                }
+            ), in: ...today, displayedComponents: .date)
+            .labelsHidden()
+            .datePickerStyle(.field)
+            .accessibilityLabel(String.localized("Last day"))
+        }
+    }
+
     /// Every day in the span, with the split and the money beside it.
     ///
     /// **The rows are days with work on them**, not every day in the span: the
     /// chart above is the one that has to keep its gaps to stay a calendar,
     /// and a table of empty rows is a table you have to read past.
     private func daily(_ summary: SpendSummary) -> some View {
-        let rows = SpendSummary.sorted(summary.days.filter { $0.tokens > 0 }, by: sort, ascending: ascending)
+        // No cache column in any store behind it: a zero hit is unrecorded,
+        // blank in the cell as in the sort.
+        let cacheUnreported = !summary.agents.isEmpty && summary.agents.allSatisfy { !$0.agent.reportsCacheReads }
+        let columns = DayColumn.allCases.filter { $0 != .unclassified || summary.unclassifiedTokens > 0 || sort == .unclassified }
+        let rows = SpendSummary.sorted(
+            summary.days.filter { $0.tokens > 0 }, by: sort, ascending: ascending,
+            cacheUnreported: cacheUnreported
+        )
         let pages = max((rows.count + pageSize - 1) / pageSize, 1)
         // Clamped rather than trusted: the span and the sort can both shorten
         // the table under a page that is already on screen.
@@ -431,7 +514,7 @@ struct TokenSpendView: View {
             VStack(spacing: 0) {
                 Grid(alignment: .trailing, horizontalSpacing: 10, verticalSpacing: 0) {
                     GridRow {
-                        ForEach(DayColumn.allCases) { column in
+                        ForEach(columns) { column in
                             header(column)
                         }
                     }
@@ -442,17 +525,16 @@ struct TokenSpendView: View {
                         GridRow {
                             Text(Self.tableDate(day.date))
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                            // **The kinds are shown only when they add up.** A
-                            // day whose categories do not equal its own total
-                            // has tokens outside the four kinds; the category
-                            // cells go blank rather than draw a zero that was
-                            // never measured. The total column is the day's
-                            // own figure and always stands.
-                            let complete = day.tally.total == day.tokens
-                            cell(complete ? day.tally.input : nil)
-                            cell(complete ? day.tally.output : nil)
-                            cell(complete ? day.tally.cacheRead : nil)
-                            cell(complete ? day.tally.cacheWrite : nil)
+                            // Known kinds and the explicit remainder must
+                            // reconcile. Unknown-only work has no measured
+                            // input/output zeroes to show or sort by.
+                            let complete = day.hasTokenBreakdown
+                            cell(day.classifiedTally?.fresh)
+                            cell(cacheUnreported && day.classifiedTally?.cacheRead == 0 ? nil : day.classifiedTally?.cacheRead)
+                            cell(day.classifiedTally?.output)
+                            if columns.contains(.unclassified) {
+                                cell(complete ? day.unclassifiedTokens : nil)
+                            }
                             cell(day.tokens)
                             // **An all-unpriced day is not a free day.** The
                             // day's own money is a priced subset; when nothing
@@ -497,6 +579,8 @@ struct TokenSpendView: View {
         } label: {
             HStack(spacing: 2) {
                 Text(column.title)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
                 if sort == column {
                     Image(systemName: ascending ? "chevron.up" : "chevron.down")
                         .font(.system(size: 7, weight: .bold))
@@ -570,6 +654,8 @@ struct TokenSpendView: View {
         return summary.agents.contains { partial($0.unpricedTokens, $0.tokens) }
             || summary.days.contains { partial($0.unpricedTokens, $0.tokens) }
             || summary.months.contains { partial($0.unpricedTokens, $0.tokens) }
+            || summary.projects.contains { partial($0.unpricedTokens, $0.tokens) }
+            || summary.sessions.contains { partial($0.session.unpricedTokens, $0.session.tokens) }
     }
 
     /// Whole months, for the spans long enough to have more than one.
@@ -620,8 +706,12 @@ struct TokenSpendView: View {
                 if Self.hoursComplete(summary), let hour = summary.peakHour {
                     SpendCaption(String.localized("Peak hour"), SpendFormat.hour(hour))
                 }
+                // Named for what it ranks by. "Favourite" read as the model
+                // used most often, and the ranking is tokens — cache reads
+                // and all, which puts whichever model re-reads the longest
+                // context first.
                 if let model = summary.models.first {
-                    SpendCaption(String.localized("Favourite model"), model.name)
+                    SpendCaption(String.localized("Most tokens"), model.name)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -753,14 +843,13 @@ struct TokenSpendView: View {
 
     // MARK: - Where the work happened
 
-    /// One row a working directory.
-    ///
-    /// **Claude Code only.** It keeps a directory per project; Codex files sit
-    /// under a date and carry no directory, so its sessions are counted in
-    /// everything above and are simply not on this list — which the caption
-    /// says, rather than leaving a reader to wonder where half the money went.
+    /// One row per project identity, with ambiguous directory names expanded.
     private func projects(_ summary: SpendSummary) -> some View {
-        let total = max(summary.projects.reduce(0) { $0 + $1.tokens }, 1)
+        // **Of all the work, not of the work with a project.** Sessions with
+        // no directory (Codex's path carries none) have no row here, and
+        // dividing by the projects alone drew each bar larger than its share
+        // beside every other section's.
+        let total = max(summary.tokens, 1)
 
         return SettingsGroup(String.localized("By project")) {
             VStack(spacing: 0) {
@@ -775,7 +864,7 @@ struct TokenSpendView: View {
                             ShareBar(share: Double(project.tokens) / Double(total))
                                 .frame(width: 64, height: 6)
 
-                            Text(SpendFormat.money(project.cost))
+                            CostText(cost: project.estimatedCost, unpriced: project.unpricedTokens)
                                 .font(.system(size: 12))
                                 .monospacedDigit()
                                 .lineLimit(1)
@@ -800,12 +889,11 @@ struct TokenSpendView: View {
                     if index > 0 { SettingsRowDivider() }
 
                     SettingsRow(
-                        // What the conversation was called. The directory is
-                        // the fallback and the file's own name the last
-                        // resort — a uuid tells the reader nothing, but it is
-                        // at least what the session is called.
-                        row.session.title ?? row.session.project ?? row.session.name,
-                        subtitle: Self.sessionSubtitle(row),
+                        // What the conversation was called (`SessionLabel`):
+                        // the directory is the fallback, then "Untitled
+                        // conversation" — never the transcript's file name.
+                        row.session.label(projectName: summary.projectName(for: row)),
+                        subtitle: Self.sessionSubtitle(row, project: summary.projectName(for: row)),
                         icon: row.agent.iconResource
                     ) {
                         HStack(spacing: 10) {
@@ -816,7 +904,7 @@ struct TokenSpendView: View {
                                 .lineLimit(1)
                                 .fixedSize(horizontal: true, vertical: false)
 
-                            Text(SpendFormat.money(row.session.cost))
+                            CostText(cost: row.session.estimatedCost, unpriced: row.session.unpricedTokens)
                                 .font(.system(size: 12))
                                 .monospacedDigit()
                                 .lineLimit(1)
@@ -835,14 +923,14 @@ struct TokenSpendView: View {
 
     /// When it ran and for how long, and the file's own name where the row's
     /// title is already the directory.
-    private static func sessionSubtitle(_ row: SpendSummary.Session) -> String {
+    private static func sessionSubtitle(_ row: SpendSummary.Session, project: String?) -> String {
         let when = row.session.end.formatted(
             .dateTime.month(.abbreviated).day().hour().minute().locale(LocalizationSource.locale)
         )
         // The directory belongs here once the title has taken the row's own
         // line — it is what tells two conversations about the same thing
         // apart.
-        guard let project = row.session.project, row.session.title != nil else { return when }
+        guard let project, row.session.namesItself() else { return when }
         return "\(when) · \(project)"
     }
 
@@ -913,7 +1001,14 @@ enum SpendSpan: String, CaseIterable, Identifiable, Sendable {
     case week
     case month
     case quarter
+    // Calendar periods beside the rolling ones: "last month" as a bill reads
+    // it is not the last 30 days.
+    case thisMonth
+    case lastMonth
+    case thisYear
     case all
+    /// The reader's own first and last day, kept in `AppSettings.spendCustomDays`.
+    case custom
 
     /// The span the pane opens on: the last week, the shortest window that
     /// shows a work rhythm rather than a single day. The reader's own pick is
@@ -922,7 +1017,8 @@ enum SpendSpan: String, CaseIterable, Identifiable, Sendable {
 
     var id: String { rawValue }
 
-    /// Nil counts everything the transcripts go back to.
+    /// The rolling spans' length in days; nil for the calendar periods, the
+    /// reader's own dates and everything.
     var days: Int? {
         switch self {
         // One day, which is the day in progress rather than the last
@@ -931,7 +1027,45 @@ enum SpendSpan: String, CaseIterable, Identifiable, Sendable {
         case .week: 7
         case .month: 30
         case .quarter: 90
-        case .all: nil
+        case .thisMonth, .lastMonth, .thisYear, .all, .custom: nil
+        }
+    }
+
+    /// The local midnight counting starts at and the one it stops before;
+    /// nil for an open edge (from the first record, or through today).
+    /// `custom` is the reader's first and last day, both counted.
+    func bounds(custom: ClosedRange<Date>, now: Date = Date(),
+                calendar: Calendar = .current) -> (from: Date?, until: Date?) {
+        let today = calendar.startOfDay(for: now)
+        func start(of component: Calendar.Component) -> Date? {
+            calendar.dateInterval(of: component, for: today)?.start
+        }
+        switch self {
+        case .today, .week, .month, .quarter:
+            return (days.flatMap { calendar.date(byAdding: .day, value: -($0 - 1), to: today) }, nil)
+        case .thisMonth:
+            return (start(of: .month), nil)
+        case .lastMonth:
+            let thisMonth = start(of: .month)
+            return (thisMonth.flatMap { calendar.date(byAdding: .month, value: -1, to: $0) }, thisMonth)
+        case .thisYear:
+            return (start(of: .year), nil)
+        case .all:
+            return (nil, nil)
+        case .custom:
+            let first = calendar.startOfDay(for: custom.lowerBound)
+            let last = calendar.startOfDay(for: custom.upperBound)
+            return (first, calendar.date(byAdding: .day, value: 1, to: last))
+        }
+    }
+
+    /// Whether the span is a single calendar day, which the pane draws by the
+    /// hour rather than as one bar.
+    func isOneDay(custom: ClosedRange<Date>, calendar: Calendar = .current) -> Bool {
+        switch self {
+        case .today: true
+        case .custom: calendar.isDate(custom.lowerBound, inSameDayAs: custom.upperBound)
+        default: false
         }
     }
 
@@ -943,7 +1077,11 @@ enum SpendSpan: String, CaseIterable, Identifiable, Sendable {
         case .week: .localized("Last \("7") days")
         case .month: .localized("Last \("30") days")
         case .quarter: .localized("Last \("90") days")
+        case .thisMonth: .localized("This month")
+        case .lastMonth: .localized("Last month")
+        case .thisYear: .localized("This year")
         case .all: .localized("All time")
+        case .custom: .localized("Custom range")
         }
     }
 }
@@ -951,10 +1089,11 @@ enum SpendSpan: String, CaseIterable, Identifiable, Sendable {
 /// The day table's columns, which are also what it can be sorted by.
 enum DayColumn: String, CaseIterable, Identifiable, Sendable {
     case date
-    case input
-    case output
+    /// New input, cache writes included (`TokenTally.fresh`).
+    case fresh
     case cacheRead
-    case cacheWrite
+    case output
+    case unclassified
     case total
     case cost
 
@@ -963,12 +1102,12 @@ enum DayColumn: String, CaseIterable, Identifiable, Sendable {
     var title: String {
         switch self {
         case .date: .localized("Date")
-        case .input: .localized("Input")
+        // Short, because columns of Chinese headings in a settings pane are a
+        // table that wraps.
+        case .fresh: .localized("Input")
+        case .cacheRead: .localized("Cached")
         case .output: .localized("Output")
-        // Short, because seven columns of Chinese headings in a settings pane
-        // is a table that wraps.
-        case .cacheRead: .localized("C. read")
-        case .cacheWrite: .localized("C. write")
+        case .unclassified: .localized("Unclassified")
         case .total: .localized("Total")
         case .cost: .localized("Cost")
         }

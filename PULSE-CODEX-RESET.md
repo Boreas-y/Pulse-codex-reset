@@ -9,6 +9,25 @@ fork maintainer and is not an official Pulse distribution.
 的个人定制 fork。Pulse 仍是上游项目；本仓库只维护少量个人需要的功能，不是
 Pulse 官方发行版。
 
+## Baseline and languages / 基线与语言
+
+Updated against official stable **v1.12.3** (`acd02a3712fe3a157bd03bc984154e449cfc1ae4`).
+The reset interface follows Pulse's language selection: **English, 简体中文,
+繁體中文, 日本語, 한국어, Русский**, or the system setting.
+
+重置界面支持官方全部六种语言，沿用设置中的语言选择。简体中文优先显示 AIhot 中文译文；
+其余语言显示英文原文并标注来源，不引入翻译服务。原文缺失时明确标注中文译文。
+所有语言均保留 AIhot 与原帖（X）两个链接：中文版将 AIhot 放在前面，其他语言将原帖放在前面。
+没有原帖时仅显示 AIhot。链接顺序依据界面语言，不检测所在地。
+
+## Build / 构建
+
+Use this repository's **Pulse Codex Reset build** workflow with the desired branch.
+It checks localization, builds and tests on macOS 26, then uploads a fork-safe
+`Pulse-codex-reset-<run id>` artifact for 30 days. The bundle disables upstream
+Sparkle updates by default. Local builds require full Xcode for SwiftUI preview macros;
+Command Line Tools alone are insufficient. See [build instructions](Docs/build-from-source.md).
+
 ## Differences from upstream / 与上游的差异
 
 - **Optional Codex reset-news indicator.** An orange dot marks a public

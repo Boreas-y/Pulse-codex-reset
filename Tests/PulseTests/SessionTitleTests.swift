@@ -46,7 +46,7 @@ struct SessionTitleTests {
         // wherever a transcript has one, and this is what is left when it does
         // not.
         let claude = URL(fileURLWithPath: "/Users/me/.claude/projects/-Users-me-Code-Pulse/abc.jsonl")
-        #expect(UsageLedgerReader.project(of: claude, provider: .claudeCode) == "Pulse")
+        #expect(UsageLedgerReader.project(of: claude, provider: .claudeCode)?.name == "Pulse")
 
         let codex = URL(fileURLWithPath: "/Users/me/.codex/sessions/2026/09/14/rollout-x.jsonl")
         #expect(UsageLedgerReader.project(of: codex, provider: .codex) == nil)
@@ -132,7 +132,7 @@ struct SessionTitleTests {
         #expect(scanned.title == "Renamed")
         // Aggregate every bucket rather than trusting a random `.first`, so
         // the assertion is about the whole transcript's counts.
-        let tallies = scanned.days.values.flatMap { $0.values }
+        let tallies = scanned.allDays.values.flatMap { $0.values }
         #expect(tallies.reduce(0) { $0 + $1.input } == 100)
         #expect(tallies.reduce(0) { $0 + $1.output } == 10)
         #expect(tallies.reduce(0) { $0 + $1.total } == 110)

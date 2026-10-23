@@ -7,9 +7,8 @@ struct ProviderSelectionTests {
     private let primaryAccounts = Set(Provider.allCases.map(\.rawValue))
 
     private func withDefaults(_ body: (UserDefaults) -> Void) {
-        let name = "PulseTests.providerSelection.\(UUID().uuidString)"
-        let defaults = UserDefaults(suiteName: name)!
-        defer { defaults.removePersistentDomain(forName: name) }
+        let (defaults, cleanup) = TestDefaults.make("providerSelection")
+        defer { cleanup() }
         body(defaults)
     }
 
@@ -149,6 +148,18 @@ struct ProviderSelectionTests {
         #expect(settings.needsProviderSelection)
         settings.selectProviders([])
         #expect(settings.needsProviderSelection)
+    }
+
+    @Test("A disabled provider cannot be fetched from its settings pane")
+    @MainActor
+    func disabledProviderStaysIdle() {
+        let settings = AppSettings(enabledAccounts: [Provider.codex.rawValue])
+        let store = UsageStore(settings: settings)
+
+        store.refresh(AccountKey(.kiro))
+
+        #expect(!store.isRefreshing)
+        #expect(store.diagnostics.isEmpty)
     }
 
     @Test("A chosen ring cannot be switched off into an empty rail")

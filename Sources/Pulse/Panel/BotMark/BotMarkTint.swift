@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import AppKit
 import SwiftUI
 
@@ -15,6 +16,24 @@ import SwiftUI
 /// green ring is two colours disagreeing. If that reads badly on a real rail,
 /// the fix is this table, not the ring.
 enum BotMarkTint {
+    /// One rail's latest deal, keyed only by the inputs that change its colours.
+    /// Pointer, activity and quota updates can reuse it without another search.
+    @MainActor
+    final class DealCache {
+        private var providers: [Provider] = []
+        private var chosen: [Color?] = []
+        private var colours: [Color] = []
+
+        func deal(over providers: [Provider], chosen: [Color?]) -> [Color] {
+            if self.providers != providers || self.chosen != chosen {
+                colours = BotMarkTint.deal(over: providers, chosen: chosen)
+                self.providers = providers
+                self.chosen = chosen
+            }
+            return colours
+        }
+    }
+
     /// Brand colours, for the providers that have one.
     ///
     /// Nil is not "unknown", it is **monochrome by design** — OpenAI, Cursor,
@@ -25,13 +44,18 @@ enum BotMarkTint {
     /// certainty than the others; they are one line each to correct. Kimi's
     /// blue, Z.ai having no colour of its own, and MiniMax's red are what the
     /// person maintaining this app says they are.
+    private static func profile(of provider: Provider) -> Color? {
+        provider.profile?.brandColor.map(BotMarkPalette.rgb)
+    }
+
     static func brand(for provider: Provider) -> Color? {
-        switch provider {
+        guard let written = provider.handWritten else { return profile(of: provider) }
+        return switch written {
         case .claudeCode: BotMarkPalette.rgb(0xD97757)
         case .deepSeek: BotMarkPalette.rgb(0x4D6BFE)
         case .volcengine: BotMarkPalette.rgb(0x1664FF)
         // Best-guess brand colours: right family, exact value unconfirmed.
-        case .minimax, .minimaxCN: BotMarkPalette.rgb(0xE8483F)
+        case .minimax: BotMarkPalette.rgb(0xE8483F)
         // Best-guess brand colours: right family, exact value unconfirmed.
         case .antigravity: BotMarkPalette.rgb(0x4285F4)
         case .glmCoding: BotMarkPalette.rgb(0x3A7BF7)
@@ -39,8 +63,22 @@ enum BotMarkTint {
         // Xiaomi's orange. The MiMo console is black-on-white, but the parent
         // brand's colour is the one a reader recognises on a rail.
         case .xiaomiMiMo: BotMarkPalette.rgb(0xFF6900)
+        // sub2api's own mark is a green-to-blue gradient; the blue end is
+        // what a single flat colour of it reads as.
+        case .sub2api: BotMarkPalette.rgb(0x3875F6)
+        // Qoder's green, the one colour in its mark. Green is also what a
+        // healthy ring is drawn in, which is the hazard named above; if a
+        // Qoder body inside a green ring reads as one blob, this is the line
+        // to change.
+        case .qoder: BotMarkPalette.rgb(0x2ADB5C)
+        // StepFun's mark is a blue gradient; the deep end is the colour.
+        case .stepFun: BotMarkPalette.rgb(0x0160FF)
+        // V2EX draws a light arrow on near-black and has no other colour.
+        // New API's own mark is a cyan-to-pink pair; neither end is the
+        // colour, so it takes one of Pulse's own rather than half a gradient.
         case .codex, .kiro, .cursor, .openCodeGo, .ollamaCloud, .zai,
-             .copilot, .grok, .grokBot, .commandCode, .devin:
+             .copilot, .grok, .grokBot, .commandCode, .devin, .newAPI, .v2ex,
+             .pulseExtension:
             nil
         }
     }
@@ -78,7 +116,7 @@ enum BotMarkTint {
 
         // Walking the wheel with a stride coprime to its size visits every
         // colour exactly once, so the rail cannot repeat one. Which stride and
-        // where it starts are the only freedom there is, and there are forty
+        // where it starts are the only freedom there is, and there are 272
         // of those — few enough to simply try them all and keep the one whose
         // worst neighbouring pair is furthest apart. Greedy choice was tried
         // first and ran out of colours near the end of a long rail, which is
@@ -141,11 +179,22 @@ enum BotMarkTint {
         brand(for: provider) == nil
     }
 
-    private static let paletteSize = 11
+    /// **At least as many slots as there are colourless providers**, or two of
+    /// them are dealt the same colour and the rail has two rings that look
+    /// alike — the one failure this whole file exists to avoid.
+    ///
+    /// It has overflowed once already: eleven was exactly the count when it
+    /// was written, and V2EX made it twelve. Sizing it to the count again
+    /// would only queue up the same bug, so this is deliberately **ahead** of
+    /// it — thirteen colourless providers today, four slots spare.
+    ///
+    /// **Prime on purpose.** `deal(over:)` walks the wheel with a stride
+    /// coprime to its size so every colour is visited once, and a prime size
+    /// means every stride qualifies rather than a handful.
+    private static let paletteSize = 17
 
     /// The wheel, solved once: evenly spaced hues, each at the same
-    /// luminance. `dealt(at:)` is a bisection, and a rail is dealt on every
-    /// pass of the dock's body.
+    /// luminance. `dealt(at:)` is a bisection; the rail keeps its latest deal.
     private static let wheel: [Color] = (0..<paletteSize).map { dealt(at: $0) }
     private static let wheelHues: [Double] = wheel.map(hue(of:))
 
@@ -193,7 +242,7 @@ enum BotMarkTint {
     /// The lightness that puts this hue at `target` luminance, by bisection.
     ///
     /// Twenty steps is far more than the eye needs and costs nothing: the
-    /// wheel above is a `static let`, so this runs ten times per process.
+    /// wheel above is a `static let`, so this runs once per slot per process.
     private static func levelled(hue: Double, saturation: Double, target: Double) -> Color {
         var low = 0.0
         var high = 1.0

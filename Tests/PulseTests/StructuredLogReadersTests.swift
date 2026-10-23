@@ -307,7 +307,9 @@ struct StructuredLogReadersTests {
         #expect(decoded.count == 1)
         let record = try #require(decoded.first)
         #expect(record.model == "claude-sonnet")
-        #expect(record.tally == TokenTally(input: 100, cacheWrite: 0, cacheRead: 30, output: 20))
+        // Codebuff's input already holds the cached prefix: 100 sent, 30 of
+        // it read from the cache, 70 fresh.
+        #expect(record.tally == TokenTally(input: 70, cacheWrite: 0, cacheRead: 30, output: 20))
         #expect(record.sessionID == "manicode/ring/\(chatID)")
         #expect(record.deduplicationID == "codebuff:manicode/ring/\(chatID):m1")
         #expect(record.timestamp == AgentLogIO.timestamp("2024-01-02T03:04:06Z"))
@@ -458,7 +460,7 @@ struct StructuredLogReadersTests {
         // record is partial because it was reported and not placed.
         #expect(first.unclassifiedTokens == 0)
         #expect(first.isPartial)
-        #expect(first.project == "ring")
+        #expect(first.project == "/Users/me/Code/ring")
 
         // A journal row with no cache and no reasoning is complete.
         let second = try #require(decoded.first { $0.deduplicationID?.contains(":t1") == true })
@@ -656,7 +658,7 @@ struct StructuredLogReadersTests {
         let record = try #require(decoded.first)
         #expect(record.model == "gpt-5")
         #expect(record.tally == TokenTally(input: 10, cacheWrite: 1, cacheRead: 2, output: 5))
-        #expect(record.project == "work")
+        #expect(record.project == "/Users/me/Code/work")
         #expect(record.sessionID == "g1")
         #expect(record.deduplicationID == "gjc:g1:e1")
     }
@@ -986,7 +988,7 @@ struct StructuredLogReadersTests {
         // The relationship is stated, so the record is complete.
         #expect(!call.isPartial)
         #expect(call.sessionID == "d1")
-        #expect(call.project == "work")
+        #expect(call.project == "/Users/me/Code/work")
 
         let summary = try #require(decoded.first { $0.deduplicationID?.contains("summary:cmp:cmp-1") == true })
         #expect(summary.tally == TokenTally(input: 1, output: 2))
@@ -1100,6 +1102,9 @@ struct StructuredLogReadersTests {
         #expect(!StructuredLogReaders.notes(client: "dsh", roots: roots).isEmpty)
 
         // A plain JSONL that is malformed is not a compression failure.
+        let combined = AgentRecordReaders.read(client: "dsh", roots: roots)
+        #expect(combined.records.isEmpty)
+        #expect(!combined.notes.isEmpty)
         let plainHome = try makeStore()
         defer { cleanup(plainHome) }
         let plainRoots = StructuredLogReaders.inputs(
@@ -1111,6 +1116,7 @@ struct StructuredLogReadersTests {
             to: plainDirectory.appending(path: "session.jsonl"), atomically: true, encoding: .utf8
         )
         #expect(StructuredLogReaders.notes(client: "dsh", roots: plainRoots).isEmpty)
+        #expect(AgentRecordReaders.read(client: "dsh", roots: plainRoots).notes.isEmpty)
     }
 
     @Test("A compressed transcript past the decode ceiling is a surfaced failure")
@@ -1183,7 +1189,7 @@ struct StructuredLogReadersTests {
         let gpt = try #require(decoded.first { $0.model == "gpt" })
         #expect(!gpt.isPartial)
         #expect(claude.title == "Fix the ring")
-        #expect(claude.project == "fx")
+        #expect(claude.project == "/Users/me/Code/fx")
         #expect(claude.isAggregate)
         #expect(claude.deduplicationID == "fx:fx-1:claude")
     }
@@ -1438,7 +1444,7 @@ struct StructuredLogReadersTests {
         #expect(abs(cost - 0.473) < 1e-9)
     }
 
-    @Test("A Group D project name matches the legacy readers and merges into one row")
+    @Test("A shared explicit directory merges into one project across readers")
     func projectNameMatchesLegacyReaders() throws {
         let home = try makeStore()
         defer { cleanup(home) }
@@ -1462,19 +1468,9 @@ struct StructuredLogReadersTests {
 
         let decoded = records("gjc", roots)
         let record = try #require(decoded.first)
-        // The display name is the directory's own name, not its absolute path.
-        #expect(record.project == "Pulse")
-
-        // The same directory through a legacy Claude Code folder: the two
-        // conventions name one project, and the production chain shows one row.
-        let legacy = try #require(
-            UsageLedgerReader.project(
-                of: URL(fileURLWithPath: "/Users/me/.claude/projects/-Users-me-Code-Pulse/abc.jsonl"),
-                provider: .claudeCode
-            )
-        )
-        #expect(legacy == "Pulse")
-        #expect(record.project == legacy)
+        #expect(record.project == "/Users/me/Code/Pulse")
+        // An explicit directory, shared across readers, identifies one project.
+        let legacy = "/Users/me/Code/Pulse"
 
         let sibling = AgentUsageRecord(
             timestamp: Self.fixedNow, model: "priced",

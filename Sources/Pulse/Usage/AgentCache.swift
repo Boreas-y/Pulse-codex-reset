@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import CryptoKit
 import Foundation
 
@@ -11,8 +12,23 @@ import Foundation
 /// and the price table, not by the store root's own size and date.
 enum AgentCache {
     /// Also versions reader semantics: a valid old shape can contain totals
-    /// from the old pricing, source-precedence or rewind rules.
-    private static let version = 6
+    /// from the old pricing, source-precedence or rewind rules. 9: OpenCode 2
+    /// writes to new tables, and an 8 cache of a store that has not changed
+    /// since holds none of it. 10: Devin's CLI counted each message twice,
+    /// OpenCode's older rows their reasoning twice, Codebuff and Copilot
+    /// Desktop their cached prefix twice, VS Code Copilot's cache-holding
+    /// prompt was fresh input, and Gemini's headless thoughts were dropped.
+    /// 11: Grok Build counted its cached read and its reasoning twice (#91),
+    /// and Antigravity's Pro rows went unpriced under a routing id (#90).
+    /// 12: Antigravity's `gemini-3.8-flash-n` rows were unpriced (#90).
+    ///
+    /// **A bump also tells `AgentArchive` the readers changed.** Its marks
+    /// were taken under the old ones, so after a bump they stand only for
+    /// days the new readers see nothing at all on. Not bumped for the
+    /// archive itself: it is a file of its own, and this cache is what the
+    /// first marks are taken from — a stable read a store has deleted from
+    /// since.
+    static let version = 12
 
     /// Whether the stores' real inputs, and the money behind their cost, are
     /// the same as when the ledger was kept.
@@ -247,10 +263,11 @@ enum AgentCache {
         let modelUnclassifiedTokens: [String: Int]
     }
 
-    struct StoredSlot: Codable {
+    struct StoredSlot: Codable, Equatable {
         let start: Date
         let tokens: Int
         let cost: Double
+        let unpricedTokens: Int
         /// **Required, not defaulted**, for the same reason as
         /// `StoredDay.modelTallies`: a model's own hours come only from here,
         /// and a slot that silently decoded with none would let a drill-down
@@ -258,15 +275,16 @@ enum AgentCache {
         let models: [String: TokenTally]
     }
 
-    struct StoredSession: Codable {
+    struct StoredSession: Codable, Equatable {
         let id: String
         let name: String
         let title: String?
-        let project: String?
+        let project: UsageProject?
         let start: Date
         let end: Date
         let tokens: Int
         let cost: Double
+        let unpricedTokens: Int
         /// **Required, not defaulted.** A cache written before sessions
         /// carried their buckets would otherwise decode with none, leaving
         /// project totals unable to respect the selected span. Missing it has to
@@ -276,10 +294,11 @@ enum AgentCache {
         let days: [StoredSessionDay]
     }
 
-    struct StoredSessionDay: Codable {
+    struct StoredSessionDay: Codable, Equatable {
         let date: Date
         let tokens: Int
         let cost: Double
+        let unpricedTokens: Int
     }
 
     /// Reads the kept ledger back.
@@ -319,21 +338,10 @@ enum AgentCache {
             unpricedModels: saved.ledger.unpricedModels,
             modelNames: saved.ledger.modelNames,
             slots: saved.ledger.slots.map {
-                .init(start: $0.start, tokens: $0.tokens, cost: $0.cost, models: $0.models)
+                .init(start: $0.start, tokens: $0.tokens, cost: $0.cost, unpricedTokens: $0.unpricedTokens, models: $0.models)
             }
         )
-        ledger.sessions = saved.ledger.sessions.map {
-            .init(
-                id: $0.id, name: $0.name, title: $0.title, project: $0.project,
-                start: $0.start, end: $0.end, tokens: $0.tokens, cost: $0.cost,
-                slots: $0.slots.map {
-                    .init(start: $0.start, tokens: $0.tokens, cost: $0.cost, models: $0.models)
-                },
-                days: $0.days.map {
-                    .init(date: $0.date, tokens: $0.tokens, cost: $0.cost)
-                }
-            )
-        }
+        ledger.sessions = saved.ledger.sessions.map(\.session)
         return (saved.stamp, ledger)
     }
 
@@ -361,22 +369,11 @@ enum AgentCache {
                     modelUnclassifiedTokens: $0.modelUnclassifiedTokens
                 )
             },
-            sessions: ledger.sessions.map {
-                StoredSession(
-                    id: $0.id, name: $0.name, title: $0.title, project: $0.project,
-                    start: $0.start, end: $0.end, tokens: $0.tokens, cost: $0.cost,
-                    slots: $0.slots.map {
-                        StoredSlot(start: $0.start, tokens: $0.tokens, cost: $0.cost, models: $0.models)
-                    },
-                    days: $0.days.map {
-                        StoredSessionDay(date: $0.date, tokens: $0.tokens, cost: $0.cost)
-                    }
-                )
-            },
+            sessions: ledger.sessions.map(StoredSession.init),
             unpricedModels: ledger.unpricedModels,
             modelNames: ledger.modelNames,
             slots: ledger.slots.map {
-                StoredSlot(start: $0.start, tokens: $0.tokens, cost: $0.cost, models: $0.models)
+                StoredSlot(start: $0.start, tokens: $0.tokens, cost: $0.cost, unpricedTokens: $0.unpricedTokens, models: $0.models)
             }
         )
 
@@ -405,6 +402,39 @@ enum AgentCache {
         // hour, or trusted as a whole, so it must not decode.
         // Version 6 adds session calendar days and invalidates the former
         // vendor-pricing, Devin mirror and Command Code rewind totals.
+        // Version 7 preserves project identity independently of its display name.
+        // Version 8 retains unpriced counts in sessions and their time buckets.
         directory.appending(path: "agent-\(version)-\(agent.rawValue).json")
+    }
+}
+
+extension AgentCache.StoredSession {
+    init(_ session: UsageLedger.Session) {
+        self.init(
+            id: session.id, name: session.name, title: session.title, project: session.project,
+            start: session.start, end: session.end, tokens: session.tokens, cost: session.cost,
+            unpricedTokens: session.unpricedTokens,
+            slots: session.slots.map {
+                .init(start: $0.start, tokens: $0.tokens, cost: $0.cost, unpricedTokens: $0.unpricedTokens, models: $0.models)
+            },
+            days: session.days.map {
+                .init(date: $0.date, tokens: $0.tokens, cost: $0.cost, unpricedTokens: $0.unpricedTokens)
+            }
+        )
+    }
+
+    var session: UsageLedger.Session {
+        .init(
+            // A scratch folder kept as a project by an older build is
+            // dropped here (`UsageProject.unlessScratch`).
+            id: id, name: name, title: title, project: project?.unlessScratch,
+            start: start, end: end, tokens: tokens, cost: cost, unpricedTokens: unpricedTokens,
+            slots: slots.map {
+                .init(start: $0.start, tokens: $0.tokens, cost: $0.cost, unpricedTokens: $0.unpricedTokens, models: $0.models)
+            },
+            days: days.map {
+                .init(date: $0.date, tokens: $0.tokens, cost: $0.cost, unpricedTokens: $0.unpricedTokens)
+            }
+        )
     }
 }

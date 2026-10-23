@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Devin Desktop's ACP event captures, `*.ndjson` under the app's
@@ -150,9 +151,7 @@ enum DevinDesktopReader {
                         model: modelName(model ?? resolved?.model),
                         tally: tally,
                         sessionID: resolved?.id ?? DatabaseReaderSupport.stem(file),
-                        project: resolved?.directory.map {
-                            URL(fileURLWithPath: $0).lastPathComponent
-                        },
+                        project: resolved?.directory,
                         deduplicationID: "devin-desktop:\(file.path):usage",
                         isAggregate: true
                     )
@@ -248,9 +247,7 @@ enum DevinDesktopReader {
                 model: modelName(hinted ?? resolved?.model),
                 tally: tally,
                 sessionID: resolved?.id ?? DatabaseReaderSupport.stem(file),
-                project: resolved?.directory.map {
-                    URL(fileURLWithPath: $0).lastPathComponent
-                },
+                project: resolved?.directory,
                 deduplicationID: "devin-desktop:\(file.path):\(index)"
             )
         }

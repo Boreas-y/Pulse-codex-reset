@@ -17,7 +17,7 @@ Historical matrix and disagreement numbers: [decisions/panel-frame.md](decisions
 
 ## Localization
 
-Five languages: English, Simplified Chinese, Traditional Chinese, Japanese and Korean. Strings in `Sources/Pulse/Resources/{en,zh-Hans,zh-Hant,ja,ko}.lproj`. `Package.swift` sets `defaultLocalization: "en"`.
+Six languages: English, Simplified Chinese, Traditional Chinese, Japanese, Korean and Russian. Strings in `Sources/Pulse/Resources/{en,zh-Hans,zh-Hant,ja,ko,ru}.lproj`. `Package.swift` sets `defaultLocalization: "en"`.
 
 - Language follows the system unless Settings pins one. Takes effect **without relaunch**: `LocalizationSource` swaps the `.lproj` sub-bundle. Lookups are a function call, so SwiftUI has nothing to observe — views that show copy carry `.id(settings.language)`.
 - `UsageWindow.Kind` and `ProviderUsage.Unavailability` are **cases, not stored strings**, so a reading taken in one language is not frozen when the user switches.
@@ -27,9 +27,10 @@ Five languages: English, Simplified Chinese, Traditional Chinese, Japanese and K
 - A `%` next to a placeholder is a malformed printf conversion. Bake the sign into the value (`"\(count)%"`).
 - **No conditional inside `Text(localized:)`.** The key scanner reads the bare tail after `localized:` and can match an unrelated key. Build the string in a property first.
 - Dates, times, and money use `LocalizationSource.locale`, not `Locale.autoupdatingCurrent`.
-- Large numbers: `TokenCount.short` uses 万 / 亿 when `groupsByTenThousands`. Those unit characters live in code, not the strings file.
+- Large numbers: `TokenCount.short` uses 万 / 亿 where `LocalizationSource.myriadUnits` returns units. Those unit characters live in code, not the strings file.
+- No plural rules: a `.strings` value is one form for every count, and Russian needs three. Russian copy keeps a number out of agreement — an abbreviated unit (`%@ дн.`, `%@ мин`) or a label before the figure (`Токенов: %@`) — rather than picking one form that is wrong for most counts.
 - Chinese full stop `。` is full-width and already has trailing space; do not add another (`glassSubtitle`).
-- SwiftPM lowercases `zh-Hans.lproj` to `zh-hans.lproj` in the built bundle. `Bundle.preferredLocalizations` is case-insensitive; `path(forResource: "zh-Hans", ofType: "lproj")` returns nil.
+- SwiftPM has lowercased `zh-Hans.lproj` to `zh-hans.lproj` in the built bundle (the current toolchain does not, and CI accepts either). Where it does, `Bundle.preferredLocalizations` is case-insensitive but `path(forResource: "zh-Hans", ofType: "lproj")` returns nil, so `LocalizationSource` matches the folder name case-insensitively.
 
 ### A translation is written, not converted
 
@@ -42,10 +43,24 @@ Five languages: English, Simplified Chinese, Traditional Chinese, Japanese and K
 - **Do not invent objects the interface has not got.** *不随它在轨道上的位置变化* gave the rail an 轨道 nobody had mentioned.
 - **zh-Hant is not zh-Hans run through a converter.** Vocabulary differs (*個性* / *性格*, *預設* / *默认*), and so does terminology: zh-Hant says *服務商* where zh-Hans says *供应商*.
 - **One term per concept per language.** zh-Hans currently breaks this: *供应商* in the navigation, *服务商* in two strings. Worth settling next time that pane is open.
-
 `./Scripts/check-localization.sh` compares **every** `.strings` file against English — it globs `*.lproj` rather than naming a pair, so a language added to the app but not to the script cannot go unchecked — **and** every key the source asks for (`Scripts/localization-keys.py` — a scanner, not a regex, because interpolations nest). Comparing only the two files missed a renamed string literal that fell back to English while both files still agreed.
 
 Why implicit `Text` fails, and the scanner’s blind spots: [decisions/localization.md](decisions/localization.md).
+
+## Writing users can read
+
+**Everything a user can see is held to one standard**, in every language, on every surface: interface copy in the six `.strings` files, notification text, the Sparkle update window, the CHANGELOG entry (which becomes both the GitHub release page and the update dialog), the READMEs, the `Docs/setup/` pages and every issue reply. If somebody decides whether to install, click or trust something based on the words, the words are user-visible.
+
+The standard — no script checks any of this, it is a read-through job, done on the rows a user actually sees:
+
+- **Written, not converted.** The rule for translations above applies to the source language and to every surface: no English syntax, no word-by-word rendering, no phrase a native reader would have to reread.
+- **Standard register.** Release notes and interface copy are formal, plain and complete — the way a Mac application writes, not the way somebody talks. Deliberate "plain talk" is as wrong as jargon: it reads as carelessness, and half the time it stops saying what happened at all. Concretely banned: sentences whose subject is a vague 「它」, idioms that describe damage instead of the fix (「削平」「冲掉」), chatty connectors (「马上」「没人点就」) in place of stating the behaviour.
+- **Release entries follow [Open WebUI's changelog](https://github.com/open-webui/open-webui/blob/main/CHANGELOG.md).** Every changelog surface — `CHANGELOG.md`, and the GitHub release page and Sparkle window made from it — uses one shape, without its emoji: a short bold title that stands alone, then **one sentence** saying what it is and where to turn it on, then the issue or PR links. No background, no reasoning, no caveats; a Docs link carries the detail. Example: `- **扩展可以上报自定义指标。** 例如首字时间和输出速率，显示在卡片上并画出趋势线。[#80](https://github.com/qunqin24/Pulse/issues/80)`
+- **Say the behaviour, then the reason** — everywhere but the changelog. Interface copy, guides and issue replies lead with what the user gets or what stopped going wrong, then explain in full sentences.
+- **One term per concept, everywhere.** The vocabulary of a release entry is the vocabulary of the interface it describes: zh-Hans says 服务商 and 账号, and a button labelled one thing on screen is called the same thing in the notes about it.
+- **Nothing invented, nothing vague.** No object the interface has not got, no「它」or「那个」without a referent, and no claim the change cannot support. 「合适的宽度」 says nothing; what changed about the width does.
+- **Credits describe the actual relationship.** The panel design takes inspiration from Vinz's work shared on X; it is not a reproduction. Say “inspired by” rather than “built from”, and keep that distinction in every language. Code or assets actually ported from another project must still be credited as ports.
+- **The changelog keeps its grammar.** Entries stay in the small language `Scripts/changelog.py` converts (bullets, `**bold**`, `` `code` ``, links), validated with `python3 Scripts/changelog.py x.y.z > /dev/null` before a tag, and never regain the pseudo-conversational style that had to be rewritten wholesale on 2026-10-07 — every release page from 1.0.0 to 1.8.1 carried it.
 
 ## Resources
 
@@ -53,7 +68,7 @@ Why implicit `Text` fails, and the scanner’s blind spots: [decisions/localizat
 
 The package resource bundle must land in `Contents/Resources` in a real app (`Bundle.module` looks through `Bundle.main.resourceURL`). Leave it out and the app runs, silently in English, with no marks. [releasing.md](releasing.md).
 
-Shipping the `.lproj` folders is **not enough on its own**. CFBundle resolves a nested bundle's language against the **main** bundle's declared localizations, so with no `CFBundleLocalizations` in `Pulse.app/Contents/Info.plist`, `Bundle.module.preferredLocalizations` comes back `["en"]` on a Mac set to `zh-Hans-CN` and every lookup returns the English key — strings all present, all unused. `Scripts/bundle.sh` declares all five; CI asserts each one survives in the plist *and* as an `.lproj` inside the resource bundle. Adding a language means adding it in **four** places: a new `.lproj`, an `AppLanguage` case, `CFBundleLocalizations` in `bundle.sh`, and the CI loop.
+Shipping the `.lproj` folders is **not enough on its own**. CFBundle resolves a nested bundle's language against the **main** bundle's declared localizations, so with no `CFBundleLocalizations` in `Pulse.app/Contents/Info.plist`, `Bundle.module.preferredLocalizations` comes back `["en"]` on a Mac set to `zh-Hans-CN` and every lookup returns the English key — strings all present, all unused. `Scripts/bundle.sh` declares all six; CI asserts each one survives in the plist *and* as an `.lproj` inside the resource bundle. Adding a language means adding it in **four** places: a new `.lproj`, an `AppLanguage` case, `CFBundleLocalizations` in `bundle.sh`, and the CI loop.
 
 **Numbers are part of the translation.** `LocalizationSource.myriadUnits` decides whether a token count is grouped by thousands or by 10⁴/10⁸, and in whose characters — 亿 for simplified Chinese, 億 for traditional Chinese and Japanese, 억 for Korean. It returns the characters rather than a `Bool` precisely so those cannot be shared by accident; the characters live in code, not in the `.strings` files, because they belong to the numeral system rather than to the copy. `MyriadUnitsTests` pins it, including that `zh_TW` / `zh_HK` / `zh_MO` are read as traditional when the locale names a region but no script.
 
@@ -66,6 +81,7 @@ When checking the key by hand, `plutil -extract … -o -`. Without `-o -` `pluti
 - New panel chrome: take size from `PanelMetrics`; keep the card an overlay; do not resize the window while a card opens ([ui/panel-geometry.md](ui/panel-geometry.md)).
 - New pointer behaviour: not `.onHover`; not exit events ([ui/input.md](ui/input.md)).
 - New settings copy: one-line subtitles. Reasoning belongs in docs, not on screen, except the money card’s provenance ([ui/settings.md](ui/settings.md)).
-- New `Provider` case: SVG, service returning `ProviderUsage`, branches in `UsageStore.refresh` / `refresh(_:)`, answers to `keepsLocalTranscripts` / `supportsLocalActivity` / `hasSourceChoice` / `supportsMultipleAccounts`, presence-only discovery and a five-language `monitoringAccessDescription`. `AgentActivity.root(for:)` and `UsageLedger.logFiles(for:)` return optional roots. Routes and auth: [providers/README.md](providers/README.md).
+- README marks: the provider and Token spend tables draw each row's mark from `Docs/icons/`, written by `./Scripts/readme-icons.py` from the app's own SVGs — white on a dark tile, because a `currentColor` mark in an `<img>` is drawn black and disappears on GitHub's dark theme. Run it after adding or changing an SVG in `Resources/`. The mark sits in a column of its own with a header word: GitHub gives every README image `max-width: 100%`, so a column holding nothing but images collapses to a dot, and an image beside a long name wraps onto its own line. A row whose product has no mark in the set (`extension` for a provider, nil `SpendAgent.iconResource`) leaves the cell empty — never the puzzle piece and never a borrowed mark. A new provider or Token spend source adds its row to all five READMEs.
+- New `Provider` case: **new providers are profiled** — the `Provider` case, a `ProviderProfile` in its own file under `Providers/Profiled/`, one line in `ProfiledProviders.profile`, and the files the profile names (its SVG in `Resources/`, its `Docs/setup/` page, its strings) — and no shared switch. Every switch that used to need a case-by-case answer for a profiled provider instead switches over `Provider.HandWrittenProvider` (`UsageProvider.swift`) — the twenty-five providers written before profiles, plus `.pulseExtension` — reached through `provider.handWritten`, which is nil for a profiled provider. A profiled provider is therefore named in none of them: not `iconResource`, not the fetch in `LiveUsageServices.fetch(for:key:)` / `fetchAdded`, not `keepsLocalTranscripts` / `supportsLocalActivity` / `hasSourceChoice` / `supportsMultipleAccounts`, not discovery, not `monitoringAccessDescription`. `AgentActivity.root(for:)` and `UsageLedger.logFiles(for:)` return optional roots. `HandWrittenProviderCoverageTests` pins that every `Provider` case is answered by exactly one of `handWritten` or `profile`. Routes, auth and the full instructions either way: [providers/README.md](providers/README.md#adding-a-provider).
 
 `ImageRenderer` cannot draw `NavigationSplitView` or AppKit-backed controls — check Settings by running the app.

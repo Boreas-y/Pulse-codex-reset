@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Kiro's CLI session tree, `~/.kiro/sessions/cli/`, where each `*.json`
@@ -37,9 +38,7 @@ enum KiroReader {
 
         let session = AgentLogIO.text(header["session_id"]) ?? DatabaseReaderSupport.stem(headerFile)
         let model = Self.modelID(header) ?? "auto"
-        let project = AgentLogIO.text(header["cwd"]).map {
-            URL(fileURLWithPath: $0).lastPathComponent
-        }
+        let project = AgentLogIO.text(header["cwd"])
         let prompts = promptTimestamps(beside: headerFile)
 
         guard

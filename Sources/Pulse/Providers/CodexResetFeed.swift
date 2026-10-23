@@ -30,6 +30,7 @@ struct CodexResetEvent: Decodable, Equatable, Identifiable, Sendable {
         let publishedAt: Date
         let text: String
         let originalText: String?
+        let fullOriginalText: String?
         let url: URL
     }
 

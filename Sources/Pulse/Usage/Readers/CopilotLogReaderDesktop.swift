@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Copilot's desktop SQLite database and its session-state sidecar.
@@ -160,7 +161,7 @@ enum CopilotDesktopReader {
                             isPartial: delta.omittedReasoning,
                             sessionID: row.id,
                             title: row.title,
-                            project: project(workspace),
+                            project: workspace,
                             deduplicationID: "copilot-desktop:\(row.id):shutdown:\(identity):\(model)"
                         )
                     else { continue }
@@ -185,7 +186,7 @@ enum CopilotDesktopReader {
                 isPartial: remainder.omittedReasoning,
                 sessionID: row.id,
                 title: row.title,
-                project: project(workspace),
+                project: workspace,
                 deduplicationID: "copilot-desktop:\(row.id):row"
             ) {
                 records.append(record)
@@ -197,9 +198,17 @@ enum CopilotDesktopReader {
 
     /// The tally for a run or remainder. The reported output is kept as is and
     /// the ambiguous reasoning is never added: see the file's header.
+    ///
+    /// **Input is gross until here.** The row's `total_input_tokens` and the
+    /// sidecar's `inputTokens` both hold the cached prefix, as the Copilot
+    /// API's `prompt_tokens` does (and ccusage and tokscale read it so). The
+    /// budget compares gross with gross, so it stays gross through it; only
+    /// the record takes the cache out, or the prefix is counted twice and
+    /// priced once at the full rate. A remainder has no write figure, so what
+    /// was written stays in its input.
     private static func tally(_ counts: Counts) -> TokenTally {
         TokenTally(
-            input: counts.input,
+            input: max(counts.input - counts.cacheRead - counts.cacheWrite, 0),
             cacheWrite: counts.cacheWrite,
             cacheRead: counts.cacheRead,
             output: StructuredLogSupport.output(
@@ -302,10 +311,6 @@ enum CopilotDesktopReader {
             return CopilotLogReader.stableHash(text)
         }
         return "idx-\(index)"
-    }
-
-    private static func project(_ workspace: String?) -> String? {
-        workspace.map { URL(fileURLWithPath: $0).lastPathComponent }
     }
 
     // MARK: - Database

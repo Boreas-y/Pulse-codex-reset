@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Codex's account-level history: how many tokens went through, day by day,
@@ -44,6 +45,20 @@ struct CodexAccountUsage: Equatable, Sendable {
     func recent(_ count: Int) -> [Day] { Array(days.suffix(count)) }
 }
 
+/// The reset credits alone, as the card shows them.
+///
+/// **What Codex said, or that it said nothing.** `unreported` is a reply with
+/// no reset-credit block in it, or no app server to ask; it is shown as "Not
+/// available" rather than a count Pulse worked out.
+enum CodexResetCredits: Equatable, Sendable {
+    case available(count: Int, nextExpiry: Date?)
+    case unreported
+    /// No `codex` anywhere Pulse looks, so nothing was asked. Said apart from
+    /// `unreported` because the remedy is different, and "Not available" for
+    /// both left two Macs with several credits guessing which (issue #67).
+    case codexMissing
+}
+
 /// Reads `account/usage/read` and the reset credits from `codex app-server`.
 ///
 /// Only the app server offers these — the usage endpoint the panel normally
@@ -67,6 +82,41 @@ struct CodexAccountUsageService: Sendable {
         return parse(usage: usageRoot, limits: limitsRoot)
     }
 
+    /// Only the reset credits, from `account/rateLimits/read` — what the card
+    /// asks for on every Codex refresh while its switch is on. One call, not
+    /// the history's two.
+    func resetCredits() async -> CodexResetCredits {
+        let data: Data
+        do {
+            data = try await server.rateLimits()
+        } catch CodexAppServer.Failure.executableNotFound {
+            return .codexMissing
+        } catch {
+            return .unreported
+        }
+        guard let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return .unreported }
+        return Self.resetCredits(in: root)
+    }
+
+    /// Internal and static so the parsing is testable without a server.
+    static func resetCredits(in limits: [String: Any]) -> CodexResetCredits {
+        guard let credits = limits["rateLimitResetCredits"] as? [String: Any] else { return .unreported }
+        let available = availableCredits(in: limits)
+        // `Int(_:)` traps past its range, and a number in somebody's JSON is
+        // not bounded by anything.
+        let stated = number(credits["availableCount"]).flatMap { $0.isFinite && $0 >= 0 && $0 < 1_000_000 ? Int($0) : nil }
+        guard let count = stated ?? (credits["credits"] != nil ? available.count : nil)
+        else { return .unreported }
+        let soonest = available.compactMap { number($0["expiresAt"]).map { Date(timeIntervalSince1970: $0) } }.min()
+        return .available(count: count, nextExpiry: soonest)
+    }
+
+    /// The credits Codex lists as available, and none of the rest.
+    private static func availableCredits(in limits: [String: Any]) -> [[String: Any]] {
+        ((limits["rateLimitResetCredits"] as? [String: Any])?["credits"] as? [[String: Any]] ?? [])
+            .filter { ($0["status"] as? String) == "available" }
+    }
+
     private func parse(usage: [String: Any], limits: [String: Any]) -> CodexAccountUsage {
         let summary = usage["summary"] as? [String: Any] ?? [:]
 
@@ -79,12 +129,17 @@ struct CodexAccountUsageService: Sendable {
             return CodexAccountUsage.Day(date: date, tokens: Int(tokens))
         }
 
-        let credits = limits["rateLimitResetCredits"] as? [String: Any] ?? [:]
-        let available = (credits["credits"] as? [[String: Any]] ?? [])
-            .filter { ($0["status"] as? String) == "available" }
+        // The count, from the one reading of it the card uses too, so the two
+        // cannot disagree about a reply. Settings hides the row at zero, which
+        // is also how it shows a reply that stated none.
+        let count: Int = switch Self.resetCredits(in: limits) {
+        case .available(let count, _): count
+        case .unreported, .codexMissing: 0
+        }
 
-        // The one expiring soonest is the one worth spending first.
-        let soonest = available
+        // The one expiring soonest is the one worth spending first — with its
+        // title, which only this pane shows.
+        let soonest = Self.availableCredits(in: limits)
             .compactMap { credit -> CodexAccountUsage.ResetCredit? in
                 guard let title = credit["title"] as? String else { return nil }
                 return CodexAccountUsage.ResetCredit(
@@ -102,7 +157,7 @@ struct CodexAccountUsageService: Sendable {
             peakDailyTokens: Int(Self.number(summary["peakDailyTokens"]) ?? 0),
             currentStreakDays: Int(Self.number(summary["currentStreakDays"]) ?? 0),
             longestStreakDays: Int(Self.number(summary["longestStreakDays"]) ?? 0),
-            availableResetCredits: Int(Self.number(credits["availableCount"]) ?? Double(available.count)),
+            availableResetCredits: count,
             nextExpiringCredit: soonest
         )
     }

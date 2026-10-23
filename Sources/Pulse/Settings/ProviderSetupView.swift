@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import SwiftUI
 
 struct ProviderSetupView: View {
@@ -22,19 +23,30 @@ struct ProviderSetupView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    ForEach(providers) { provider in
-                        ProviderSetupRow(
-                            provider: provider,
-                            detected: settings.detectedProviders.contains(provider),
-                            isSelected: Binding(
-                                get: { selected.contains(provider) },
-                                set: { enabled in
-                                    if enabled { selected.insert(provider) }
-                                    else { selected.remove(provider) }
-                                }
-                            )
-                        )
-                        Divider()
+                    // Grouped the way Settings lists them. Each group keeps the
+                    // order it was handed: detected first, then by name.
+                    ForEach(Provider.Billing.allCases, id: \.self) { billing in
+                        let group = providers.filter { $0.billing == billing }
+                        if !group.isEmpty {
+                            Text(billing.sectionTitle)
+                                .font(.headline)
+                                .padding(.top, billing == Provider.Billing.allCases.first ? 4 : 20)
+                                .padding(.bottom, 4)
+                            ForEach(group) { provider in
+                                ProviderSetupRow(
+                                    provider: provider,
+                                    detected: settings.detectedProviders.contains(provider),
+                                    isSelected: Binding(
+                                        get: { selected.contains(provider) },
+                                        set: { enabled in
+                                            if enabled { selected.insert(provider) }
+                                            else { selected.remove(provider) }
+                                        }
+                                    )
+                                )
+                                Divider()
+                            }
+                        }
                     }
                 }
                 .padding(.horizontal, 24)
@@ -104,7 +116,7 @@ private struct ProviderSetupRow: View {
 #Preview {
     ProviderSetupView(
         settings: AppSettings(enabledAccounts: []),
-        providers: Provider.allCases, isInitial: true,
+        providers: Provider.builtIn, isInitial: true,
         finish: { _ in }, dismiss: {}
     )
 }

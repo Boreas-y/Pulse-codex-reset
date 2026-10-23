@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 import SQLite3
 
@@ -35,28 +36,33 @@ enum DevinCLIStore {
         }
 
         var buckets: [String: [String: TokenTally]] = [:]
-        var perSession: [String: (tokens: Int, cost: Double, start: Date, end: Date)] = [:]
-        var sessionSlots: [String: [String: (tokens: Int, cost: Double)]] = [:]
+        var perSession: [String: (tokens: Int, cost: Double, unpriced: Int, start: Date, end: Date)] = [:]
+        var sessionSlots: [String: [String: (tokens: Int, cost: Double, unpriced: Int)]] = [:]
 
+        var lookup = ModelPriceLookup(prices)
         Self.eachUsage(handle) { session, model, at, tally in
             let key = UsageLedgerReader.slotKey(for: at)
             buckets[key, default: [:]][model] = (buckets[key]?[model] ?? TokenTally()) + tally
 
-            let cost = ModelPrices.price(for: model, in: prices).map { tally.cost(at: $0) } ?? 0
+            let price = lookup.price(for: model)
+            let cost = price.map { tally.cost(at: $0) } ?? 0
+            let unpriced = price == nil ? tally.total : 0
 
-            var slot = sessionSlots[session, default: [:]][key] ?? (tokens: 0, cost: 0)
+            var slot = sessionSlots[session, default: [:]][key] ?? (tokens: 0, cost: 0, unpriced: 0)
             slot.tokens += tally.total
             slot.cost += cost
+            slot.unpriced += unpriced
             sessionSlots[session, default: [:]][key] = slot
 
             if var running = perSession[session] {
                 running.tokens += tally.total
                 running.cost += cost
+                running.unpriced += unpriced
                 running.start = min(running.start, at)
                 running.end = max(running.end, at)
                 perSession[session] = running
             } else {
-                perSession[session] = (tally.total, cost, at, at)
+                perSession[session] = (tally.total, cost, unpriced, at, at)
             }
         }
 
@@ -69,11 +75,12 @@ enum DevinCLIStore {
                 id: "\(file.path)#\(id)",
                 name: id,
                 title: session?.title,
-                project: session?.directory.map { URL(fileURLWithPath: $0).lastPathComponent },
+                project: UsageProject(session?.directory),
                 start: totals.start,
                 end: totals.end,
                 tokens: totals.tokens,
                 cost: totals.cost,
+                unpricedTokens: totals.unpriced,
                 slots: UsageLedgerReader.sessionSlots(sessionSlots[id] ?? [:])
             )
         }
@@ -95,6 +102,12 @@ enum DevinCLIStore {
         _ database: OpaquePointer?,
         _ consume: (String, String, Date, TokenTally) -> Void
     ) {
+        // **One message, two nodes.** The CLI keeps a message's node and a
+        // sibling under the same parent with the same `message_id` and the
+        // same metrics; read node by node, every reply counted twice (5
+        // messages, 10 metered rows, on the Mac this was found on). A message
+        // is counted once, by its id, or by its request where it has none.
+        var seen: Set<String> = []
         each(database, "SELECT session_id, chat_message, created_at FROM message_nodes") { statement in
             guard
                 let sessionText = sqlite3_column_text(statement, 0),
@@ -111,6 +124,8 @@ enum DevinCLIStore {
                 output: int(metrics["output_tokens"])
             )
             guard tally.total > 0 else { return }
+            let message = (root["message_id"] as? String) ?? (metadata["request_id"] as? String)
+            if let message, !seen.insert(message).inserted { return }
             let seconds = Double(sqlite3_column_int64(statement, 2))
             let at = Date(timeIntervalSince1970: seconds > 10_000_000_000 ? seconds / 1000 : seconds)
             guard at.timeIntervalSince1970 > 0 else { return }

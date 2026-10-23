@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// A short-lived connection to Kiro CLI's native Agent Client Protocol.
@@ -72,7 +73,7 @@ actor KiroACPClient {
         let process = Process()
         process.executableURL = executable
         process.arguments = ["acp", "--agent-engine", "v3", "--auth-method", "cli"]
-        process.environment = NetworkSession.subprocessEnvironment()
+        process.environment = BoundedProcess.environment(leading: executable, over: BoundedProcess.inheritedEnvironment)
 
         let input = Pipe(), output = Pipe(), errors = Pipe()
         process.standardInput = input

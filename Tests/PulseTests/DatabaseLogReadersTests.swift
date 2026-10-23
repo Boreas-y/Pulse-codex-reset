@@ -351,7 +351,7 @@ struct DatabaseLogReadersTests {
         // Entry a (100/10/read 30/write 20), entry b skipped as empty, entry c
         // as numeric strings with a negative cache read clamped to zero.
         #expect(z1.tally == TokenTally(input: 150, cacheWrite: 20, cacheRead: 30, output: 11))
-        #expect(z1.project == "Two")
+        #expect(z1.project == "b/Two")
         #expect(z1.deduplicationID == "zed:z1")
 
         let z2 = try #require(records.first { $0.sessionID == "z2" })
@@ -440,6 +440,10 @@ struct DatabaseLogReadersTests {
         let badRoots = DatabaseLogReaders.inputs(client: "zed", home: badHome, environment: [:])
         #expect(DatabaseLogReaders.records(client: "zed", roots: badRoots).count == 1)
         #expect(!DatabaseLogReaders.notes(client: "zed", roots: badRoots).isEmpty)
+        let combined = AgentRecordReaders.read(client: "zed", roots: badRoots)
+        #expect(combined.records.count == 1)
+        #expect(combined.records.first?.tally.total == 110)
+        #expect(!combined.notes.isEmpty)
 
         // The size ceiling is the same failure class; the limit is injected so
         // the test need not build a 32 MiB buffer. `tooLarge` is thrown before
@@ -491,7 +495,7 @@ struct DatabaseLogReadersTests {
         #expect(record.tally == TokenTally(input: 100, output: 10))
         #expect(record.model == "priced")
         #expect(record.sessionID == "s1")
-        #expect(record.project == "Pulse")
+        #expect(record.project == "/Users/me/Code/Pulse")
         #expect(record.deduplicationID == "s1:0")
         #expect(record.timestamp == Date(timeIntervalSince1970: 1_789_372_800))
         #expect(!record.isAggregate)
@@ -627,7 +631,7 @@ struct DatabaseLogReadersTests {
         #expect(record.tally.total == 145)
         #expect(record.model == "priced")
         #expect(record.sessionID == "conv-a")
-        #expect(record.project == "Pulse")
+        #expect(record.project == "/Users/me/Code/Pulse")
         #expect(record.timestamp == Date(timeIntervalSince1970: 1_789_372_900))
         #expect(record.deduplicationID == "antigravity:conv-a:resp-1")
         // An explicit per-generation timestamp is an exact event time.
@@ -635,6 +639,40 @@ struct DatabaseLogReadersTests {
         // `#1` is excluded and no whole-usage total exists, so the read is a
         // proven subset.
         #expect(record.isPartial)
+    }
+
+    @Test("Antigravity's Pro routing id is resolved by its label, not by the file's other model (#90)")
+    func antigravityProRoutingLabel() throws {
+        let home = try Self.temporary("antigravity-pro")
+        defer { try? FileManager.default.removeItem(at: home) }
+        let database = home.appending(path: ".gemini/antigravity-cli/conversations/conv-p.db")
+
+        let trajectory = Self.fieldLength(2, Self.timestampBytes(seconds: 1_789_372_800))
+        func generation(model: String, label: String?, response: String) -> [UInt8] {
+            let usage = Self.fieldVarint(2, 100) + Self.fieldString(11, response)
+            var chat = Self.fieldString(19, model) + Self.fieldLength(4, usage)
+            if let label { chat += Self.fieldString(21, label) }
+            return Self.fieldLength(1, chat)
+        }
+        let flash = generation(model: "gemini-3.6-flash", label: "Gemini 3.6 Flash (High)", response: "resp-f")
+        let pro = generation(model: "gemini-pro-default", label: "Gemini 3.1 Pro (High)", response: "resp-p")
+
+        try Self.sqlite(at: database, [
+            "CREATE TABLE trajectory_metadata_blob (data BLOB)",
+            "CREATE TABLE gen_metadata (idx INTEGER, data BLOB)",
+            "CREATE TABLE steps (metadata BLOB, step_type INTEGER)",
+            "INSERT INTO trajectory_metadata_blob VALUES (\(Self.hex(trajectory)))",
+            "INSERT INTO gen_metadata VALUES (0, \(Self.hex(flash)))",
+            "INSERT INTO gen_metadata VALUES (1, \(Self.hex(pro)))",
+        ])
+
+        let roots = DatabaseLogReaders.inputs(client: "antigravity-cli", home: home, environment: [:])
+        let records = DatabaseLogReaders.records(client: "antigravity-cli", roots: roots)
+        #expect(records.first { $0.deduplicationID == "antigravity:conv-p:resp-f" }?.model == "gemini-3.6-flash")
+        let model = try #require(records.first { $0.deduplicationID == "antigravity:conv-p:resp-p" }?.model)
+        #expect(model == "gemini-3.1-pro-preview-high")
+        // The effort on the end is dropped to reach the published price.
+        #expect(ModelPrices.aliases(for: model).contains("gemini-3.1-pro-preview"))
     }
 
     @Test("Antigravity ignores field numbers with no established meaning")
@@ -758,7 +796,7 @@ struct DatabaseLogReadersTests {
         #expect(ledger.sessions.count == 2)
         let session = try #require(ledger.sessions.first { $0.id == "micode#s1" })
         #expect(session.tokens == 165)
-        #expect(session.project == "Pulse")
+        #expect(session.project?.name == "Pulse")
 
         // One raw model across two sessions is one model row.
         let model = ModelSpendSummary.of(
@@ -800,7 +838,7 @@ struct DatabaseLogReadersTests {
         // latest input 150 − read 40 = 110 fresh; summed output 10 + 5 = 15.
         #expect(aggregate.tally == TokenTally(input: 110, cacheWrite: 25, cacheRead: 40, output: 15))
         #expect(aggregate.sessionID == "d1")
-        #expect(aggregate.project == "Pulse")
+        #expect(aggregate.project == "/Users/me/Code/Pulse")
         #expect(aggregate.isAggregate)
         #expect(aggregate.timestamp == Self.iso("2026-09-15T12:01:00Z"))
 

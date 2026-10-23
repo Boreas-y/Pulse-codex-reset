@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// GitHub Copilot's quotas, from the endpoint its own editor plugins use.
@@ -34,7 +35,7 @@ struct CopilotUsageService: Sendable {
         request.setValue("copilot-chat/0.26.7", forHTTPHeaderField: "Editor-Plugin-Version")
         request.timeoutInterval = 15
 
-        guard let (data, response) = try? await NetworkSession.shared.data(for: request) else {
+        guard let (data, response) = try? await NetworkSession.shared.recordedData(for: request) else {
             return .unavailable(.copilot, reason: .unreachable)
         }
 

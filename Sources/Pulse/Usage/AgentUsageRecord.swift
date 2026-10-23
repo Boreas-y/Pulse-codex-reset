@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// One **incremental** piece of work an agent's store recorded.
@@ -126,6 +127,7 @@ enum AgentUsageLedger {
         // session below is a subset of this bounded total, none of that
         // arithmetic needs a saturating guard of its own.
         var acceptedTotal = 0
+        var lookup = ModelPriceLookup(prices)
 
         for record in records {
             guard !Task.isCancelled else { return .empty }
@@ -184,32 +186,34 @@ enum AgentUsageLedger {
             // still count toward the totals and the models.
             guard let sessionID = Self.nonBlank(record.sessionID) else { continue }
 
-            let money = known > 0
-                ? (ModelPrices.price(for: model, in: prices, vendor: vendor).map { record.tally.cost(at: $0) } ?? 0)
-                : 0
+            let price = lookup.price(for: model, vendor: vendor)
+            let money = price.map { record.tally.cost(at: $0) } ?? 0
+            let unpriced = extra + (price == nil ? known : 0)
             let name = Self.nonBlank(record.sessionName)
             let title = Self.nonBlank(record.title)
-            let project = Self.nonBlank(record.project)
+            let project = UsageProject(record.project)
 
             if var running = sessions[sessionID] {
                 running.tokens = running.tokens + total
                 running.cost += money
+                running.unpriced += unpriced
                 running.start = min(running.start, record.timestamp)
                 running.end = max(running.end, record.timestamp)
                 if running.name == nil { running.name = name }
                 if running.title == nil { running.title = title }
                 if running.project == nil { running.project = project }
-                running.addDay(tokens: total, cost: money, on: day)
+                running.addDay(tokens: total, cost: money, unpriced: unpriced, on: day)
                 if record.isAggregate {
                     running.hasAggregate = true
                 } else {
-                    running.add(tokens: total, cost: money, at: key)
+                    running.add(tokens: total, cost: money, unpriced: unpriced, at: key)
                 }
                 sessions[sessionID] = running
             } else {
                 var running = Running(
                     tokens: total,
                     cost: money,
+                    unpriced: unpriced,
                     start: record.timestamp,
                     end: record.timestamp,
                     name: name,
@@ -217,8 +221,8 @@ enum AgentUsageLedger {
                     project: project,
                     hasAggregate: record.isAggregate
                 )
-                running.addDay(tokens: total, cost: money, on: day)
-                if !record.isAggregate { running.add(tokens: total, cost: money, at: key) }
+                running.addDay(tokens: total, cost: money, unpriced: unpriced, on: day)
+                if !record.isAggregate { running.add(tokens: total, cost: money, unpriced: unpriced, at: key) }
                 sessions[sessionID] = running
             }
         }
@@ -239,7 +243,7 @@ enum AgentUsageLedger {
         // tokens must never be listed as having "no published price".
         var unpriced = Set(ledger.unpricedModels)
         for model in acceptedModels {
-            if let price = ModelPrices.price(for: model, in: prices, vendor: vendor) {
+            if let price = lookup.price(for: model, vendor: vendor) {
                 if let name = price.name { ledger.modelNames[model] = name }
             } else {
                 unpriced.insert(model)
@@ -255,11 +259,11 @@ enum AgentUsageLedger {
             slotByStart[slot.start] = slot
         }
         for (key, models) in eventUnknown {
-            guard let start = UsageLedgerReader.sharedSlotFormatter.date(from: key) else { continue }
+            guard let start = UsageLedgerReader.slotDate(key) else { continue }
             let extra = models.values.reduce(0, +)
             let slot = slotByStart[start] ?? UsageLedger.Slot(start: start, tokens: 0, cost: 0)
             slotByStart[start] = UsageLedger.Slot(
-                start: slot.start, tokens: slot.tokens + extra, cost: slot.cost, models: slot.models
+                start: slot.start, tokens: slot.tokens + extra, cost: slot.cost, unpricedTokens: slot.unpricedTokens + extra, models: slot.models
             )
         }
         ledger.slots = slotByStart.values.sorted { $0.start < $1.start }
@@ -324,11 +328,12 @@ enum AgentUsageLedger {
                     end: running.end,
                     tokens: running.tokens,
                     cost: running.cost,
+                    unpricedTokens: running.unpriced,
                     // Aggregate timing withholds hours, not known dates. Day
                     // buckets keep a resumed session inside the selected span.
                     slots: running.hasAggregate ? [] : UsageLedgerReader.sessionSlots(running.slots),
                     days: running.days.map { date, totals in
-                        .init(date: date, tokens: totals.tokens, cost: totals.cost)
+                        .init(date: date, tokens: totals.tokens, cost: totals.cost, unpricedTokens: totals.unpriced)
                     }.sorted { $0.date < $1.date }
                 )
             }
@@ -349,7 +354,7 @@ enum AgentUsageLedger {
     /// The calendar day a slot key falls on, exactly as the shared pricing
     /// pass would group it.
     private static func day(for key: String, calendar: Calendar) -> Date? {
-        guard let start = UsageLedgerReader.sharedSlotFormatter.date(from: key) else { return nil }
+        guard let start = UsageLedgerReader.slotDate(key) else { return nil }
         return calendar.startOfDay(for: start)
     }
 
@@ -376,26 +381,29 @@ enum AgentUsageLedger {
     private struct Running {
         var tokens: Int
         var cost: Double
+        var unpriced: Int
         var start: Date
         var end: Date
         var name: String?
         var title: String?
-        var project: String?
+        var project: UsageProject?
         var hasAggregate: Bool
-        var slots: [String: (tokens: Int, cost: Double)] = [:]
-        var days: [Date: (tokens: Int, cost: Double)] = [:]
+        var slots: [String: (tokens: Int, cost: Double, unpriced: Int)] = [:]
+        var days: [Date: (tokens: Int, cost: Double, unpriced: Int)] = [:]
 
-        mutating func addDay(tokens count: Int, cost money: Double, on day: Date) {
-            var total = days[day] ?? (tokens: 0, cost: 0)
+        mutating func addDay(tokens count: Int, cost money: Double, unpriced: Int, on day: Date) {
+            var total = days[day] ?? (tokens: 0, cost: 0, unpriced: 0)
             total.tokens += count
             total.cost += money
+            total.unpriced += unpriced
             days[day] = total
         }
 
-        mutating func add(tokens count: Int, cost money: Double, at key: String) {
-            var slot = slots[key] ?? (tokens: 0, cost: 0)
+        mutating func add(tokens count: Int, cost money: Double, unpriced: Int, at key: String) {
+            var slot = slots[key] ?? (tokens: 0, cost: 0, unpriced: 0)
             slot.tokens = slot.tokens + count
             slot.cost += money
+            slot.unpriced += unpriced
             slots[key] = slot
         }
     }

@@ -1,3 +1,4 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
 
 /// Command Code's plan limits, credit pool and org spend limits.
@@ -14,7 +15,7 @@ import Foundation
 ///    the same reason it does for OpenCode Go: somebody who typed a key meant
 ///    that one, and a stale login left behind by the CLI should not quietly
 ///    override a deliberate choice.
-/// 2. **What `cmd auth login` saved**, in `~/.commandcode/auth.json` — a plain
+/// 2. **What `cmd login` saved**, in `~/.commandcode/auth.json` — a plain
 ///    JSON object carrying `apiKey` alongside `userId`, `userName`, `keyName`
 ///    and `authenticatedAt`, written owner-only.
 ///
@@ -129,7 +130,7 @@ struct CommandCodeUsageService: Sendable {
         )
     }
 
-    /// The key `cmd auth login` wrote.
+    /// The key `cmd login` wrote.
     ///
     /// Only the production file. The CLI writes `auth.staging.json` and
     /// `auth.local.json` when it is pointed at the vendor's own staging or a
@@ -188,7 +189,7 @@ struct CommandCodeUsageService: Sendable {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.timeoutInterval = 15
 
-        guard let (data, response) = try? await NetworkSession.shared.data(for: request) else {
+        guard let (data, response) = try? await NetworkSession.shared.recordedData(for: request) else {
             return .failed(.unreachable)
         }
 
@@ -665,11 +666,7 @@ struct CommandCodeUsageService: Sendable {
         guard amounts.contains(where: { $0 != nil }) else { return nil }
 
         return amounts.compactMap { $0 }.reduce(0) { $0 + max(0, $1) }
-            .formatted(
-                .currency(code: "USD")
-                    .precision(.fractionLength(2))
-                    .locale(LocalizationSource.locale)
-            )
+            .formatted(Money.reportedStyle("USD"))
     }
 
     /// Built per call: `ISO8601DateFormatter` is not `Sendable`.

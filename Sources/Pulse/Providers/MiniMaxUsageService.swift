@@ -1,12 +1,14 @@
+// Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
+import CryptoKit
 import Foundation
 
 /// The MiniMax Coding Plan's limits, from its token-plan endpoint.
 ///
-/// **Two providers, one service**, for the same reason as the GLM plan:
-/// `api.minimax.io` and `api.minimaxi.com` are one company's international and
-/// mainland storefronts, and a key for one is refused by the other. CodexBar
-/// models this as a region switch inside one provider; each gets its own ring
-/// here.
+/// **One provider, two sites** (`MiniMaxSite`): `api.minimax.io` and
+/// `api.minimaxi.com` are one company's international and mainland
+/// storefronts, and a key for one is refused by the other. They were two
+/// providers, MiniMax and MiniMax CN, until both were one choice in Settings,
+/// as Qoder's and StepFun's sites are; each site keeps its own key.
 ///
 /// `GET {host}/v1/token_plan/remains` with the key as a bearer token, falling
 /// back to the older coding-plan path. Undocumented, and it can change without
@@ -16,8 +18,8 @@ import Foundation
 /// Three things about the reply are worth knowing before changing anything here.
 ///
 /// - **It reports what is *left*, not what is gone.** `current_*_remaining_percent`
-///   at 96 means 4% spent. Antigravity is the only other provider that does
-///   this, and the inversion happens here so everything downstream stays in
+///   at 96 means 4% spent. Antigravity and Copilot do this too, and the
+///   inversion happens here so everything downstream stays in
 ///   terms of what has been used.
 /// - **Numbers arrive as strings or as numbers, interchangeably.** The same
 ///   field is `"96"` in one reply and `75` in another, so every figure goes
@@ -27,13 +29,12 @@ import Foundation
 ///   video. Read literally that is a ring pinned at 0% for a thing the account
 ///   cannot use, so they are left out.
 struct MiniMaxUsageService: Sendable {
-    let provider: Provider
+    let site: MiniMaxSite
     let enteredKey: String?
+    private let provider = Provider.minimax
 
     /// The mainland service is a different host *and* a different account.
-    private var apiHost: String {
-        provider == .minimaxCN ? "https://api.minimaxi.com" : "https://api.minimax.io"
-    }
+    private var apiHost: String { site.apiHost }
 
     /// The current path first, then the one it replaced. A plan that answers
     /// 404 on the first is not a failure, it is an older account.
@@ -45,6 +46,22 @@ struct MiniMaxUsageService: Sendable {
     }
 
     func fetch() async -> ProviderUsage {
+        var usage = await read()
+        usage.sourceScope = Self.scope(site: site, key: enteredKey)
+        return usage
+    }
+
+    /// Which site and which key a reading came from, for the cache: the two
+    /// sites are two accounts, and the site is a setting, so a failed read on
+    /// one must never fall back to the other's figures. The key is named by
+    /// its SHA-256, never by itself. See `QoderUsageService.scope`.
+    static func scope(site: MiniMaxSite, key: String?) -> UsageScope? {
+        guard let key = key?.trimmingCharacters(in: .whitespacesAndNewlines), !key.isEmpty else { return nil }
+        let fingerprint = SHA256.hash(data: Data(key.utf8)).map { String(format: "%02x", $0) }.joined()
+        return UsageScope(route: .endpoint, organization: site.apiHost, identity: fingerprint)
+    }
+
+    private func read() async -> ProviderUsage {
         guard let key = enteredKey.flatMap({ $0.isEmpty ? nil : $0 }) else {
             return .unavailable(provider, reason: .apiKeyMissing)
         }
@@ -82,7 +99,7 @@ struct MiniMaxUsageService: Sendable {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.timeoutInterval = 15
 
-        guard let (data, response) = try? await NetworkSession.shared.data(for: request) else {
+        guard let (data, response) = try? await NetworkSession.shared.recordedData(for: request) else {
             return .failed(.unreachable)
         }
 
@@ -100,24 +117,11 @@ struct MiniMaxUsageService: Sendable {
 
         // The service's own verdict, which is not the HTTP status: a refused
         // key comes back as a perfectly good 200 with a non-zero status here.
-        //
-        // **Not every non-zero status is a bad key**, and saying so sends the
-        // user to check a credential that is fine. 1004 is the credential one;
-        // the rest are the service having a bad day.
-        let base = root["base_resp"] as? [String: Any]
-        let status = Self.number(base?["status_code"]) ?? 0
-        if status != 0 {
-            let said = (base?["status_msg"] as? String)?.lowercased() ?? ""
-            let credential = status == 1004
-                || ["token", "auth", "login", "cookie", "credential"].contains(where: said.contains)
-            return .failed(credential ? .apiKeyRefused : .serverError)
+        if let verdict = Self.statusVerdict(base: root["base_resp"] as? [String: Any]) {
+            return .failed(verdict)
         }
 
-        // **The payload is not always wrapped.** Some replies put `data` at the
-        // root instead, and the reference decoder takes either — most of its own
-        // captured replies are the unwrapped shape. Reading only `data` reported
-        // a perfectly good account as "no limits reported".
-        let payload = (root["data"] as? [String: Any]) ?? root
+        let payload = Self.payload(from: root)
         let windows = Self.windows(from: payload, provider: provider)
         guard !windows.isEmpty else { return .failed(.noLimitsReported) }
 
@@ -136,6 +140,29 @@ struct MiniMaxUsageService: Sendable {
     }
 
     // MARK: - Mapping
+
+    /// Moved out of `attempt(_:key:)` so a test can drive it without a
+    /// network call. **Not every non-zero status is a bad key**, and saying
+    /// so sends the user to check a credential that is fine. 1004 is the
+    /// credential one; the rest are the service having a bad day. Returns nil
+    /// when the service reports no problem at all.
+    static func statusVerdict(base: [String: Any]?) -> ProviderUsage.Unavailability? {
+        let status = Self.number(base?["status_code"]) ?? 0
+        guard status != 0 else { return nil }
+        let said = (base?["status_msg"] as? String)?.lowercased() ?? ""
+        let credential = status == 1004
+            || ["token", "auth", "login", "cookie", "credential"].contains(where: said.contains)
+        return credential ? .apiKeyRefused : .serverError
+    }
+
+    /// Moved out of `attempt(_:key:)` so a test can drive it without a network
+    /// call. **The payload is not always wrapped.** Some replies put `data` at
+    /// the root instead, and the reference decoder takes either — most of its
+    /// own captured replies are the unwrapped shape. Reading only `data`
+    /// reported a perfectly good account as "no limits reported".
+    static func payload(from root: [String: Any]) -> [String: Any] {
+        (root["data"] as? [String: Any]) ?? root
+    }
 
     /// Internal so the mapping can be driven against captured replies: the
     /// field names are undocumented and the inversion below is the whole
@@ -274,7 +301,10 @@ struct MiniMaxUsageService: Sendable {
     /// The first of several names that carries a usable string. Which one a
     /// reply uses varies by account, and reading only one leaves the card
     /// blank for everybody else.
-    private static func first(_ payload: [String: Any]?, of keys: [String]) -> String? {
+    ///
+    /// Internal rather than private so `MiniMaxParsingTests` can drive it
+    /// directly. Do not tidy it back.
+    static func first(_ payload: [String: Any]?, of keys: [String]) -> String? {
         for key in keys {
             if let text = (payload?[key] as? String)?.trimmingCharacters(in: .whitespaces),
                !text.isEmpty { return text }
@@ -282,7 +312,9 @@ struct MiniMaxUsageService: Sendable {
         return nil
     }
 
-    private static func balance(_ payload: [String: Any]?, of keys: [String]) -> String? {
+    /// Internal rather than private so `MiniMaxParsingTests` can drive it
+    /// directly. Do not tidy it back.
+    static func balance(_ payload: [String: Any]?, of keys: [String]) -> String? {
         guard let points = keys.lazy.compactMap({ number(payload?[$0]) }).first(where: { $0 > 0 })
         else { return nil }
         let count = Int(points).formatted(.number.locale(LocalizationSource.locale))
@@ -306,4 +338,39 @@ struct MiniMaxUsageService: Sendable {
 
 private extension String {
     var nilWhenEmpty: String? { isEmpty ? nil : self }
+}
+
+/// Which MiniMax storefront the key belongs to: `minimax.io` or
+/// `minimaxi.com`, one company's international and mainland sites, two
+/// accounts on two hosts. A key for one is refused by the other, so the site
+/// decides where the request goes — and each site keeps its own key
+/// (`keySlot`), so choosing the other one never throws a key away.
+enum MiniMaxSite: String, CaseIterable, Codable, Sendable {
+    case international
+    case china
+
+    var apiHost: String {
+        switch self {
+        case .international: "https://api.minimax.io"
+        case .china: "https://api.minimaxi.com"
+        }
+    }
+
+    /// What the site picker shows: the domain people name the two by.
+    var label: String {
+        switch self {
+        case .international: "minimax.io"
+        case .china: "minimaxi.com"
+        }
+    }
+
+    /// Where this site's key is kept beside the provider's (`APIKeyStore`).
+    /// The international one keeps the provider's own entry, which is where
+    /// every MiniMax key was before there were two sites to choose between.
+    var keySlot: String? {
+        switch self {
+        case .international: nil
+        case .china: "minimaxi.com"
+        }
+    }
 }
