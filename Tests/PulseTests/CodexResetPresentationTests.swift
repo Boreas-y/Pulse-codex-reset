@@ -86,6 +86,17 @@ extension PanelGlobalsSuite {
 struct CodexResetTimeZoneTests {
     private func instant(_ text: String) -> Date { ISO8601DateFormatter().date(from: text)! }
 
+    @Test func compactTimeKeepsLocalDayAndFractionalOffset() {
+        let date = instant("2026-10-26T07:00:00Z")
+        let locale = Locale(identifier: "en_GB")
+        let zone = TimeZone(identifier: "Asia/Shanghai")!
+        #expect(CodexResetTime.short(date, at: date, locale: locale, timeZone: zone) == "15:00")
+        #expect(CodexResetTime.short(date, at: date.addingTimeInterval(-86400), locale: locale, timeZone: zone).contains("26"))
+        #expect(CodexResetTime.shortOffset(date, timeZone: zone) == "UTC+8")
+        #expect(CodexResetTime.shortOffset(date, timeZone: TimeZone(identifier: "Asia/Kathmandu")!) == "UTC+5:45")
+        #expect(CodexResetTime.shortOffset(date, timeZone: TimeZone(secondsFromGMT: 0)!) == "UTC")
+    }
+
     @Test func oneInstantHasDifferentLocalClockTimes() {
         let date = instant("2026-10-25T07:00:00Z")
         let locale = Locale(identifier: "en_GB")
@@ -138,6 +149,18 @@ extension PanelGlobalsSuite {
             #expect(event(.window).timingDescription(locale: locale, timeZone: zone).contains(" and "))
             #expect(deadline.relativeTiming(at: from, locale: locale, timeZone: zone)?.hasPrefix("Deadline") == true)
             #expect(deadline.relativeTiming(at: through.addingTimeInterval(1), locale: locale, timeZone: zone) == "Awaiting confirmation")
+            #expect(deadline.compactTiming(at: from, locale: locale, timeZone: zone) == "By " + CodexResetTime.short(through, at: from, locale: locale, timeZone: zone) + " · UTC")
+            #expect(dateOnly.compactTiming(at: from, locale: locale, timeZone: zone) == dateOnly.timingDescription(locale: locale, timeZone: zone))
+            let formatter = ISO8601DateFormatter()
+            let beforeDST = formatter.date(from: "2026-11-01T08:30:00Z")!
+            let afterDST = formatter.date(from: "2026-11-01T09:30:00Z")!
+            let dstEvent = CodexResetEvent(id: "dst", kind: .directReset, status: .announced, title: "", scope: "",
+                                          createdAt: beforeDST, updatedAt: beforeDST, confirmedAt: nil,
+                                          schedule: .init(precision: .window, from: beforeDST, through: afterDST, label: ""), posts: [],
+                                          url: URL(string: "https://aihot.news/codex-reset")!)
+            let la = TimeZone(identifier: "America/Los_Angeles")!
+            let full = dstEvent.compactTiming(at: beforeDST, locale: locale, timeZone: la)
+            #expect(full.contains("UTC−07:00") && full.contains("UTC−08:00"))
         }
     }
 }

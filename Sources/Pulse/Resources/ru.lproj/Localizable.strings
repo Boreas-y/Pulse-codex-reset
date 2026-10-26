@@ -1308,3 +1308,12 @@
 "No successful announcement check yet" = "Объявления ещё не удалось проверить";
 "Announcement data may be out of date" = "Данные объявления могут быть устаревшими";
 "This account’s available quota increased at %@. This does not confirm a global reset." = "В %@ доступная квота этого аккаунта увеличилась. Это не подтверждает сброс для всех аккаунтов.";
+
+/* Compact reset announcement */
+"Original: %@" = "Оригинал: %@";
+"Translation: %@" = "Перевод: %@";
+"Quota increased for this account · global reset unconfirmed" = "Квота аккаунта увеличилась · общий сброс не подтверждён";
+"By %@" = "Ожидается до %@";
+"At %@" = "Ожидается в %@";
+"Around %@" = "Ожидается около %@";
+"Expected %@–%@" = "Ожидается %@–%@";

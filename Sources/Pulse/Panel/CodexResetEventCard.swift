@@ -18,7 +18,7 @@ struct CodexResetEventSection: View {
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 60)) { context in
-            VStack(alignment: .leading, spacing: 12 * PanelMetrics.scale) {
+            VStack(alignment: .leading, spacing: 8 * PanelMetrics.scale) {
                 HStack(spacing: 8 * PanelMetrics.scale) {
                     Image(systemName: event.kind == .resetCredit ? "ticket" : "arrow.clockwise")
                         .font(.system(size: 14 * PanelMetrics.scale, weight: .semibold))
@@ -35,66 +35,32 @@ struct CodexResetEventSection: View {
                         .foregroundStyle(accent)
                 }
 
-                VStack(alignment: .leading, spacing: 4 * PanelMetrics.scale) {
-                    Text(event.localizedTitle)
-                        .font(.system(size: 13 * PanelMetrics.scale, weight: .semibold, design: .rounded))
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text(event.timingDescription(locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent))
-                        .font(.system(size: 12 * PanelMetrics.scale, weight: .medium, design: .rounded))
-                        .foregroundStyle(accent)
-                        .monospacedDigit()
-                        .fixedSize(horizontal: false, vertical: true)
-                    if let relative = event.relativeTiming(at: context.date, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent) {
-                        Text(relative)
-                            .font(.system(size: DetailCardLayout.footnoteFontSize))
-                            .foregroundStyle(.secondary)
-                    }
-                    if event.status == .announced, event.schedule != nil {
-                        Text(localized: "Local time · AI Hot News estimate")
-                            .font(.system(size: DetailCardLayout.footnoteFontSize))
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                VStack(alignment: .leading, spacing: 4 * PanelMetrics.scale) {
-                    Text(event.status == .confirmed
-                         ? String.localized("Reported as confirmed by AI Hot News")
-                         : String.localized("AI Hot News has not confirmed this announcement"))
-                    if let checked = health.lastSucceededAt {
-                        let time = CodexResetTime.local(checked, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent)
-                        Text(String.localized("Last successful check: \(time)"))
-                    } else {
-                        Text(localized: "No successful announcement check yet")
-                    }
-                    if health.isStale(at: context.date) {
-                        Text(localized: "Announcement data may be out of date")
-                    }
-                    if let increase = observation.increase(for: account, event: event, at: context.date) {
-                        let time = CodexResetTime.local(increase.at, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent)
-                        Text(String.localized("This account’s available quota increased at \(time). This does not confirm a global reset."))
-                    }
-                }
-                .font(.system(size: DetailCardLayout.footnoteFontSize))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+                Text(event.compactTiming(at: context.date, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent))
+                    .font(.system(size: 12 * PanelMetrics.scale, weight: .medium, design: .rounded))
+                    .foregroundStyle(accent)
+                    .monospacedDigit()
+                    .fixedSize(horizontal: false, vertical: true)
 
                 if let content = event.posts.first?.content(for: LocalizationSource.locale) {
                     Text(content.isOriginal
-                         ? String.localized("Original post")
-                         : String.localized("AI Hot News Chinese translation"))
-                        .font(.system(size: DetailCardLayout.footnoteFontSize))
-                        .foregroundStyle(.secondary)
-                    if let post = event.posts.first {
-                        let posted = CodexResetTime.local(post.publishedAt, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent)
-                        Text(String.localized("Posted \(posted)"))
-                            .font(.system(size: DetailCardLayout.footnoteFontSize))
-                            .foregroundStyle(.secondary)
-                    }
-                    Text(content.text)
+                         ? String.localized("Original: \(content.text)")
+                         : String.localized("Translation: \(content.text)"))
                         .font(.system(size: 11 * PanelMetrics.scale, design: .rounded))
                         .foregroundStyle(.secondary)
-                        .lineLimit(4)
+                        .lineLimit(3)
                         .fixedSize(horizontal: false, vertical: true)
+                }
+
+                if observation.increase(for: account, event: event, at: context.date) != nil {
+                    Text(localized: "Quota increased for this account · global reset unconfirmed")
+                        .font(.system(size: DetailCardLayout.footnoteFontSize))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if health.isStale(at: context.date) {
+                    Text(localized: "Announcement data may be out of date")
+                        .font(.system(size: DetailCardLayout.footnoteFontSize))
+                        .foregroundStyle(.secondary)
                 }
 
                 HStack(spacing: 12 * PanelMetrics.scale) {
@@ -107,9 +73,41 @@ struct CodexResetEventSection: View {
                     }
                 }
             }
+            .help(details(at: context.date))
+            .accessibilityHint(details(at: context.date))
             .accessibilityElement(children: .contain)
             .accessibilityLabel(String.localized("Codex reset announcement"))
         }
+    }
+
+    private func details(at now: Date) -> String {
+        let locale = LocalizationSource.locale
+        let zone = TimeZone.autoupdatingCurrent
+        var lines = [event.status == .confirmed
+                     ? String.localized("Reported as confirmed by AI Hot News")
+                     : String.localized("AI Hot News has not confirmed this announcement")]
+        if let checked = health.lastSucceededAt {
+            let time = CodexResetTime.local(checked, locale: locale, timeZone: zone)
+            lines.append(String.localized("Last successful check: \(time)"))
+        } else {
+            lines.append(String.localized("No successful announcement check yet"))
+        }
+        if let relative = event.relativeTiming(at: now, locale: locale, timeZone: zone) { lines.append(relative) }
+        if event.status == .announced, event.schedule != nil {
+            lines.append(String.localized("Local time · AI Hot News estimate"))
+        }
+        if let post = event.posts.first {
+            let time = CodexResetTime.local(post.publishedAt, locale: locale, timeZone: zone)
+            lines.append(String.localized("Posted \(time)"))
+            if post.content(for: locale)?.isOriginal == false {
+                lines.append(String.localized("AI Hot News Chinese translation"))
+            }
+        }
+        if let increase = observation.increase(for: account, event: event, at: now) {
+            let time = CodexResetTime.local(increase.at, locale: locale, timeZone: zone)
+            lines.append(String.localized("This account’s available quota increased at \(time). This does not confirm a global reset."))
+        }
+        return lines.joined(separator: "\n")
     }
 
     private var aihotLink: some View {

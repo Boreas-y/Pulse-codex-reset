@@ -1308,3 +1308,12 @@
 "No successful announcement check yet" = "尚未成功檢查公告";
 "Announcement data may be out of date" = "公告資料可能已過期";
 "This account’s available quota increased at %@. This does not confirm a global reset." = "%@ 偵測到本帳號剩餘額度回升，不代表所有帳號均已重置。";
+
+/* Compact reset announcement */
+"Original: %@" = "原文：%@";
+"Translation: %@" = "譯文：%@";
+"Quota increased for this account · global reset unconfirmed" = "本帳號額度已回升 · 全域重置待確認";
+"By %@" = "預計 %@ 前";
+"At %@" = "預計 %@";
+"Around %@" = "預計 %@ 左右";
+"Expected %@–%@" = "預計 %@–%@";

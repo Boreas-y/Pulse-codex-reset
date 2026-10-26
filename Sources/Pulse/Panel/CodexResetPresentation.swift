@@ -44,6 +44,24 @@ extension Locale {
 
 /// Formats absolute feed instants in the user's time zone, independently of UI language.
 enum CodexResetTime {
+    static func short(_ date: Date, at now: Date, locale: Locale, timeZone: TimeZone) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.timeZone = timeZone
+        formatter.setLocalizedDateFormatFromTemplate(calendar.isDate(date, inSameDayAs: now) ? "jmm" : "MMMdjmm")
+        return formatter.string(from: date)
+    }
+
+    static func shortOffset(_ date: Date, timeZone: TimeZone) -> String {
+        let seconds = timeZone.secondsFromGMT(for: date)
+        guard seconds != 0 else { return "UTC" }
+        let magnitude = abs(seconds)
+        let minutes = magnitude % 3600 / 60
+        return "UTC\(seconds < 0 ? "−" : "+")\(magnitude / 3600)" + (minutes == 0 ? "" : String(format: ":%02d", minutes))
+    }
+
     static func local(_ date: Date, locale: Locale, timeZone: TimeZone, includesTime: Bool = true) -> String {
         let formatter = DateFormatter()
         formatter.locale = locale
@@ -67,6 +85,30 @@ enum CodexResetTime {
 }
 
 extension CodexResetEvent {
+    /// Keep the headline short; provenance and publication metadata live in help.
+    func compactTiming(at now: Date, locale: Locale, timeZone: TimeZone) -> String {
+        if status == .confirmed {
+            guard let confirmedAt else { return String.localized("Confirmed recently") }
+            let time = CodexResetTime.short(confirmedAt, at: now, locale: locale, timeZone: timeZone)
+            return String.localized("Confirmation reported \(time)") + " · " + CodexResetTime.shortOffset(confirmedAt, timeZone: timeZone)
+        }
+        guard let schedule else { return String.localized("Time not specified") }
+        // Date-only notices and ranges across a DST boundary retain full precision.
+        guard schedule.precision != .date,
+              timeZone.secondsFromGMT(for: schedule.from) == timeZone.secondsFromGMT(for: schedule.through)
+        else { return timingDescription(locale: locale, timeZone: timeZone) }
+        let start = CodexResetTime.short(schedule.from, at: now, locale: locale, timeZone: timeZone)
+        let end = CodexResetTime.short(schedule.through, at: now, locale: locale, timeZone: timeZone)
+        let text: String
+        switch schedule.precision {
+        case .deadline: text = String.localized("By \(end)")
+        case .exact: text = String.localized("At \(start)")
+        case .approximate where schedule.from == schedule.through: text = String.localized("Around \(start)")
+        default: text = String.localized("Expected \(start)–\(end)")
+        }
+        return text + " · " + CodexResetTime.shortOffset(schedule.through, timeZone: timeZone)
+    }
+
     func timingDescription(locale: Locale, timeZone: TimeZone) -> String {
         if status == .confirmed {
             guard let confirmedAt else { return String.localized("Confirmed recently") }

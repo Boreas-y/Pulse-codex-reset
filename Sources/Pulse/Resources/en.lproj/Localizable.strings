@@ -1308,3 +1308,12 @@
 "No successful announcement check yet" = "No successful announcement check yet";
 "Announcement data may be out of date" = "Announcement data may be out of date";
 "This account’s available quota increased at %@. This does not confirm a global reset." = "This account’s available quota increased at %@. This does not confirm a global reset.";
+
+/* Compact reset announcement */
+"Original: %@" = "Original: %@";
+"Translation: %@" = "Translation: %@";
+"Quota increased for this account · global reset unconfirmed" = "Quota increased for this account · global reset unconfirmed";
+"By %@" = "By %@";
+"At %@" = "At %@";
+"Around %@" = "Around %@";
+"Expected %@–%@" = "Expected %@–%@";

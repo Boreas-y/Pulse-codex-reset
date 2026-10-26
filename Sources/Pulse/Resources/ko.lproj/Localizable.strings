@@ -1308,3 +1308,12 @@
 "No successful announcement check yet" = "아직 공지를 확인하지 못했습니다";
 "Announcement data may be out of date" = "공지 정보가 오래되었을 수 있습니다";
 "This account’s available quota increased at %@. This does not confirm a global reset." = "%@에 이 계정의 남은 사용량이 늘어난 것을 감지했습니다. 모든 계정의 초기화를 확인한 것은 아닙니다.";
+
+/* Compact reset announcement */
+"Original: %@" = "원문: %@";
+"Translation: %@" = "번역: %@";
+"Quota increased for this account · global reset unconfirmed" = "이 계정의 사용량 증가 · 전체 초기화 미확인";
+"By %@" = "%@까지 예상";
+"At %@" = "%@ 예정";
+"Around %@" = "%@쯤 예상";
+"Expected %@–%@" = "%@~%@ 예상";

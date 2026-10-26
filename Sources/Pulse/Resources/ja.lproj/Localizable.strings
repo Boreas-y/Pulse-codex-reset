@@ -1308,3 +1308,12 @@
 "No successful announcement check yet" = "告知の確認はまだ成功していません";
 "Announcement data may be out of date" = "告知の情報が古い可能性があります";
 "This account’s available quota increased at %@. This does not confirm a global reset." = "%@ にこのアカウントの残り利用枠の増加を検出しました。全アカウントのリセットを確認したものではありません。";
+
+/* Compact reset announcement */
+"Original: %@" = "原文：%@";
+"Translation: %@" = "訳：%@";
+"Quota increased for this account · global reset unconfirmed" = "このアカウントの利用枠が増加・全体のリセットは未確認";
+"By %@" = "%@ までの予定";
+"At %@" = "%@ の予定";
+"Around %@" = "%@ 頃の予定";
+"Expected %@–%@" = "%@〜%@ の予定";
