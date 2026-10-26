@@ -13,9 +13,8 @@ struct PanelLink: NSViewRepresentable {
     func updateNSView(_ button: PanelLinkButton, context: Context) {
         button.destination = destination
         button.attributedTitle = NSAttributedString(string: title, attributes: [
-            .font: NSFont.systemFont(ofSize: DetailCardLayout.footnoteFontSize, weight: .medium),
-            .foregroundColor: NSColor.linkColor,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
+            .font: NSFont.systemFont(ofSize: DetailCardLayout.footnoteFontSize, weight: .regular),
+            .foregroundColor: NSColor.secondaryLabelColor
         ])
         button.setAccessibilityLabel(title)
         button.setAccessibilityHelp(destination.absoluteString)
