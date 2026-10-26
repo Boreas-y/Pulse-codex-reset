@@ -282,3 +282,5 @@ Swift 6 warning flags for build and test to reuse its compiled application.
 `FreeAcrossTests` separates an unclamped, fitting window from the full metadata budget: the latter may move within screen bounds while the rail retains its stored ratios and matching in-window offsets.
 
 `CodexResetObservationTests` covers same-account quota increases, account and plan changes, normal expiry, first reads, invalid/cache/stale inputs, long gaps, model-scoped windows and reset-credit announcements. `CodexResetHealthTests` pins freshness and failure presentation without live network or credentials.
+
+The initial freshness/recovery candidate passed its new behavioral tests but failed the full-card and notch geometry checks after its fixed announcement budget was raised to 520 points. The final candidate retains the existing 420-point budget and scrolling behavior; geometry assertions are unchanged.

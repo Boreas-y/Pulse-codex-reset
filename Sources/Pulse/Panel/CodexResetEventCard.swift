@@ -4,7 +4,7 @@ enum ResetEventCardLayout {
     /// The section has no outer padding or surface of its own; both belong to
     /// the usage bubble that contains it. This is only the conservative space
     /// the fixed AppKit panel reserves for its variable text.
-    static var maximumHeight: CGFloat { 520 * PanelMetrics.scale }
+    static var maximumHeight: CGFloat { 420 * PanelMetrics.scale }
 }
 
 /// Public reset news inside the Codex usage bubble. The divider supplied by
