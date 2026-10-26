@@ -270,3 +270,9 @@ A local pass does not prove CI will compile. The `macos-26` runner's Swift is ol
 ## Fork: reset announcements
 
 `CodexResetFeedTests` covers expiry, overlapping confirmation selection, the setting default, rail colours and the combined fixed panel budget. It is nested under `PanelGlobalsSuite`. `CodexResetPresentationTests` covers all six languages, Traditional Chinese regional locales, blank/missing original text, source attribution and native source-link dispatch. Native dispatch tests do not substitute for a real pointer test in the floating panel.
+
+The fork's build workflows pass `--no-parallel` explicitly when running the full
+suite. On shared macOS runners, concurrent rendering and subprocess tests can
+starve the process-death watches beyond their ten-second assertion. Serialization
+retains those assertions and all test cases. The bundle workflow uses the same
+Swift 6 warning flags for build and test to reuse its compiled application.

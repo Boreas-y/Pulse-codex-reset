@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: swift build -Xswiftc -swift-version -Xswiftc 6 -Xswiftc -warnings-as-errors
       - name: Tests
-        run: swift test -Xswiftc -swift-version -Xswiftc 6
+        run: swift test --no-parallel -Xswiftc -swift-version -Xswiftc 6 -Xswiftc -warnings-as-errors
       - name: Assemble fork-safe app
         env:
           PULSE_ENABLE_UPDATES: "0"

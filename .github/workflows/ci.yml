@@ -83,7 +83,7 @@ jobs:
       # thing that could catch a regression in them ran only when somebody
       # remembered to run it.
       - name: Tests
-        run: swift test
+        run: swift test --no-parallel
 
       # Proves the thing that actually ships can be assembled, not just that
       # the sources compile.
