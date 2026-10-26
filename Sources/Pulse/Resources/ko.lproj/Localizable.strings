@@ -1300,3 +1300,11 @@
 "Deadline · %@" = "예상 마감: %@";
 "Local time · AI Hot News estimate" = "현지 시간 · AI Hot News 예상";
 "Posted %@" = "원문 게시: %@";
+
+/* Announcement source freshness and local quota observations */
+"Reported as confirmed by AI Hot News" = "AI Hot News에서 확인됨";
+"AI Hot News has not confirmed this announcement" = "AI Hot News에서 아직 이 공지를 확인하지 않았습니다";
+"Last successful check: %@" = "마지막 확인 성공: %@";
+"No successful announcement check yet" = "아직 공지를 확인하지 못했습니다";
+"Announcement data may be out of date" = "공지 정보가 오래되었을 수 있습니다";
+"This account’s available quota increased at %@. This does not confirm a global reset." = "%@에 이 계정의 남은 사용량이 늘어난 것을 감지했습니다. 모든 계정의 초기화를 확인한 것은 아닙니다.";

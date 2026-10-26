@@ -830,6 +830,8 @@ struct ProviderUsage: Identifiable, Equatable, Sendable {
     var sourceScope: UsageScope?
     /// A stale status-line capture is not necessarily a cache replacement.
     var isCached = false
+    /// In-memory Codex identity for comparing live readings; never cached or exported.
+    var codexAccountFingerprint: String?
     /// Only the latest fetch carries attempts; the cache stores the origin alone.
     var attempts: [ConnectionDiagnostic.Attempt] = []
 

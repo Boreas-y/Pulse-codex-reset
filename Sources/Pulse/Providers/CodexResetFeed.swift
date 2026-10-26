@@ -101,6 +101,16 @@ struct CodexResetSnapshot: Decodable, Sendable {
 /// Errors retain the last good answer: this auxiliary feed never blanks or
 /// delays the provider usage that Pulse exists to show.
 actor CodexResetFeed {
+    struct Health: Equatable, Sendable {
+        var lastSucceededAt: Date?
+        var lastAttemptFailed = false
+
+        func isStale(at now: Date) -> Bool {
+            lastAttemptFailed || lastSucceededAt.map { now.timeIntervalSince($0) > 30 * 60 } ?? true
+        }
+    }
+
+    private(set) var health = Health()
     static let shared = CodexResetFeed()
     static let interval: TimeInterval = 15 * 60
     static let source = URL(string: "https://aihot.news/api/v1/codex-resets")!
@@ -122,6 +132,7 @@ actor CodexResetFeed {
 
         lastChecked = now
         isFetching = true
+        health.lastAttemptFailed = true
         defer { isFetching = false }
         var request = URLRequest(url: Self.source)
         request.timeoutInterval = 20
@@ -135,6 +146,7 @@ actor CodexResetFeed {
                 return CodexResetEvent.current(in: events, at: now)
             }
             if response.statusCode == 304 {
+                health = Health(lastSucceededAt: now)
                 return CodexResetEvent.current(in: events, at: now)
             }
             if response.statusCode == 429 {
@@ -147,6 +159,7 @@ actor CodexResetFeed {
 
             let snapshot = try Self.decode(data)
             events = snapshot.events
+            health = Health(lastSucceededAt: now)
             etag = response.value(forHTTPHeaderField: "ETag")
             nextAllowedAt = nil
         } catch {

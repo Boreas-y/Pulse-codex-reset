@@ -1300,3 +1300,11 @@
 "Deadline · %@" = "Deadline · %@";
 "Local time · AI Hot News estimate" = "Local time · AI Hot News estimate";
 "Posted %@" = "Posted %@";
+
+/* Announcement source freshness and local quota observations */
+"Reported as confirmed by AI Hot News" = "Reported as confirmed by AI Hot News";
+"AI Hot News has not confirmed this announcement" = "AI Hot News has not confirmed this announcement";
+"Last successful check: %@" = "Last successful check: %@";
+"No successful announcement check yet" = "No successful announcement check yet";
+"Announcement data may be out of date" = "Announcement data may be out of date";
+"This account’s available quota increased at %@. This does not confirm a global reset." = "This account’s available quota increased at %@. This does not confirm a global reset.";

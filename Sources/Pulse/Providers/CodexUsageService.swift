@@ -1,5 +1,6 @@
 // Copyright (c) 2026 qunqin24. Licensed under the Apache License, Version 2.0.
 import Foundation
+import CryptoKit
 
 /// Reads Codex's usage.
 ///
@@ -100,7 +101,12 @@ struct CodexUsageService: Sendable {
                     guard let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
                         return .failed(.unreadableReply)
                     }
-                    return .success(Self.parseUsageResponse(root, for: account))
+                    var usage = Self.parseUsageResponse(root, for: account)
+                    if !credentials.accountID.isEmpty {
+                        usage.codexAccountFingerprint = SHA256.hash(data: Data(credentials.accountID.utf8))
+                            .map { String(format: "%02x", $0) }.joined()
+                    }
+                    return .success(usage)
                 case 401, 403:
                     // The stored token has aged out; the app server can renew it.
                     return .needsFreshCredentials

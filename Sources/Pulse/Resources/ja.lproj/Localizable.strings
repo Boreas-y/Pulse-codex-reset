@@ -1300,3 +1300,11 @@
 "Deadline · %@" = "予定の期限：%@";
 "Local time · AI Hot News estimate" = "現地時刻 · AI Hot News の予想";
 "Posted %@" = "原文の投稿日時：%@";
+
+/* Announcement source freshness and local quota observations */
+"Reported as confirmed by AI Hot News" = "AI Hot News で確認済み";
+"AI Hot News has not confirmed this announcement" = "AI Hot News ではこの告知は未確認です";
+"Last successful check: %@" = "最終確認成功：%@";
+"No successful announcement check yet" = "告知の確認はまだ成功していません";
+"Announcement data may be out of date" = "告知の情報が古い可能性があります";
+"This account’s available quota increased at %@. This does not confirm a global reset." = "%@ にこのアカウントの残り利用枠の増加を検出しました。全アカウントのリセットを確認したものではありません。";

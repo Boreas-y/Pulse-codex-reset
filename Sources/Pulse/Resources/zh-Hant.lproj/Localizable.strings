@@ -1300,3 +1300,11 @@
 "Deadline · %@" = "預計截止：%@";
 "Local time · AI Hot News estimate" = "本地時間 · AI Hot News 預計";
 "Posted %@" = "原帖發佈於 %@";
+
+/* Announcement source freshness and local quota observations */
+"Reported as confirmed by AI Hot News" = "AI Hot News 已標記為確認";
+"AI Hot News has not confirmed this announcement" = "AI Hot News 尚未確認這則公告";
+"Last successful check: %@" = "最近成功檢查：%@";
+"No successful announcement check yet" = "尚未成功檢查公告";
+"Announcement data may be out of date" = "公告資料可能已過期";
+"This account’s available quota increased at %@. This does not confirm a global reset." = "%@ 偵測到本帳號剩餘額度回升，不代表所有帳號均已重置。";

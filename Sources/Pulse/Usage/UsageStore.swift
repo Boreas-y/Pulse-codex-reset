@@ -102,6 +102,8 @@ final class UsageStore {
     private let codexResetFeed = CodexResetFeed.shared
     private var codexResetTask: Task<Void, Never>?
     private(set) var codexResetEvent: CodexResetEvent?
+    private(set) var codexResetHealth = CodexResetFeed.Health()
+    private(set) var codexResetObservation = CodexResetObservation()
     /// Whether a limit is being spent where this Mac's logs cannot see, which
     /// takes the value estimate off it. The app's own; previews and tests
     /// pass none, so they neither read the real transcripts nor write the file.
@@ -424,8 +426,10 @@ final class UsageStore {
                 guard self != nil else { return }
                 if self?.wantsCodexResetAnnouncements == true {
                     let event = await codexResetFeed.current()
+                    let health = await codexResetFeed.health
                     guard !Task.isCancelled else { return }
                     self?.codexResetEvent = self?.wantsCodexResetAnnouncements == true ? event : nil
+                    self?.codexResetHealth = health
                 } else {
                     self?.codexResetEvent = nil
                 }
@@ -441,8 +445,10 @@ final class UsageStore {
         }
         Task { [weak self, codexResetFeed] in
             let event = await codexResetFeed.current(force: force)
+            let health = await codexResetFeed.health
             guard !Task.isCancelled else { return }
             self?.codexResetEvent = self?.wantsCodexResetAnnouncements == true ? event : nil
+            self?.codexResetHealth = health
         }
     }
 
@@ -773,6 +779,7 @@ final class UsageStore {
     /// restored cache through the alert rules would announce a fortnight of
     /// crossings the moment the app opened.
     private func commit(_ fetched: ProviderUsage, raw: ProviderUsage, for id: String) {
+        codexResetObservation.observe(raw, event: codexResetEvent, now: clock())
         // The replies belong to the diagnostics, not to the table every view
         // of the panel reads.
         var fetched = fetched

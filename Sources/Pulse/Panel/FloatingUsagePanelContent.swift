@@ -127,6 +127,8 @@ struct FloatingUsagePanelContent: View {
                             resetCredits: selected.account == AccountKey(.codex) ? store.codexResetCredits : nil,
                             codexResetEvent: selected.account.provider == .codex && settings.showsCodexResetAnnouncements
                                 ? store.codexResetEvent : nil,
+                            codexResetHealth: store.codexResetHealth,
+                            codexResetObservation: store.codexResetObservation,
                             isDetailed: settings.showsDetailedCard(for: selected.account),
                             spend: showsSpend(for: selected.account)
                                 ? cardLedgers.spend(for: selected.account.provider) : nil,

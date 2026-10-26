@@ -4,7 +4,7 @@ enum ResetEventCardLayout {
     /// The section has no outer padding or surface of its own; both belong to
     /// the usage bubble that contains it. This is only the conservative space
     /// the fixed AppKit panel reserves for its variable text.
-    static var maximumHeight: CGFloat { 420 * PanelMetrics.scale }
+    static var maximumHeight: CGFloat { 520 * PanelMetrics.scale }
 }
 
 /// Public reset news inside the Codex usage bubble. The divider supplied by
@@ -12,6 +12,9 @@ enum ResetEventCardLayout {
 /// provider-reported quota without making it look like a detached popover.
 struct CodexResetEventSection: View {
     let event: CodexResetEvent
+    var health = CodexResetFeed.Health()
+    var observation = CodexResetObservation()
+    var account = AccountKey(.codex)
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 60)) { context in
@@ -52,6 +55,28 @@ struct CodexResetEventSection: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+
+                VStack(alignment: .leading, spacing: 4 * PanelMetrics.scale) {
+                    Text(event.status == .confirmed
+                         ? String.localized("Reported as confirmed by AI Hot News")
+                         : String.localized("AI Hot News has not confirmed this announcement"))
+                    if let checked = health.lastSucceededAt {
+                        let time = CodexResetTime.local(checked, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent)
+                        Text(String.localized("Last successful check: \(time)"))
+                    } else {
+                        Text(localized: "No successful announcement check yet")
+                    }
+                    if health.isStale(at: context.date) {
+                        Text(localized: "Announcement data may be out of date")
+                    }
+                    if let increase = observation.increase(for: account, event: event, at: context.date) {
+                        let time = CodexResetTime.local(increase.at, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent)
+                        Text(String.localized("This account’s available quota increased at \(time). This does not confirm a global reset."))
+                    }
+                }
+                .font(.system(size: DetailCardLayout.footnoteFontSize))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
 
                 if let content = event.posts.first?.content(for: LocalizationSource.locale) {
                     Text(content.isOriginal

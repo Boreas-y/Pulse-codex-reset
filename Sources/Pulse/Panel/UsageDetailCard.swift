@@ -171,6 +171,8 @@ struct UsageDetailCard: View {
     /// asked. Nil draws no row at all.
     var resetCredits: CodexResetCredits?
     var codexResetEvent: CodexResetEvent? = nil
+    var codexResetHealth = CodexResetFeed.Health()
+    var codexResetObservation = CodexResetObservation()
     /// The detailed card: the plan, how far through each window the clock is
     /// and the account's recent activity. Set per account.
     var isDetailed = false
@@ -340,7 +342,8 @@ struct UsageDetailCard: View {
 
             if let codexResetEvent {
                 Divider()
-                CodexResetEventSection(event: codexResetEvent)
+                CodexResetEventSection(event: codexResetEvent, health: codexResetHealth,
+                                      observation: codexResetObservation, account: usage.account)
             }
 
             if isDetailed, let spend {
