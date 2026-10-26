@@ -1290,3 +1290,13 @@
 "Reset credit confirmed" = "한도 초기화 크레딧 배포 확인";
 "Show public Codex reset and reset-credit news in usage details." = "공개된 Codex 한도 초기화 및 초기화 크레딧 소식을 사용량 세부 정보에 표시합니다.";
 "Time not specified" = "시간 미정";
+
+/* Reset news: device-local time and source timestamps. */
+"Confirmation reported %@" = "확인 소식 기록: %@";
+"Expected by %@" = "%@까지 완료 예상";
+"Expected at %@" = "%@에 반영 예상";
+"Expected around %@" = "%@ 무렵 예상";
+"Expected between %@ and %@" = "예상 시간대: %@ ~ %@";
+"Deadline · %@" = "예상 마감: %@";
+"Local time · AI Hot News estimate" = "현지 시간 · AI Hot News 예상";
+"Posted %@" = "원문 게시: %@";

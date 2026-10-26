@@ -1290,3 +1290,13 @@
 "Reset credit confirmed" = "已确认发放重置卡";
 "Show public Codex reset and reset-credit news in usage details." = "在 Codex 用量详情中显示公开的额度重置和重置卡消息。";
 "Time not specified" = "时间未确定";
+
+/* Reset news: device-local time and source timestamps. */
+"Confirmation reported %@" = "确认消息记录于 %@";
+"Expected by %@" = "预计于 %@ 前完成";
+"Expected at %@" = "预计于 %@ 生效";
+"Expected around %@" = "预计在 %@ 左右";
+"Expected between %@ and %@" = "预计时间段：%@ 至 %@";
+"Deadline · %@" = "预计截止：%@";
+"Local time · AI Hot News estimate" = "本地时间 · AI Hot News 预计";
+"Posted %@" = "原帖发布于 %@";

@@ -4,7 +4,7 @@ enum ResetEventCardLayout {
     /// The section has no outer padding or surface of its own; both belong to
     /// the usage bubble that contains it. This is only the conservative space
     /// the fixed AppKit panel reserves for its variable text.
-    static var maximumHeight: CGFloat { 250 * PanelMetrics.scale }
+    static var maximumHeight: CGFloat { 420 * PanelMetrics.scale }
 }
 
 /// Public reset news inside the Codex usage bubble. The divider supplied by
@@ -36,10 +36,21 @@ struct CodexResetEventSection: View {
                     Text(event.localizedTitle)
                         .font(.system(size: 13 * PanelMetrics.scale, weight: .semibold, design: .rounded))
                         .fixedSize(horizontal: false, vertical: true)
-                    Text(timing(at: context.date))
+                    Text(event.timingDescription(locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent))
                         .font(.system(size: 12 * PanelMetrics.scale, weight: .medium, design: .rounded))
                         .foregroundStyle(accent)
                         .monospacedDigit()
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let relative = event.relativeTiming(at: context.date, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent) {
+                        Text(relative)
+                            .font(.system(size: DetailCardLayout.footnoteFontSize))
+                            .foregroundStyle(.secondary)
+                    }
+                    if event.status == .announced, event.schedule != nil {
+                        Text(localized: "Local time · AI Hot News estimate")
+                            .font(.system(size: DetailCardLayout.footnoteFontSize))
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 if let content = event.posts.first?.content(for: LocalizationSource.locale) {
@@ -48,6 +59,12 @@ struct CodexResetEventSection: View {
                          : String.localized("AI Hot News Chinese translation"))
                         .font(.system(size: DetailCardLayout.footnoteFontSize))
                         .foregroundStyle(.secondary)
+                    if let post = event.posts.first {
+                        let posted = CodexResetTime.local(post.publishedAt, locale: LocalizationSource.locale, timeZone: .autoupdatingCurrent)
+                        Text(String.localized("Posted \(posted)"))
+                            .font(.system(size: DetailCardLayout.footnoteFontSize))
+                            .foregroundStyle(.secondary)
+                    }
                     Text(content.text)
                         .font(.system(size: 11 * PanelMetrics.scale, design: .rounded))
                         .foregroundStyle(.secondary)
@@ -85,28 +102,4 @@ struct CodexResetEventSection: View {
         event.status == .confirmed ? .green : .orange
     }
 
-    private func timing(at now: Date) -> String {
-        if event.status == .confirmed {
-            return String.localized("Confirmed recently")
-        }
-        guard let schedule = event.schedule else {
-            return String.localized("Time not specified")
-        }
-        if now < schedule.from {
-            return String.localized("Expected \(Self.relative(from: now, to: schedule.from))")
-        }
-        if now <= schedule.through {
-            return schedule.precision == .exact
-                ? String.localized("Expected now")
-                : String.localized("Expected window is open")
-        }
-        return String.localized("Awaiting confirmation")
-    }
-
-    private static func relative(from start: Date, to end: Date) -> String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.locale = LocalizationSource.locale
-        formatter.unitsStyle = .full
-        return formatter.localizedString(for: end, relativeTo: start)
-    }
 }

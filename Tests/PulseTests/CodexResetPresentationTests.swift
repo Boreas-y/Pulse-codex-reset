@@ -37,6 +37,9 @@ struct CodexResetPresentationTests {
     @Test @MainActor func nativeLinkAcceptsFirstClickAndOpensItsOwnDestination() throws {
         _ = NSApplication.shared
         let button = PanelLinkButton()
+        button.frame = NSRect(x: 0, y: 0, width: 120, height: 24)
+        button.updateTrackingAreas()
+        #expect(button.trackingAreas.contains { $0.options.contains([.activeAlways, .mouseEnteredAndExited, .inVisibleRect]) })
         var opened: [URL] = []
         button.open = { opened.append($0) }
         #expect(button.acceptsFirstMouse(for: nil))
@@ -76,6 +79,65 @@ extension PanelGlobalsSuite {
                 LocalizationSource.use(language)
                 #expect(event.localizedTitle == expected)
             }
+        }
+    }
+}
+
+struct CodexResetTimeZoneTests {
+    private func instant(_ text: String) -> Date { ISO8601DateFormatter().date(from: text)! }
+
+    @Test func oneInstantHasDifferentLocalClockTimes() {
+        let date = instant("2026-10-25T07:00:00Z")
+        let locale = Locale(identifier: "en_GB")
+        let china = CodexResetTime.local(date, locale: locale, timeZone: TimeZone(identifier: "Asia/Shanghai")!)
+        let japan = CodexResetTime.local(date, locale: locale, timeZone: TimeZone(identifier: "Asia/Tokyo")!)
+        let california = CodexResetTime.local(date, locale: locale, timeZone: TimeZone(identifier: "America/Los_Angeles")!)
+        #expect(china.contains("15:00") && china.contains("UTC+08:00"))
+        #expect(japan.contains("16:00") && japan.contains("UTC+09:00"))
+        #expect(california.contains("00:00") && california.contains("UTC−07:00"))
+    }
+
+    @Test func daylightSavingOffsetBelongsToEventDate() {
+        let zone = TimeZone(identifier: "America/Los_Angeles")!
+        let locale = Locale(identifier: "en_GB")
+        let before = CodexResetTime.local(instant("2026-11-01T08:30:00Z"), locale: locale, timeZone: zone)
+        let after = CodexResetTime.local(instant("2026-11-01T09:30:00Z"), locale: locale, timeZone: zone)
+        #expect(before.contains("01:30") && before.contains("UTC−07:00"))
+        #expect(after.contains("01:30") && after.contains("UTC−08:00"))
+    }
+
+    @Test func languageDoesNotChooseTimeZone() {
+        let date = instant("2026-10-25T07:00:00Z")
+        let china = TimeZone(identifier: "Asia/Shanghai")!
+        #expect(CodexResetTime.local(date, locale: Locale(identifier: "ja_JP"), timeZone: china).contains("UTC+08:00"))
+        #expect(CodexResetTime.local(date, locale: Locale(identifier: "en_US"), timeZone: TimeZone(identifier: "Asia/Kathmandu")!).contains("UTC+05:45"))
+    }
+}
+
+extension PanelGlobalsSuite {
+    @Suite(.serialized)
+    struct CodexResetTimingCopyTests {
+        @Test @MainActor func deadlineAndWindowKeepTheirMeaning() {
+            let previous = LocalizationSource.language
+            defer { LocalizationSource.use(previous) }
+            LocalizationSource.use(.english)
+            let from = Date(timeIntervalSince1970: 1_800_000_000)
+            let through = from.addingTimeInterval(3600)
+            let locale = Locale(identifier: "en_GB")
+            let zone = TimeZone(secondsFromGMT: 0)!
+            func event(_ precision: CodexResetEvent.Schedule.Precision) -> CodexResetEvent {
+                .init(id: "timing", kind: .directReset, status: .announced, title: "", scope: "", createdAt: from, updatedAt: from,
+                      confirmedAt: nil, schedule: .init(precision: precision, from: from, through: through, label: "北京时间"), posts: [],
+                      url: URL(string: "https://aihot.news/codex-reset")!)
+            }
+            let deadline = event(.deadline)
+            #expect(deadline.timingDescription(locale: locale, timeZone: zone) == "Expected by " + CodexResetTime.local(through, locale: locale, timeZone: zone))
+            let dateOnly = event(.date)
+            #expect(!dateOnly.timingDescription(locale: locale, timeZone: zone).components(separatedBy: " · ")[0].contains(":"))
+            #expect(dateOnly.relativeTiming(at: from.addingTimeInterval(-3600), locale: locale, timeZone: zone) == nil)
+            #expect(event(.window).timingDescription(locale: locale, timeZone: zone).contains(" and "))
+            #expect(deadline.relativeTiming(at: from, locale: locale, timeZone: zone)?.hasPrefix("Deadline") == true)
+            #expect(deadline.relativeTiming(at: through.addingTimeInterval(1), locale: locale, timeZone: zone) == "Awaiting confirmation")
         }
     }
 }

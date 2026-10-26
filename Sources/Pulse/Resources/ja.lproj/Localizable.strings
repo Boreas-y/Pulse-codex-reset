@@ -1290,3 +1290,13 @@
 "Reset credit confirmed" = "リセットクレジットの配布を確認";
 "Show public Codex reset and reset-credit news in usage details." = "公開されている Codex の制限リセットとリセットクレジット情報を使用量の詳細に表示します。";
 "Time not specified" = "時刻未定";
+
+/* Reset news: device-local time and source timestamps. */
+"Confirmation reported %@" = "確認情報の記録日時：%@";
+"Expected by %@" = "%@ までに完了予定";
+"Expected at %@" = "%@ に反映予定";
+"Expected around %@" = "%@ ごろの予定";
+"Expected between %@ and %@" = "予定時間帯：%@ ～ %@";
+"Deadline · %@" = "予定の期限：%@";
+"Local time · AI Hot News estimate" = "現地時刻 · AI Hot News の予想";
+"Posted %@" = "原文の投稿日時：%@";

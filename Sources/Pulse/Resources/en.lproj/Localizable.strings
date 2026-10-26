@@ -1290,3 +1290,13 @@
 "Reset credit confirmed" = "Reset credit confirmed";
 "Show public Codex reset and reset-credit news in usage details." = "Show public Codex reset and reset-credit news in usage details.";
 "Time not specified" = "Time not specified";
+
+/* Reset news: device-local time and source timestamps. */
+"Confirmation reported %@" = "Confirmation reported %@";
+"Expected by %@" = "Expected by %@";
+"Expected at %@" = "Expected at %@";
+"Expected around %@" = "Expected around %@";
+"Expected between %@ and %@" = "Expected between %@ and %@";
+"Deadline · %@" = "Deadline · %@";
+"Local time · AI Hot News estimate" = "Local time · AI Hot News estimate";
+"Posted %@" = "Posted %@";

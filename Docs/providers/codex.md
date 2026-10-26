@@ -125,3 +125,5 @@ Settings › Codex › **Service status** (`ServiceStatus`, `ServiceStatusGroup`
 ## First run
 
 Presence of `~/.codex`, never its contents.
+
+The reset news section formats feed instants in `TimeZone.autoupdatingCurrent`; UI language changes date wording, never the time zone. Each absolute timestamp includes its event-date UTC offset, including daylight saving and fractional-hour offsets. A deadline says "by", a window shows both ends, and date-only estimates omit invented clock precision and countdowns. Announcements are labelled as AIhot estimates; confirmations use the supplied confirmation-record timestamp, never the individual account receipt time. The quoted post has its own local publication time so "tomorrow" retains its original context. Source PST/PDT ambiguity is not silently corrected.

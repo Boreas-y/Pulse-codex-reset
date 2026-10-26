@@ -1290,3 +1290,13 @@
 "Reset credit confirmed" = "Выдача кредита для сброса подтверждена";
 "Show public Codex reset and reset-credit news in usage details." = "Показывать публичные объявления о сбросе лимитов Codex и выдаче кредитов для сброса в сведениях об использовании.";
 "Time not specified" = "Время не указано";
+
+/* Reset news: device-local time and source timestamps. */
+"Confirmation reported %@" = "Подтверждение опубликовано %@";
+"Expected by %@" = "Ожидается до %@";
+"Expected at %@" = "Ожидается %@";
+"Expected around %@" = "Ожидается примерно %@";
+"Expected between %@ and %@" = "Ожидаемый период: %@ — %@";
+"Deadline · %@" = "Ожидаемый срок: %@";
+"Local time · AI Hot News estimate" = "Местное время · оценка AI Hot News";
+"Posted %@" = "Оригинал опубликован %@";

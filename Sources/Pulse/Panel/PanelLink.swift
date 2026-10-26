@@ -23,6 +23,7 @@ struct PanelLink: NSViewRepresentable {
 
 @MainActor
 final class PanelLinkButton: NSButton {
+    private var linkTrackingArea: NSTrackingArea?
     var destination: URL?
     var open: (URL) -> Void = { NSWorkspace.shared.open($0) }
 
@@ -36,6 +37,35 @@ final class PanelLinkButton: NSButton {
     }
 
     required init?(coder: NSCoder) { return nil }
+
+    override func updateTrackingAreas() {
+        if let linkTrackingArea { removeTrackingArea(linkTrackingArea) }
+        let area = NSTrackingArea(
+            rect: .zero,
+            options: [.mouseEnteredAndExited, .mouseMoved, .activeAlways, .inVisibleRect],
+            owner: self, userInfo: nil
+        )
+        addTrackingArea(area)
+        linkTrackingArea = area
+        super.updateTrackingAreas()
+    }
+
+    override func mouseEntered(with event: NSEvent) {
+        if isEnabled { NSCursor.pointingHand.set() }
+    }
+
+    override func mouseMoved(with event: NSEvent) {
+        if isEnabled { NSCursor.pointingHand.set() }
+    }
+
+    override func mouseExited(with event: NSEvent) {
+        NSCursor.arrow.set()
+    }
+
+    override func resetCursorRects() {
+        super.resetCursorRects()
+        if isEnabled { addCursorRect(visibleRect, cursor: .pointingHand) }
+    }
 
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 
