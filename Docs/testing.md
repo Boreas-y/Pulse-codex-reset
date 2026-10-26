@@ -278,3 +278,5 @@ retains those assertions and all test cases. The bundle workflow uses the same
 Swift 6 warning flags for build and test to reuse its compiled application.
 
 `CodexResetTimeZoneTests` pins the same instant in China, Japan and California, both occurrences of 01:30 at the US daylight-saving transition, a 45-minute offset and language/time-zone independence. Timing-copy tests distinguish deadlines, ranges and date-only precision. Link probes check native tracking options and click dispatch; physical hover delivery remains a separate UI check.
+
+`FreeAcrossTests` separates an unclamped, fitting window from the full metadata budget: the latter may move within screen bounds while the rail retains its stored ratios and matching in-window offsets.

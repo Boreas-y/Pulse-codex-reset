@@ -28,13 +28,31 @@ extension PanelGlobalsSuite {
             #expect(layout(0.5, 0.8).0.edge.axis == .horizontal)
         }
 
-        @Test("The window hangs down from the rail, or stands up from it")
+        @Test("A window that fits hangs down from the rail, or stands up from it")
         func windowFollowsTheCard() {
-            let (_, high) = layout(0.5, 0.2)
+            // This invariant applies before screen-edge clamping. Rich reset
+            // metadata can make the full budget taller than this available half.
+            let fitting = CGSize(width: panel.width, height: min(panel.height, visible.height / 2))
+            let high = PanelPlacement(dock: .floating(.horizontal), horizontalRatio: 0.5, verticalRatio: 0.2)
+                .layout(in: visible, topEdge: 1169, panel: fitting, rail: rail)
             #expect(abs(high.frame.maxY - high.railOrigin.y) < 0.01)
 
-            let (_, low) = layout(0.5, 0.8)
+            let low = PanelPlacement(dock: .floating(.horizontal), horizontalRatio: 0.5, verticalRatio: 0.8)
+                .layout(in: visible, topEdge: 1169, panel: fitting, rail: rail)
             #expect(abs(low.frame.minY - (low.railOrigin.y - rail.height)) < 0.01)
+        }
+
+        @Test("A clamped full card budget keeps the rail at its stored ratios")
+        func fullBudgetKeepsRailPosition() {
+            for v in [0.2, 0.8] {
+                let (_, placed) = layout(0.5, v)
+                let expectedTop = visible.minY + CGFloat(1 - v) * (visible.height - rail.height) + rail.height
+                #expect(abs(placed.railOrigin.y - expectedTop) < 0.01)
+                #expect(visible.contains(placed.frame))
+                let offset = PanelPlacement.offsets(forRailTopLeft: placed.railOrigin, in: placed.frame, rail: rail)
+                #expect(abs(placed.frame.maxY - offset.top - expectedTop) < 0.01)
+                #expect(abs(placed.frame.minX + offset.leading - placed.railOrigin.x) < 0.01)
+            }
         }
 
         @Test("The rail goes where both ratios say, flush into the corners (#85)")
