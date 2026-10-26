@@ -318,6 +318,7 @@ final class FloatingPanelController {
         panel.hidesOnDeactivate = false
         panel.isReleasedWhenClosed = false
         panel.becomesKeyOnlyIfNeeded = true
+        panel.allowsToolTipsWhenApplicationIsInactive = true
         panel.applyLevel(for: placement.dock)
         applyCollectionBehavior()
         applyScreenCapture()
