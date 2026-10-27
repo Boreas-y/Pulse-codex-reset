@@ -67,7 +67,7 @@ Click-away ending editing is `SettingsWindow.sendEvent`, geometry vs the field, 
 
 ## Fork: reset source links
 
-`PanelLink` hosts a native `NSButton` with link accessibility semantics and `acceptsFirstMouse` enabled. The links use regular-weight secondary label text without an underline, matching the quiet announcement excerpt. Each button opens its own HTTP(S) destination through `NSWorkspace`, so a non-key accessory panel can dispatch the first click. The AIhot page and original X post are separate links in every language. `CodexResetPresentationTests` checks dispatch with an injected opener and first-mouse acceptance; this is a control test, not proof of physical pointer delivery through the running panel.
+`PanelLink` hosts a native `NSButton` with link accessibility semantics and `acceptsFirstMouse` enabled. Both source links retain a leading SF Symbol `link` icon, tinted to match the regular-weight secondary label text without an underline. Each button opens its own HTTP(S) destination through `NSWorkspace`, so a non-key accessory panel can dispatch the first click. The AIhot page and original X post are separate links in every language. `CodexResetPresentationTests` checks dispatch with an injected opener and first-mouse acceptance; this is a control test, not proof of physical pointer delivery through the running panel.
 
 Reset source buttons retain muted, un-underlined text and use the pointing-hand cursor. Native cursor rectangles cover only the visible button area. An `activeAlways` tracking area also sets the cursor on entry and movement for the non-key accessory panel; exiting restores the arrow without closing or resizing the panel. Tracking is rebuilt with the view bounds.
 
