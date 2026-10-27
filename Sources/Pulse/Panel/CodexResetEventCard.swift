@@ -64,6 +64,10 @@ struct CodexResetEventSection: View {
                 }
 
                 HStack(spacing: 12 * PanelMetrics.scale) {
+                    Image(systemName: "link")
+                        .font(.system(size: DetailCardLayout.footnoteFontSize))
+                        .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
                     if LocalizationSource.locale.prefersAIhotResetLink {
                         aihotLink
                         originalLink

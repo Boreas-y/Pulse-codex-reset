@@ -12,9 +12,6 @@ struct PanelLink: NSViewRepresentable {
 
     func updateNSView(_ button: PanelLinkButton, context: Context) {
         button.destination = destination
-        button.image = NSImage(systemSymbolName: "link", accessibilityDescription: nil)?
-            .withSymbolConfiguration(.init(pointSize: DetailCardLayout.footnoteFontSize, weight: .regular))
-        button.contentTintColor = .secondaryLabelColor
         button.attributedTitle = NSAttributedString(string: title, attributes: [
             .font: NSFont.systemFont(ofSize: DetailCardLayout.footnoteFontSize, weight: .regular),
             .foregroundColor: NSColor.secondaryLabelColor
@@ -34,7 +31,6 @@ final class PanelLinkButton: NSButton {
         super.init(frame: .zero)
         isBordered = false
         bezelStyle = .inline
-        imagePosition = .imageLeading
         target = self
         action = #selector(openLink)
         setAccessibilityRole(.link)
