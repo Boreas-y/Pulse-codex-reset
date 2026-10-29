@@ -186,3 +186,7 @@ They keep **separate memories on purpose**: the alerts' bookkeeping sits behind 
 ## Fork: public reset news
 
 `CodexResetFeed` has its own 15-minute clock, independent of account usage pacing. It starts only when Codex is shown and reset announcements are enabled. Disabling clears the event and stops new reads; a response already in flight is checked against the setting before display. Wake and manual Codex refresh request a fresh snapshot, respecting feed rate limits. This public feed uses `NetworkSession`, never account credentials. See [Codex](providers/codex.md#public-reset-announcements).
+
+### Codex reset announcement attention
+
+The reset announcement rail dot is separate from the detail card. A confirmed reset shows a green dot for two hours from `confirmedAt` (falling back to `createdAt`), while the detail card retains the existing 24-hour window. Editorial `updatedAt` changes do not restart the green dot. Pending announcements keep their orange dot while displayable. The panel checks expiry each minute even when the window clock is disabled; no network request is needed to expire the dot.

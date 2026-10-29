@@ -4,6 +4,20 @@ import Testing
 @testable import Pulse
 
 struct CodexResetPresentationTests {
+    @Test func confirmationDotExpiresWithoutHidingDetailsOrFollowingEditorialUpdates() {
+        let start = Date(timeIntervalSince1970: 1_800_000_000)
+        let event = CodexResetEvent(
+            id: "reset", kind: .directReset, status: .confirmed, title: "Reset", scope: "",
+            createdAt: start, updatedAt: start.addingTimeInterval(23 * 3600),
+            confirmedAt: start, schedule: nil, posts: [], url: URL(string: "https://aihot.news/codex-reset")!
+        )
+        #expect(event.railStatus(at: start.addingTimeInterval(7199)) == .confirmed)
+        #expect(event.railStatus(at: start.addingTimeInterval(7200)) == nil)
+        #expect(event.railStatus(at: start.addingTimeInterval(23 * 3600)) == nil)
+        #expect(event.isDisplayable(at: start.addingTimeInterval(23 * 3600)))
+        #expect(event.railStatus(at: start.addingTimeInterval(-1)) == nil)
+    }
+
     private func post(original: String? = "Source post", full: String? = nil, text: String = "中文译文") -> CodexResetEvent.Post {
         .init(publishedAt: .distantPast, text: text, originalText: original,
               fullOriginalText: full, url: URL(string: "https://x.com/example/status/1")!)

@@ -1,6 +1,16 @@
 import Foundation
 
 extension CodexResetEvent {
+    /// Rail attention expires independently of the longer-lived detail card.
+    /// Editorial updates must not make an old confirmation look new again.
+    func railStatus(at now: Date) -> Status? {
+        guard isDisplayable(at: now) else { return nil }
+        guard status == .confirmed else { return status }
+        let confirmed = confirmedAt ?? createdAt
+        guard now >= confirmed, now.timeIntervalSince(confirmed) < 2 * 60 * 60 else { return nil }
+        return .confirmed
+    }
+
     /// The feed's title is Chinese; interface copy follows Pulse's selected language.
     var localizedTitle: String {
         switch (kind, status) {

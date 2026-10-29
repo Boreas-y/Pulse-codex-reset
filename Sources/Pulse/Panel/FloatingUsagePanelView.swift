@@ -20,8 +20,8 @@ struct FloatingUsagePanelView: View {
         let entries = entries
         let hasEvent = entries.contains { $0.botEvent != nil }
         FloatingUsagePanelContent(store: store, settings: settings, entries: entries, placement: placement)
-            .task(id: settings.showsWindowClock) {
-                guard settings.showsWindowClock else { return }
+            .task(id: settings.showsWindowClock || settings.showsCodexResetAnnouncements) {
+                guard settings.showsWindowClock || settings.showsCodexResetAnnouncements else { return }
                 while !Task.isCancelled {
                     minute = Date()
                     try? await Task.sleep(for: .seconds(60))
@@ -110,7 +110,7 @@ struct FloatingUsagePanelView: View {
             second: settings.showsSecondRing ? usage.secondWindow(preferring: pinned) : nil,
             showsRemaining: settings.showsRemaining,
             codexResetStatus: account.provider == .codex && settings.showsCodexResetAnnouncements
-                ? store.codexResetEvent?.status : nil
+                ? store.codexResetEvent?.railStatus(at: minute) : nil
         )
     }
 }
