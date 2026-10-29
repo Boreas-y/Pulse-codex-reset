@@ -2,14 +2,14 @@
 
 Qoder's credits, read through the account page's own request.
 
-**Nothing here was run against a live account by Pulse.** One reporter's capture from the mainland site (issue #59, a trial account, sanitized into `qoder-credits-trial-stale-reset.json`) is the only real reply seen; the rest of the route, the headers and the reply shape come from monitors that already read it — [CodexBar](https://github.com/steipete/CodexBar)'s `QoderUsageFetcher` and its fixtures (from CodexBar#1590), and the AIBalance notes attached to that issue — not from a capture made here. The parsing is pinned by fixtures written to that shape. Requested in issue #59, which pointed at cockpit-tools; that project carries no licence and guesses the shape by keyword, so nothing was taken from it.
+The original route and reply shape came from [CodexBar](https://github.com/steipete/CodexBar)'s `QoderUsageFetcher` and its fixtures (from CodexBar#1590), the AIBalance notes attached to that issue, and a mainland trial capture (issue #59, sanitized into `qoder-credits-trial-stale-reset.json`). A browser capture on 2026-10-29 confirmed that an international Teams account reads its shared allowance from a **separate route**, while the personal reply contains zero credits and no `shared_quota`. `qoder-organization-shared.json` follows that observed shape with every amount replaced and all account identifiers removed. The automated tests use synthetic replies, not a live account. Requested in issue #59, which pointed at cockpit-tools; that project carries no licence and guesses the shape by keyword, so nothing was taken from it.
 
 ## Place in Pulse
 
 - `Provider.qoder`. Icon `qoder` (lobe-icons). Brand colour `#2ADB5C`. Extra accounts: no. Transcripts: no. Spending history: no.
 - First run: offered unchecked in the chooser. Detected hint when `~/Library/Application Support/Qoder` or `QoderCN`, or `Qoder.app`, exists — a hint only; nothing the app keeps is read.
 - `usesAPIKey` and `usesSessionCookie` are true, so Settings draws a **session cookie** row and the "Read from browser" row, as for Ollama and Xiaomi.
-- Service: [`QoderUsageService.swift`](../../Sources/Pulse/Providers/QoderUsageService.swift). Tests: `QoderParsingTests` (the parts included), `QoderCacheTests`, and the site/session case in `UsageCacheTests`. Fixtures `Tests/PulseTests/Fixtures/qoder-*.json`.
+- Service: [`QoderUsageService.swift`](../../Sources/Pulse/Providers/QoderUsageService.swift). Tests: `QoderParsingTests` (the parts included), `QoderSharedUsageTests`, `QoderCacheTests`, and the site/session case in `UsageCacheTests`. Fixtures `Tests/PulseTests/Fixtures/qoder-*.json`.
 
 ## Two sites, one row
 
@@ -23,6 +23,8 @@ Qoder's credits, read through the account page's own request.
 ## The route
 
 `GET https://{site}/api/v2/me/usages/big_model_credits`, with the session as `Cookie`, and the headers the page sends: `Origin` and `Referer` (`/account/usage`) for the site, `X-Requested-With: XMLHttpRequest`, `Bx-V: 2.5.35`, and a Chrome `User-Agent`. `Bx-V` belongs to the bot screening Alibaba puts in front of its sites; every known reader sends all of these, so this does too.
+
+If that reply has no positive shared allowance, also ask `GET https://{site}/api/v1/me/organization-shared-usages/big_model_credits`, using the same session and headers. Read **`shared_quota.quota_summary`**, the member's allowance; `organization_pool` is the entire organization's pool and must not replace the member's limit or remainder. An inline shared allowance is kept without a second lookup. A 404 on this optional route leaves the personal reading intact. Other failures retain their error classification and the existing cache fallback, including when personal credits are zero; they are not evidence that the account has no credits. Only the international route was observed in the browser; the mainland host uses the same path and is covered synthetically.
 
 | Status | Reported as |
 |---|---|
@@ -80,7 +82,7 @@ Both: fraction is `usedValue / limitValue` (not the rounded `usagePercentage`); 
 
 **A limit of zero is not drawn.** No ring at 100% for an allowance never granted: a zero shared pool is a placeholder and is dropped, and a zero personal allowance with nothing else is `qoderNoCredits` — an answer, not an outage (`UsageAlerts.standing` → `.answered`). This clears the account's previous reading from memory and disk, so a later failure, relaunch or `--json` export cannot restore an allowance Qoder has withdrawn. An allowance with a positive limit remains a reading even when its remaining credits are zero.
 
-An absent or null `sharedQuota` means no team pool. A present pool must contain a readable summary with nonnegative used and limit values; malformed or incomplete figures are `unreadableReply`, never proof that the account has no credits. Those failures keep the usual same-site/session cache fallback. `QoderCacheTests` covers these transitions through the service and cache with synthetic HTTP responses, not a live account.
+An absent or null `sharedQuota` in the personal reply triggers the separate shared-usage lookup. A successful reply from that route must contain a readable shared summary with nonnegative used and limit values; zero is a confirmed empty pool, while malformed or incomplete figures are `unreadableReply`, never proof that the account has no credits. Those failures keep the usual same-site/session cache fallback. `QoderCacheTests` and `QoderSharedUsageTests` cover these transitions through the service and cache with synthetic HTTP responses, not a live account.
 
 ### The credits themselves (issue #88)
 

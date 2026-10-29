@@ -6,6 +6,12 @@ private final class QoderFixtureProtocol: URLProtocol, @unchecked Sendable {
     override class func canInit(with request: URLRequest) -> Bool { true }
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
     override func startLoading() {
+        if request.url?.path == "/api/v1/me/organization-shared-usages/big_model_credits" {
+            let response = HTTPURLResponse(url: request.url!, statusCode: 404, httpVersion: nil, headerFields: nil)!
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            client?.urlProtocolDidFinishLoading(self)
+            return
+        }
         let scenario = String((request.value(forHTTPHeaderField: "Cookie") ?? "").dropFirst(4))
         if scenario == "offline" {
             client?.urlProtocol(self, didFailWithError: URLError(.notConnectedToInternet))
