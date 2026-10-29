@@ -34,7 +34,8 @@ import Foundation
 /// ```
 ///
 /// `totalQuota` is the account's own: the plan plus any resource pack bought
-/// on top. `sharedQuota` is a team's pool, present only on a team plan. They
+/// on top. A team pool may arrive as `sharedQuota` in that reply or through
+/// `/api/v1/me/organization-shared-usages/big_model_credits`. They
 /// are **two rings, never one sum** — a spent personal allowance beside an
 /// untouched team pool added together reads as "plenty left" about the pool
 /// that is actually stopping you.
@@ -53,6 +54,12 @@ enum QoderSite: String, CaseIterable, Codable, Sendable {
     var origin: String { "https://\(host)" }
 
     var usageURL: URL { URL(string: "\(origin)/api/v2/me/usages/big_model_credits")! }
+
+    /// The member's team allowance, which the account page requests apart
+    /// from personal credits. Its organization-wide pool is a different sum.
+    var organizationSharedUsageURL: URL {
+        URL(string: "\(origin)/api/v1/me/organization-shared-usages/big_model_credits")!
+    }
 
     /// One page of the account's own usage records, newest first — what the
     /// account page's detail table asks (issue #88). **No `userId`:** the
@@ -170,9 +177,9 @@ struct QoderSnapshot: Equatable, Sendable {
 
     /// The account's own credits: plan plus resource packs.
     let personal: Pool
-    /// A team's shared pool. Nil off a team plan, and nil when Qoder reports
-    /// an empty placeholder — a pool of zero is not one anybody can spend.
-    let shared: Pool?
+    /// The member's shared pool when either usage route supplies a positive
+    /// allowance. A zero placeholder is not a pool anybody can spend.
+    var shared: Pool?
     let resetsAt: Date?
 
     /// A part of the personal total with an end date of its own — on the one
@@ -260,6 +267,8 @@ struct QoderClient: Sendable {
     /// that was invalidated.
     var session: URLSession?
 
+    /// Reads personal credits and, when absent there, the member's shared
+    /// allowance. Both replies must complete before an empty answer is final.
     func fetch(cookie: String, site: QoderSite) async throws -> QoderSnapshot {
         let header = try QoderCookie.normalize(cookie)
         let request = Self.request(site.usageURL, header: header, site: site)
@@ -273,7 +282,14 @@ struct QoderClient: Sendable {
         }
 
         switch (response as? HTTPURLResponse)?.statusCode {
-        case 200: return try Self.parse(data)
+        case 200:
+            var snapshot = try Self.parse(data)
+            // A team member can have no personal credits while still having
+            // a shared allowance. Finish that lookup before declaring empty.
+            if snapshot.shared == nil {
+                snapshot.shared = try await organizationSharedPool(header: header, site: site)
+            }
+            return snapshot
         // A signed-out page answers the API call by redirecting it at the
         // sign-in flow; `URLSession` follows redirects, so a 3xx is only seen
         // when one was not followed, and it means the same thing.
@@ -284,7 +300,36 @@ struct QoderClient: Sendable {
         }
     }
 
-    /// A GET as the account page sends it, for either of its routes.
+    /// Reads the signed-in member's shared allowance on the same site. A 404
+    /// leaves the personal reading intact; failed or malformed replies stay
+    /// failures so the cache cannot mistake them for a withdrawn allowance.
+    private func organizationSharedPool(header: String, site: QoderSite) async throws -> QoderSnapshot.Pool? {
+        let request = Self.request(site.organizationSharedUsageURL, header: header, site: site)
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await (session ?? NetworkSession.shared).recordedData(for: request)
+        } catch {
+            throw QoderError.unreachable
+        }
+
+        switch (response as? HTTPURLResponse)?.statusCode {
+        case 200:
+            // sharedQuota is the member's cap; organization_pool can contain
+            // the whole company's credits and must never stand in for it.
+            guard let reply = try? JSONDecoder().decode(Reply.self, from: data),
+                  let summary = reply.sharedQuota?.quotaSummary,
+                  let pool = Self.pool(summary) else { throw QoderError.unreadableReply }
+            return pool.limit > 0 ? pool : nil
+        case 404: return nil
+        case .some(300..<400), 401, 403: throw QoderError.sessionExpired
+        case 429: throw QoderError.rateLimited
+        case .some(500...599): throw QoderError.serverError
+        default: throw QoderError.unreadableReply
+        }
+    }
+
+    /// A GET as the account page sends it, for its usage and history routes.
     static func request(_ url: URL, header: String, site: QoderSite) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
